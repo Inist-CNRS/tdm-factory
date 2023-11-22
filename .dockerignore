@@ -1,0 +1,6 @@
+tdm-be/node_modules/*
+tdm-fe/node_modules/*
+Dockerfile
+.git
+.gitignore
+.dockerignore
