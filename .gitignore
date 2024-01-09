@@ -3,3 +3,4 @@ tdm-fe/node_modules/
 tdm-fe/.next/
 .gitlab-ci.yml
 helm/*
+tdm-be/environment-recette.ts
