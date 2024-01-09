@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Express Swagger API",
+    "version": "1.0.0",
+    "description": "A simple Express API with Swagger documentation"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/config/set": {
+      "post": {
+        "summary": "Set configuration data",
+        "description": "Endpoint to set configuration data",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Config"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Config"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body or missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message describing the issue"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Config": {
+        "type": "object",
+        "properties": {
+          "wrappers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SwaggerApi"
+            },
+            "example": [
+              {
+                "url": "https://data-wrapper.services.istex.fr",
+                "tags": [
+                  {
+                    "name": "data-wrapper",
+                    "excluded": []
+                  }
+                ]
+              }
+            ]
+          },
+          "enrichments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SwaggerApi"
+            },
+            "example": [
+              {
+                "url": "https://data-enrichment.services.istex.fr",
+                "tags": [
+                  {
+                    "name": "data-enrichment",
+                    "excluded": [
+                      "/v1/collect",
+                      "/v1/lda",
+                      "/v1/retrieve",
+                      "/v1/mock-error-async",
+                      "/v1/mock-error-sync"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "SwaggerApi": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://data-wrapper.services.istex.fr"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "data-wrapper"
+          },
+          "excluded": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "csv"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
