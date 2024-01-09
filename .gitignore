@@ -1,3 +1,5 @@
 tdm-be/node_modules/
 tdm-fe/node_modules/
 tdm-fe/.next/
+.gitlab-ci.yml
+helm/*
