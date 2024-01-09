@@ -47,7 +47,7 @@ const Home: React.FC<Props> = (props: Props) => {
     const api = await DefaultApiFactory();
     switch (activeStep) {
       case 0:
-        if (selectedWrapper?.fileType && file && selectedWrapper.fileType.indexOf(file.type) - 1) {
+        if (selectedWrapper?.fileType && file && selectedWrapper.fileType.indexOf(file.type) > - 1) {
           setFileError(false);
           setLoading(true);
           api.traitmentUploadPost(file).then((res) => {
