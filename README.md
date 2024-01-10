@@ -43,7 +43,7 @@ Follow these steps to set up and run the application:
 Build the Docker image using the provided Dockerfile:
 
 ```bash
-	- docker build . -t tdm:v1.0.0 --no-cache
+docker build . -t tdm:v1.0.0 --no-cache
 ```
 
 ## Usage
@@ -51,10 +51,10 @@ Build the Docker image using the provided Dockerfile:
 To run the application in a Docker container:
 
 ```bash
-docker run -p 8080:8080 tdm:v1.0.0
+docker run -p 3000:3000 tdm:v1.0.0
 ```
 
-The frontend will be accessible at `http://localhost:8080/` and the swagger configuration at `http://localhost:8080/swagger-config`.
+The frontend will be accessible at `http://localhost:3000/` and the swagger configuration at `http://localhost:3000/swagger-config`.
 
 
 ## Properties
@@ -92,7 +92,7 @@ There are two level of properties :
       }
       };
       export default environment;
-
+    ```
 2. Dynamic property updatable from post request on swagger `${environment.url}/swagger-ui` protected with `user/${environment.password}`
 
    ```json

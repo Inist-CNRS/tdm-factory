@@ -17,7 +17,7 @@ export interface Props {
 }
 
 
-const Home: React.FC<Props> = (props: Props) => {
+const Home: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [selectedWrapper, setWrapper] = React.useState<Request>();
   const [selectedEnrichment, setEnrichment] = React.useState<Request>();
@@ -101,9 +101,9 @@ const Home: React.FC<Props> = (props: Props) => {
 
   return (
     //If we have queryparams then redirect to traitmentcomponent to handle following
-    props.searchParams.id ? <TraitmentComponent id={props.searchParams.id} /> :
-      //Else display main page
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      { typeof window !== 'undefined' && window.location.search && window.location.search.split('id=').length > 0 ? <TraitmentComponent id={+window.location.search.split('id=')[1]} /> :
         <Box sx={{ width: '100%' }}>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
@@ -156,8 +156,8 @@ const Home: React.FC<Props> = (props: Props) => {
                   Lancer un nouveau traitement
                 </Button>
               </Box>) : null}
-        </Box>
-      </main>
+        </Box>}
+    </main>
   );
 };
 
