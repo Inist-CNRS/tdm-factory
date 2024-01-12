@@ -61,7 +61,7 @@ The frontend will be accessible at `http://localhost:3000/` and the swagger conf
 
 There are two level of properties :
 
-1. Back end property file `tdb-be\environment.ts`
+1. Back end property file `tdb-be\config.json`
    ```json
    {
    // Port configuration should be the same as dockerfile
@@ -113,7 +113,6 @@ There are two level of properties :
                   "name": "data-computer",
                   "excluded": [
                      "/v1/collect",
-                     "/v1/lda",
                      "/v1/retrieve",
                      "/v1/mock-error-async",
                      "/v1/mock-error-sync"
@@ -148,4 +147,3 @@ There are two level of properties :
 - `mailError` Template for the failure mail
    - `subject` Subject of the mail
    - `text` Text content for the mail
-

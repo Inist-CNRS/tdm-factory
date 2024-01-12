@@ -50,7 +50,7 @@ The project structure is organized as follows:
   - `model/`: Defines data models or interacts with the database.
   - `services/`: Custom services here we have only one to send mail.
 - `app.ts`: Entry point of the application.
-- `environment.ts`: Configuration file of the application.
+- `config.json`: Configuration file of the application.
 - `swagger.ts`: script to generate swagger files.
 
 ## Available Scripts
