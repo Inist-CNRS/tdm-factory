@@ -2,8 +2,8 @@ import { Request } from './Request';
 import { StatusEnum } from './StatusEnum';
 
 export class Traitment {
-  wrapper: Request = {};
-  enrichment: Request = {};
+  wrapper: Request = { url: '' };
+  enrichment: Request = { url: '' };
   mail: string = '';
   file: string = '';
   timestamp?: number;

@@ -24,7 +24,6 @@ var singleton: Config = require('../model/Config');
  */
 //Route to access all wrapper available due to config set
 router.get('/list', async (req, res) => {
-  console.log(singleton.getConfig());
   const results = await Promise.all(
     singleton.getConfig().wrappers?.map((wrapper) => axios.get(wrapper.url))
   );
@@ -36,7 +35,7 @@ router.get('/list', async (req, res) => {
       .map<Request>((path: any[]) => {
         console.log();
         return {
-          label: path[0] + ` (${path[1].post.summary})`,
+          label: `${path[1].post.summary} (${path[0]})`,
           description: path[1].post.description,
           fileType: Object.entries(path[1].post.requestBody.content).map((filetype) => filetype[0]),
           url: `${res.data.servers[0].variables.scheme.default}://${res.data.servers[0].variables.hostname.default}${path[0]}`,

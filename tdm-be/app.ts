@@ -1,6 +1,5 @@
 
 import express from 'express';
-import environment from './environment';
 import fs from 'fs';
 const path = require('path');
 const app = express();
@@ -8,6 +7,8 @@ const cors = require("cors");
 const basicAuth = require('express-basic-auth'); // This package is used for basic authentication
 const cron = require('node-cron');
 
+const rawdata = fs.readFileSync('config.json', 'utf-8');
+const environment = JSON.parse(rawdata);
 //Import all controllers
 const dataWrapperRoute = require('./routers/data-wrapper');
 const dataEnrichmentRoute = require('./routers/data-enrichment');

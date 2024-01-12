@@ -1,6 +1,6 @@
 export class Request {
   label?: string;
-  url?: string;
+  url: string = '';
   parameters?: Parameter[];
   fileType?: string[];
   description?: string;

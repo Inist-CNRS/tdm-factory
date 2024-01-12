@@ -19,7 +19,7 @@ const router = express.Router();
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/SwaggerApi'
- *           example: [{'url':'https://data-computer.services.istex.fr', 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
+ *           example: [{'url':'https://data-computer.services.istex.fr', 'retrieveUrl':'/v1/retrieve', 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
  *         mailSuccess:
  *           type: 
  *             $ref: '#/components/schemas/Mail'
@@ -35,6 +35,8 @@ const router = express.Router();
  *         url:
  *           type: string
  *           example: 'https://data-wrapper.services.istex.fr'
+ *         retrieveUrl:
+ *           type: string
  *         tags:
  *           type: array
  *           items:
@@ -97,4 +99,22 @@ router.post('/set', (req, res) => {
     console.log(error);
 });
 
+
+/**
+ * @swagger
+ * /config:
+ *   get:
+ *     summary: Get a the current configuration
+ *     responses:
+ *       200:
+ *         description: Current configuration of the tdm project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Config'
+ */
+//Route to get config the current config
+router.get('/', (req, res) => {
+    res.json(config);
+});
 module.exports = router;

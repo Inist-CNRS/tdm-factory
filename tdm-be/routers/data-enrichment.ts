@@ -72,7 +72,7 @@ router.get('/list', async (req, res) => {
       .filter((path: any) => tags?.some((t) => path[1].post?.tags?.includes(t.name) && t.excluded?.indexOf(path[0]) === -1))
       .map<Request>((path: any) => {
         return {
-          label: path[0] + ` (${path[1].post.summary})`,
+          label: `${path[1].post.summary} (${path[0]})`,
           description: path[1].post.description,
           url: `${res.data.servers[0].variables.scheme.default}://${res.data.servers[0].variables.hostname.default}${path[0]}`,
           parameters: path[1].post?.parameters?.map((param: any) => param.name)

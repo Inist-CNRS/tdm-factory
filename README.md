@@ -62,36 +62,32 @@ The frontend will be accessible at `http://localhost:3000/` and the swagger conf
 There are two level of properties :
 
 1. Back end property file `tdb-be\environment.ts`
-   ```typescript
-      const environment = {
-      // Port configuration should be the same as dockerfile
-      port: 3000,
-      //Public URL of the project
-      url: '',
-      //Update with secured password
-      password: '',
-      // SMTP configuration for development
-      smtp: {
-         host: 'smtp.example.com',
-         port: 587,
-         auth: {
-            user: '',
-            pass: '',
-         },
-         service: 'gmail'
+   ```json
+   {
+   // Port configuration should be the same as dockerfile
+   "port": 3000,
+   //password for swagger configuration
+   "password": "",
+   // SMTP configuration
+   "smtp": {
+      "host": "",
+      "port": 587,
+      "secure": false,
+      "auth": {
+         "user": "",
+         "pass": ""
       },
-      //ISTEX API retrieve file URL
-      retrieveUrl: 'https://data-computer.services.istex.fr/v1/retrieve',
-      fileFolder: 'uploads/',
-      dumpFile: 'dump.tar.gz',
-      finalFile: 'final.tar.gz',
-      //CRON every day at 00:00 to remove file older than 7 days
-      cron: {
-         schedule: '0 0 * * *',
-         deleteFileOlderThan: 7
+      "service": "gmail"
+   },
+   "fileFolder": "uploads/",
+   "dumpFile": "dump.tar.gz",
+   "finalFile": "final.tar.gz",
+   //CRON every day at 00:00 to remove file older than 7 days
+   "cron": {
+      "schedule": "0 0 * * *",
+      "deleteFileOlderThan": 7
       }
-      };
-      export default environment;
+   }
     ```
 2. Dynamic property updatable from post request on swagger `${environment.url}/swagger-ui` protected with `user/${environment.password}`
 
@@ -111,6 +107,7 @@ There are two level of properties :
          "enrichments": [
             {
                "url": "https://data-computer.services.istex.fr",
+               "retrieveUrl": "/v1/retrieve",
                "tags": [
                {
                   "name": "data-computer",

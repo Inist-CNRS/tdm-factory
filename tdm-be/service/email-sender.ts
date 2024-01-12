@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
-import environment from '../environment';
-
+import fs from 'fs';
+const rawdata = fs.readFileSync('config.json', 'utf-8');
+const environment = JSON.parse(rawdata);
 export interface EmailOptions {
   to: string;
   subject: string;

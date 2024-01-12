@@ -12,6 +12,7 @@ export class Config {
     enrichments: SwaggerApi[] = [
         {
             url: 'https://data-computer.services.istex.fr',
+            retrieveUrl: '/v1/retrieve',
             tags: [{
                 name: 'data-computer',
                 excluded: ['/v1/collect', '/v1/retrieve', '/v1/mock-error-async', '/v1/mock-error-sync']
@@ -39,6 +40,7 @@ export class Config {
 
 export class SwaggerApi {
     url: string = '';
+    retrieveUrl?: string;
     tags: Tag[] = [];
 }
 

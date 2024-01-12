@@ -54,6 +54,23 @@
           }
         }
       }
+    },
+    "/config": {
+      "get": {
+        "summary": "Get a the current configuration",
+        "responses": {
+          "200": {
+            "description": "Current configuration of the tdm project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Config"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -86,12 +103,12 @@
             "example": [
               {
                 "url": "https://data-computer.services.istex.fr",
+                "retrieveUrl": "/v1/retrieve",
                 "tags": [
                   {
                     "name": "data-computer",
                     "excluded": [
                       "/v1/collect",
-                      "/v1/lda",
                       "/v1/retrieve",
                       "/v1/mock-error-async",
                       "/v1/mock-error-sync"
@@ -127,6 +144,9 @@
           "url": {
             "type": "string",
             "example": "https://data-wrapper.services.istex.fr"
+          },
+          "retrieveUrl": {
+            "type": "string"
           },
           "tags": {
             "type": "array",
