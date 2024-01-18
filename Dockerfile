@@ -16,6 +16,8 @@ COPY tdm-fe /app/
 # Build the React app
 RUN npm run build
 
+#######################################################
+
 # Stage 2: Serve React App using Express
 FROM node:lts-slim
 
@@ -34,12 +36,26 @@ COPY tdm-be /usr/src/app
 # Build the node app
 RUN npm run build
 
+COPY /usr/src/app/dist /usr/src/app
+
 # Copy built React app from the previous stage
 COPY --from=react-build /app/.next /usr/src/app/public/_next
 
 RUN mkdir /usr/src/app/public/downloads
+
+# Add ezmaster config file
+RUN echo '{ \
+    "httpPort": 3000, \
+    "configPath": "/usr/src/app/config.json", \
+    "dataPath": "/usr/src/app/public/downloads", \
+    }' > /etc/ezmaster.json  && \
+    sed -i -e "s/daemon:x:2:2/daemon:x:1:1/" /etc/passwd && \
+    sed -i -e "s/daemon:x:2:/daemon:x:1:/" /etc/group && \
+    sed -i -e "s/bin:x:1:1/bin:x:2:2/" /etc/passwd && \
+    sed -i -e "s/bin:x:1:/bin:x:2:/" /etc/group
+
 # Expose the port your Express server will run on
 EXPOSE 3000
 
 # Start the Express app
-CMD ["npm", "start"]
+CMD ["npm", "start:prod"]
