@@ -45,7 +45,7 @@ FROM node:18.19-bullseye-slim AS application
 RUN echo '{ \
     "httpPort": 3000, \
     "configPath": "/app/config.json", \
-    "dataPath": "/app/public/downloads" \
+    "dataPath": "/app" \
     }' > /etc/ezmaster.json
 
 # Update npm folder write permision
@@ -68,6 +68,7 @@ COPY --chown=daemon:daemon --from=express-build /app/dist /app/
 # Copy front-end files from the build container and create the required folder
 COPY --chown=daemon:daemon --from=react-build /app/.next /app/public/_next/
 RUN mkdir /app/public/downloads
+RUN mkdir /app/uploads
 
 # Start the application
 EXPOSE 3000

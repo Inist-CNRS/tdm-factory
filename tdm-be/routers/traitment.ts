@@ -4,10 +4,10 @@ import multer from 'multer';
 import fs from 'fs';
 import axios from 'axios';
 
-
 const rawdata = fs.readFileSync('config.json', 'utf-8');
 const environment = JSON.parse(rawdata);
 import { StatusEnum } from '../model/StatusEnum';
+import {sendEmail} from "../service/email-sender";
 const router = express.Router();
 var currentTraitments: Traitment[] = require('../model/Traitment');
 
@@ -71,6 +71,13 @@ router.post('/start', (req: Request<{}, {}, Traitment>, res) => {
     traitment.timestamp = new Date().getTime();
     traitment.status = StatusEnum.WRAPPER_RUNNING;
     res.send({ message: `Enrichissement démarré vous allez recevoir un email.`, url: `Un suivi est disponible à l\'url https://${req.hostname}?id=${traitment.timestamp}` });
+    sendEmail({
+        to: req.body.mail,
+        subject: 'Votre traitement a bien démarré',
+        text: `Un suivi est disponible à l\'url http://${req.hostname}?id=${traitment.timestamp}`
+    }).then(() => {
+        console.info(`${new Date().toISOString()}mail envoyer pour début de traitement`);
+    })
     axios.post(url, fileData, { responseType: 'arraybuffer', params: { value: traitment.wrapper.parameters?.find((p) => p.name === 'value')?.value }, timeout: 600000 }).then((wrapperRes) => {
         const bin: Buffer = Buffer.from(wrapperRes.data, 'binary');
         fs.writeFileSync(environment.dumpFile, bin);
@@ -78,8 +85,8 @@ router.post('/start', (req: Request<{}, {}, Traitment>, res) => {
         console.log(`Wrapper Done for ${traitment.timestamp}`);
         const conf = {
             headers: {
-                'X-Webhook-Success': `https://${req.hostname}/webhook/success?id=${traitment.timestamp}`,
-                'X-Webhook-Failure': `https://${req.hostname}/webhook/failure?id=${traitment.timestamp}`,
+                'X-Webhook-Success': `://${req.hostname}/webhook/success?id=${traitment.timestamp}`,
+                'X-Webhook-Failure': `://${req.hostname}/webhook/failure?id=${traitment.timestamp}`,
             },
             timeout: 600000
         }

@@ -13,20 +13,17 @@ async function sendEmail(options: EmailOptions): Promise<any> {
   try {
     const smtpConfig = environment.smtp;
 
-    const transporter = nodemailer.createTransport({
-      service: smtpConfig.service,
-      auth: {
-        user: smtpConfig.auth.user,
-        pass: smtpConfig.auth.pass,
-      },
-    });
+    const transporter = nodemailer.createTransport(smtpConfig);
 
     const mailOptions = {
       ...options,
-      from: smtpConfig.auth.user
+      from: 'noreply@inist.fr'
     };
 
     const info = await transporter.sendMail(mailOptions);
+
+    transporter.close();
+
     console.log('Email sent:', info.response);
     return info;
   } catch (error) {

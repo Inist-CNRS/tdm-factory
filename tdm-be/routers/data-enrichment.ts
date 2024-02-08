@@ -1,7 +1,7 @@
 import { Request } from '../model/Request';
 import express from 'express';
 import axios from 'axios';
-import { Config } from '../model/Config';
+import type { Config } from '../model/Config';
 var singleton: Config = require('../model/Config');
 
 const router = express.Router();

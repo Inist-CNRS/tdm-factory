@@ -7,7 +7,9 @@ import { StatusEnum } from '../model/StatusEnum';
 import { SwaggerApi } from '../model/Config';
 const router = express.Router();
 var currentTraitments: Traitment[] = require('../model/Traitment');
-var config = require('../model/Config');
+var configModel = require('../model/Config');
+
+const config = configModel.getConfig()
 
 //Webhook of success after traitment done
 router.post('/success', (req, res) => {

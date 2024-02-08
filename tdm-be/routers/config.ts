@@ -94,7 +94,7 @@ const router = express.Router();
  */
 router.post('/set', (req, res) => {
     config.setConfig(req.body);
-    res.status(200).json({ message: 'Config data updated successfully', config });
+    res.status(200).json({ message: 'Config data updated successfully', config: config.getConfig() });
 }, (error) => {
     console.log(error);
 });
@@ -115,6 +115,6 @@ router.post('/set', (req, res) => {
  */
 //Route to get config the current config
 router.get('/', (req, res) => {
-    res.json(config);
+    res.json(config.getConfig());
 });
 module.exports = router;
