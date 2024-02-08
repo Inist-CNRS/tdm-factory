@@ -62,13 +62,13 @@ The frontend will be accessible at `http://localhost:3000/` and the swagger conf
 There are two level of properties :
 
 1. Back end property file `tdb-be\config.json`
-   ```json
+   ```json5
    {
    // Port configuration should be the same as dockerfile
    "port": 3000,
    //password for swagger configuration
    "password": "",
-   // SMTP configuration
+   // SMTP configuration (nodemailer smtp options)
    "smtp": {
       "host": "",
       "port": 587,

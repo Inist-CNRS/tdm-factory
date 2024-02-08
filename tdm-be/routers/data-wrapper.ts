@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Parameter, Request } from '../model/Request';
 
 const router = express.Router();
-import { Config } from '../model/Config';
+import type { Config } from '../model/Config';
 var singleton: Config = require('../model/Config');
 
 /**
