@@ -21,4 +21,4 @@ jobs:
         run: docker build --no-cache -t cnrsinist/tdm-factory:${{ github.ref_name }} .
 
       - name: Push Docker Image
-        run: docker push cnrsinist/tdm-factory:${{ github.ref_name }} .
+        run: docker push cnrsinist/tdm-factory:${{ github.ref_name }}
