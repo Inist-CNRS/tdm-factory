@@ -1,0 +1,34 @@
+{
+  "port": 3000,
+  "password": "",
+  "hosts": {
+    "internal": {
+      "host": "",
+      "isHttps": false
+    },
+    "external": {
+      "host": "",
+      "isHttps": false
+    }
+  },
+  "smtp": {
+    "host": "maildev",
+    "port": 1025,
+    "auth": {
+      "user": "",
+      "pass": ""
+    },
+    "secure": false,
+    "tls": {
+      "ignore": true,
+      "rejectUnauthorized": false
+    }
+  },
+  "fileFolder": "uploads/",
+  "dumpFile": "dump.tar.gz",
+  "finalFile": "final.tar.gz",
+  "cron": {
+    "schedule": "0 0 * * *",
+    "deleteFileOlderThan": 7
+  }
+}

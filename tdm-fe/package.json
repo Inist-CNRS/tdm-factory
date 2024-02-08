@@ -1,0 +1,39 @@
+{
+  "name": "tdm-fe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 8080",
+    "generate-api": "openapi-generator-cli generate -i ../tdm-be/swagger.json -g typescript-axios -o src/generated",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@google-cloud/recaptcha-enterprise": "^5.1.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.18",
+    "mui-file-input": "^4.0.2",
+    "next": "14.0.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-google-recaptcha": "^3.1.0",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.21.1"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-google-recaptcha": "^2.1.8",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.2",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}

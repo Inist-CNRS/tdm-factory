@@ -1,0 +1,8 @@
+tdm-be/node_modules/*
+tdm-be/dist/*
+tdm-fe/node_modules/*
+tdm-fe/.next/*
+Dockerfile
+.git
+.gitignore
+.dockerignore

@@ -1,0 +1,238 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Express Swagger API",
+    "version": "1.0.0",
+    "description": "A simple Express API with Swagger documentation"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "paths": {
+    "/data-enrichments/list": {
+      "get": {
+        "summary": "Get a list of data enrichments",
+        "description": "Returns a list of data enrichments",
+        "responses": {
+          "200": {
+            "description": "A list of data enrichments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data-wrappers/list": {
+      "get": {
+        "summary": "Get a list of data enrichments",
+        "description": "Returns a list of data enrichments",
+        "responses": {
+          "200": {
+            "description": "A list of data enrichments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/traitment/start": {
+      "post": {
+        "summary": "Set configuration data",
+        "description": "Endpoint to set configuration data",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traitment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "A message."
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL associated with the message."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, file upload failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/traitment/upload": {
+      "post": {
+        "summary": "Upload a file",
+        "description": "Endpoint to upload a file to the server",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully"
+          },
+          "400": {
+            "description": "Bad request, file upload failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/traitment/status": {
+      "get": {
+        "summary": "get status",
+        "description": "get status",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID parameter",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errorType": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Request": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "The request name"
+          },
+          "url": {
+            "type": "string",
+            "description": "The request url"
+          },
+          "description": {
+            "type": "string",
+            "description": "The request description"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parameter"
+            }
+          },
+          "fileType": {
+            "type": "string",
+            "description": "The request accept type"
+          }
+        }
+      },
+      "Parameter": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the parameter"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the parameter"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value of the parameter"
+          }
+        }
+      },
+      "Traitment": {
+        "type": "object",
+        "properties": {
+          "wrapper": {
+            "$ref": "#/components/schemas/Request"
+          },
+          "enrichment": {
+            "$ref": "#/components/schemas/Request"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
