@@ -46,6 +46,12 @@ Build the Docker image using the provided Dockerfile:
 docker build . -t tdm:v1.0.0 --no-cache
 ```
 
+### Publishing a new version
+
+To create a new version of TDM-Factory create a new 
+[GitHub release](https://github.com/Inist-CNRS/tdm-factory/releases/new) with an associated tags.
+This will run the ci and push an image into Docker Hub.
+
 ## Usage
 
 To run the application in a Docker container:
