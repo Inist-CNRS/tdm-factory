@@ -8,7 +8,7 @@ WORKDIR /app
 COPY tdm-fe/package*.json /app/
 
 # Install dependency
-RUN npm install
+RUN npm ci
 
 # Copy the front-end source code into the build container
 COPY tdm-fe /app/
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY tdm-be/package*.json tdm-be/ts*.json /app/
 
 # Install dependency
-RUN npm install
+RUN npm ci
 
 # Copy the back-end source code into the build container
 COPY tdm-be /app/
@@ -48,7 +48,7 @@ WORKDIR /app
 COPY tdm-be/package*.json tdm-be/ts*.json /app/
 
 # Install production dependency
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 #######################################################
 
