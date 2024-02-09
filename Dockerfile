@@ -74,8 +74,6 @@ WORKDIR /app
 COPY --chown=daemon:daemon --from=express-build /app/package.json /app/
 COPY --chown=daemon:daemon --from=express-build /app/package-lock.json /app/
 COPY --chown=daemon:daemon --from=node-modules /app/node_modules /app/node_modules/
-COPY --chown=daemon:daemon --from=express-build /app/swagger-config.json /app/
-COPY --chown=daemon:daemon --from=express-build /app/swagger.json /app/
 COPY --chown=daemon:daemon --from=express-build /app/config/default.json /app/config/
 COPY --chown=daemon:daemon --from=express-build /app/dist /app/
 

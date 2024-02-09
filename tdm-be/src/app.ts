@@ -1,5 +1,6 @@
 import environment from './lib/config';
 import logger, { httpLogger, cronLogger } from './lib/logger';
+import swaggerFile from './swagger/swagger-config.json';
 import express from 'express';
 import fs from 'node:fs';
 
@@ -9,7 +10,6 @@ const dataEnrichmentRoute = require('./controller/data-enrichment');
 const dataWrapperRoute = require('./controller/data-wrapper');
 const traitmentRoute = require('./controller/traitment');
 const webhookRoute = require('./controller/webhook');
-const swaggerFile = require('./swagger/swagger-config.json');
 const cors = require('cors');
 const basicAuth = require('express-basic-auth'); // This package is used for basic authentication
 const cron = require('node-cron');
