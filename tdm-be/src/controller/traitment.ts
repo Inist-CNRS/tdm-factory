@@ -1,4 +1,4 @@
-import environment from '../config.json';
+import environment from '../../config.json';
 import { StatusEnum } from '../model/StatusEnum';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
