@@ -35,7 +35,7 @@ const auth = basicAuth({
 });
 
 app.use((req, res, next) => {
-    httpLogger.info(`${req.method} ${req.baseUrl} - ${req.ip}/${req.get('user-agent')}`);
+    httpLogger.info(`${req.method} ${req.url} - ${req.ip} - ${req.get('user-agent')}`);
     next();
 });
 
