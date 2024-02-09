@@ -79,10 +79,13 @@ COPY --chown=daemon:daemon --from=express-build /app/swagger.json /app/
 COPY --chown=daemon:daemon --from=express-build /app/config.json /app/
 COPY --chown=daemon:daemon --from=express-build /app/dist /app/
 
-# Copy front-end files from the build container and create the required folder
+# Copy front-end files from the build container
 COPY --chown=daemon:daemon --from=react-build /app/.next /app/public/_next/
+
+# Create the required folder
 RUN mkdir /app/public/downloads
 RUN mkdir /app/uploads
+RUN mkdir /app/logs
 
 # Start the application
 EXPOSE 3000
