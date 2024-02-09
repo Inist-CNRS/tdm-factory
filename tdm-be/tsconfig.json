@@ -5,16 +5,17 @@
         "lib": [
             "ESNext"
         ],
-        "outDir": "./dist",
+        "outDir": "dist",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
-        "**/*.ts"
+        "src/**/*.ts",
+        "config/config.json"
     ],
     "exclude": [
         "node_modules",

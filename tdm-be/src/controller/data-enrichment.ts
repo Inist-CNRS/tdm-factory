@@ -1,8 +1,9 @@
-import { Request } from '../model/Request';
-import express from 'express';
 import axios from 'axios';
+import express from 'express';
 import type { Config } from '../model/Config';
-var singleton: Config = require('../model/Config');
+import type { Request } from '../model/Request';
+
+const singleton: Config = require('../model/Config');
 
 const router = express.Router();
 /**
@@ -61,25 +62,26 @@ const router = express.Router();
 
 //Route to access all enrichments in the istex api due to config set
 router.get('/list', async (req, res) => {
+    const results = await Promise.all(
+        singleton.getConfig().enrichments?.map((enrichment) => axios.get(enrichment.url)),
+    );
 
-  const results = await Promise.all(
-    singleton.getConfig().enrichments?.map((enrichment) => axios.get(enrichment.url))
-  );
-
-  const requests = results.flatMap(res => {
-    const tags = singleton.getConfig().enrichments?.find((enrichment) => enrichment.url === res.config.url)?.tags;
-    return Object.entries(res.data.paths)
-      .filter((path: any) => tags?.some((t) => path[1].post?.tags?.includes(t.name) && t.excluded?.indexOf(path[0]) === -1))
-      .map<Request>((path: any) => {
-        return {
-          label: `${path[1].post.summary} (${path[0]})`,
-          description: path[1].post.description,
-          url: `${res.data.servers[0].variables.scheme.default}://${res.data.servers[0].variables.hostname.default}${path[0]}`,
-          parameters: path[1].post?.parameters?.map((param: any) => param.name)
-        };
-      })
-  });
-  res.json(requests);
+    const requests = results.flatMap((res) => {
+        const tags = singleton.getConfig().enrichments?.find((enrichment) => enrichment.url === res.config.url)?.tags;
+        return Object.entries(res.data.paths)
+            .filter((path: any) =>
+                tags?.some((t) => path[1].post?.tags?.includes(t.name) && t.excluded?.indexOf(path[0]) === -1),
+            )
+            .map<Request>((path: any) => {
+                return {
+                    label: `${path[1].post.summary} (${path[0]})`,
+                    description: path[1].post.description,
+                    url: `${res.data.servers[0].variables.scheme.default}://${res.data.servers[0].variables.hostname.default}${path[0]}`,
+                    parameters: path[1].post?.parameters?.map((param: any) => param.name),
+                };
+            });
+    });
+    res.json(requests);
 });
 
 module.exports = router;

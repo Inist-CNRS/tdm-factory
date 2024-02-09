@@ -1,20 +1,21 @@
-import { readFileSync } from 'node:fs'
+import logger from '../lib/logger';
+import { readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
 export class SwaggerApi {
-    url: string = '';
+    url = '';
     retrieveUrl?: string;
     tags: Tag[] = [];
 }
 
 export class Tag {
-    name: string = '';
+    name = '';
     excluded?: string[] = [];
 }
 
 export class Mail {
-    subject: string = '';
-    text: string = '';
+    subject = '';
+    text = '';
 }
 
 type ConfigType = {
@@ -22,7 +23,7 @@ type ConfigType = {
     enrichments: SwaggerApi[];
     mailSuccess: Mail;
     mailError: Mail;
-}
+};
 
 export class Config {
     private readonly config: ConfigType;
@@ -32,7 +33,7 @@ export class Config {
             const rawLocalConfig = readFileSync('dynamic-config.json', 'utf-8');
             localConfig = JSON.parse(rawLocalConfig);
         } catch (e) {
-            console.error('No dynamic config file found')
+            logger.error('No dynamic config file found');
             localConfig = {};
         }
 
@@ -40,43 +41,43 @@ export class Config {
             wrappers: localConfig.wrappers ?? [
                 {
                     url: 'https://data-wrapper.services.istex.fr',
-                    tags: [{
-                        name: 'data-wrapper',
-                        excluded: []
-                    }]
-                }
+                    tags: [
+                        {
+                            name: 'data-wrapper',
+                            excluded: [],
+                        },
+                    ],
+                },
             ],
             enrichments: localConfig.enrichments ?? [
                 {
                     url: 'https://data-computer.services.istex.fr',
                     retrieveUrl: '/v1/retrieve',
-                    tags: [{
-                        name: 'data-computer',
-                        excluded: ['/v1/collect', '/v1/retrieve', '/v1/mock-error-async', '/v1/mock-error-sync']
-                    }]
-                }
+                    tags: [
+                        {
+                            name: 'data-computer',
+                            excluded: ['/v1/collect', '/v1/retrieve', '/v1/mock-error-async', '/v1/mock-error-sync'],
+                        },
+                    ],
+                },
             ],
             mailSuccess: localConfig.mailSuccess ?? {
                 subject: 'Objet du mail succès',
-                text: 'Vous pouvez télécharger le fichier enrichi à l\'adresse ci-dessous'
+                text: "Vous pouvez télécharger le fichier enrichi à l'adresse ci-dessous",
             },
             mailError: localConfig.mailError ?? {
-                subject: 'Objet du mail d\'erreur',
-                text: 'Une erreur s\'est produite lors de l\'enrichissement'
-            }
-        }
-        console.info('Dynamic config loaded');
+                subject: "Objet du mail d'erreur",
+                text: "Une erreur s'est produite lors de l'enrichissement",
+            },
+        };
+        logger.info('Dynamic config loaded');
         this.saveConfig();
     }
 
     private saveConfig() {
-        writeFile(
-            'dynamic-config.json',
-            JSON.stringify(this.config),
-            'utf-8'
-        ).then(() => {
-            console.info('Dynamic config successfully written to disk')
-        })
+        writeFile('dynamic-config.json', JSON.stringify(this.config), 'utf-8').then(() => {
+            logger.info('Dynamic config successfully written to disk');
+        });
     }
 
     getConfig(): ConfigType {
@@ -111,6 +112,6 @@ export class Config {
     }
 }
 
-const singleton = new Config()
+const singleton = new Config();
 
 module.exports = singleton;

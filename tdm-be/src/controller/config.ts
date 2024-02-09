@@ -1,5 +1,7 @@
+import logger from '../lib/logger';
 import express from 'express';
-var config = require('../model/Config');
+
+const config = require('../model/Config');
 
 const router = express.Router();
 
@@ -21,14 +23,14 @@ const router = express.Router();
  *             $ref: '#/components/schemas/SwaggerApi'
  *           example: [{'url':'https://data-computer.services.istex.fr', 'retrieveUrl':'/v1/retrieve', 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
  *         mailSuccess:
- *           type: 
+ *           type:
  *             $ref: '#/components/schemas/Mail'
  *           example: {'subject':'Objet du mail succès', 'text':'Vous pouvez télécharger le fichier enrichi à l&apos;adresse ci-dessous' }
  *         mailError:
- *           type: 
+ *           type:
  *             $ref: '#/components/schemas/Mail'
  *           example: {'subject':'Objet du mail d&apos;erreur', 'text':'Une erreur s&apos;est produite lors de l&apos;enrichissement' }
- * 
+ *
  *     SwaggerApi:
  *       type: object
  *       properties:
@@ -59,7 +61,7 @@ const router = express.Router();
  *           type: string
  *         text:
  *           type: string
- * 
+ *
  */
 
 /**
@@ -92,13 +94,16 @@ const router = express.Router();
  *                   type: string
  *                   description: Error message describing the issue
  */
-router.post('/set', (req, res) => {
-    config.setConfig(req.body);
-    res.status(200).json({ message: 'Config data updated successfully', config: config.getConfig() });
-}, (error) => {
-    console.log(error);
-});
-
+router.post(
+    '/set',
+    (req, res) => {
+        config.setConfig(req.body);
+        res.status(200).json({ message: 'Config data updated successfully', config: config.getConfig() });
+    },
+    (error) => {
+        logger.error(error);
+    },
+);
 
 /**
  * @swagger

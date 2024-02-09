@@ -1,4 +1,5 @@
-import logger, { httpLogger, cronLogger } from './logger';
+import environment from './lib/config';
+import logger, { httpLogger, cronLogger } from './lib/logger';
 import express from 'express';
 import fs from 'node:fs';
 
@@ -13,8 +14,6 @@ const cors = require('cors');
 const basicAuth = require('express-basic-auth'); // This package is used for basic authentication
 const cron = require('node-cron');
 
-const rawdata = fs.readFileSync('config.json', 'utf-8');
-const environment = JSON.parse(rawdata);
 //Import all controllers
 
 //Import swagger config

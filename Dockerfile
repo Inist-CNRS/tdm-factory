@@ -58,7 +58,7 @@ FROM node:18.19-bullseye-slim AS application
 # Add ezmaster config file
 RUN echo '{ \
     "httpPort": 3000, \
-    "configPath": "/app/config.json", \
+    "configPath": "/app/config/default.json", \
     "dataPath": "/app" \
     }' > /etc/ezmaster.json
 

@@ -6,5 +6,5 @@ export enum StatusEnum {
     WAITING_WEBHOOK,
     FINISHED,
     FINISHED_ERROR,
-    UNKNOWN
+    UNKNOWN,
 }
