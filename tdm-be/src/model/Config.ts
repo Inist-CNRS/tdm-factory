@@ -114,4 +114,4 @@ export class Config {
 
 const singleton = new Config();
 
-module.exports = singleton;
+export default singleton;

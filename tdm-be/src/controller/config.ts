@@ -1,7 +1,6 @@
 import logger from '../lib/logger';
+import config from '../model/Config';
 import express from 'express';
-
-const config = require('../model/Config');
 
 const router = express.Router();
 
@@ -122,4 +121,5 @@ router.post(
 router.get('/', (req, res) => {
     res.json(config.getConfig());
 });
-module.exports = router;
+
+export default router;

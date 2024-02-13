@@ -1,6 +1,7 @@
 import environment from '../lib/config';
 import logger from '../lib/logger';
 import { StatusEnum } from '../model/StatusEnum';
+import currentTraitments from '../model/Traitment';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
@@ -10,7 +11,6 @@ import type { Traitment } from '../model/Traitment';
 import type { Request, Response } from 'express';
 
 const router = express.Router();
-const currentTraitments: Traitment[] = require('../model/Traitment');
 
 /**
  * @swagger
@@ -219,4 +219,5 @@ router.get('/status', (req, res) => {
         errorType: status,
     });
 });
-module.exports = router;
+
+export default router;

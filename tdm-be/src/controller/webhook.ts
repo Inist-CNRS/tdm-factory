@@ -1,5 +1,7 @@
 import logger from '../lib/logger';
+import configModel from '../model/Config';
 import { StatusEnum } from '../model/StatusEnum';
+import currentTraitments from '../model/Traitment';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
@@ -9,8 +11,6 @@ import type { Traitment } from '../model/Traitment';
 import type { EmailOptions } from '../service/email-sender';
 
 const router = express.Router();
-const configModel = require('../model/Config');
-let currentTraitments: Traitment[] = require('../model/Traitment');
 
 const config = configModel.getConfig();
 
@@ -84,4 +84,4 @@ router.post(
     },
 );
 
-module.exports = router;
+export default router;
