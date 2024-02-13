@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-  height: 100vh;
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    height: 100vh;
 }
 
 .error {
-  color: #d32f2f;
-  font-size: small;
+    color: #d32f2f;
+    font-size: small;
 }
 
 a {
-  color: revert;
-  text-decoration: revert;
+    color: revert;
+    text-decoration: revert;
 }
 
-.traitment{
-  width: 100%;
-  text-align: center;
+.traitment {
+    width: 100%;
+    text-align: center;
 }
