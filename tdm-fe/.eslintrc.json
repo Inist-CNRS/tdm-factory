@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json"
+    },
+    "env": {
+        "node": false,
+        "browser": true
+    },
+    "extends": [
+        "@draconides/eslint-config-ts",
+        "@draconides/eslint-config-react",
+        "next/core-web-vitals"
+    ]
 }
