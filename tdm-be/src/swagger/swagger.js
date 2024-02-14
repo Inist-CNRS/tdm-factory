@@ -15,7 +15,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./routers/data-enrichment.ts', './routers/data-wrapper.ts', './routers/traitment.ts'], // Specify the file containing your routes
+    apis: ['./src/controller/data-enrichment.ts', './src/controller/data-wrapper.ts', './src/controller/traitment.ts'], // Specify the file containing your routes
 };
 
 const swaggerOptionsConfig = {
@@ -32,19 +32,19 @@ const swaggerOptionsConfig = {
             },
         ],
     },
-    apis: ['./routers/config.ts'], // Specify the file containing your routes
+    apis: ['./src/controller/config.ts'], // Specify the file containing your routes
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Write Swagger JSON to a file
 const swaggerJson = JSON.stringify(swaggerSpec, null, 2);
-fs.writeFileSync('swagger.json', swaggerJson);
+fs.writeFileSync(__dirname + '/swagger.json', swaggerJson);
 
 const swaggerSpecConfig = swaggerJsdoc(swaggerOptionsConfig);
 
 // Write Swagger JSON to a file
 const swaggerJsonConfig = JSON.stringify(swaggerSpecConfig, null, 2);
-fs.writeFileSync('swagger-config.json', swaggerJsonConfig);
+fs.writeFileSync(__dirname + '/swagger-config.json', swaggerJsonConfig);
 
 console.log('Swagger JSON file generated successfully');

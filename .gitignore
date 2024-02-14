@@ -6,3 +6,7 @@ tdm-fe/.next/
 helm/*
 tdm-be/environment-recette.ts
 .idea
+tdm-be/uploads/*
+!tdm-be/uploads/.keep
+tdm-be/dynamic-config.json
+tdm-be/logs/*

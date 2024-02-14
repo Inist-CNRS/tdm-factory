@@ -1,0 +1,26 @@
+{
+    "password": "{very secure password}",
+    "hosts": {
+        "internal": {
+            "host": "{machine ip or internal host}",
+            "isHttps": true
+        },
+        "external": {
+            "host": "{external host / revers proxy host}",
+            "isHttps": false
+        }
+    },
+    "smtp": {
+        "host": "{mail services host}",
+        "port": 1025,
+        "secure": false,
+        "tls": {
+            "ignore": true,
+            "rejectUnauthorized": false
+        }
+    },
+    "cron": {
+        "schedule": "0 0 * * *",
+        "deleteFileOlderThan": 7
+    }
+}
