@@ -13,4 +13,4 @@ export class Traitment {
 
 const currentTraitments: Traitment[] = [];
 
-module.exports = currentTraitments;
+export default currentTraitments;

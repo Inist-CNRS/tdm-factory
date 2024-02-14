@@ -1,24 +1,20 @@
+import configRoute from './controller/config';
+import dataEnrichmentRoute from './controller/data-enrichment';
+import dataWrapperRoute from './controller/data-wrapper';
+import traitmentRoute from './controller/traitment';
+import webhookRoute from './controller/webhook';
 import environment from './lib/config';
 import logger, { httpLogger, cronLogger } from './lib/logger';
 import swaggerFile from './swagger/swagger-config.json';
+import cors from 'cors';
 import express from 'express';
+import basicAuth from 'express-basic-auth'; // This package is used for basic authentication
+import cron from 'node-cron';
+import swaggerUi from 'swagger-ui-express';
 import fs from 'node:fs';
+import path from 'path';
 
 const app = express();
-const configRoute = require('./controller/config');
-const dataEnrichmentRoute = require('./controller/data-enrichment');
-const dataWrapperRoute = require('./controller/data-wrapper');
-const traitmentRoute = require('./controller/traitment');
-const webhookRoute = require('./controller/webhook');
-const cors = require('cors');
-const basicAuth = require('express-basic-auth'); // This package is used for basic authentication
-const cron = require('node-cron');
-
-//Import all controllers
-
-//Import swagger config
-const swaggerUi = require('swagger-ui-express');
-const path = require('path');
 
 const port = environment.port;
 

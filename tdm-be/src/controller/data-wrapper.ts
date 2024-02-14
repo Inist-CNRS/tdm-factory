@@ -1,10 +1,9 @@
+import singleton from '../model/Config';
 import axios from 'axios';
 import express from 'express';
-import type { Config } from '../model/Config';
 import type { Parameter, Request } from '../model/Request';
 
 const router = express.Router();
-const singleton: Config = require('../model/Config');
 
 /**
  * @swagger
@@ -49,4 +48,4 @@ router.get('/list', async (req, res) => {
     res.json(requests);
 });
 
-module.exports = router;
+export default router;
