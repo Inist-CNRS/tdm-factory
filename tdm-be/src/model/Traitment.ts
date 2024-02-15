@@ -11,6 +11,16 @@ export class Traitment {
     status: StatusEnum = StatusEnum.UNKNOWN;
 }
 
-const currentTraitments: Traitment[] = [];
+let currentTraitments: Traitment[] = [];
 
-export default currentTraitments;
+export const addTraitement = (traitement: Traitment) => {
+    currentTraitments.push(traitement);
+};
+
+export const getTraitement = () => {
+    return currentTraitments;
+};
+
+export const setTraitement = (traitements: Traitment[]) => {
+    currentTraitments = traitements;
+};
