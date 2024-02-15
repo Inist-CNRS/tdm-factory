@@ -28,12 +28,11 @@ type Config = {
     };
     smtp: SMTP;
     fileFolder: string;
-    dumpFile: string;
-    finalFile: string;
     cron: {
         schedule: string;
         deleteFileOlderThan: number;
     };
+    verbose: string;
 };
 
 export default config as unknown as Config;

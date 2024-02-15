@@ -21,6 +21,7 @@ const Home: React.FC = () => {
     const [selectedWrapper, setWrapper] = React.useState<Request>();
     const [selectedEnrichment, setEnrichment] = React.useState<Request>();
     const [file, setFile] = React.useState<File>();
+    const [fileName, setFileName] = React.useState<string>();
     const [fileError, setFileError] = React.useState<boolean>(false);
     const [mail, setMail] = React.useState<string>();
     const [startResult, setStartResult] = React.useState<{ success: boolean; message?: string; url?: string }>();
@@ -50,6 +51,7 @@ const Home: React.FC = () => {
                     setFileError(false);
                     setLoading(true);
                     api.traitmentUploadPost(file).then((res) => {
+                        setFileName(res.data.filename);
                         setLoading(false);
                         setActiveStep((prevActiveStep) => prevActiveStep + 1);
                     });
@@ -61,7 +63,7 @@ const Home: React.FC = () => {
                 const traitment: Traitment = {
                     wrapper: selectedWrapper,
                     enrichment: selectedEnrichment,
-                    file: file?.name,
+                    file: fileName,
                     mail: mail,
                 };
                 setLoading(true);

@@ -146,13 +146,26 @@ export interface TraitmentStatusGet200Response {
      * @type {string}
      * @memberof TraitmentStatusGet200Response
      */
-    'message': string;
+    'message'?: string;
     /**
      * 
      * @type {number}
      * @memberof TraitmentStatusGet200Response
      */
-    'errorType': number;
+    'errorType'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface TraitmentUploadPost200Response
+ */
+export interface TraitmentUploadPost200Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof TraitmentUploadPost200Response
+     */
+    'filename'?: string;
 }
 
 /**
@@ -400,7 +413,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async traitmentUploadPost(file?: File, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async traitmentUploadPost(file?: File, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TraitmentUploadPost200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.traitmentUploadPost(file, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.traitmentUploadPost']?.[index]?.url;
@@ -461,7 +474,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        traitmentUploadPost(file?: File, options?: any): AxiosPromise<void> {
+        traitmentUploadPost(file?: File, options?: any): AxiosPromise<TraitmentUploadPost200Response> {
             return localVarFp.traitmentUploadPost(file, options).then((request) => request(axios, basePath));
         },
     };

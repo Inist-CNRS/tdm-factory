@@ -120,7 +120,19 @@
         },
         "responses": {
           "200": {
-            "description": "File uploaded successfully"
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filename": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request, file upload failed"

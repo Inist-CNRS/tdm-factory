@@ -17,5 +17,6 @@
             "ignore": true,
             "rejectUnauthorized": false
         }
-    }
+    },
+    "verbose": "debug"
 }

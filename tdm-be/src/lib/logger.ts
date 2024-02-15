@@ -1,3 +1,4 @@
+import config from './config';
 import { createLogger, format, transports } from 'winston';
 import type { Logger } from 'winston';
 
@@ -15,7 +16,9 @@ const create = (name: string): Logger => {
             }),
         ),
         transports: [
-            new transports.Console(),
+            new transports.Console({
+                level: config.verbose,
+            }),
             new transports.File({
                 filename: name === 'default' ? 'logs/combined.log' : `logs/${name}-combined.log`,
             }),

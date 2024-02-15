@@ -1,10 +1,12 @@
 import environment from '../lib/config';
+import { randomFileName } from '../lib/files';
 import logger from '../lib/logger';
 import { StatusEnum } from '../model/StatusEnum';
 import { addTraitement, getTraitement } from '../model/Traitment';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
+import md5 from 'md5';
 import multer from 'multer';
 import fs from 'fs';
 import type { Traitment } from '../model/Traitment';
@@ -95,8 +97,9 @@ router.post(
             .then(
                 (wrapperRes) => {
                     const bin: Buffer = Buffer.from(wrapperRes.data, 'binary');
-                    fs.writeFileSync(environment.dumpFile, bin);
-                    const fd = fs.readFileSync(environment.dumpFile);
+                    const dumpName = randomFileName();
+                    fs.writeFileSync(`/tmp/${dumpName}.tar.gz`, bin);
+                    const fd = fs.readFileSync(`/tmp/${dumpName}.tar.gz`);
                     logger.info(`Wrapper Done for ${traitment.timestamp}`);
                     const conf = {
                         headers: {
@@ -144,8 +147,9 @@ const storage = multer.diskStorage({
         cb(null, environment.fileFolder);
     },
     filename: function (req, file, cb) {
+        const uniqueName = randomFileName();
         // Set the file name
-        cb(null, file.originalname);
+        cb(null, `${uniqueName}.${file.originalname.split('.').pop() ?? ''}`);
     },
 });
 
@@ -170,14 +174,23 @@ const upload = multer({ storage: storage });
  *     responses:
  *       '200':
  *         description: File uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 filename:
+ *                   type: string
  *       '400':
  *         description: Bad request, file upload failed
  *       '500':
  *         description: Internal server error
  */
 // Route to handle file upload
-router.post('/upload', upload.single('file'), (req: any, res: Response) => {
-    res.send('File uploaded!');
+router.post('/upload', upload.single('file'), (req, res: Response) => {
+    res.send({
+        filename: req.file?.filename,
+    });
 });
 
 /**

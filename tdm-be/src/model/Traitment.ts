@@ -7,6 +7,7 @@ export class Traitment {
     mail = '';
     file = '';
     timestamp?: number;
+    id?: string;
     retrieveValue?: string;
     status: StatusEnum = StatusEnum.UNKNOWN;
 }
