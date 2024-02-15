@@ -34,7 +34,7 @@ const TraitmentComponent: React.FC<{ id: number }> = (props) => {
                 <div className="traitment">
                     {result?.message}
                     <br />
-                    <Factory color={result.errorType >= 0 ? 'primary' : 'disabled'} />
+                    <Factory color={result.errorType && result.errorType >= 0 ? 'primary' : 'disabled'} />
                     <br />
                     En cours de conversion
                     <br />
@@ -46,7 +46,9 @@ const TraitmentComponent: React.FC<{ id: number }> = (props) => {
                         </div>
                     ) : (
                         <div>
-                            <FindReplaceIcon color={result.errorType >= 2 ? 'primary' : 'disabled'} />
+                            <FindReplaceIcon
+                                color={result.errorType && result.errorType >= 2 ? 'primary' : 'disabled'}
+                            />
                             <br />
                             En cours d&apos;appel au traitement
                             <br />
@@ -58,7 +60,9 @@ const TraitmentComponent: React.FC<{ id: number }> = (props) => {
                                 </div>
                             ) : (
                                 <div>
-                                    <TroubleshootIcon color={result.errorType >= 4 ? 'primary' : 'disabled'} />
+                                    <TroubleshootIcon
+                                        color={result.errorType && result.errorType >= 4 ? 'primary' : 'disabled'}
+                                    />
                                     <br />
                                     En attente de la fin du traitement
                                     <br />
