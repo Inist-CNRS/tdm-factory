@@ -4,6 +4,7 @@ import dataWrapperRoute from './controller/data-wrapper';
 import traitmentRoute from './controller/traitment';
 import webhookRoute from './controller/webhook';
 import environment from './lib/config';
+import { initFilesSystem } from './lib/files';
 import logger, { httpLogger, cronLogger } from './lib/logger';
 import swaggerFile from './swagger/swagger-config.json';
 import cors from 'cors';
@@ -48,12 +49,12 @@ app.use('/config', auth, configRoute);
 app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'public', '_next', 'server', 'app', 'index.html'));
+    res.sendFile(path.join('public', '_next', 'server', 'app', 'index.html'));
 });
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join('public')));
 
 app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'public'));
+    res.sendFile(path.join('public'));
 });
 
 // Middleware pour gérer les erreurs 404 (route non trouvée)
@@ -63,11 +64,13 @@ app.use((req, res, next) => {
     );
 });
 
-const server = app.listen(port, () => {
-    logger.debug(`Running on ${port}`);
-});
+initFilesSystem().then(() => {
+    const server = app.listen(port, () => {
+        logger.debug(`Running on ${port}`);
+    });
 
-server.setTimeout(600000); // 10 minutes timeout for all routes
+    server.setTimeout(600000); // 10 minutes timeout for all routes
+});
 
 cron.schedule(environment.cron.schedule, () => {
     const oneWeekAgo = new Date(); // Date actuelle
