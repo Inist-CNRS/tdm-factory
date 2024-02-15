@@ -1,0 +1,21 @@
+{
+    "hosts": {
+        "internal": {
+            "host": "{ngrok host}",
+            "isHttps": true
+        },
+        "external": {
+            "host": "http://localhost:8080",
+            "isHttps": false
+        }
+    },
+    "smtp": {
+        "host": "tdm-factory-dev-maildev",
+        "port": 1025,
+        "secure": false,
+        "tls": {
+            "ignore": true,
+            "rejectUnauthorized": false
+        }
+    }
+}

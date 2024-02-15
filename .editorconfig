@@ -17,3 +17,11 @@ tab_width = 2
 indent_size = 2
 tab_width = 2
 
+[package-lock.json]
+indent_size = 2
+tab_width = 2
+
+[package.json]
+indent_size = 2
+tab_width = 2
+

@@ -1,0 +1,44 @@
+version: "3.5"
+
+services:
+  tdm-factory-backend:
+    container_name: tdm-factory-dev-backend
+    image: node:18.19-bullseye-slim
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./tdm-be:/app
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - tdm-factory-network
+
+  tdm-factory-frontend:
+    container_name: tdm-factory-dev-frontend
+    image: node:18.19-bullseye-slim
+    environment:
+      NODE_ENV: development
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./tdm-fe:/app
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - tdm-factory-network
+
+  tdm-factory-maildev:
+    container_name: tdm-factory-dev-maildev
+    image: maildev/maildev
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    networks:
+      - tdm-factory-network
+
+networks:
+  tdm-factory-network:
+    driver: bridge
+    name: tdm-factory-network

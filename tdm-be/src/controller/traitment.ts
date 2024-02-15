@@ -1,7 +1,7 @@
 import environment from '../lib/config';
 import logger from '../lib/logger';
 import { StatusEnum } from '../model/StatusEnum';
-import currentTraitments from '../model/Traitment';
+import { addTraitement, getTraitement } from '../model/Traitment';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
@@ -65,9 +65,9 @@ const router = express.Router();
 //Route to start traitment wrapping and then enrichment
 router.post(
     '/start',
-    (req: Request<{}, {}, Traitment>, res) => {
+    (req: Request<unknown, unknown, Traitment>, res) => {
         const traitment: Traitment = req.body;
-        currentTraitments.push(traitment);
+        addTraitement(traitment);
         const url = traitment.wrapper?.url ? traitment.wrapper?.url : '';
         const urlEnrichment = traitment.enrichment?.url ? traitment.enrichment?.url : '';
         const fileData = fs.readFileSync(`${environment.fileFolder}${traitment.file}`);
@@ -209,7 +209,7 @@ router.post('/upload', upload.single('file'), (req: any, res: Response) => {
 //Route to retrieve traitment status
 router.get('/status', (req, res) => {
     const { id } = req.query;
-    const traitment: Traitment = currentTraitments.filter((t) => t.timestamp + '' === id)[0];
+    const traitment: Traitment = getTraitement().filter((t) => t.timestamp + '' === id)[0];
     let status: StatusEnum = StatusEnum.UNKNOWN;
     if (traitment) {
         status = traitment.status;
