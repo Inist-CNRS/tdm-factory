@@ -85,6 +85,7 @@ COPY --chown=daemon:daemon --from=react-build /app/.next /app/public/_next/
 RUN mkdir /app/public/downloads
 RUN mkdir /app/uploads
 RUN mkdir /app/logs
+RUN mkdir /app/tmp
 
 # Start the application
 EXPOSE 3000

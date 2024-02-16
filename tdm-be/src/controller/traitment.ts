@@ -1,12 +1,11 @@
 import environment from '../lib/config';
-import { randomFileName } from '../lib/files';
+import { randomFileName, tmpFile } from '../lib/files';
 import logger from '../lib/logger';
 import { StatusEnum } from '../model/StatusEnum';
 import { addTraitement, getTraitement } from '../model/Traitment';
 import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
-import md5 from 'md5';
 import multer from 'multer';
 import fs from 'fs';
 import type { Traitment } from '../model/Traitment';
@@ -97,9 +96,9 @@ router.post(
             .then(
                 (wrapperRes) => {
                     const bin: Buffer = Buffer.from(wrapperRes.data, 'binary');
-                    const dumpName = randomFileName();
-                    fs.writeFileSync(`/tmp/${dumpName}.tar.gz`, bin);
-                    const fd = fs.readFileSync(`/tmp/${dumpName}.tar.gz`);
+                    const dumpFilePath = tmpFile(`${randomFileName()}.tar.gz`);
+                    fs.writeFileSync(dumpFilePath, bin);
+                    const fd = fs.readFileSync(dumpFilePath);
                     logger.info(`Wrapper Done for ${traitment.timestamp}`);
                     const conf = {
                         headers: {
