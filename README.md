@@ -68,6 +68,8 @@ To use the dev mode add the `http://localhost:3000` prefix to the servers url in
 
 Then run `make update-front-api`.
 
+You also need a ngrok host for the external host in `tdm-be/config/devlopement.json`
+
 After setting up this you can run `make run-dev`
 
 ## Properties
