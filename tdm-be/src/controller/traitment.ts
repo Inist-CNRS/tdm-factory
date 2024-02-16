@@ -74,14 +74,17 @@ router.post(
         const fileData = fs.readFileSync(`${environment.fileFolder}${traitment.file}`);
         traitment.timestamp = new Date().getTime();
         traitment.status = StatusEnum.WRAPPER_RUNNING;
+        const statusPanelUrl = `${
+            environment.hosts.external.isHttps ? 'https' : 'http'
+        }://${environment.hosts.external.host}?id=${traitment.timestamp}`;
         res.send({
             message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: `Un suivi est disponible à l\'url https://${req.hostname}?id=${traitment.timestamp}`,
+            url: `Un suivi est disponible à l'url ${statusPanelUrl}`,
         });
         sendEmail({
             to: req.body.mail,
             subject: 'Votre traitement a bien démarré',
-            text: `Un suivi est disponible à l\'url http://${req.hostname}?id=${traitment.timestamp}`,
+            text: `Un suivi est disponible à l'url ${statusPanelUrl}`,
         }).then(() => {
             logger.info('mail envoyer pour début de traitement');
         });
