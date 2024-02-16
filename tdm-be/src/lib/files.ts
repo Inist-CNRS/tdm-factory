@@ -6,8 +6,6 @@ import path from 'path';
 
 const filesLocation = {
     app: process.cwd(),
-    public: 'public',
-    uploads: config.fileFolder,
     tmp: 'tmp',
 };
 
