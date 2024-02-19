@@ -1,7 +1,7 @@
 {
     "hosts": {
         "internal": {
-            "host": "06ff-193-54-107-81.ngrok-free.app",
+            "host": "{ngrok host}",
             "isHttps": true
         },
         "external": {
