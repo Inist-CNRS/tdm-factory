@@ -16,7 +16,8 @@
     },
     "include": [
         "src/**/*.ts",
-        "src/**/*.js"
+        "src/**/*.js",
+        "bin/swagger.ts"
     ],
     "exclude": [
         "node_modules",

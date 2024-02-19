@@ -7,7 +7,7 @@ install:
 
 
 run-dev:
-	docker compose -f docker-compose.dev.yml up --force-recreate
+	docker compose -f docker-compose.dev.yml watch
 
 update-front-api:
 	cd tdm-be && \

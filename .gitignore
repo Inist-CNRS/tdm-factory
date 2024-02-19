@@ -10,3 +10,4 @@ tdm-be/uploads/*
 tdm-be/dynamic-config.json
 tdm-be/logs/*
 tdm-be/public/*
+tdm-be/tmp/*

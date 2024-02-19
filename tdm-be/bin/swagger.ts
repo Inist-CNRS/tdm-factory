@@ -1,5 +1,8 @@
-const swaggerJsdoc = require('swagger-jsdoc');
-const fs = require('fs');
+import swaggerJsdoc from 'swagger-jsdoc';
+import { writeFileSync } from 'fs';
+
+// Replace this with http://localhost:3000 in dev mode and run `make update-front-api`
+const HOST = '';
 
 const swaggerOptions = {
     definition: {
@@ -11,11 +14,12 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: `/api`,
+                url: `${HOST}/api`,
             },
         ],
     },
-    apis: ['./src/controller/data-enrichment.ts', './src/controller/data-wrapper.ts', './src/controller/traitment.ts'], // Specify the file containing your routes
+    // Specify the file containing your routes
+    apis: ['./src/controller/data-enrichment.ts', './src/controller/data-wrapper.ts', './src/controller/traitment.ts'],
 };
 
 const swaggerOptionsConfig = {
@@ -28,7 +32,7 @@ const swaggerOptionsConfig = {
         },
         servers: [
             {
-                url: `/`,
+                url: `${HOST}/`,
             },
         ],
     },
@@ -39,12 +43,12 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Write Swagger JSON to a file
 const swaggerJson = JSON.stringify(swaggerSpec, null, 2);
-fs.writeFileSync(__dirname + '/swagger.json', swaggerJson);
+writeFileSync('../tdm-fe/src/swagger.json', swaggerJson);
 
 const swaggerSpecConfig = swaggerJsdoc(swaggerOptionsConfig);
 
 // Write Swagger JSON to a file
 const swaggerJsonConfig = JSON.stringify(swaggerSpecConfig, null, 2);
-fs.writeFileSync(__dirname + '/swagger-config.json', swaggerJsonConfig);
+writeFileSync('./src/swagger/swagger-config.json', swaggerJsonConfig);
 
 console.log('Swagger JSON file generated successfully');
