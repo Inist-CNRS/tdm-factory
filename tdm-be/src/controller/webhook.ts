@@ -1,3 +1,4 @@
+import environment from '../lib/config';
 import logger from '../lib/logger';
 import configModel from '../model/Config';
 import { StatusEnum } from '../model/StatusEnum';
@@ -34,13 +35,14 @@ router.post(
                         // Process the payload as needed
                         const bin: Buffer = Buffer.from(retrieveRes.data, 'binary');
                         fs.writeFileSync(`public/downloads/${traitment.timestamp}.tar.gz`, bin);
+                        const resultUrl = `${
+                            environment.hosts.external.isHttps ? 'https' : 'http'
+                        }://${environment.hosts.external.host}/downloads/${traitment.timestamp}.tar.gz`;
                         logger.info('mail sent to smtp');
                         const mailOptions: EmailOptions = {
                             to: traitment.mail,
                             subject: config.mailSuccess.subject,
-                            text:
-                                config.mailSuccess.text +
-                                `\n ${req.protocol}://${req.hostname}/downloads/${traitment.timestamp}.tar.gz`,
+                            text: config.mailSuccess.text + `\n ${resultUrl}`,
                         };
                         sendEmail(mailOptions);
                         res.send('Email envoyé');

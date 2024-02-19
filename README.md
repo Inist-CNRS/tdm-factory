@@ -62,6 +62,16 @@ docker run -p 3000:3000 tdm:v1.0.0
 
 The frontend will be accessible at `http://localhost:3000/` and the swagger configuration at `http://localhost:3000/swagger-config`.
 
+## Development mode
+
+To use the dev mode add the `http://localhost:3000` prefix to the servers url in `tdm-be/src/swagger/swagger.js`.
+
+Then run `make update-front-api`.
+
+You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/devlopement.json`,
+to create a ngrok endpoints run `ngrok http 3000`.
+
+After setting up this you can run `make run-dev`
 
 ## Properties
 
