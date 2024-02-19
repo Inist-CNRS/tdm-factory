@@ -64,7 +64,7 @@ The frontend will be accessible at `http://localhost:3000/` and the swagger conf
 
 ## Development mode
 
-To use the dev mode add the `http://localhost:3000` host in `tdm-be/bin/swagger.ts`.
+To use the dev mode, set `HOST` to `http://localhost:3000` in `tdm-be/bin/swagger.ts`.
 
 Then run `make update-front-api`.
 
