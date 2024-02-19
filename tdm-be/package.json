@@ -12,7 +12,7 @@
     "start": "node app.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger-autogen": "node src/swagger/swagger.js 3000"
+    "swagger-autogen": "ts-node bin/swagger.ts 3000"
   },
   "keywords": [],
   "author": "",

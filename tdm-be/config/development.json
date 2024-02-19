@@ -5,7 +5,7 @@
             "isHttps": true
         },
         "external": {
-            "host": "http://localhost:8080",
+            "host": "localhost:8080",
             "isHttps": false
         }
     },

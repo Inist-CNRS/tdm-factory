@@ -1,17 +1,20 @@
-version: "3.5"
-
 services:
   tdm-factory-backend:
     container_name: tdm-factory-dev-backend
-    image: node:18.19-bullseye-slim
+    build: ./tdm-be
     environment:
       NODE_ENV: development
     ports:
       - "3000:3000"
-    volumes:
-      - ./tdm-be:/app
     working_dir: /app
     command: npm run dev
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./tdm-be/src
+          target: /app/src
+        - action: rebuild
+          path: tdm-be/package.json
     networks:
       - tdm-factory-network
 

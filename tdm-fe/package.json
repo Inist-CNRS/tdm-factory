@@ -6,7 +6,7 @@
     "dev": "next dev -p 8080",
     "build": "next build",
     "start": "next start -p 8080",
-    "generate-api": "openapi-generator-cli generate -i ../tdm-be/src/swagger/swagger.json -g typescript-axios -o src/generated",
+    "generate-api": "openapi-generator-cli generate -i src/swagger.json -g typescript-axios -o src/generated",
     "lint": "next lint"
   },
   "dependencies": {
