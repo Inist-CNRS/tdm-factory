@@ -15,12 +15,11 @@
         "allowJs": true
     },
     "include": [
-        "src/**/*.ts",
-        "src/**/*.js",
-        "bin/swagger.ts"
+        "src/**/*.ts"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "bin/swagger.ts"
     ]
 }

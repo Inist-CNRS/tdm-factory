@@ -11,8 +11,7 @@
     "dev": "ts-node src/app.ts",
     "start": "node app.js",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger-autogen": "ts-node bin/swagger.ts 3000"
+    "swagger-autogen": "ts-node --project tsconfig.dev.json bin/swagger.ts 3000"
   },
   "keywords": [],
   "author": "",
