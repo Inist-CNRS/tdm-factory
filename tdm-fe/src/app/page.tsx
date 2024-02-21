@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
+import mimeTypes from 'mime';
 import React from 'react';
 import type { Request, Traitment } from '@/generated/api';
 
@@ -46,19 +47,30 @@ const Home: React.FC = () => {
     const handleNext = async () => {
         const api = await DefaultApiFactory();
         switch (activeStep) {
-            case 0:
-                if (selectedWrapper?.fileType && file && selectedWrapper.fileType.indexOf(file.type) > -1) {
-                    setFileError(false);
-                    setLoading(true);
-                    api.traitmentUploadPost(file).then((res) => {
-                        setFileName(res.data.filename);
-                        setLoading(false);
-                        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-                    });
-                } else {
+            case 0: {
+                if (!file || !selectedWrapper || !selectedWrapper.fileType) {
                     setFileError(true);
+                    break;
                 }
+
+                if (selectedWrapper.fileType.includes('application/x-gzip')) {
+                    selectedWrapper.fileType.push('application/gzip');
+                }
+
+                if (!selectedWrapper.fileType.includes(mimeTypes.getType(file.name) ?? '')) {
+                    setFileError(true);
+                    break;
+                }
+
+                setFileError(false);
+                setLoading(true);
+                api.traitmentUploadPost(file).then((res) => {
+                    setFileName(res.data.filename);
+                    setLoading(false);
+                    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                });
                 break;
+            }
             case 1:
                 const traitment: Traitment = {
                     wrapper: selectedWrapper,
@@ -157,9 +169,9 @@ const Home: React.FC = () => {
                             >
                                 {startResult?.message}
                             </Alert>
-                            {startResult?.url?.split('https://')[0]}
-                            <a href={startResult?.url?.split('url ')[1]} target="blank">
-                                {startResult?.url?.split('url ')[1]}
+                            {"Un suivi est disponible à l'url"}
+                            <a href={startResult?.url} target="blank">
+                                {startResult?.url}
                             </a>
                         </Box>
                     )}

@@ -25,8 +25,10 @@ const router = express.Router();
  *           items:
  *             $ref: '#/components/schemas/Parameter'
  *         fileType:
- *           type: string
+ *           type: array
  *           description: The request accept type
+ *           items:
+ *             type: string
  *     Parameter:
  *       type: object
  *       properties:
