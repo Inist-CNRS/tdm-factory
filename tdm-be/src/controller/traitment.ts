@@ -79,7 +79,7 @@ router.post(
         }://${environment.hosts.external.host}?id=${traitment.timestamp}`;
         res.send({
             message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: `Un suivi est disponible à l'url ${statusPanelUrl}`,
+            url: statusPanelUrl,
         });
         sendEmail({
             to: req.body.mail,
