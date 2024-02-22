@@ -15,6 +15,7 @@
     "@google-cloud/recaptcha-enterprise": "^5.1.0",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.18",
+    "mime": "^4.0.1",
     "mui-file-input": "^4.0.2",
     "next": "14.0.2",
     "react": "^18.2.0",

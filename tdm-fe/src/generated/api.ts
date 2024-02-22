@@ -80,10 +80,10 @@ export interface Request {
     'parameters'?: Array<Parameter>;
     /**
      * The request accept type
-     * @type {string}
+     * @type {Array<string>}
      * @memberof Request
      */
-    'fileType'?: string;
+    'fileType'?: Array<string>;
 }
 /**
  * 
