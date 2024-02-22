@@ -1,15 +1,16 @@
 import express from 'express';
 import multer from 'multer';
-import fs from 'fs';
 import type { Request, Response } from 'express';
+import type { Processing } from '~/model/ProcessingModel';
 import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendEmail } from '~/lib/email-sender';
 import { randomFileName } from '~/lib/files';
+import { HTTP_BAD_REQUEST, HTTP_CREATED, HTTP_INTERNAL_SERVER_ERROR, HTTP_PRECONDITION_REQUIRED } from '~/lib/http';
 import logger from '~/lib/logger';
-import { createProcessing } from '~/model/ProcessingModel';
+import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
-import { addTraitement, getTraitement } from '~/model/Traitment';
+import { getTraitement } from '~/model/Traitment';
 import { wrapper } from '~/worker/wrapper';
 
 const router = express.Router();
@@ -61,6 +62,8 @@ const router = express.Router();
  *                   description: URL associated with the message.
  *       '400':
  *         description: Bad request, file upload failed
+ *       '428':
+ *         description: No processing are available for this id
  *       '500':
  *         description: Internal server error
  */
@@ -68,26 +71,75 @@ const router = express.Router();
 router.post(
     '/start',
     (req: Request<unknown, unknown, Traitment>, res) => {
-        const traitment: Traitment = req.body;
+        const traitement: Traitment = req.body;
 
-        addTraitement(traitment);
+        // --- Find the processing associated with the uploaded file
+        // Get the processing the sqlite cache db
+        const processing = findProcessing(traitement.file);
 
-        const url = traitment.wrapper?.url ? traitment.wrapper?.url : '';
-        const urlEnrichment = traitment.enrichment?.url ? traitment.enrichment?.url : '';
-        const fileData = fs.readFileSync(`${environment.fileFolder}${traitment.file}`);
+        // Check if the processing exists
+        if (!processing) {
+            res.status(HTTP_PRECONDITION_REQUIRED).send({
+                status: HTTP_PRECONDITION_REQUIRED,
+                message: 'Precondition Required - No processing are available for this id',
+            });
+            return;
+        }
 
-        traitment.timestamp = new Date().getTime();
-        traitment.status = Status.WRAPPER_RUNNING;
+        // --- Get processing webservices url
+        // Set the wrapper and the enrichment as undefined
+        let wrapperUrl: string | undefined = undefined;
+        let urlEnrichment: string | undefined = undefined;
 
+        // Get wrapper url
+        if (traitement.wrapper && traitement.wrapper.url) {
+            wrapperUrl = traitement.wrapper.url;
+        }
+
+        // Get enrichment url
+        if (traitement.enrichment && traitement.enrichment.url) {
+            urlEnrichment = traitement.enrichment.url;
+        }
+
+        // Check if the wrapper and the enrichment is pressent
+        if (!wrapperUrl || !urlEnrichment) {
+            res.status(HTTP_BAD_REQUEST).send({
+                status: HTTP_BAD_REQUEST,
+                message: 'Bad Request - Wrapper nor enrichment cannot be null',
+            });
+            return;
+        }
+
+        // --- Update the processing with the new webservices url
+        // Create the partial processing use to update the cache db
+        const processingSetting: Partial<Processing> = {
+            wrapper: wrapperUrl,
+            enrichment: urlEnrichment,
+            status: Status.STARTING,
+        };
+
+        // Update the cache db
+        const updatedProcessing = updateProcessing(processing.id, processingSetting);
+
+        // Check if the cache db return a valide processing
+        if (!updatedProcessing) {
+            res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+                status: HTTP_INTERNAL_SERVER_ERROR,
+                message: 'Internal Server Error - Something went wrong when updating the processing status',
+            });
+            return;
+        }
+
+        // --- Send a message to the user about the processing starting
+        // Create the status url return to the client
         const statusPanelUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
-        }://${environment.hosts.external.host}?id=${traitment.timestamp}`;
+        }://${environment.hosts.external.host}?id=${updatedProcessing.id}`;
 
-        res.send({
-            message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: statusPanelUrl,
-        });
+        // Start the processing by starting the wrapper
+        wrapper(updatedProcessing).then(undefined).catch(undefined);
 
+        // Send a mail with the processing information
         sendEmail({
             to: req.body.mail,
             subject: 'Votre traitement a bien démarré',
@@ -96,7 +148,11 @@ router.post(
             logger.info('mail envoyer pour début de traitement');
         });
 
-        wrapper(url, fileData, traitment, urlEnrichment).then(undefined);
+        // Send a http response with the processing information
+        res.send({
+            message: `Enrichissement démarré vous allez recevoir un email.`,
+            url: statusPanelUrl,
+        });
     },
     (error) => {
         logger.error(error);
@@ -112,6 +168,7 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         const uniqueName = randomFileName();
         req.body.processingId = uniqueName;
+        req.body.originalName = file.originalname;
         // Set the file name
         cb(null, `${uniqueName}.${file.originalname.split('.').pop() ?? ''}`);
     },
@@ -136,14 +193,14 @@ const upload = multer({ storage: storage });
  *                 type: string
  *                 format: binary
  *     responses:
- *       '200':
+ *       '201':
  *         description: File uploaded successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 filename:
+ *                 id:
  *                   type: string
  *       '400':
  *         description: Bad request, file upload failed
@@ -152,18 +209,18 @@ const upload = multer({ storage: storage });
  */
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
-    if (req.body.processingId && req.file?.filename) {
-        const result = createProcessing(req.body.processingId, req.file.filename);
+    if (req.body.processingId && req.body.originalName && req.file?.filename) {
+        const result = createProcessing(req.body.processingId, req.body.originalName, req.file.filename);
         if (result) {
-            res.send({
+            res.status(HTTP_CREATED).send({
                 id: result.id,
             });
             return;
         }
     }
 
-    res.status(500).send({
-        status: 500,
+    res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+        status: HTTP_INTERNAL_SERVER_ERROR,
     });
 });
 

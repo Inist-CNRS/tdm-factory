@@ -1,13 +1,13 @@
 import axios from 'axios';
 import fs from 'fs';
-import type { Traitment } from '~/model/Traitment';
+import type { Processing } from '~/model/ProcessingModel';
 import environment from '~/lib/config';
 import { randomFileName, tmpFile } from '~/lib/files';
 import logger from '~/lib/logger';
 import Status from '~/model/Status';
 import { enrichment } from '~/worker/enrichment';
 
-export const wrapper = async (url: string, fileData: Buffer, traitment: Traitment, urlEnrichment: string) => {
+export const wrapper = async (processing: Processing) => {
     axios
         .post(url, fileData, {
             responseType: 'arraybuffer',

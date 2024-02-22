@@ -17,6 +17,7 @@ const init = () => {
             email text default null,
             wrapper text default null,
             enrichment text default null,
+            originalName text,
             uploadFile text,
             tmpFile text default null,
             resultFile text default null

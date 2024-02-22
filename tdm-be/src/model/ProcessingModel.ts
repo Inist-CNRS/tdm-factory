@@ -1,4 +1,5 @@
 import database from '~/lib/database';
+import { defaultNull } from '~/lib/utils';
 import Status from '~/model/Status';
 
 export type Processing = {
@@ -7,34 +8,19 @@ export type Processing = {
     email: string | null;
     wrapper: string | null;
     enrichment: string | null;
-    uploadFile: string | null;
+    originalName: string;
+    uploadFile: string;
     tmpFile: string | null;
     resultFile: string | null;
 };
 
 /**
- * Helper function use to compare two value and set a default value if both are null or undefined
- * @param first First value to compare
- * @param second Second value to compare
- */
-const defaultNull = <T>(first: T | null | undefined, second: T | null | undefined): T | null => {
-    if (first !== null && first !== undefined) {
-        return first;
-    }
-
-    if (second !== null && second !== undefined) {
-        return second;
-    }
-
-    return null;
-};
-
-/**
  * Create a new processing
  * @param id ID of the processing
+ * @param originalName Name of the original file
  * @param uploadFile Source file of processing
  */
-export const createProcessing = (id: string, uploadFile: string): Processing | undefined => {
+export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
     const stmt = database.prepare<[string, number, string]>(`
         insert into processing (id, status, uploadFile) values (?, ?, ?);
     `);
@@ -45,7 +31,8 @@ export const createProcessing = (id: string, uploadFile: string): Processing | u
         return {
             id,
             status: Status.UNKNOWN,
-            uploadFile: uploadFile,
+            uploadFile,
+            originalName,
             email: null,
             tmpFile: null,
             resultFile: null,

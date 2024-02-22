@@ -92,6 +92,9 @@
           "400": {
             "description": "Bad request, file upload failed"
           },
+          "428": {
+            "description": "No processing are available for this id"
+          },
           "500": {
             "description": "Internal server error"
           }
@@ -119,14 +122,14 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "File uploaded successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "filename": {
+                    "id": {
                       "type": "string"
                     }
                   }

@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-shadow
 enum Status {
     UNKNOWN,
+    STARTING,
     WRAPPER_RUNNING,
     WRAPPER_ERROR,
     ENRICHMENT_RUNNING,
