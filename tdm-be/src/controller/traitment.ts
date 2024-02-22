@@ -84,7 +84,7 @@ router.post(
 
         res.send({
             message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: `Un suivi est disponible à l'url ${statusPanelUrl}`,
+            url: statusPanelUrl,
         });
 
         sendEmail({

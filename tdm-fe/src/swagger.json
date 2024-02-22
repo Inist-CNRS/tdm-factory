@@ -205,8 +205,11 @@
             }
           },
           "fileType": {
-            "type": "string",
-            "description": "The request accept type"
+            "type": "array",
+            "description": "The request accept type",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
