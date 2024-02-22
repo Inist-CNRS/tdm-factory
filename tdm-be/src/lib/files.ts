@@ -3,9 +3,12 @@ import fs from 'node:fs/promises';
 import path from 'path';
 import logger from '~/lib/logger';
 
-const filesLocation = {
+export const filesLocation = {
     app: process.cwd(),
     tmp: 'tmp',
+    upload: 'uploads',
+    crash: 'crash',
+    download: 'public/downloads',
 };
 
 export const randomFileName = (): string => {
@@ -20,10 +23,19 @@ export const dbFile = (fileName: string): string => {
     return path.join(filesLocation.app, fileName);
 };
 
+export const uploadFile = (fileName: string): string => {
+    return path.join(filesLocation.app, filesLocation.upload, fileName);
+};
+
+export const crashFile = (fileName: string): string => {
+    return path.join(filesLocation.app, filesLocation.crash, fileName);
+};
+
 export const initFilesSystem = async (): Promise<void> => {
     logger.debug('Initializing files system');
-    await fs.mkdir('uploads', { recursive: true });
-    await fs.mkdir('public/downloads', { recursive: true });
-    await fs.mkdir('tmp', { recursive: true });
+    await fs.mkdir(filesLocation.upload, { recursive: true });
+    await fs.mkdir(filesLocation.download, { recursive: true });
+    await fs.mkdir(filesLocation.tmp, { recursive: true });
+    await fs.mkdir(filesLocation.crash, { recursive: true });
     logger.debug('Files system initialized');
 };

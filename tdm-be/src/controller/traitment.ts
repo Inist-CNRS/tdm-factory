@@ -2,16 +2,17 @@ import express from 'express';
 import multer from 'multer';
 import type { Request, Response } from 'express';
 import type { Processing } from '~/model/ProcessingModel';
+import type { Parameter } from '~/model/Request';
 import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendEmail } from '~/lib/email-sender';
-import { randomFileName } from '~/lib/files';
+import { filesLocation, randomFileName } from '~/lib/files';
 import { HTTP_BAD_REQUEST, HTTP_CREATED, HTTP_INTERNAL_SERVER_ERROR, HTTP_PRECONDITION_REQUIRED } from '~/lib/http';
 import logger from '~/lib/logger';
 import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import { getTraitement } from '~/model/Traitment';
-import { wrapper } from '~/worker/wrapper';
+import wrapper from '~/worker/wrapper';
 
 const router = express.Router();
 
@@ -89,11 +90,22 @@ router.post(
         // --- Get processing webservices url
         // Set the wrapper and the enrichment as undefined
         let wrapperUrl: string | undefined = undefined;
+        let wrapperParam = 'value';
         let urlEnrichment: string | undefined = undefined;
 
         // Get wrapper url
         if (traitement.wrapper && traitement.wrapper.url) {
             wrapperUrl = traitement.wrapper.url;
+        }
+
+        // Get wrapper param
+        if (traitement.wrapper && traitement.wrapper.parameters) {
+            const param = traitement.wrapper.parameters
+                .filter((param) => param !== undefined && param.value !== undefined && param.name !== undefined)
+                .find((param) => (param as Required<Parameter>).name === 'value') as Required<Parameter> | undefined;
+            if (param) {
+                wrapperParam = param.value;
+            }
         }
 
         // Get enrichment url
@@ -114,6 +126,7 @@ router.post(
         // Create the partial processing use to update the cache db
         const processingSetting: Partial<Processing> = {
             wrapper: wrapperUrl,
+            wrapperParam,
             enrichment: urlEnrichment,
             status: Status.STARTING,
         };
@@ -137,7 +150,7 @@ router.post(
         }://${environment.hosts.external.host}?id=${updatedProcessing.id}`;
 
         // Start the processing by starting the wrapper
-        wrapper(updatedProcessing).then(undefined).catch(undefined);
+        wrapper(updatedProcessing.id);
 
         // Send a mail with the processing information
         sendEmail({
@@ -163,7 +176,7 @@ router.post(
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Set your desired destination folder
-        cb(null, environment.fileFolder);
+        cb(null, filesLocation.upload);
     },
     filename: function (req, file, cb) {
         const uniqueName = randomFileName();

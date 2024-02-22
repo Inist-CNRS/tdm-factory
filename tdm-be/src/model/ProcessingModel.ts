@@ -7,7 +7,9 @@ export type Processing = {
     status: Status;
     email: string | null;
     wrapper: string | null;
+    wrapperParam: string | null;
     enrichment: string | null;
+    enrichmentHook: string | null;
     originalName: string;
     uploadFile: string;
     tmpFile: string | null;
@@ -22,7 +24,8 @@ export type Processing = {
  */
 export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
     const stmt = database.prepare<[string, number, string]>(`
-        insert into processing (id, status, uploadFile) values (?, ?, ?);
+        insert into processing (id, status, uploadFile)
+        values (?, ?, ?);
     `);
 
     const result = stmt.run(id, Status.UNKNOWN, uploadFile);
@@ -37,7 +40,9 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
             tmpFile: null,
             resultFile: null,
             wrapper: null,
+            wrapperParam: null,
             enrichment: null,
+            enrichmentHook: null,
         } satisfies Processing;
     }
 
@@ -50,11 +55,18 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
  */
 export const findProcessing = (id: string): Processing | undefined => {
     const stmt = database.prepare<[string]>(`
-        select 
-            id, status, email,
-            wrapper, enrichment, uploadFile,
-            tmpFile, resultFile
-        from processing 
+        select id,
+               status,
+               email,
+               wrapper,
+               wrapperParam,
+               enrichment,
+               enrichmentHook,
+               uploadFile,
+               originalName,
+               tmpFile,
+               resultFile
+        from processing
         where id = ?;
     `);
 
@@ -78,22 +90,35 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
         status: defaultNull<number>(processing.status, previousValue.status) ?? Status.UNKNOWN,
         email: defaultNull<string>(processing.email, previousValue.email),
         wrapper: defaultNull<string>(processing.wrapper, previousValue.wrapper),
+        wrapperParam: defaultNull<string>(processing.wrapperParam, previousValue.wrapperParam),
         enrichment: defaultNull<string>(processing.enrichment, previousValue.enrichment),
+        enrichmentHook: defaultNull<string>(processing.enrichmentHook, previousValue.enrichmentHook),
         tmpFile: defaultNull<string>(processing.tmpFile, previousValue.tmpFile),
         resultFile: defaultNull<string>(processing.resultFile, previousValue.resultFile),
     };
 
     const stmt = database.prepare<
-        [number, string | null, string | null, string | null, string | null, string | null, string | null]
+        [
+            number,
+            string | null,
+            string | null,
+            string | null,
+            string | null,
+            string | null,
+            string | null,
+            string | null,
+            string | null,
+        ]
     >(`
         update processing
-        set
-            status = ?,
-            email = ?,
-            wrapper = ?,
-            enrichment = ?,
-            tmpFile = ?,
-            resultFile = ?
+        set status         = ?,
+            email          = ?,
+            wrapper        = ?,
+            wrapperParam   = ?,
+            enrichment     = ?,
+            enrichmentHook = ?,
+            tmpFile        = ?,
+            resultFile     = ?
         where id = ?;
     `);
 
@@ -101,7 +126,9 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
         newValue.status,
         newValue.email,
         newValue.wrapper,
+        newValue.wrapperParam,
         newValue.enrichment,
+        newValue.enrichmentHook,
         newValue.tmpFile,
         newValue.resultFile,
         id,

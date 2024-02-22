@@ -50,5 +50,9 @@ export const cronLogger: Logger = create('cron');
  * Logger use to log database process
  */
 export const databaseLogger: Logger = create('database');
+/**
+ * Logger use to log worker process
+ */
+export const workerLogger: Logger = create('worker');
 
 export default defaultLogger;

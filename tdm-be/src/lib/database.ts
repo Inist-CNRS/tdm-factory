@@ -11,16 +11,19 @@ const db = new Database(dbFile('factory.db'), {
 const init = () => {
     db.prepare(
         `
-        create table if not exists processing (
-            id text primary key,
-            status integer,
-            email text default null,
-            wrapper text default null,
-            enrichment text default null,
-            originalName text,
-            uploadFile text,
-            tmpFile text default null,
-            resultFile text default null
+        create table if not exists processing
+        (
+            id             text primary key,
+            status         integer,
+            email          text default null,
+            wrapper        text default null,
+            wrapperParam   text default null,
+            enrichment     text default null,
+            enrichmentHook text default null,
+            originalName   text,
+            uploadFile     text,
+            tmpFile        text default null,
+            resultFile     text default null
         );
     `,
     ).run();
