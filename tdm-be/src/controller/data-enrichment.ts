@@ -1,7 +1,7 @@
-import singleton from '../model/Config';
 import axios from 'axios';
 import express from 'express';
-import type { Request } from '../model/Request';
+import type { Request } from '~/model/Request';
+import singleton from '~/model/Config';
 
 const router = express.Router();
 /**

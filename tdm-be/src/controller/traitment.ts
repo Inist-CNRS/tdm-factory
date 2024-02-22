@@ -1,15 +1,15 @@
-import environment from '../lib/config';
-import { randomFileName, tmpFile } from '../lib/files';
-import logger from '../lib/logger';
-import { StatusEnum } from '../model/StatusEnum';
-import { addTraitement, getTraitement } from '../model/Traitment';
-import { sendEmail } from '../service/email-sender';
-import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
-import type { Traitment } from '../model/Traitment';
 import type { Request, Response } from 'express';
+import type { Traitment } from '~/model/Traitment';
+import environment from '~/lib/config';
+import { sendEmail } from '~/lib/email-sender';
+import { randomFileName } from '~/lib/files';
+import logger from '~/lib/logger';
+import Status from '~/model/Status';
+import { addTraitement, getTraitement } from '~/model/Traitment';
+import { wrapper } from '~/worker/wrapper';
 
 const router = express.Router();
 
@@ -68,19 +68,25 @@ router.post(
     '/start',
     (req: Request<unknown, unknown, Traitment>, res) => {
         const traitment: Traitment = req.body;
+
         addTraitement(traitment);
+
         const url = traitment.wrapper?.url ? traitment.wrapper?.url : '';
         const urlEnrichment = traitment.enrichment?.url ? traitment.enrichment?.url : '';
         const fileData = fs.readFileSync(`${environment.fileFolder}${traitment.file}`);
+
         traitment.timestamp = new Date().getTime();
-        traitment.status = StatusEnum.WRAPPER_RUNNING;
+        traitment.status = Status.WRAPPER_RUNNING;
+
         const statusPanelUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
         }://${environment.hosts.external.host}?id=${traitment.timestamp}`;
+
         res.send({
             message: `Enrichissement démarré vous allez recevoir un email.`,
             url: `Un suivi est disponible à l'url ${statusPanelUrl}`,
         });
+
         sendEmail({
             to: req.body.mail,
             subject: 'Votre traitement a bien démarré',
@@ -88,54 +94,8 @@ router.post(
         }).then(() => {
             logger.info('mail envoyer pour début de traitement');
         });
-        axios
-            .post(url, fileData, {
-                responseType: 'arraybuffer',
-                params: {
-                    value: traitment.wrapper.parameters?.find((p) => p.name === 'value')?.value,
-                },
-                timeout: 600000,
-            })
-            .then(
-                (wrapperRes) => {
-                    const bin: Buffer = Buffer.from(wrapperRes.data, 'binary');
-                    const dumpFilePath = tmpFile(`${randomFileName()}.tar.gz`);
-                    fs.writeFileSync(dumpFilePath, bin);
-                    const fd = fs.readFileSync(dumpFilePath);
-                    logger.info(`Wrapper Done for ${traitment.timestamp}`);
-                    const conf = {
-                        headers: {
-                            'X-Webhook-Success': `${
-                                environment.hosts.internal.isHttps ? 'https' : 'http'
-                            }://${environment.hosts.internal.host}/webhook/success?id=${traitment.timestamp}`,
-                            'X-Webhook-Failure': `${
-                                environment.hosts.internal.isHttps ? 'https' : 'http'
-                            }://${environment.hosts.internal.host}/webhook/failure?id=${traitment.timestamp}`,
-                        },
-                        timeout: 600000,
-                    };
-                    traitment.status = StatusEnum.TRAITMENT_RUNNING;
-                    axios.post(urlEnrichment, fd, conf).then(
-                        (enrichmentRes) => {
-                            traitment.status = StatusEnum.WAITING_WEBHOOK;
-                            logger.info(`Traitment Done for ${traitment.timestamp}`);
-                            traitment.retrieveValue = enrichmentRes.data[0].value;
-                        },
-                        (error) => {
-                            traitment.status = StatusEnum.TRAITMENT_ERROR;
-                            logger.error(`Traitment Error for ${traitment.timestamp}`);
-                            logger.error(error);
-                            res.status(500).send(error.response.data.message);
-                        },
-                    );
-                },
-                (error) => {
-                    traitment.status = StatusEnum.WRAPPER_ERROR;
-                    logger.error(`Wrapper Error for ${traitment.timestamp}`);
-                    logger.error(error);
-                    res.status(500).send(error.message);
-                },
-            );
+
+        wrapper(url, fileData, traitment, urlEnrichment).then(undefined);
     },
     (error) => {
         logger.error(error);
@@ -225,12 +185,12 @@ router.post('/upload', upload.single('file'), (req, res: Response) => {
 router.get('/status', (req, res) => {
     const { id } = req.query;
     const traitment: Traitment = getTraitement().filter((t) => t.timestamp + '' === id)[0];
-    let status: StatusEnum = StatusEnum.UNKNOWN;
+    let status: Status = Status.UNKNOWN;
     if (traitment) {
         status = traitment.status;
     }
     res.send({
-        message: `Status du traitement ${id} ${status === StatusEnum.UNKNOWN ? ': Inconnu' : ''}`,
+        message: `Status du traitement ${id} ${status === Status.UNKNOWN ? ': Inconnu' : ''}`,
         errorType: status,
     });
 });

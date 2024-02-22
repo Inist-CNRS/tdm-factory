@@ -1,4 +1,8 @@
 {
+    "ts-node": {
+        "files": true,
+        "require": ["tsconfig-paths/register"]
+    },
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
@@ -12,7 +16,12 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
-        "allowJs": true
+        "allowJs": true,
+        "paths": {
+            "~/*": [
+                "./src/*"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts"

@@ -1,6 +1,6 @@
-import environment from '../lib/config';
-import { mailLogger } from '../lib/logger';
 import nodemailer from 'nodemailer';
+import environment from '~/lib/config';
+import { mailLogger } from '~/lib/logger';
 
 export type EmailOptions = {
     to: string;

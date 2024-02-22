@@ -1,7 +1,26 @@
 {
-    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "lib": [
+            "ESNext"
+        ],
+        "noEmit": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "paths": {
+            "~/*": [
+                "./src/*"
+            ]
+        }
+    },
     "include": [
         "src/**/*.ts",
-        "bin/swagger.ts"
+        "bin/**/*.ts"
     ]
 }

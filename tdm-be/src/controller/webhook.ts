@@ -1,15 +1,15 @@
-import environment from '../lib/config';
-import logger from '../lib/logger';
-import configModel from '../model/Config';
-import { StatusEnum } from '../model/StatusEnum';
-import { getTraitement, setTraitement } from '../model/Traitment';
-import { sendEmail } from '../service/email-sender';
 import axios from 'axios';
 import express from 'express';
 import fs from 'fs';
-import type { SwaggerApi } from '../model/Config';
-import type { Traitment } from '../model/Traitment';
-import type { EmailOptions } from '../service/email-sender';
+import type { EmailOptions } from '~/lib/email-sender';
+import type { SwaggerApi } from '~/model/Config';
+import type { Traitment } from '~/model/Traitment';
+import environment from '~/lib/config';
+import { sendEmail } from '~/lib/email-sender';
+import logger from '~/lib/logger';
+import configModel from '~/model/Config';
+import Status from '~/model/Status';
+import { getTraitement, setTraitement } from '~/model/Traitment';
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ router.post(
                 })
                 .then(
                     (retrieveRes) => {
-                        traitment.status = StatusEnum.FINISHED;
+                        traitment.status = Status.FINISHED;
                         // Process the payload as needed
                         const bin: Buffer = Buffer.from(retrieveRes.data, 'binary');
                         fs.writeFileSync(`public/downloads/${traitment.timestamp}.tar.gz`, bin);
@@ -68,7 +68,7 @@ router.post(
     (req, res) => {
         const { id } = req.query;
         const traitment: Traitment = getTraitement().filter((traitment) => traitment.timestamp === id)[0];
-        traitment.status = StatusEnum.FINISHED_ERROR;
+        traitment.status = Status.FINISHED_ERROR;
         if (traitment) {
             setTraitement(getTraitement().filter((t) => t.timestamp !== traitment.timestamp));
             // Process the payload as needed
