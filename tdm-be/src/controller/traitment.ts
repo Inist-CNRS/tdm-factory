@@ -7,6 +7,7 @@ import environment from '~/lib/config';
 import { sendEmail } from '~/lib/email-sender';
 import { randomFileName } from '~/lib/files';
 import logger from '~/lib/logger';
+import { createProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import { addTraitement, getTraitement } from '~/model/Traitment';
 import { wrapper } from '~/worker/wrapper';
@@ -110,6 +111,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const uniqueName = randomFileName();
+        req.body.processingId = uniqueName;
         // Set the file name
         cb(null, `${uniqueName}.${file.originalname.split('.').pop() ?? ''}`);
     },
@@ -150,8 +152,18 @@ const upload = multer({ storage: storage });
  */
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
-    res.send({
-        filename: req.file?.filename,
+    if (req.body.processingId && req.file?.filename) {
+        const result = createProcessing(req.body.processingId, req.file.filename);
+        if (result) {
+            res.send({
+                id: result.id,
+            });
+            return;
+        }
+    }
+
+    res.status(500).send({
+        status: 500,
     });
 });
 

@@ -41,7 +41,6 @@ export const wrapper = async (url: string, fileData: Buffer, traitment: Traitmen
                 traitment.status = Status.WRAPPER_ERROR;
                 logger.error(`Wrapper Error for ${traitment.timestamp}`);
                 logger.error(error);
-                res.status(500).send(error.message);
             },
         );
 };

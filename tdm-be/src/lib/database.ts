@@ -1,7 +1,8 @@
 import { databaseLogger } from './logger';
 import Database from 'better-sqlite3';
+import { dbFile } from '~/lib/files';
 
-const db = new Database('factory.db', {
+const db = new Database(dbFile('factory.db'), {
     verbose: (message) => {
         databaseLogger.debug(message);
     },

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import type { Traitment } from '~/model/Traitment';
 import logger from '~/lib/logger';
 import Status from '~/model/Status';
 
-export const enrichment = (urlEnrichment, fd, conf, traitment) => {
+export const enrichment = (urlEnrichment: string, fd: Buffer, conf: any, traitment: Traitment) => {
     axios.post(urlEnrichment, fd, conf).then(
         (enrichmentRes) => {
             traitment.status = Status.WAITING_WEBHOOK;
@@ -13,7 +14,6 @@ export const enrichment = (urlEnrichment, fd, conf, traitment) => {
             traitment.status = Status.ENRICHMENT_ERROR;
             logger.error(`Traitment Error for ${traitment.timestamp}`);
             logger.error(error);
-            res.status(500).send(error.response.data.message);
         },
     );
 };

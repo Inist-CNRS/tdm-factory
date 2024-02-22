@@ -16,6 +16,10 @@ export const tmpFile = (fileName: string): string => {
     return path.join(filesLocation.app, filesLocation.tmp, fileName);
 };
 
+export const dbFile = (fileName: string): string => {
+    return path.join(filesLocation.app, fileName);
+};
+
 export const initFilesSystem = async (): Promise<void> => {
     logger.debug('Initializing files system');
     await fs.mkdir('uploads', { recursive: true });
