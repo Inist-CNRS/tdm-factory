@@ -8,6 +8,7 @@ tdm-be/environment-recette.ts
 .idea
 tdm-be/uploads/*
 tdm-be/dynamic-config.json
+tdm-be/factory.db
 tdm-be/logs/*
 tdm-be/public/*
 tdm-be/tmp/*
