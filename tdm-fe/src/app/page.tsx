@@ -53,6 +53,7 @@ const Home: React.FC = () => {
                     break;
                 }
 
+                // For retro-compatibility with old web services
                 if (selectedWrapper.fileType.includes('application/x-gzip')) {
                     selectedWrapper.fileType.push('application/gzip');
                 }
