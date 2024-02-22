@@ -3,6 +3,7 @@
         "uploads/**",
         "tmp/**",
         "logs/**",
+        "crash/**",
         "dynamic-config.json"
     ],
     "ext": "ts,js,json,mjml",

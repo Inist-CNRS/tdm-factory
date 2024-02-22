@@ -3,7 +3,6 @@ import { readFile } from 'node:fs/promises';
 import type { AxiosResponse } from 'axios';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
-import { tmpFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
 import { updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
@@ -54,7 +53,7 @@ const enrichment = async (processingId: string) => {
     // Load file into a buffer
     let fileBuffer: Buffer;
     try {
-        fileBuffer = await readFile(tmpFile(file));
+        fileBuffer = await readFile(file);
     } catch (e) {
         const message = "Can't read tmp file";
         error(processingId, message);

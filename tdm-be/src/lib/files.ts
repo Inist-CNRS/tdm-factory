@@ -31,6 +31,10 @@ export const crashFile = (fileName: string): string => {
     return path.join(filesLocation.app, filesLocation.crash, fileName);
 };
 
+export const downloadFile = (fileName: string): string => {
+    return path.join(filesLocation.app, filesLocation.download, fileName);
+};
+
 export const initFilesSystem = async (): Promise<void> => {
     logger.debug('Initializing files system');
     await fs.mkdir(filesLocation.upload, { recursive: true });

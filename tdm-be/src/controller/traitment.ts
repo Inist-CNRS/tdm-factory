@@ -87,11 +87,12 @@ router.post(
             return;
         }
 
-        // --- Get processing webservices url
-        // Set the wrapper and the enrichment as undefined
+        // --- Get processing params
+        // Set default params as undefined
         let wrapperUrl: string | undefined = undefined;
         let wrapperParam = 'value';
         let urlEnrichment: string | undefined = undefined;
+        let email: string | undefined = undefined;
 
         // Get wrapper url
         if (traitement.wrapper && traitement.wrapper.url) {
@@ -100,11 +101,11 @@ router.post(
 
         // Get wrapper param
         if (traitement.wrapper && traitement.wrapper.parameters) {
-            const param = traitement.wrapper.parameters
+            const tmpWrapperParam = traitement.wrapper.parameters
                 .filter((param) => param !== undefined && param.value !== undefined && param.name !== undefined)
                 .find((param) => (param as Required<Parameter>).name === 'value') as Required<Parameter> | undefined;
-            if (param) {
-                wrapperParam = param.value;
+            if (tmpWrapperParam) {
+                wrapperParam = tmpWrapperParam.value;
             }
         }
 
@@ -113,11 +114,15 @@ router.post(
             urlEnrichment = traitement.enrichment.url;
         }
 
-        // Check if the wrapper and the enrichment is pressent
-        if (!wrapperUrl || !urlEnrichment) {
+        if (traitement.mail) {
+            email = traitement.mail;
+        }
+
+        // Check if default params is pressent
+        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email) {
             res.status(HTTP_BAD_REQUEST).send({
                 status: HTTP_BAD_REQUEST,
-                message: 'Bad Request - Wrapper nor enrichment cannot be null',
+                message: 'Bad Request - Required parameter cannot be null',
             });
             return;
         }
@@ -129,6 +134,7 @@ router.post(
             wrapperParam,
             enrichment: urlEnrichment,
             status: Status.STARTING,
+            email,
         };
 
         // Update the cache db
