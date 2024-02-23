@@ -9,7 +9,7 @@ import { sendEmail } from '~/lib/email-sender';
 import { downloadFile, randomFileName } from '~/lib/files';
 import logger, { workerLogger } from '~/lib/logger';
 import configModel from '~/model/Config';
-import { updateProcessing } from '~/model/ProcessingModel';
+import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
 const info = (id: string, message: string) => {
@@ -35,9 +35,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     debug(processingId, 'Getting processing information');
 
     // Find the processing in the cache db
-    const initialProcessing = updateProcessing(processingId, {
-        status: Status.PROCESSING_WEBHOOK,
-    });
+    const initialProcessing = findProcessing(processingId);
 
     // Check if the processing existe
     if (!initialProcessing) {
@@ -53,6 +51,10 @@ const enrichmentHookSuccess = async (processingId: string) => {
     if (status !== Status.WAITING_WEBHOOK) {
         return;
     }
+
+    updateProcessing(processingId, {
+        status: Status.PROCESSING_WEBHOOK,
+    });
 
     // Check if the variable existe
     if (!enrichmentUrl || !enrichmentHook || !email) {
@@ -150,9 +152,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     debug(processingId, 'Getting processing information');
 
     // Find the processing in the cache db
-    const initialProcessing = updateProcessing(processingId, {
-        status: Status.PROCESSING_WEBHOOK,
-    });
+    const initialProcessing = findProcessing(processingId);
 
     // Check if the processing existe
     if (!initialProcessing) {
@@ -168,6 +168,10 @@ const enrichmentHookFailure = async (processingId: string) => {
     if (status !== Status.WAITING_WEBHOOK) {
         return;
     }
+
+    updateProcessing(processingId, {
+        status: Status.PROCESSING_WEBHOOK,
+    });
 
     // Check if the variable existe
     if (!email) {
