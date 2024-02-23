@@ -28,27 +28,10 @@ WORKDIR /app
 COPY tdm-be/package*.json tdm-be/ts*.json /app/
 
 # Install dependency
-RUN npm ci
+RUN npm ci --omit=dev
 
 # Copy the back-end source code into the build container
 COPY tdm-be /app/
-
-# Build the Express app
-RUN npm run build
-
-#######################################################
-
-# Stage 1 - Building Stage: Build back-end node modules
-FROM node:18.19-bullseye-slim AS node-modules
-
-# Switch to the main working directory
-WORKDIR /app
-
-# Copy package.json, package-lock.json and tsconfig.json files
-COPY tdm-be/package*.json tdm-be/ts*.json /app/
-
-# Install production dependency
-RUN npm ci --omit=dev
 
 #######################################################
 
@@ -73,10 +56,11 @@ WORKDIR /app
 # Copy back-end files from the build container
 COPY --chown=daemon:daemon --from=express-build /app/package.json /app/
 COPY --chown=daemon:daemon --from=express-build /app/package-lock.json /app/
-COPY --chown=daemon:daemon --from=node-modules /app/node_modules /app/node_modules/
+COPY --chown=daemon:daemon --from=express-build /app/tsconfig.json /app/
+COPY --chown=daemon:daemon --from=express-build /app/node_modules /app/node_modules/
 COPY --chown=daemon:daemon --from=express-build /app/config/default.json /app/config/
 COPY --chown=daemon:daemon --from=express-build /app/config/production.json /app/config/
-COPY --chown=daemon:daemon --from=express-build /app/dist /app/
+COPY --chown=daemon:daemon --from=express-build /app/src /app/src
 
 # Copy front-end files from the build container
 COPY --chown=daemon:daemon --from=react-build /app/.next /app/public/_next/
