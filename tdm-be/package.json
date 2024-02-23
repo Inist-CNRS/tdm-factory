@@ -1,16 +1,12 @@
 {
   "name": "tdm-be",
-  "version": "1.0.0",
-  "description": "",
   "private": true,
-  "main": "index.js",
   "engines": {
     "node": "18"
   },
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "start": "node app.js",
-    "build": "tsc",
+    "start": "ts-node --transpile-only ./src/app.ts",
     "swagger-autogen": "ts-node --project tsconfig.dev.json bin/swagger.ts 3000"
   },
   "keywords": [],
@@ -29,6 +25,9 @@
     "nodemailer": "^6.9.9",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.2.2",
     "winston": "^3.11.0"
   },
   "devDependencies": {
@@ -45,9 +44,6 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "eslint": "^8.56.0",
-    "nodemon": "^3.0.3",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.2.2"
+    "nodemon": "^3.0.3"
   }
 }

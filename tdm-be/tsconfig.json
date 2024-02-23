@@ -4,12 +4,11 @@
         "require": ["tsconfig-paths/register"]
     },
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
+        "target": "ES2022",
+        "moduleResolution": "Node",
         "lib": [
             "ESNext"
         ],
-        "outDir": "dist",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
