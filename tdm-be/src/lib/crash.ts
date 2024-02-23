@@ -10,7 +10,15 @@ import logger from '~/lib/logger';
  */
 const crashHandler = (error: Error | unknown, message: string, data: unknown) => {
     try {
-        const crashReport = crashFile(`${new Date().toString()}.json`);
+        const crashReport = crashFile(
+            `${
+                // https://stackoverflow.com/questions/10645994/how-to-format-a-utc-date-as-a-yyyy-mm-dd-hhmmss-string-using-nodejs
+                new Date()
+                    .toISOString()
+                    .replace(/T/, '-') // replace T with a -
+                    .replace(/\..+/, '') // delete the dot and everything after
+            }.json`,
+        );
         const crashContent = JSON.stringify(
             {
                 message,

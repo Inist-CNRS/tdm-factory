@@ -47,7 +47,12 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { enrichment: enrichmentUrl, enrichmentHook, email } = initialProcessing;
+    const { enrichment: enrichmentUrl, enrichmentHook, email, status } = initialProcessing;
+
+    // Check if we still wait for webhook
+    if (status !== Status.WAITING_WEBHOOK) {
+        return;
+    }
 
     // Check if the variable existe
     if (!enrichmentUrl || !enrichmentHook || !email) {
@@ -157,7 +162,12 @@ const enrichmentHookFailure = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { email } = initialProcessing;
+    const { email, status } = initialProcessing;
+
+    // Check if we still wait for webhook
+    if (status !== Status.WAITING_WEBHOOK) {
+        return;
+    }
 
     // Check if the variable existe
     if (!email) {

@@ -157,7 +157,7 @@
             "description": "ID parameter",
             "required": true,
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],

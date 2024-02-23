@@ -11,17 +11,3 @@ export class Traitment {
     retrieveValue?: string;
     status: Status = Status.UNKNOWN;
 }
-
-let currentTraitments: Traitment[] = [];
-
-export const addTraitement = (traitement: Traitment) => {
-    currentTraitments.push(traitement);
-};
-
-export const getTraitement = () => {
-    return currentTraitments;
-};
-
-export const setTraitement = (traitements: Traitment[]) => {
-    currentTraitments = traitements;
-};

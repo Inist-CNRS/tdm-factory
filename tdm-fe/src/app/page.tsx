@@ -123,7 +123,7 @@ const Home: React.FC = () => {
             {typeof window !== 'undefined' &&
             window.location.search &&
             window.location.search.split('id=').length > 0 ? (
-                <TraitmentComponent id={+window.location.search.split('id=')[1]} />
+                <TraitmentComponent id={window.location.search.split('id=')[1]} />
             ) : (
                 <Box sx={{ width: '100%' }}>
                     <Stepper activeStep={activeStep}>

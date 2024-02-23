@@ -7,11 +7,16 @@ import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendEmail } from '~/lib/email-sender';
 import { filesLocation, randomFileName } from '~/lib/files';
-import { HTTP_BAD_REQUEST, HTTP_CREATED, HTTP_INTERNAL_SERVER_ERROR, HTTP_PRECONDITION_REQUIRED } from '~/lib/http';
+import {
+    HTTP_BAD_REQUEST,
+    HTTP_CREATED,
+    HTTP_INTERNAL_SERVER_ERROR,
+    HTTP_NOT_FOUND,
+    HTTP_PRECONDITION_REQUIRED,
+} from '~/lib/http';
 import logger from '~/lib/logger';
 import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
-import { getTraitement } from '~/model/Traitment';
 import wrapper from '~/worker/wrapper';
 
 const router = express.Router();
@@ -255,7 +260,7 @@ router.post('/upload', upload.single('file'), (req, res: Response) => {
  *         description: ID parameter
  *         required: true
  *         schema:
- *           type: number
+ *           type: string
  *     responses:
  *       '200':
  *         description: Successful response
@@ -272,14 +277,27 @@ router.post('/upload', upload.single('file'), (req, res: Response) => {
 //Route to retrieve traitment status
 router.get('/status', (req, res) => {
     const { id } = req.query;
-    const traitment: Traitment = getTraitement().filter((t) => t.timestamp + '' === id)[0];
-    let status: Status = Status.UNKNOWN;
-    if (traitment) {
-        status = traitment.status;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
     }
+
+    const initialProcessing = findProcessing(id);
+
+    // Check if the processing existe
+    if (!initialProcessing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
     res.send({
-        message: `Status du traitement ${id} ${status === Status.UNKNOWN ? ': Inconnu' : ''}`,
-        errorType: status,
+        message: `Status du traitement ${initialProcessing.id} ${initialProcessing.status === Status.UNKNOWN ? ': Inconnu' : ''}`,
+        errorType: initialProcessing.status,
     });
 });
 

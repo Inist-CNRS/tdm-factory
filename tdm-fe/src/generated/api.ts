@@ -273,11 +273,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * get status
          * @summary get status
-         * @param {number} id ID parameter
+         * @param {string} id ID parameter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        traitmentStatusGet: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        traitmentStatusGet: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('traitmentStatusGet', 'id', id)
             const localVarPath = `/traitment/status`;
@@ -396,11 +396,11 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * get status
          * @summary get status
-         * @param {number} id ID parameter
+         * @param {string} id ID parameter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async traitmentStatusGet(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TraitmentStatusGet200Response>> {
+        async traitmentStatusGet(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TraitmentStatusGet200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.traitmentStatusGet(id, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.traitmentStatusGet']?.[index]?.url;
@@ -460,11 +460,11 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * get status
          * @summary get status
-         * @param {number} id ID parameter
+         * @param {string} id ID parameter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        traitmentStatusGet(id: number, options?: any): AxiosPromise<TraitmentStatusGet200Response> {
+        traitmentStatusGet(id: string, options?: any): AxiosPromise<TraitmentStatusGet200Response> {
             return localVarFp.traitmentStatusGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -524,12 +524,12 @@ export class DefaultApi extends BaseAPI {
     /**
      * get status
      * @summary get status
-     * @param {number} id ID parameter
+     * @param {string} id ID parameter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public traitmentStatusGet(id: number, options?: AxiosRequestConfig) {
+    public traitmentStatusGet(id: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).traitmentStatusGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 
