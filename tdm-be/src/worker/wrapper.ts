@@ -1,9 +1,18 @@
 import axios from 'axios';
 import { readFile, writeFile } from 'node:fs/promises';
 import type { AxiosResponse } from 'axios';
+import type { Processing } from '~/model/ProcessingModel';
+import {
+    ERROR_MESSAGE_FILE_SYSTEM_ERROR,
+    ERROR_MESSAGE_UNEXPECTED_ERROR,
+    ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT,
+    ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR,
+} from '~/lib/codes';
 import crash from '~/lib/crash';
+import { sendErrorMail } from '~/lib/email';
 import { randomFileName, tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
+import { findProcessing } from '~/model/ProcessingModel';
 import { updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import enrichment from '~/worker/enrichment';
@@ -18,6 +27,20 @@ const error = (id: string, message: string) => {
 
 const debug = (id: string, message: string) => {
     workerLogger.debug(`[wrapper/${id}] ${message}`);
+};
+
+const errorEmail = (processing: Processing, errorMessage: string) => {
+    sendErrorMail({
+        email: processing.email as string,
+        data: {
+            processingId: processing.id,
+            originalName: processing.originalName,
+            wrapper: processing.wrapper as string,
+            wrapperParam: processing.wrapperParam as string,
+            enrichment: processing.enrichment as string,
+            errorMessage,
+        },
+    }).then(undefined);
 };
 
 const wrapper = async (processingId: string) => {
@@ -58,7 +81,7 @@ const wrapper = async (processingId: string) => {
     } catch (e) {
         const message = "Can't read uploaded file";
         error(processingId, message);
-        // TODO Send an error email
+        errorEmail(initialProcessing, ERROR_MESSAGE_FILE_SYSTEM_ERROR);
         crash(e, message, initialProcessing);
         return;
     }
@@ -76,8 +99,8 @@ const wrapper = async (processingId: string) => {
     } catch (e) {
         const message = 'Impossible to contact wrapper api';
         error(processingId, message);
-        // TODO Send an error email
         crash(e, message, initialProcessing);
+        errorEmail(initialProcessing, ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR);
         return;
     }
 
@@ -87,7 +110,7 @@ const wrapper = async (processingId: string) => {
     // Check if we receive a non 200 status code
     if (response.status !== 200) {
         error(processingId, 'Wrapper api return an non 200 status');
-        // TODO Send an error email
+        errorEmail(initialProcessing, ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT);
         return;
     }
 
@@ -101,8 +124,8 @@ const wrapper = async (processingId: string) => {
     } catch (e) {
         const message = "Can't write tmp file";
         error(processingId, message);
-        // TODO Send an error email
         crash(e, message, initialProcessing);
+        errorEmail(initialProcessing, ERROR_MESSAGE_FILE_SYSTEM_ERROR);
         return;
     }
 
@@ -120,8 +143,14 @@ const catchWrapper = (processingId: string) => {
     wrapperPromise.catch((e) => {
         const message = 'Receive an un-catch error from wrapper';
         error(processingId, 'Receive an un-catch error from wrapper');
-        // TODO Send an error email
         crash(e, message, processingId);
+        try {
+            const processing = findProcessing(processingId);
+            if (!processing) {
+                return;
+            }
+            errorEmail(processing, ERROR_MESSAGE_UNEXPECTED_ERROR);
+        } catch (ignored) {}
     });
 };
 
