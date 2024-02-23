@@ -1,15 +1,23 @@
-import environment from '../lib/config';
-import { randomFileName, tmpFile } from '../lib/files';
-import logger from '../lib/logger';
-import { StatusEnum } from '../model/StatusEnum';
-import { addTraitement, getTraitement } from '../model/Traitment';
-import { sendEmail } from '../service/email-sender';
-import axios from 'axios';
 import express from 'express';
 import multer from 'multer';
-import fs from 'fs';
-import type { Traitment } from '../model/Traitment';
 import type { Request, Response } from 'express';
+import type { Processing } from '~/model/ProcessingModel';
+import type { Parameter } from '~/model/Request';
+import type { Traitment } from '~/model/Traitment';
+import environment from '~/lib/config';
+import { sendEmail } from '~/lib/email-sender';
+import { filesLocation, randomFileName } from '~/lib/files';
+import {
+    HTTP_BAD_REQUEST,
+    HTTP_CREATED,
+    HTTP_INTERNAL_SERVER_ERROR,
+    HTTP_NOT_FOUND,
+    HTTP_PRECONDITION_REQUIRED,
+} from '~/lib/http';
+import logger from '~/lib/logger';
+import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
+import Status from '~/model/Status';
+import wrapper from '~/worker/wrapper';
 
 const router = express.Router();
 
@@ -60,6 +68,8 @@ const router = express.Router();
  *                   description: URL associated with the message.
  *       '400':
  *         description: Bad request, file upload failed
+ *       '428':
+ *         description: No processing are available for this id
  *       '500':
  *         description: Internal server error
  */
@@ -67,20 +77,93 @@ const router = express.Router();
 router.post(
     '/start',
     (req: Request<unknown, unknown, Traitment>, res) => {
-        const traitment: Traitment = req.body;
-        addTraitement(traitment);
-        const url = traitment.wrapper?.url ? traitment.wrapper?.url : '';
-        const urlEnrichment = traitment.enrichment?.url ? traitment.enrichment?.url : '';
-        const fileData = fs.readFileSync(`${environment.fileFolder}${traitment.file}`);
-        traitment.timestamp = new Date().getTime();
-        traitment.status = StatusEnum.WRAPPER_RUNNING;
+        const traitement: Traitment = req.body;
+
+        // --- Find the processing associated with the uploaded file
+        // Get the processing the sqlite cache db
+        const processing = findProcessing(traitement.file);
+
+        // Check if the processing exists
+        if (!processing) {
+            res.status(HTTP_PRECONDITION_REQUIRED).send({
+                status: HTTP_PRECONDITION_REQUIRED,
+                message: 'Precondition Required - No processing are available for this id',
+            });
+            return;
+        }
+
+        // --- Get processing params
+        // Set default params as undefined
+        let wrapperUrl: string | undefined = undefined;
+        let wrapperParam = 'value';
+        let urlEnrichment: string | undefined = undefined;
+        let email: string | undefined = undefined;
+
+        // Get wrapper url
+        if (traitement.wrapper && traitement.wrapper.url) {
+            wrapperUrl = traitement.wrapper.url;
+        }
+
+        // Get wrapper param
+        if (traitement.wrapper && traitement.wrapper.parameters) {
+            const tmpWrapperParam = traitement.wrapper.parameters
+                .filter((param) => param !== undefined && param.value !== undefined && param.name !== undefined)
+                .find((param) => (param as Required<Parameter>).name === 'value') as Required<Parameter> | undefined;
+            if (tmpWrapperParam) {
+                wrapperParam = tmpWrapperParam.value;
+            }
+        }
+
+        // Get enrichment url
+        if (traitement.enrichment && traitement.enrichment.url) {
+            urlEnrichment = traitement.enrichment.url;
+        }
+
+        if (traitement.mail) {
+            email = traitement.mail;
+        }
+
+        // Check if default params is pressent
+        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email) {
+            res.status(HTTP_BAD_REQUEST).send({
+                status: HTTP_BAD_REQUEST,
+                message: 'Bad Request - Required parameter cannot be null',
+            });
+            return;
+        }
+
+        // --- Update the processing with the new webservices url
+        // Create the partial processing use to update the cache db
+        const processingSetting: Partial<Processing> = {
+            wrapper: wrapperUrl,
+            wrapperParam,
+            enrichment: urlEnrichment,
+            status: Status.STARTING,
+            email,
+        };
+
+        // Update the cache db
+        const updatedProcessing = updateProcessing(processing.id, processingSetting);
+
+        // Check if the cache db return a valide processing
+        if (!updatedProcessing) {
+            res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+                status: HTTP_INTERNAL_SERVER_ERROR,
+                message: 'Internal Server Error - Something went wrong when updating the processing status',
+            });
+            return;
+        }
+
+        // --- Send a message to the user about the processing starting
+        // Create the status url return to the client
         const statusPanelUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
-        }://${environment.hosts.external.host}?id=${traitment.timestamp}`;
-        res.send({
-            message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: statusPanelUrl,
-        });
+        }://${environment.hosts.external.host}?id=${updatedProcessing.id}`;
+
+        // Start the processing by starting the wrapper
+        wrapper(updatedProcessing.id);
+
+        // Send a mail with the processing information
         sendEmail({
             to: req.body.mail,
             subject: 'Votre traitement a bien démarré',
@@ -88,54 +171,12 @@ router.post(
         }).then(() => {
             logger.info('mail envoyer pour début de traitement');
         });
-        axios
-            .post(url, fileData, {
-                responseType: 'arraybuffer',
-                params: {
-                    value: traitment.wrapper.parameters?.find((p) => p.name === 'value')?.value,
-                },
-                timeout: 600000,
-            })
-            .then(
-                (wrapperRes) => {
-                    const bin: Buffer = Buffer.from(wrapperRes.data, 'binary');
-                    const dumpFilePath = tmpFile(`${randomFileName()}.tar.gz`);
-                    fs.writeFileSync(dumpFilePath, bin);
-                    const fd = fs.readFileSync(dumpFilePath);
-                    logger.info(`Wrapper Done for ${traitment.timestamp}`);
-                    const conf = {
-                        headers: {
-                            'X-Webhook-Success': `${
-                                environment.hosts.internal.isHttps ? 'https' : 'http'
-                            }://${environment.hosts.internal.host}/webhook/success?id=${traitment.timestamp}`,
-                            'X-Webhook-Failure': `${
-                                environment.hosts.internal.isHttps ? 'https' : 'http'
-                            }://${environment.hosts.internal.host}/webhook/failure?id=${traitment.timestamp}`,
-                        },
-                        timeout: 600000,
-                    };
-                    traitment.status = StatusEnum.TRAITMENT_RUNNING;
-                    axios.post(urlEnrichment, fd, conf).then(
-                        (enrichmentRes) => {
-                            traitment.status = StatusEnum.WAITING_WEBHOOK;
-                            logger.info(`Traitment Done for ${traitment.timestamp}`);
-                            traitment.retrieveValue = enrichmentRes.data[0].value;
-                        },
-                        (error) => {
-                            traitment.status = StatusEnum.TRAITMENT_ERROR;
-                            logger.error(`Traitment Error for ${traitment.timestamp}`);
-                            logger.error(error);
-                            res.status(500).send(error.response.data.message);
-                        },
-                    );
-                },
-                (error) => {
-                    traitment.status = StatusEnum.WRAPPER_ERROR;
-                    logger.error(`Wrapper Error for ${traitment.timestamp}`);
-                    logger.error(error);
-                    res.status(500).send(error.message);
-                },
-            );
+
+        // Send a http response with the processing information
+        res.send({
+            message: `Enrichissement démarré vous allez recevoir un email.`,
+            url: statusPanelUrl,
+        });
     },
     (error) => {
         logger.error(error);
@@ -146,10 +187,12 @@ router.post(
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Set your desired destination folder
-        cb(null, environment.fileFolder);
+        cb(null, filesLocation.upload);
     },
     filename: function (req, file, cb) {
         const uniqueName = randomFileName();
+        req.body.processingId = uniqueName;
+        req.body.originalName = file.originalname;
         // Set the file name
         cb(null, `${uniqueName}.${file.originalname.split('.').pop() ?? ''}`);
     },
@@ -174,14 +217,14 @@ const upload = multer({ storage: storage });
  *                 type: string
  *                 format: binary
  *     responses:
- *       '200':
+ *       '201':
  *         description: File uploaded successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 filename:
+ *                 id:
  *                   type: string
  *       '400':
  *         description: Bad request, file upload failed
@@ -190,8 +233,18 @@ const upload = multer({ storage: storage });
  */
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
-    res.send({
-        filename: req.file?.filename,
+    if (req.body.processingId && req.body.originalName && req.file?.filename) {
+        const result = createProcessing(req.body.processingId, req.body.originalName, req.file.filename);
+        if (result) {
+            res.status(HTTP_CREATED).send({
+                id: result.id,
+            });
+            return;
+        }
+    }
+
+    res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+        status: HTTP_INTERNAL_SERVER_ERROR,
     });
 });
 
@@ -207,7 +260,7 @@ router.post('/upload', upload.single('file'), (req, res: Response) => {
  *         description: ID parameter
  *         required: true
  *         schema:
- *           type: number
+ *           type: string
  *     responses:
  *       '200':
  *         description: Successful response
@@ -224,14 +277,27 @@ router.post('/upload', upload.single('file'), (req, res: Response) => {
 //Route to retrieve traitment status
 router.get('/status', (req, res) => {
     const { id } = req.query;
-    const traitment: Traitment = getTraitement().filter((t) => t.timestamp + '' === id)[0];
-    let status: StatusEnum = StatusEnum.UNKNOWN;
-    if (traitment) {
-        status = traitment.status;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
     }
+
+    const initialProcessing = findProcessing(id);
+
+    // Check if the processing existe
+    if (!initialProcessing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
     res.send({
-        message: `Status du traitement ${id} ${status === StatusEnum.UNKNOWN ? ': Inconnu' : ''}`,
-        errorType: status,
+        message: `Status du traitement ${initialProcessing.id} ${initialProcessing.status === Status.UNKNOWN ? ': Inconnu' : ''}`,
+        errorType: initialProcessing.status,
     });
 });
 

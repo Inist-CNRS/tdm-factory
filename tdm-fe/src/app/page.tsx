@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     const [selectedWrapper, setWrapper] = React.useState<Request>();
     const [selectedEnrichment, setEnrichment] = React.useState<Request>();
     const [file, setFile] = React.useState<File>();
-    const [fileName, setFileName] = React.useState<string>();
+    const [processingId, setProcessingId] = React.useState<string>();
     const [fileError, setFileError] = React.useState<boolean>(false);
     const [mail, setMail] = React.useState<string>();
     const [startResult, setStartResult] = React.useState<{ success: boolean; message?: string; url?: string }>();
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                 setFileError(false);
                 setLoading(true);
                 api.traitmentUploadPost(file).then((res) => {
-                    setFileName(res.data.filename);
+                    setProcessingId(res.data.id);
                     setLoading(false);
                     setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 });
@@ -76,7 +76,7 @@ const Home: React.FC = () => {
                 const traitment: Traitment = {
                     wrapper: selectedWrapper,
                     enrichment: selectedEnrichment,
-                    file: fileName,
+                    file: processingId,
                     mail: mail,
                 };
                 setLoading(true);
@@ -123,11 +123,11 @@ const Home: React.FC = () => {
             {typeof window !== 'undefined' &&
             window.location.search &&
             window.location.search.split('id=').length > 0 ? (
-                <TraitmentComponent id={+window.location.search.split('id=')[1]} />
+                <TraitmentComponent id={window.location.search.split('id=')[1]} />
             ) : (
                 <Box sx={{ width: '100%' }}>
                     <Stepper activeStep={activeStep}>
-                        {steps.map((label, index) => {
+                        {steps.map((label) => {
                             const stepProps: { completed?: boolean } = {};
                             const labelProps: {
                                 optional?: React.ReactNode;

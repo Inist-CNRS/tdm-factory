@@ -8,7 +8,7 @@
     "node": "18"
   },
   "scripts": {
-    "dev": "ts-node src/app.ts",
+    "dev": "nodemon src/app.ts",
     "start": "node app.js",
     "build": "tsc",
     "swagger-autogen": "ts-node --project tsconfig.dev.json bin/swagger.ts 3000"
@@ -18,6 +18,7 @@
   "license": "CeCILL",
   "dependencies": {
     "axios": "^1.6.7",
+    "better-sqlite3": "^9.4.1",
     "config": "^3.3.11",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@draconides/eslint-config-ts": "^1.2.0",
+    "@types/better-sqlite3": "^7.6.9",
     "@types/config": "^3.3.3",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -43,7 +45,9 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "eslint": "^8.56.0",
+    "nodemon": "^3.0.3",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
   }
 }

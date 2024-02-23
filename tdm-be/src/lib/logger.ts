@@ -1,6 +1,6 @@
-import config from './config';
 import { createLogger, format, transports } from 'winston';
 import type { Logger } from 'winston';
+import config from '~/lib/config';
 
 /**
  * Create a winston logger with an associated label
@@ -46,5 +46,13 @@ export const mailLogger: Logger = create('mail');
  * Logger use to log cron process
  */
 export const cronLogger: Logger = create('cron');
+/**
+ * Logger use to log database process
+ */
+export const databaseLogger: Logger = create('database');
+/**
+ * Logger use to log worker process
+ */
+export const workerLogger: Logger = create('worker');
 
 export default defaultLogger;

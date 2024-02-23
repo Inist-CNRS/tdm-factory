@@ -27,7 +27,6 @@ type Config = {
         external: Host;
     };
     smtp: SMTP;
-    fileFolder: string;
     cron: {
         schedule: string;
         deleteFileOlderThan: number;

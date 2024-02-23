@@ -1,5 +1,5 @@
-import { StatusEnum } from './StatusEnum';
-import type { Request } from './Request';
+import type { Request } from '~/model/Request';
+import Status from '~/model/Status';
 
 export class Traitment {
     wrapper: Request = { url: '' };
@@ -9,19 +9,5 @@ export class Traitment {
     timestamp?: number;
     id?: string;
     retrieveValue?: string;
-    status: StatusEnum = StatusEnum.UNKNOWN;
+    status: Status = Status.UNKNOWN;
 }
-
-let currentTraitments: Traitment[] = [];
-
-export const addTraitement = (traitement: Traitment) => {
-    currentTraitments.push(traitement);
-};
-
-export const getTraitement = () => {
-    return currentTraitments;
-};
-
-export const setTraitement = (traitements: Traitment[]) => {
-    currentTraitments = traitements;
-};

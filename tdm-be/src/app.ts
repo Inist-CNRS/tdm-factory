@@ -1,12 +1,3 @@
-import configRoute from './controller/config';
-import dataEnrichmentRoute from './controller/data-enrichment';
-import dataWrapperRoute from './controller/data-wrapper';
-import traitmentRoute from './controller/traitment';
-import webhookRoute from './controller/webhook';
-import environment from './lib/config';
-import { initFilesSystem } from './lib/files';
-import logger, { httpLogger, cronLogger } from './lib/logger';
-import swaggerFile from './swagger/swagger-config.json';
 import cors from 'cors';
 import express from 'express';
 import basicAuth from 'express-basic-auth'; // This package is used for basic authentication
@@ -14,6 +5,15 @@ import cron from 'node-cron';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'node:fs';
 import path from 'path';
+import configRoute from '~/controller/config';
+import dataEnrichmentRoute from '~/controller/data-enrichment';
+import dataWrapperRoute from '~/controller/data-wrapper';
+import traitmentRoute from '~/controller/traitment';
+import webhookRoute from '~/controller/webhook';
+import environment from '~/lib/config';
+import { filesLocation, initFilesSystem } from '~/lib/files';
+import logger, { httpLogger, cronLogger } from '~/lib/logger';
+import swaggerFile from '~/swagger/swagger-config.json';
 
 const app = express();
 
@@ -78,14 +78,14 @@ cron.schedule(environment.cron.schedule, () => {
     const oneWeekAgo = new Date(); // Date actuelle
     oneWeekAgo.setDate(oneWeekAgo.getDate() - environment.cron.deleteFileOlderThan); // Soustrait une semaine
 
-    fs.readdir(environment.fileFolder, (err, files) => {
+    fs.readdir(filesLocation.upload, (err, files) => {
         if (err) {
             cronLogger.error('Erreur de lecture du dossier', err);
             return;
         }
 
         files.forEach((file) => {
-            const filePath = path.join(environment.fileFolder, file);
+            const filePath = path.join(filesLocation.upload, file);
 
             fs.stat(filePath, (error, stats) => {
                 if (error) {
