@@ -67,7 +67,7 @@ export const sendFinishedMail = async (options: FinishedMailOptions) => {
         await transporter.sendMail({
             from: 'no-reply@inist.fr',
             to: options.email,
-            subject: `IA Factory - Résulta - Traitement ${options.data.processingId}`,
+            subject: `IA Factory - Résultat - Traitement ${options.data.processingId}`,
             text,
         });
         mailLogger.info(`Result email for processing '${options.data.processingId}' send`);
