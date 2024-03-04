@@ -2,11 +2,13 @@ import axios from 'axios';
 import { writeFile } from 'node:fs/promises';
 import path from 'path';
 import type { AxiosResponse } from 'axios';
+import { ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR } from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { sendErrorMail, sendFinishedMail } from '~/lib/email';
 import { downloadFile, randomFileName } from '~/lib/files';
 import logger, { workerLogger } from '~/lib/logger';
+import { errorEmail } from '~/lib/utils';
 import configModel from '~/model/Config';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
@@ -210,8 +212,14 @@ const catchEnrichmentHook = (enrichmentHook: { (processingId: string): Promise<v
         enrichmentPromise.catch((e) => {
             const message = 'Receive an un-catch error from enrichment hook';
             error(processingId, 'Receive an un-catch error from enrichment hook');
-            // TODO Send an error email
             crash(e, message, processingId);
+            try {
+                const processing = findProcessing(processingId);
+                if (!processing) {
+                    return;
+                }
+                errorEmail(processing, ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR);
+            } catch (ignored) {}
         });
     };
 };

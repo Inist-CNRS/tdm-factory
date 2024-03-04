@@ -1,17 +1,16 @@
 import axios from 'axios';
 import { readFile, writeFile } from 'node:fs/promises';
 import type { AxiosResponse } from 'axios';
-import type { Processing } from '~/model/ProcessingModel';
 import {
     ERROR_MESSAGE_FILE_SYSTEM_ERROR,
-    ERROR_MESSAGE_UNEXPECTED_ERROR,
+    ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR,
     ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT,
     ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR,
 } from '~/lib/codes';
 import crash from '~/lib/crash';
-import { sendErrorMail } from '~/lib/email';
 import { randomFileName, tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
+import { errorEmail } from '~/lib/utils';
 import { findProcessing } from '~/model/ProcessingModel';
 import { updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
@@ -27,20 +26,6 @@ const error = (id: string, message: string) => {
 
 const debug = (id: string, message: string) => {
     workerLogger.debug(`[wrapper/${id}] ${message}`);
-};
-
-const errorEmail = (processing: Processing, errorMessage: string) => {
-    sendErrorMail({
-        email: processing.email as string,
-        data: {
-            processingId: processing.id,
-            originalName: processing.originalName,
-            wrapper: processing.wrapper as string,
-            wrapperParam: processing.wrapperParam as string,
-            enrichment: processing.enrichment as string,
-            errorMessage,
-        },
-    }).then(undefined);
 };
 
 const wrapper = async (processingId: string) => {
@@ -149,7 +134,7 @@ const catchWrapper = (processingId: string) => {
             if (!processing) {
                 return;
             }
-            errorEmail(processing, ERROR_MESSAGE_UNEXPECTED_ERROR);
+            errorEmail(processing, ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR);
         } catch (ignored) {}
     });
 };
