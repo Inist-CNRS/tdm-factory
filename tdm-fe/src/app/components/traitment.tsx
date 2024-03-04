@@ -1,13 +1,13 @@
 'use client';
-import Status from '@/app/shared/Status';
-import { DefaultApiFactory } from '@/generated';
 import EmailIcon from '@mui/icons-material/Email';
 import Factory from '@mui/icons-material/Factory';
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot';
 import { useEffect, useState } from 'react';
-import type { TraitmentStatusGet200Response } from '@/generated';
 import type React from 'react';
+import type { TraitmentStatusGet200Response } from '~/generated';
+import Status from '~/app/shared/Status';
+import { DefaultApiFactory } from '~/generated';
 
 const TraitmentComponent: React.FC<{ id: string }> = ({ id }) => {
     const [result, setResult] = useState<TraitmentStatusGet200Response>({ message: '', errorType: 7 });

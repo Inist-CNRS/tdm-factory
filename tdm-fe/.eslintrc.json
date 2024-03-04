@@ -1,15 +1,22 @@
 {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "tsconfig.json"
+        "project": "tsconfig.eslint.json",
+        "sourceType": "module"
     },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "root": true,
     "env": {
-        "node": false,
+        "node": true,
+        "jest": true,
         "browser": true
     },
     "extends": [
         "@draconides/eslint-config-ts",
-        "@draconides/eslint-config-react",
-        "next/core-web-vitals"
+        "@draconides/eslint-config-react"
     ]
 }

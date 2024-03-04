@@ -1,11 +1,11 @@
 'use client';
-import { DefaultApiFactory } from '@/generated/api';
 import { FormControl, TextField, Autocomplete } from '@mui/material';
 import Box from '@mui/material/Box';
 import { MuiFileInput } from 'mui-file-input';
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import type { Request } from '@/generated/api';
+import type { Request } from '~/generated/api';
+import { DefaultApiFactory } from '~/generated/api';
 
 type EnrichmentProps = {
     selectWrapper: any;

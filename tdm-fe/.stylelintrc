@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "stylelint-config-standard-scss",
+        "stylelint-config-twbs-bootstrap"
+    ],
+    "rules": {
+        "declaration-no-important": null,
+        "scss/dollar-variable-default": [
+            true,
+            {
+                "ignore": "local"
+            }
+        ],
+        "selector-max-class": null,
+        "selector-max-type": null,
+        "selector-no-qualifying-type": null,
+        "selector-max-id": 3
+    }
+}

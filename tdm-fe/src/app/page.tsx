@@ -1,7 +1,6 @@
 'use client';
 import Enrichment from './components/enrichment';
 import TraitmentComponent from './components/traitment';
-import { DefaultApiFactory } from '@/generated/api';
 import { Alert, Button, TextField, LinearProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
@@ -9,7 +8,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import mimeTypes from 'mime';
 import React from 'react';
-import type { Request, Traitment } from '@/generated/api';
+import type { Request, Traitment } from '~/generated/api';
+import { DefaultApiFactory } from '~/generated/api';
 
 export type Props = {
     searchParams: {
