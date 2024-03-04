@@ -9,6 +9,7 @@ export const filesLocation = {
     upload: 'uploads',
     crash: 'crash',
     download: 'public/downloads',
+    templates: 'src/templates',
 };
 
 export const randomFileName = (): string => {
@@ -33,6 +34,10 @@ export const crashFile = (fileName: string): string => {
 
 export const downloadFile = (fileName: string): string => {
     return path.join(filesLocation.app, filesLocation.download, fileName);
+};
+
+export const templatesFiles = () => {
+    return path.join(filesLocation.app, filesLocation.templates);
 };
 
 export const initFilesSystem = async (): Promise<void> => {

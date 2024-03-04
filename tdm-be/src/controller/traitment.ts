@@ -5,7 +5,7 @@ import type { Processing } from '~/model/ProcessingModel';
 import type { Parameter } from '~/model/Request';
 import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
-import { sendEmail } from '~/lib/email-sender';
+import { sendStartedMail } from '~/lib/email';
 import { filesLocation, randomFileName } from '~/lib/files';
 import {
     HTTP_BAD_REQUEST,
@@ -164,13 +164,17 @@ router.post(
         wrapper(updatedProcessing.id);
 
         // Send a mail with the processing information
-        sendEmail({
-            to: req.body.mail,
-            subject: 'Votre traitement a bien démarré',
-            text: `Un suivi est disponible à l'url ${statusPanelUrl}`,
-        }).then(() => {
-            logger.info('mail envoyer pour début de traitement');
-        });
+        sendStartedMail({
+            email: req.body.mail,
+            data: {
+                processingId: updatedProcessing.id,
+                originalName: updatedProcessing.originalName,
+                wrapper: updatedProcessing.wrapper as string,
+                wrapperParam: updatedProcessing.wrapperParam as string,
+                enrichment: updatedProcessing.enrichment as string,
+                statusPage: statusPanelUrl,
+            },
+        }).then(undefined);
 
         // Send a http response with the processing information
         res.send({
