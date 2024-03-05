@@ -1,0 +1,24 @@
+@import "../../../scss/colors";
+
+.processing-form-field-group {
+  margin-bottom: 16px !important;
+}
+
+#processing-form-wrapper-param {
+  display: flex;
+  flex-direction: row;
+  margin-top: 8px;
+  margin-bottom: 8px;
+
+  #processing-form-wrapper-param-style {
+    width: 24px;
+    height: 48px; // Base 28
+    margin-top: -21px;
+    margin-left: 12px;
+    user-select: none;
+    border-bottom: solid #bdbdbd 1px;
+    border-left: solid #bdbdbd 1px;
+    border-bottom-left-radius: 8px;
+  }
+}
+

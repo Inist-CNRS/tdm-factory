@@ -4,17 +4,17 @@ export type Operation = {
     url: string;
 };
 
-export type WrapperList = Array<
-    Operation & {
-        fileType: string[];
-    }
->;
+export type Wrapper = Operation & {
+    fileType: string[];
+};
 
-export type EnrichmentList = Array<
-    Operation & {
-        parameters: string[];
-    }
->;
+export type WrapperList = Wrapper[];
+
+export type Enrichment = Operation & {
+    parameters: string[];
+};
+
+export type EnrichmentList = Enrichment[];
 
 export type ProcessingStatus = {
     message: string;

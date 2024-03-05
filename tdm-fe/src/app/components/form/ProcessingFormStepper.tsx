@@ -1,4 +1,4 @@
-import '~/app/components/form/ProcessingFormStepper.scss';
+import '~/app/components/form/scss/ProcessingFormStepper.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import Step from '@mui/material/Step';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
@@ -38,7 +38,7 @@ const IstexStepConnector = styled(StepConnector)(({ theme }) => ({
         },
     },
     [`& .${stepConnectorClasses.line}`]: {
-        borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.colors.grey,
+        borderColor: theme.palette.colors.grey,
         borderTopWidth: 2,
     },
 }));

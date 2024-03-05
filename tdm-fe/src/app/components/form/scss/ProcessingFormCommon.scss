@@ -1,0 +1,17 @@
+.processing-form-field {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.processing-form-field-with-label {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  margin-bottom: 8px;
+
+  .processing-form-field-label {
+    min-height: 22px;
+    margin-left: 36px;
+    font-style: italic;
+  }
+}

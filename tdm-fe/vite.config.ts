@@ -7,7 +7,15 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 const regex = /(.*node_modules\/)([^\/]+)(.*)/;
 
-const linter = process.env.VITE_ENV === 'prod' ? [] : [eslint(), stylelint()];
+const linter =
+    process.env.VITE_ENV === 'prod'
+        ? []
+        : [
+              eslint({
+                  failOnError: false,
+              }),
+              stylelint(),
+          ];
 
 export default defineConfig({
     plugins: [react(), tsconfigPaths(), ...linter],

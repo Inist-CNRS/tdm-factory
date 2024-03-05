@@ -16,6 +16,10 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+.text {
+  color: $light-black;
+}
+
 h1,
 h2,
 h3,
@@ -24,4 +28,8 @@ h5,
 h6 {
   font-family: Montserrat, sans-serif;
   color: $light-black;
+}
+
+#app-container {
+  margin: 12px 24px;
 }

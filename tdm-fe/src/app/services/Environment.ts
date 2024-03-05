@@ -2,17 +2,17 @@ export const environment = {
     host: import.meta.env.VITE_TDM_FACTORY_HOST,
     get: {
         list: {
-            wrapper: '/data-wrappers/list',
-            enrichment: '/data-enrichments/list',
+            wrapper: '/api/data-wrappers/list',
+            enrichment: '/api/data-enrichments/list',
         },
         processing: {
-            status: '/traitment/status',
+            status: '/api/traitment/status',
         },
     },
     post: {
         processing: {
-            upload: '/traitment/upload',
-            start: '/traitment/start',
+            upload: '/api/traitment/upload',
+            start: '/api/traitment/start',
         },
     },
 } as const;

@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 vite --host",
     "build": "tsc && vite build",
-    "build:env": "VITE_ENV=prod npm run build",
+    "build:env": "npm run build",
     "preview": "vite preview",
     "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\" --fix",
     "lint:test": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\"",
