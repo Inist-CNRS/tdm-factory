@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 interface ImportMetaEnv {
-    readonly VITE_ENV: string | undefined;
+    readonly VITE_TDM_FACTORY_HOST: string | undefined;
 }
 
 interface ImportMeta {

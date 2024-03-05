@@ -1,0 +1,17 @@
+@import "src/app/scss/colors";
+
+.processing-form-stepper-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: solid $grey 2px;
+  border-radius: 32px;
+
+  &.processing-form-stepper-icon-active {
+    color: $white;
+    background-color: $blue;
+    border-color: $blue;
+  }
+}
