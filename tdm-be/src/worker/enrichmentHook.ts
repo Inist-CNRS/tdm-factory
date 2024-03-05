@@ -2,12 +2,13 @@ import axios from 'axios';
 import { writeFile } from 'node:fs/promises';
 import path from 'path';
 import type { AxiosResponse } from 'axios';
-import type { EmailOptions } from '~/lib/email-sender';
+import { ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR } from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
-import { sendEmail } from '~/lib/email-sender';
+import { sendErrorMail, sendFinishedMail } from '~/lib/email';
 import { downloadFile, randomFileName } from '~/lib/files';
 import logger, { workerLogger } from '~/lib/logger';
+import { errorEmail } from '~/lib/utils';
 import configModel from '~/model/Config';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
@@ -126,13 +127,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }://${environment.hosts.external.host}/downloads/${finalFileName}`;
     logger.info('mail sent to smtp');
 
-    const mailOptions: EmailOptions = {
-        to: email,
-        subject: config.mailSuccess.subject,
-        text: config.mailSuccess.text + `\n ${resultUrl}`,
-    };
-
-    sendEmail(mailOptions).then(undefined);
+    sendFinishedMail({
+        email,
+        data: {
+            processingId: initialProcessing.id,
+            originalName: initialProcessing.originalName,
+            wrapper: initialProcessing.wrapper as string,
+            wrapperParam: initialProcessing.wrapperParam as string,
+            enrichment: initialProcessing.enrichment as string,
+            resultFile: resultUrl,
+        },
+    }).then(undefined);
 
     // Update processing information
     updateProcessing(processingId, {
@@ -180,19 +185,20 @@ const enrichmentHookFailure = async (processingId: string) => {
         throw new Error('This is normally impossible - Enrichment-Hook value are undefined or null');
     }
 
-    // Get dynamic config
-    const config = configModel.getConfig();
-
     // --- Save enrichment-hook result
     debug(processingId, 'Saving enrichment-hook result');
 
-    const mailOptions: EmailOptions = {
-        to: email,
-        subject: config.mailError.subject,
-        text: config.mailError.text,
-    };
-
-    sendEmail(mailOptions).then(undefined);
+    sendErrorMail({
+        email,
+        data: {
+            processingId: initialProcessing.id,
+            originalName: initialProcessing.originalName,
+            wrapper: initialProcessing.wrapper as string,
+            wrapperParam: initialProcessing.wrapperParam as string,
+            enrichment: initialProcessing.enrichment as string,
+            errorMessage: "Une erreur s'est produite lors de l'enrichissement",
+        },
+    }).then(undefined);
 
     // Update processing information
     updateProcessing(processingId, {
@@ -206,8 +212,14 @@ const catchEnrichmentHook = (enrichmentHook: { (processingId: string): Promise<v
         enrichmentPromise.catch((e) => {
             const message = 'Receive an un-catch error from enrichment hook';
             error(processingId, 'Receive an un-catch error from enrichment hook');
-            // TODO Send an error email
             crash(e, message, processingId);
+            try {
+                const processing = findProcessing(processingId);
+                if (!processing) {
+                    return;
+                }
+                errorEmail(processing, ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR);
+            } catch (ignored) {}
         });
     };
 };

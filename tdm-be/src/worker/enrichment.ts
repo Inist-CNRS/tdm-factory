@@ -1,9 +1,17 @@
 import axios from 'axios';
 import { readFile } from 'node:fs/promises';
 import type { AxiosResponse } from 'axios';
+import {
+    ERROR_MESSAGE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR,
+    ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR,
+    ERROR_MESSAGE_ENRICHMENT_UNREACHABLE_ERROR,
+    ERROR_MESSAGE_FILE_SYSTEM_ERROR,
+} from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { workerLogger } from '~/lib/logger';
+import { errorEmail } from '~/lib/utils';
+import { findProcessing } from '~/model/ProcessingModel';
 import { updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
@@ -57,8 +65,8 @@ const enrichment = async (processingId: string) => {
     } catch (e) {
         const message = "Can't read tmp file";
         error(processingId, message);
-        // TODO Send an error email
         crash(e, message, initialProcessing);
+        errorEmail(initialProcessing, ERROR_MESSAGE_FILE_SYSTEM_ERROR);
         return;
     }
 
@@ -79,8 +87,8 @@ const enrichment = async (processingId: string) => {
     } catch (e) {
         const message = 'Impossible to contact enrichment api';
         error(processingId, message);
-        // TODO Send an error email
         crash(e, message, initialProcessing);
+        errorEmail(initialProcessing, ERROR_MESSAGE_ENRICHMENT_UNREACHABLE_ERROR);
         return;
     }
 
@@ -90,7 +98,7 @@ const enrichment = async (processingId: string) => {
     // Check if we receive a non 200 status code
     if (response.status !== 200) {
         error(processingId, 'Enrichment api return an non 200 status');
-        // TODO Send an error email
+        errorEmail(initialProcessing, ERROR_MESSAGE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR);
         return;
     }
 
@@ -106,8 +114,14 @@ const catchEnrichment = (processingId: string) => {
     enrichmentPromise.catch((e) => {
         const message = 'Receive an un-catch error from enrichment';
         error(processingId, 'Receive an un-catch error from enrichment');
-        // TODO Send an error email
         crash(e, message, processingId);
+        try {
+            const processing = findProcessing(processingId);
+            if (!processing) {
+                return;
+            }
+            errorEmail(processing, ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR);
+        } catch (ignored) {}
     });
 };
 
