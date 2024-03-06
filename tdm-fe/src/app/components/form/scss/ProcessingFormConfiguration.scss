@@ -4,20 +4,29 @@
   margin-bottom: 16px !important;
 }
 
-#processing-form-wrapper-param {
+#processing-form-wrapper-param,
+#processing-form-wrapper-label {
   display: flex;
   flex-direction: row;
+
+  #processing-form-wrapper-param-style,
+  #processing-form-wrapper-label-style {
+    width: 24px;
+    margin-left: 12px;
+    user-select: none;
+    border-left: solid #bdbdbd 1px;
+  }
+}
+
+#processing-form-wrapper-param {
   margin-top: 8px;
   margin-bottom: 8px;
 
   #processing-form-wrapper-param-style {
-    width: 24px;
-    height: 48px; // Base 28
-    margin-top: -21px;
+    height: 36px; // Base 28 px
+    margin-top: -8px;
     margin-left: 12px;
-    user-select: none;
     border-bottom: solid #bdbdbd 1px;
-    border-left: solid #bdbdbd 1px;
     border-bottom-left-radius: 8px;
   }
 }

@@ -6,18 +6,35 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useQueries } from '@tanstack/react-query';
 import { MuiFileInput } from 'mui-file-input';
-import { useState } from 'react';
-import type { SyntheticEvent } from 'react';
+import { memo, useEffect, useState } from 'react';
+import type { SyntheticEvent, ChangeEvent } from 'react';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
+import Markdown from '~/app/components/text/Markdown';
 import { enrichment, wrapper } from '~/app/services/creation/operations';
 import { colors } from '~/app/shared/theme';
 
-const ProcessingFormConfiguration = () => {
-    const [file, setFile] = useState<File | null>(null);
-    const [selectedWrapper, setSelectedWrapper] = useState<Wrapper | null>(null);
-    const [wrapperParam, setWrapperParam] = useState<string | null>(null);
-    const [selectedEnrichment, setSelectedEnrichment] = useState<Enrichment | null>(null);
+export type ProcessingFormConfigurationProps = {
+    value: {
+        file?: File | null;
+        wrapper?: Wrapper | null;
+        wrapperParam?: string | null;
+        enrichment?: Enrichment | null;
+    };
+    onChange: (configuration: {
+        file: File | null;
+        wrapper: Wrapper | null;
+        wrapperParam: string | null;
+        enrichment: Enrichment | null;
+    }) => void;
+};
+
+const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormConfigurationProps) => {
+    const { file: fileIn, wrapper: wrapperIn, wrapperParam: wrapperParamIn, enrichment: enrichmentIn } = value;
+    const [file, setFile] = useState<File | null>(fileIn ?? null);
+    const [selectedWrapper, setSelectedWrapper] = useState<Wrapper | null>(wrapperIn ?? null);
+    const [wrapperParam, setWrapperParam] = useState<string | null>(wrapperParamIn ?? null);
+    const [selectedEnrichment, setSelectedEnrichment] = useState<Enrichment | null>(enrichmentIn ?? null);
 
     /**
      * Get a wrapper and enrichment list
@@ -45,16 +62,50 @@ const ProcessingFormConfiguration = () => {
         },
     });
 
-    const handleFileChange = (value: File | null) => {
-        setFile(value);
+    /**
+     * Handle event from file input
+     */
+    const handleFileChange = (newFile: File | null) => {
+        setFile(newFile);
+        onChange({
+            file: newFile,
+            wrapper: selectedWrapper,
+            wrapperParam: wrapperParam,
+            enrichment: selectedEnrichment,
+        });
     };
 
-    const handleWrapperChange = (_: SyntheticEvent, value: Wrapper | null) => {
-        setSelectedWrapper(value);
+    /**
+     * Handle event from wrapper selection
+     */
+    const handleWrapperChange = (_: SyntheticEvent, newWrapper: Wrapper | null) => {
+        setSelectedWrapper(newWrapper);
+        onChange({
+            file,
+            wrapper: newWrapper,
+            wrapperParam: wrapperParam,
+            enrichment: selectedEnrichment,
+        });
     };
 
-    const handleEnrichmentChange = (_: SyntheticEvent, value: Enrichment | null) => {
-        setSelectedEnrichment(value);
+    const handleWrapperParamChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWrapperParam(event.target.value);
+        onChange({
+            file,
+            wrapper: selectedWrapper,
+            wrapperParam: event.target.value,
+            enrichment: selectedEnrichment,
+        });
+    };
+
+    const handleEnrichmentChange = (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
+        setSelectedEnrichment(newEnrichment);
+        onChange({
+            file,
+            wrapper: selectedWrapper,
+            wrapperParam: wrapperParam,
+            enrichment: newEnrichment,
+        });
     };
 
     /**
@@ -68,11 +119,16 @@ const ProcessingFormConfiguration = () => {
      * Show an error if we get empty operations
      */
     if (!operations.data.wrapper || !operations.data.enrichment) {
-        return <div id="processing-form-configuration">error</div>;
+        return (
+            <div id="processing-form-configuration" className="text">
+                Nous parvenos pas a contacté le serveur, merci de résayer utererment.
+            </div>
+        );
     }
 
     return (
         <div id="processing-form-configuration">
+            {/* File input */}
             <MuiFileInput
                 className="processing-form-field processing-form-field-group"
                 placeholder="Déposer un fichier"
@@ -91,7 +147,9 @@ const ProcessingFormConfiguration = () => {
                     },
                 }}
             />
+            {/* Wrapper input */}
             <div className="processing-form-field-group">
+                {/* Wrapper selection */}
                 <div className="processing-form-field-with-label">
                     <Autocomplete
                         className="processing-form-field"
@@ -103,13 +161,19 @@ const ProcessingFormConfiguration = () => {
                         disablePortal
                     />
                     {selectedWrapper ? (
-                        <div className="text processing-form-field-label">{selectedWrapper.description}</div>
+                        <div id="processing-form-wrapper-label">
+                            <div id="processing-form-wrapper-label-style"></div>
+                            <Markdown className="text processing-form-field-label" text={selectedWrapper.description} />
+                        </div>
                     ) : null}
                 </div>
+                {/* Wrapper param */}
                 {selectedWrapper ? (
                     <div id="processing-form-wrapper-param">
                         <div id="processing-form-wrapper-param-style"></div>
                         <TextField
+                            value={wrapperParam}
+                            onChange={handleWrapperParamChange}
                             className="processing-form-field"
                             label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
                             fullWidth
@@ -117,17 +181,23 @@ const ProcessingFormConfiguration = () => {
                     </div>
                 ) : null}
             </div>
-            <Autocomplete
-                className="processing-form-field"
-                value={selectedEnrichment}
-                onChange={handleEnrichmentChange}
-                options={operations.data.enrichment}
-                renderInput={(params) => <TextField {...params} label="Traitement" />}
-                fullWidth
-                disablePortal
-            />
+            {/* Enrichment input */}
+            <div className="processing-form-field-with-label">
+                <Autocomplete
+                    className="processing-form-field"
+                    value={selectedEnrichment}
+                    onChange={handleEnrichmentChange}
+                    options={operations.data.enrichment}
+                    renderInput={(params) => <TextField {...params} label="Traitement" />}
+                    fullWidth
+                    disablePortal
+                />
+                {selectedEnrichment ? (
+                    <Markdown className="text processing-form-field-label" text={selectedEnrichment.description} />
+                ) : null}
+            </div>
         </div>
     );
 };
 
-export default ProcessingFormConfiguration;
+export default memo(ProcessingFormConfiguration);
