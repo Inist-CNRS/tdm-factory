@@ -63,6 +63,9 @@ const theme = createTheme(
             info: {
                 main: colors.blue,
             },
+            error: {
+                main: colors.red,
+            },
         },
         typography: {
             fontFamily: '"Open Sans", sans-serif',

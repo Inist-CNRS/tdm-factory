@@ -4,5 +4,14 @@
     margin-top: 40px;
     margin-right: 10%;
     margin-left: 10%;
+
+    #processing-form-navigation {
+      display: flex;
+      flex-direction: row;
+    }
+
+    #processing-form-navigation > button:first-child {
+      margin-right: auto;
+    }
   }
 }
