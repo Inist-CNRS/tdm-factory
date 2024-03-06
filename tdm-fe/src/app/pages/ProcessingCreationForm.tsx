@@ -13,6 +13,7 @@ import ProcessingFormStepper, {
     PROCESSING_VALIDATION_STEP,
 } from '~/app/components/form/ProcessingFormStepper';
 import FileUpload from '~/app/components/progress/FileUpload';
+import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 
 const ProcessingCreationForm = () => {
@@ -34,11 +35,40 @@ const ProcessingCreationForm = () => {
                 return null;
             }
 
+            // We can't have this state due to previous check (I hate ts some time)
             if (!configuration.file) {
                 return null;
             }
 
             return upload(configuration.file);
+        },
+    });
+
+    const {} = useQuery({
+        queryKey: [currentStep, processingId], // use processingId to avoid cache when redoing the form,
+        queryFn: () => {
+            if (currentStep !== PROCESSING_CONFIRMATION_STEP) {
+                return null;
+            }
+
+            // We can't have this state due to previous check (I hate ts some time)
+            if (
+                !processingId ||
+                !configuration.wrapper ||
+                !configuration.wrapperParam ||
+                !configuration.enrichment ||
+                !email.email
+            ) {
+                return null;
+            }
+
+            return start({
+                id: processingId,
+                wrapper: configuration.wrapper,
+                wrapperParam: configuration.wrapperParam,
+                enrichment: configuration.enrichment,
+                mail: email.email,
+            });
         },
     });
 

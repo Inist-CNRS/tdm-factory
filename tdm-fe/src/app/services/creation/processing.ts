@@ -3,19 +3,30 @@ import { createQuery, environment } from '~/app/services/Environment';
 
 export type ProcessingStartParams = {
     wrapper: Operation;
+    wrapperParam: string;
     enrichment: Operation;
     mail: string;
-    file: string;
+    id: string;
 };
 
-export const start = async (form: ProcessingStartParams) => {
+export const start = async ({ wrapper, wrapperParam, enrichment, mail, id }: ProcessingStartParams) => {
     const response = await fetch(createQuery(environment.post.processing.start), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+            wrapper: {
+                url: wrapper.url,
+                parameters: [wrapperParam],
+            },
+            enrichment: {
+                url: enrichment.url,
+            },
+            mail,
+            file: id,
+        }),
     });
 
     switch (response.status) {
