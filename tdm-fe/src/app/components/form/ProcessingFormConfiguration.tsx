@@ -2,6 +2,7 @@ import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useQueries } from '@tanstack/react-query';
@@ -174,15 +175,11 @@ const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormCon
      * Show an error if we get empty operations
      */
     if (!operations.data.wrapper || !operations.data.enrichment) {
-        return (
-            <div id="processing-form-configuration" className="text">
-                Nous parvenos pas a contacté le serveur, merci de résayer utererment.
-            </div>
-        );
+        return <Alert severity="error">Nous parvenos pas a contacté le serveur, merci de résayer utererment.</Alert>;
     }
 
     return (
-        <div id="processing-form-configuration">
+        <div>
             {/* File input */}
             <div className="processing-form-field-group processing-form-field-with-label">
                 <MuiFileInput

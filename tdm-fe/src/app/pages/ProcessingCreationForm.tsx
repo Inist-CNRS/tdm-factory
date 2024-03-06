@@ -3,14 +3,15 @@ import { Button } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import type { ChangeConfiguration } from '~/app/components/form/ProcessingFormConfiguration';
+import type { ChangeEmail } from '~/app/components/form/ProcessingFormEmail';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
+import ProcessingFormEmail from '~/app/components/form/ProcessingFormEmail';
 import ProcessingFormStepper, {
     PROCESSING_CONFIGURATION_STEP,
     PROCESSING_CONFIRMATION_STEP,
     PROCESSING_UPLOAD_STEP,
     PROCESSING_VALIDATION_STEP,
 } from '~/app/components/form/ProcessingFormStepper';
-import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import FileUpload from '~/app/components/progress/FileUpload';
 import { upload } from '~/app/services/creation/upload';
 
@@ -24,9 +25,10 @@ const ProcessingCreationForm = () => {
         wrapperParam: null,
     });
     const [processingId, setProcessingId] = useState<string | null>(null);
+    const [email, setEmail] = useState<ChangeEmail>({ email: null, invalidState: true });
 
     const { data: uploadResult, isError: uploadFailed } = useQuery({
-        queryKey: [currentStep],
+        queryKey: [currentStep, processingId], // use processingId to avoid cache when redoing the form
         queryFn: () => {
             if (currentStep !== PROCESSING_UPLOAD_STEP) {
                 return null;
@@ -55,6 +57,9 @@ const ProcessingCreationForm = () => {
             case PROCESSING_UPLOAD_STEP: {
                 return true;
             }
+            case PROCESSING_VALIDATION_STEP: {
+                return email.invalidState;
+            }
             default:
                 return false;
         }
@@ -62,6 +67,10 @@ const ProcessingCreationForm = () => {
 
     const handleConfigurationChange = (newConfiguration: ChangeConfiguration) => {
         setConfiguration(newConfiguration);
+    };
+
+    const handleEmailChange = (newEmail: ChangeEmail) => {
+        setEmail(newEmail);
     };
 
     const handleNextStep = () => {
@@ -72,6 +81,11 @@ const ProcessingCreationForm = () => {
     };
 
     const handlePreviousStep = () => {
+        if (currentStep === PROCESSING_VALIDATION_STEP) {
+            setCurrentStep(PROCESSING_CONFIGURATION_STEP);
+            return;
+        }
+
         const newStep = currentStep - 1;
         if (newStep >= PROCESSING_CONFIGURATION_STEP) {
             setCurrentStep(newStep);
@@ -86,6 +100,9 @@ const ProcessingCreationForm = () => {
                     <ProcessingFormConfiguration value={configuration} onChange={handleConfigurationChange} />
                 ) : null}
                 {currentStep === PROCESSING_UPLOAD_STEP ? <FileUpload showError={uploadFailed} /> : null}
+                {currentStep === PROCESSING_VALIDATION_STEP ? (
+                    <ProcessingFormEmail email={email.email} onChange={handleEmailChange} />
+                ) : null}
                 <div id="processing-form-navigation">
                     <Button onClick={handlePreviousStep} variant="outlined" disabled={currentStep === 0}>
                         Précédent
