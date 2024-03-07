@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 vite --host",
     "build": "tsc && vite build",
-    "build:env": "npm run build",
+    "build:dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 npm run build",
     "preview": "vite preview",
     "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\" --fix",
     "lint:test": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\"",

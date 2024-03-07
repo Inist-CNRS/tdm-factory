@@ -1,3 +1,4 @@
+import '~/app/components/progress/scss/StatusTimeline.scss';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
@@ -16,7 +17,6 @@ export type StatusTimeline = {
     text: string;
 };
 
-// TODO Add scss file instead of the jsx css
 const CustomTimelineDot = ({
     color,
     isRunning,
@@ -36,15 +36,15 @@ const CustomTimelineDot = ({
 
     if (isOnError) {
         return (
-            <TimelineDot color={color} sx={{ padding: 0 }}>
-                <ErrorOutlineIcon sx={{ width: 24, height: 24 }} />
+            <TimelineDot color={color} className="status-timeline-error">
+                <ErrorOutlineIcon className="status-timeline-error-icon" />
             </TimelineDot>
         );
     }
 
     return (
         <TimelineDot color={color}>
-            <div style={{ width: 16, height: 16 }}></div>
+            <div className="status-timeline-waiting"></div>
         </TimelineDot>
     );
 };
@@ -74,7 +74,7 @@ const StatusTimeline = ({ isRunning = false, isComplet = false, isOnError = fals
                 <CustomTimelineDot color={dotColor} isRunning={isRunning} isOnError={isOnError} />
                 <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent sx={{ m: 'auto 0' }} align="right" color={textColor}>
+            <TimelineContent className="status-timeline-content" align="right" color={textColor}>
                 {text}
             </TimelineContent>
         </TimelineItem>

@@ -1,3 +1,4 @@
+import '~/app/pages/scss/ProcessingStatus.scss';
 import Timeline from '@mui/lab/Timeline';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
@@ -25,16 +26,34 @@ const ProcessingStatus = () => {
 
             return status(id);
         },
+        // Do pulling to update the page
+        refetchInterval: (query) => {
+            const stateData = query.state.data;
+            if (
+                stateData === undefined ||
+                stateData === Status.WRAPPER_ERROR ||
+                stateData === Status.ENRICHMENT_ERROR ||
+                stateData === Status.FINISHED_ERROR ||
+                stateData === Status.FINISHED
+            ) {
+                return undefined;
+            }
+
+            if (stateData === Status.WRAPPER_RUNNING || stateData === Status.WAITING_WEBHOOK) {
+                return 1000 * 30; // 30 Secs
+            }
+
+            return 1000 * 4; // 4 Secs
+        },
     });
 
     if (data === undefined) {
         return <p>Not found</p>; // Todo faire un page 404
     }
 
-    // TODO Add scss file instead of the jsx css
     return (
         <div>
-            <p className="text" style={{ textAlign: 'center' }}>
+            <p className="text" id="processing-status-title">
                 Status du traitement : {id}
             </p>
             <Timeline>

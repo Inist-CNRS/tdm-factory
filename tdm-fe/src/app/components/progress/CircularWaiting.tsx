@@ -1,4 +1,4 @@
-import '~/app/components/progress/CircularWaiting.scss';
+import '~/app/components/progress/scss/CircularWaiting.scss';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const CircularWaiting = () => {

@@ -1,4 +1,4 @@
-import '~/app/pages/ProcessingCreationForm.scss';
+import '~/app/pages/scss/ProcessingCreationForm.scss';
 import { Button } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';

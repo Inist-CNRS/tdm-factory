@@ -1,0 +1,17 @@
+.status-timeline-content {
+  margin: auto 0 !important;
+}
+
+.status-timeline-waiting {
+  width: 16px;
+  height: 16px;
+}
+
+.status-timeline-error {
+  padding: 0 !important;
+
+  .status-timeline-error-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
