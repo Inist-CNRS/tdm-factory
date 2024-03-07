@@ -47,7 +47,7 @@ const ProcessingStatus = () => {
                 <StatusTimeline
                     isRunning={data === Status.STARTING}
                     isComplet={data > Status.STARTING}
-                    text="Démarage"
+                    text="Démarrage"
                 />
 
                 <StatusTimeline
@@ -61,19 +61,19 @@ const ProcessingStatus = () => {
                     isRunning={data === Status.ENRICHMENT_RUNNING}
                     isComplet={data > Status.ENRICHMENT_ERROR}
                     isOnError={data === Status.ENRICHMENT_ERROR}
-                    text="Lancement de l'enrichement"
+                    text="Lancement de l'enrichissement"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.WAITING_WEBHOOK}
                     isComplet={data > Status.WAITING_WEBHOOK}
-                    text="En attente du résulta"
+                    text="En attente du résultat"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.PROCESSING_WEBHOOK}
                     isComplet={data > Status.PROCESSING_WEBHOOK}
-                    text="Récuperation du résulta"
+                    text="Récupération du résultat"
                 />
 
                 <StatusTimeline
