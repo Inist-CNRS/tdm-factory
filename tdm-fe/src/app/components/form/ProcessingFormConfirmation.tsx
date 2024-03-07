@@ -26,7 +26,11 @@ const ProcessingFormConfirmation = ({ processingId, state }: ProcessingFormConfi
      * Show an error if we get empty operations
      */
     if (!state.status) {
-        return <Alert severity="error">Nous ne parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.</Alert>;
+        return (
+            <Alert severity="error">
+                Nous ne parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.
+            </Alert>
+        );
     }
 
     /**
