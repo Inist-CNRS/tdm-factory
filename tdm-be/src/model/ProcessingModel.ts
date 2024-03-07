@@ -23,12 +23,12 @@ export type Processing = {
  * @param uploadFile Source file of processing
  */
 export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
-    const stmt = database.prepare<[string, number, string]>(`
-        insert into processing (id, status, uploadFile)
-        values (?, ?, ?);
+    const stmt = database.prepare<[string, number, string, string]>(`
+        insert into processing (id, status, uploadFile, originalName)
+        values (?, ?, ?, ?);
     `);
 
-    const result = stmt.run(id, Status.UNKNOWN, uploadFile);
+    const result = stmt.run(id, Status.UNKNOWN, uploadFile, originalName);
 
     if (result.changes !== 0) {
         return {
