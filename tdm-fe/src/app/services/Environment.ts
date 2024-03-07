@@ -17,8 +17,10 @@ export const environment = {
     },
 } as const;
 
-export const createQuery = (uri: string, param?: Record<string, string> | undefined, removeHost?: boolean): URL => {
-    const url = removeHost ? new URL(uri) : new URL(environment.host + uri);
+const internalHost = environment.host === '' ? window.location.origin : environment.host;
+
+export const createQuery = (uri: string, param?: Record<string, string> | undefined): URL => {
+    const url = new URL(internalHost + uri);
     if (param !== undefined) {
         const query = new URLSearchParams(param);
         url.search = query.toString();
