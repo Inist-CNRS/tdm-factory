@@ -10,7 +10,7 @@ const FileUpload = ({ showError }: FileUploadProps) => {
         return <CircularWaiting />;
     }
 
-    return <Alert severity="error">Le fichier n&apos;a pas peu être téléverser.</Alert>;
+    return <Alert severity="error">Le fichier n&apos;a pas pu être téléversé.</Alert>;
 };
 
 export default FileUpload;
