@@ -3,13 +3,19 @@ import { createQuery, environment } from '~/app/services/Environment';
 
 export type ProcessingStartParams = {
     wrapper: Operation;
-    wrapperParam: string;
+    wrapperParam?: string;
     enrichment: Operation;
     mail: string;
     id: string;
 };
 
-export const start = async ({ wrapper, wrapperParam, enrichment, mail, id }: ProcessingStartParams) => {
+export const start = async ({
+    wrapper,
+    wrapperParam,
+    enrichment,
+    mail,
+    id,
+}: ProcessingStartParams): Promise<200 | 400 | 428 | 500> => {
     const response = await fetch(createQuery(environment.post.processing.start), {
         method: 'POST',
         headers: {
@@ -17,10 +23,14 @@ export const start = async ({ wrapper, wrapperParam, enrichment, mail, id }: Pro
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            wrapper: {
-                url: wrapper.url,
-                parameters: [wrapperParam],
-            },
+            wrapper: wrapperParam
+                ? {
+                      url: wrapper.url,
+                      parameters: [wrapperParam],
+                  }
+                : {
+                      url: wrapper.url,
+                  },
             enrichment: {
                 url: enrichment.url,
             },
