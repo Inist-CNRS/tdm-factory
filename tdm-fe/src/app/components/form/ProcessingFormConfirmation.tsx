@@ -26,28 +26,28 @@ const ProcessingFormConfirmation = ({ processingId, state }: ProcessingFormConfi
      * Show an error if we get empty operations
      */
     if (!state.status) {
-        return <Alert severity="error">Nous parvenos pas a contacté le serveur, merci de résayer utererment.</Alert>;
+        return <Alert severity="error">Nous ne parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.</Alert>;
     }
 
     /**
      * Show an error if we have no processing linked with the given id
      */
     if (state.status === 428) {
-        return <Alert severity="error">Nous parvenos pas a trouvé le fichier lié a ce traitement.</Alert>;
+        return <Alert severity="error">Nous ne parvenons pas à trouver le fichier lié à ce traitement.</Alert>;
     }
 
     /**
      * Show an error if we get any other error
      */
     if (state.status !== 200) {
-        return <Alert severity="error">Un probléme inatendue et survenue.</Alert>;
+        return <Alert severity="error">Un problème inattendu est survenu.</Alert>;
     }
 
     return (
         <div>
-            <p>Le tratement a commencé vous aller recevoir un mail contenent un résumé.</p>
+            <p>Le traitement a commencé. Vous allez recevoir un mail contenant un résumé.</p>
             <p>
-                Vous pouvais voir l&apos;avancement du traitement via la page de status des traitement :{' '}
+                Vous pouvez voir l&apos;avancement du traitement via la page de statut des traitements :{' '}
                 <Link href={href}>{processingId}</Link>
             </p>
         </div>
