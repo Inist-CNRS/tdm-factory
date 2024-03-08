@@ -50,9 +50,6 @@ app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const dirname = process.cwd();
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(dirname, 'public', '_next', 'server', 'app', 'index.html'));
-});
 app.use(express.static(path.join(dirname, 'public')));
 
 app.get('/*', function (req, res) {

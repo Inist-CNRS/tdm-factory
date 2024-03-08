@@ -19,7 +19,7 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - "8080:8080"
+      - "5173:5173"
     volumes:
       - ./tdm-fe:/app
     working_dir: /app

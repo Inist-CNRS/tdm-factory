@@ -158,7 +158,7 @@ router.post(
         // Create the status url return to the client
         const statusPanelUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
-        }://${environment.hosts.external.host}?id=${updatedProcessing.id}`;
+        }://${environment.hosts.external.host}/status/${updatedProcessing.id}`;
 
         // Start the processing by starting the wrapper
         wrapper(updatedProcessing.id);

@@ -1,7 +1,8 @@
 tdm-be/node_modules/
-tdm-be/dist/
+tdm-be/dist/*
+tdm-fe/dist/*
 tdm-fe/node_modules/
-tdm-fe/.next/
+tdm-fe/.stylelintcache
 .gitlab-ci.yml
 helm/*
 tdm-be/environment-recette.ts

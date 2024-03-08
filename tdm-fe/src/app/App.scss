@@ -1,0 +1,39 @@
+@import "src/app/scss/colors";
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: $white;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+.text {
+  color: $light-black;
+}
+
+.error {
+  color: $red;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Montserrat, sans-serif;
+  color: $light-black;
+}
+
+#app-container {
+  margin: 12px 24px;
+}

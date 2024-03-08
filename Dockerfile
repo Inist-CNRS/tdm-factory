@@ -14,7 +14,7 @@ RUN npm ci
 COPY tdm-fe /app/
 
 # Build the React app
-RUN npm run build
+RUN VITE_TDM_FACTORY_HOST="" npm run build
 
 #######################################################
 
@@ -63,7 +63,7 @@ COPY --chown=daemon:daemon --from=express-build /app/config/production.json /app
 COPY --chown=daemon:daemon --from=express-build /app/src /app/src
 
 # Copy front-end files from the build container
-COPY --chown=daemon:daemon --from=react-build /app/.next /app/public/_next/
+COPY --chown=daemon:daemon --from=react-build /app/dist /app/public/
 
 # Create the required folder
 RUN mkdir /app/public/downloads
