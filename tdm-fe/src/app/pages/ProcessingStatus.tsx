@@ -54,7 +54,7 @@ const ProcessingStatus = () => {
     return (
         <div>
             <p className="text" id="processing-status-title">
-                Status du traitement : {id}
+                Statut du traitement : {id}
             </p>
             <Timeline>
                 <StatusTimeline
