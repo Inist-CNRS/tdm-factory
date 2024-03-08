@@ -52,12 +52,17 @@ const dirname = process.cwd();
 
 app.use(express.static(path.join(dirname, 'public')));
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(dirname, 'public'));
+// Rewrite reverse proxy, this is required because we use a single page application
+// We need to declare all route used by the front application
+app.get('/', function (req, res) {
+    res.sendFile(path.join(dirname, 'public', 'index.html'));
+});
+app.get('/status/:id', function (req, res) {
+    res.sendFile(path.join(dirname, 'public', 'index.html'));
 });
 
 // Middleware pour gérer les erreurs 404 (route non trouvée)
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).send(
         "Désolé, le fichier est introuvable, il n'a peut être pas encore été généré ou il a expiré (créé il y a plus d'une semaine)",
     );
