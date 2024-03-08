@@ -11,6 +11,7 @@ const ProcessingStatus = () => {
     const params = useParams();
 
     const id = useMemo(() => {
+        // Check if not nullish, if id exist this one is a md5
         if (params.id) {
             return params.id;
         }
@@ -59,44 +60,44 @@ const ProcessingStatus = () => {
             <Timeline>
                 <StatusTimeline
                     isRunning={data === Status.UNKNOWN}
-                    isComplet={data > Status.UNKNOWN}
+                    isComplete={data > Status.UNKNOWN}
                     text="Initialisé"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.STARTING}
-                    isComplet={data > Status.STARTING}
+                    isComplete={data > Status.STARTING}
                     text="Démarrage"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.WRAPPER_RUNNING}
-                    isComplet={data > Status.WRAPPER_ERROR}
+                    isComplete={data > Status.WRAPPER_ERROR}
                     isOnError={data === Status.WRAPPER_ERROR}
                     text="Conversion"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.ENRICHMENT_RUNNING}
-                    isComplet={data > Status.ENRICHMENT_ERROR}
+                    isComplete={data > Status.ENRICHMENT_ERROR}
                     isOnError={data === Status.ENRICHMENT_ERROR}
                     text="Lancement de l'enrichissement"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.WAITING_WEBHOOK}
-                    isComplet={data > Status.WAITING_WEBHOOK}
+                    isComplete={data > Status.WAITING_WEBHOOK}
                     text="En attente du résultat"
                 />
 
                 <StatusTimeline
                     isRunning={data === Status.PROCESSING_WEBHOOK}
-                    isComplet={data > Status.PROCESSING_WEBHOOK}
+                    isComplete={data > Status.PROCESSING_WEBHOOK}
                     text="Récupération du résultat"
                 />
 
                 <StatusTimeline
-                    isComplet={data === Status.FINISHED}
+                    isComplete={data === Status.FINISHED}
                     isOnError={data === Status.FINISHED_ERROR}
                     text="Traitement terminé"
                 />

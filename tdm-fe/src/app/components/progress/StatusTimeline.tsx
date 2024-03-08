@@ -10,9 +10,9 @@ import { useMemo } from 'react';
 import type { TimelineContentProps } from '@mui/lab/TimelineContent';
 import type { TimelineDotProps } from '@mui/lab/TimelineDot';
 
-export type StatusTimeline = {
+export type StatusTimelineProps = {
     isRunning?: boolean;
-    isComplet?: boolean;
+    isComplete?: boolean;
     isOnError?: boolean;
     text: string;
 };
@@ -49,16 +49,16 @@ const CustomTimelineDot = ({
     );
 };
 
-const StatusTimeline = ({ isRunning = false, isComplet = false, isOnError = false, text }: StatusTimeline) => {
+const StatusTimeline = ({ isRunning = false, isComplete = false, isOnError = false, text }: StatusTimelineProps) => {
     const dotColor = useMemo<TimelineDotProps['color']>(() => {
-        if (isComplet) {
+        if (isComplete) {
             return 'primary';
         }
         if (isOnError) {
             return 'error';
         }
         return undefined;
-    }, [isComplet, isOnError]);
+    }, [isComplete, isOnError]);
 
     const textColor = useMemo<TimelineContentProps['color']>(() => {
         if (isOnError) {
