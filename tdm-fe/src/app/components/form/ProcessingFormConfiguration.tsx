@@ -175,7 +175,7 @@ const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormCon
      * Show an error if we get empty operations
      */
     if (!operations.data.wrapper || !operations.data.enrichment) {
-        return <Alert severity="error">Nous parvenos pas a contacté le serveur, merci de résayer utererment.</Alert>;
+        return <Alert severity="error">Nous parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.</Alert>;
     }
 
     return (
