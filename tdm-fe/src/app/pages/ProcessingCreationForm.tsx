@@ -35,7 +35,7 @@ const ProcessingCreationForm = () => {
      * Query handler use to upload the file
      */
     const { data: uploadResult, isError: uploadFailed } = useQuery({
-        queryKey: ['upload', currentStep, processingId], // use processingId to avoid cache when redoing the form
+        queryKey: ['upload', currentStep, processingId, configuration.file],
         queryFn: () => {
             if (currentStep !== PROCESSING_UPLOAD_STEP) {
                 return null;
@@ -56,7 +56,15 @@ const ProcessingCreationForm = () => {
      * Query handle use to start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', currentStep, processingId], // use processingId to avoid cache when redoing the form,
+        queryKey: [
+            'start',
+            currentStep,
+            processingId,
+            configuration.wrapper,
+            configuration.enrichment,
+            email.email,
+            configuration.wrapperParam,
+        ],
         queryFn: () => {
             if (currentStep !== PROCESSING_CONFIRMATION_STEP) {
                 return null;

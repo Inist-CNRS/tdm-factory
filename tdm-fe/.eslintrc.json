@@ -15,8 +15,12 @@
         "jest": true,
         "browser": true
     },
+    "plugins": [
+        "@tanstack/query"
+    ],
     "extends": [
         "@draconides/eslint-config-ts",
-        "@draconides/eslint-config-react"
+        "@draconides/eslint-config-react",
+        "plugin:@tanstack/eslint-plugin-query/recommended"
     ]
 }
