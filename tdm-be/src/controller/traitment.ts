@@ -8,7 +8,9 @@ import environment from '~/lib/config';
 import { sendStartedMail } from '~/lib/email';
 import { filesLocation, randomFileName } from '~/lib/files';
 import {
+    HTTP_ACCEPTED,
     HTTP_BAD_REQUEST,
+    HTTP_CONFLICT,
     HTTP_CREATED,
     HTTP_INTERNAL_SERVER_ERROR,
     HTTP_NOT_FOUND,
@@ -88,6 +90,14 @@ router.post(
             res.status(HTTP_PRECONDITION_REQUIRED).send({
                 status: HTTP_PRECONDITION_REQUIRED,
                 message: 'Precondition Required - No processing are available for this id',
+            });
+            return;
+        }
+
+        if (processing.status !== Status.UNKNOWN) {
+            res.status(HTTP_CONFLICT).send({
+                status: HTTP_CONFLICT,
+                message: 'Conflict - The processing as already been started',
             });
             return;
         }
@@ -176,10 +186,9 @@ router.post(
             },
         }).then(undefined);
 
-        // Send a http response with the processing information
-        res.send({
-            message: `Enrichissement démarré vous allez recevoir un email.`,
-            url: statusPanelUrl,
+        // Send an http response with code 202
+        res.status(HTTP_ACCEPTED).send({
+            status: HTTP_ACCEPTED,
         });
     },
     (error) => {
