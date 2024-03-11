@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import basicAuth from 'express-basic-auth'; // This package is used for basic authentication
+import basicAuth from 'express-basic-auth';
 import rateLimit from 'express-rate-limit';
 import cron from 'node-cron';
 import swaggerUi from 'swagger-ui-express';
@@ -19,8 +19,8 @@ import swaggerFile from '~/swagger/swagger-config.json';
 const app = express();
 
 const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    limit: 1000, // Limit each IP to 1000 requests per `window` (here, per minute)
+    windowMs: 10 * 60 * 1000, // 10 minute
+    limit: 2000, // Limit each IP to 1000 requests per `window` (here, per 10 minutes)
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
