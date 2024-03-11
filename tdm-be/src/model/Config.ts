@@ -2,15 +2,15 @@ import { readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import logger from '~/lib/logger';
 
+export class Tag {
+    name = '';
+    excluded?: string[] = [];
+}
+
 export class SwaggerApi {
     url = '';
     retrieveUrl?: string;
     tags: Tag[] = [];
-}
-
-export class Tag {
-    name = '';
-    excluded?: string[] = [];
 }
 
 export class Mail {
@@ -74,12 +74,6 @@ export class Config {
         this.saveConfig();
     }
 
-    private saveConfig() {
-        writeFile('dynamic-config.json', JSON.stringify(this.config), 'utf-8').then(() => {
-            logger.info('Dynamic config successfully written to disk');
-        });
-    }
-
     getConfig(): ConfigType {
         return this.config;
     }
@@ -109,6 +103,12 @@ export class Config {
         if (hasChange) {
             this.saveConfig();
         }
+    }
+
+    private saveConfig() {
+        writeFile('dynamic-config.json', JSON.stringify(this.config), 'utf-8').then(() => {
+            logger.info('Dynamic config successfully written to disk');
+        });
     }
 }
 

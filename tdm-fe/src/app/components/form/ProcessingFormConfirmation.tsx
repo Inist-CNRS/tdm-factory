@@ -7,7 +7,7 @@ import { RouteProcessingStatus } from '~/app/shared/routes';
 export type ProcessingFormConfirmationProps = {
     processingId: string;
     state: {
-        status: 200 | 400 | 428 | 500 | null | undefined;
+        status: 202 | 400 | 409 | 428 | 500 | null | undefined;
         pending: boolean;
     };
 };
@@ -43,7 +43,7 @@ const ProcessingFormConfirmation = ({ processingId, state }: ProcessingFormConfi
     /**
      * Show an error if we get any other error
      */
-    if (state.status !== 200) {
+    if (state.status !== 202 && state.status !== 409) {
         return <Alert severity="error">Un problème inattendu est survenu.</Alert>;
     }
 
