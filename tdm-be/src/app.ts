@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import basicAuth from 'express-basic-auth'; // This package is used for basic authentication
+import rateLimit from 'express-rate-limit';
 import cron from 'node-cron';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'node:fs';
@@ -17,7 +18,13 @@ import swaggerFile from '~/swagger/swagger-config.json';
 
 const app = express();
 
-const port = environment.port;
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    limit: 1000, // Limit each IP to 1000 requests per `window` (here, per minute)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+app.use(limiter);
 
 // Simple example user credentials
 const users = {
@@ -27,7 +34,7 @@ const users = {
 // Middleware for basic authentication
 const auth = basicAuth({
     users,
-    challenge: true, // Sends 401 authentication challenge if credentials are missing
+    challenge: true, // Sends 401 authentication challenges if credentials are missing
     unauthorizedResponse: 'Authentication required.', // Message for unauthorized access
 });
 
@@ -69,8 +76,8 @@ app.use((req, res) => {
 });
 
 initFilesSystem().then(() => {
-    const server = app.listen(port, () => {
-        logger.debug(`Running on ${port}`);
+    const server = app.listen(environment.port, () => {
+        logger.debug(`Running on ${environment.port}`);
     });
 
     server.setTimeout(600000); // 10 minutes timeout for all routes
