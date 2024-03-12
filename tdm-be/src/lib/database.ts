@@ -16,6 +16,7 @@ const init = () => {
             id             text primary key,
             status         integer,
             email          text default null,
+            fields         text default null,
             wrapper        text default null,
             wrapperParam   text default null,
             enrichment     text default null,

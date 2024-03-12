@@ -19,6 +19,7 @@ import {
 import logger from '~/lib/logger';
 import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
+import csvFields from '~/worker/fields/csvFields';
 import wrapper from '~/worker/wrapper';
 
 const router = express.Router();
@@ -246,19 +247,34 @@ const upload = multer({ storage: storage });
  */
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
-    if (req.body.processingId && req.body.originalName && req.file?.filename) {
-        const result = createProcessing(req.body.processingId, req.body.originalName, req.file.filename);
+    const saveAndSend = (processingId: string, originalName: string, uploadedFile: string, fields?: string[]) => {
+        const result = createProcessing(processingId, originalName, uploadedFile, fields);
         if (result) {
             res.status(HTTP_CREATED).send({
                 id: result.id,
+                fields,
             });
             return;
         }
-    }
+        res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+            status: HTTP_INTERNAL_SERVER_ERROR,
+        });
+    };
 
-    res.status(HTTP_INTERNAL_SERVER_ERROR).send({
-        status: HTTP_INTERNAL_SERVER_ERROR,
-    });
+    if (req.body.processingId && req.body.originalName && req.file?.filename) {
+        const processingId = req.body.processingId;
+        const originalName = req.body.originalName;
+        const uploadedFile = req.file.filename;
+
+        if (req.file.filename.endsWith('csv')) {
+            csvFields(req.file.filename).then((fields) => {
+                saveAndSend(processingId, originalName, uploadedFile, fields);
+            });
+            return;
+        }
+
+        saveAndSend(processingId, originalName, uploadedFile);
+    }
 });
 
 /**
