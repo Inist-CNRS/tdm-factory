@@ -2,8 +2,8 @@ import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { useContext } from 'react';
-import type { SyntheticEvent, ChangeEvent } from 'react';
+import { useContext, useMemo } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import Markdown from '~/app/components/text/Markdown';
@@ -13,13 +13,22 @@ const ProcessingFormConfiguration = () => {
     const {
         wrapperList,
         enrichmentList,
+        fields,
         wrapper,
         setWrapper,
         wrapperParam,
         setWrapperParam,
         enrichment,
         setEnrichment,
+        isPending,
     } = useContext(ProcessingFormContext);
+
+    const cleanFields = useMemo(() => {
+        if (fields && fields.fields) {
+            return fields.fields;
+        }
+        return [];
+    }, [fields]);
 
     /**
      * Handle event from wrapper selection
@@ -28,13 +37,20 @@ const ProcessingFormConfiguration = () => {
         setWrapper(newWrapper);
     };
 
-    const handleWrapperParamChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setWrapperParam(event.target.value);
+    const handleWrapperParamChange = (_: SyntheticEvent, newWrapperParam: string | null) => {
+        setWrapperParam(newWrapperParam);
     };
 
     const handleEnrichmentChange = (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
         setEnrichment(newEnrichment);
     };
+
+    /**
+     * Show a loading box will wait for the operations to be fetched
+     */
+    if (isPending) {
+        return <CircularWaiting />;
+    }
 
     return (
         <>
@@ -62,11 +78,17 @@ const ProcessingFormConfiguration = () => {
                 {wrapper ? (
                     <div id="processing-form-wrapper-param">
                         <div id="processing-form-wrapper-param-style"></div>
-                        <TextField
+                        <Autocomplete
+                            className="processing-form-field"
                             value={wrapperParam}
                             onChange={handleWrapperParamChange}
-                            className="processing-form-field"
-                            label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
+                            options={cleanFields}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
+                                />
+                            )}
                             fullWidth
                         />
                     </div>

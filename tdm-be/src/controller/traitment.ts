@@ -6,7 +6,7 @@ import type { Parameter } from '~/model/Request';
 import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendStartedMail } from '~/lib/email';
-import { filesLocation, randomFileName } from '~/lib/files';
+import { filesLocation, randomFileName, uploadFile } from '~/lib/files';
 import {
     HTTP_ACCEPTED,
     HTTP_BAD_REQUEST,
@@ -285,7 +285,7 @@ router.get('/fields', (req, res) => {
         return;
     }
 
-    csvFields(initialProcessing.uploadFile).then((fields) => {
+    csvFields(uploadFile(initialProcessing.uploadFile)).then((fields) => {
         res.send({
             fields,
         });

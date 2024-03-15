@@ -2,7 +2,8 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { createContext, useEffect, useMemo, useState } from 'react';
 import type { PropsWithChildren } from 'react';
-import type { Enrichment, Wrapper } from '~/app/shared/data.types';
+import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
+import { fields } from '~/app/services/creation/fields';
 import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
@@ -24,6 +25,7 @@ export type ProcessingFormContextType = {
     setFile: (file: File | null) => void;
     processingId: string | null;
     // Configuration step
+    fields: ProcessingFields | null;
     wrapper: Wrapper | null;
     setWrapper: (wrapper: Wrapper | null) => void;
     wrapperParam: string | null;
@@ -134,6 +136,21 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         gcTime: 3600000,
     });
 
+    const { data: fieldsData, isPending: fieldsPending } = useQuery({
+        queryKey: ['fields', step, processingId],
+        queryFn: () => {
+            if (step !== PROCESSING_CONFIGURATION_STEP) {
+                return null;
+            }
+
+            if (!processingId) {
+                return null;
+            }
+
+            return fields(processingId);
+        },
+    });
+
     /**
      * Start the processing
      */
@@ -178,11 +195,41 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
     }, [operations.data.wrapper, operations.pending]);
 
     /**
+     * Clean up wrapper list
+     */
+    const wrapperList = useMemo(() => {
+        if (!operations.data.wrapper) {
+            return [];
+        }
+
+        const list = operations.data.wrapper;
+
+        if (file) {
+            return list.filter((entry) => {
+                return entry.fileType.includes(mimeTypes.getType(file.name) ?? '');
+            });
+        }
+
+        return list;
+    }, [file, operations.data.wrapper]);
+
+    /**
+     * Clean up enrichment list
+     */
+    const enrichmentList = useMemo(() => {
+        if (!operations.data.enrichment) {
+            return [];
+        }
+
+        return operations.data.enrichment;
+    }, [operations.data.enrichment]);
+
+    /**
      * Listen for network call and update the state
      */
     useEffect(() => {
-        setIsPending(operations.pending || uploading || startPending);
-    }, [operations.pending, uploading, startPending]);
+        setIsPending(operations.pending || uploading || startPending || fieldsPending);
+    }, [operations.pending, uploading, startPending, fieldsPending]);
 
     /**
      * Listen for the end of the upload and update the processing id state
@@ -211,20 +258,22 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
     }, [startResponse]);
 
     /**
-     * Listen step to auto validated email on new processing
-     */
-    useEffect(() => {
-        if (email && step === PROCESSING_VALIDATION_STEP) {
-            handleEmailChange(email);
-        }
-    }, [step]);
-
-    /**
      * Handle the next button
      */
     const handleNext = () => {
+        let invalid = false;
         let waiting = true;
         let nextStep = step + 1;
+
+        if (nextStep === PROCESSING_VALIDATION_STEP) {
+            if (email && EMAIL_REGEX.test(email)) {
+                waiting = false;
+            }
+
+            if (email && !EMAIL_REGEX.test(email)) {
+                invalid = true;
+            }
+        }
 
         if (nextStep === PROCESSING_CONFIRMATION_STEP) {
             waiting = false;
@@ -238,7 +287,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
             nextStep = PROCESSING_UPLOAD_STEP;
         }
 
-        setIsInvalid(false);
+        setIsInvalid(invalid);
         setIsWaitingInput(waiting);
         setStep(nextStep);
     };
@@ -342,11 +391,12 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
                 isWaitingInput,
                 next: handleNext,
                 mimes,
-                wrapperList: operations.data.wrapper ?? [],
-                enrichmentList: operations.data.enrichment ?? [],
+                wrapperList,
+                enrichmentList,
                 file,
                 setFile: handleFileChange,
                 processingId,
+                fields: fieldsData ?? null,
                 wrapper,
                 setWrapper: handleWrapperChange,
                 wrapperParam,
