@@ -14,6 +14,7 @@ export type ProcessingFormContextType = {
     isInvalid: boolean;
     isPending: boolean;
     isOnError: boolean;
+    isWaitingInput: boolean;
     next: () => void;
     mimes: string[];
     wrapperList: Wrapper[];
@@ -56,8 +57,9 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
      */
     const [step, setStep] = useState<number>(PROCESSING_UPLOAD_STEP);
     const [isPending, setIsPending] = useState<boolean>(false);
-    const [isInvalid, setIsInvalid] = useState<boolean>(true);
+    const [isInvalid, setIsInvalid] = useState<boolean>(false);
     const [isOnError, setIsOnError] = useState<boolean>(false);
+    const [isWaitingInput, setIsWaitingInput] = useState<boolean>(true);
 
     /**
      * Form file and processing id (upload step)
@@ -116,13 +118,13 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         isPending: uploading,
         isError: uploadFailed,
     } = useQuery({
-        queryKey: ['upload', step, processingId, file, isInvalid],
+        queryKey: ['upload', step, processingId, file],
         queryFn: () => {
             if (step !== PROCESSING_UPLOADING_STEP) {
                 return null;
             }
 
-            if (!file || isInvalid) {
+            if (!file) {
                 return null;
             }
 
@@ -209,25 +211,36 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
     }, [startResponse]);
 
     /**
+     * Listen step to auto validated email on new processing
+     */
+    useEffect(() => {
+        if (email && step === PROCESSING_VALIDATION_STEP) {
+            handleEmailChange(email);
+        }
+    }, [step]);
+
+    /**
      * Handle the next button
      */
     const handleNext = () => {
-        setIsInvalid(true);
+        let waiting = true;
+        let nextStep = step + 1;
 
-        if (step === PROCESSING_VALIDATION_STEP) {
-            handleEmailChange(email);
+        if (nextStep === PROCESSING_CONFIRMATION_STEP) {
+            waiting = false;
         }
 
         if (step === PROCESSING_CONFIRMATION_STEP) {
-            setStep(PROCESSING_UPLOAD_STEP);
             setFile(null);
             setWrapper(null);
             setWrapperParam(null);
             setEnrichment(null);
-            return;
+            nextStep = PROCESSING_UPLOAD_STEP;
         }
 
-        setStep(step + 1);
+        setIsInvalid(false);
+        setIsWaitingInput(waiting);
+        setStep(nextStep);
     };
 
     /**
@@ -245,6 +258,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
             }
 
             setIsInvalid(invalid);
+            setIsWaitingInput(false);
         }
     };
 
@@ -263,6 +277,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
             }
 
             setIsInvalid(invalid);
+            setIsWaitingInput(false);
         }
     };
 
@@ -294,6 +309,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
             }
 
             setIsInvalid(invalid);
+            setIsWaitingInput(false);
         }
     };
 
@@ -312,6 +328,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
             }
 
             setIsInvalid(invalid);
+            setIsWaitingInput(false);
         }
     };
 
@@ -322,6 +339,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
                 isInvalid,
                 isPending,
                 isOnError,
+                isWaitingInput,
                 next: handleNext,
                 mimes,
                 wrapperList: operations.data.wrapper ?? [],

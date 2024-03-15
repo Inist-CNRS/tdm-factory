@@ -24,8 +24,8 @@ export type Processing = {
  */
 export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
     const stmt = database.prepare<[string, number, string, string]>(`
-        insert into processing (id, status, uploadFile, originalName, fields)
-        values (?, ?, ?, ?, ?);
+        insert into processing (id, status, uploadFile, originalName)
+        values (?, ?, ?, ?);
     `);
 
     const result = stmt.run(id, Status.UNKNOWN, uploadFile, originalName);

@@ -16,7 +16,7 @@ import {
 } from '~/app/provider/ProcessingFormContextProvider';
 
 const ProcessingCreationForm = () => {
-    const { step, isInvalid, next } = useContext(ProcessingFormContext);
+    const { step, isInvalid, isWaitingInput, next } = useContext(ProcessingFormContext);
 
     return (
         <div id="processing-form">
@@ -41,7 +41,7 @@ const ProcessingCreationForm = () => {
 
                 {/* Navigation button */}
                 <div id="processing-form-navigation">
-                    <Button onClick={next} variant="outlined" disabled={isInvalid}>
+                    <Button onClick={next} variant="outlined" disabled={isInvalid || isWaitingInput}>
                         {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
                     </Button>
                 </div>

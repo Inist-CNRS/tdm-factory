@@ -19,7 +19,6 @@ const ProcessingFormConfiguration = () => {
         setWrapperParam,
         enrichment,
         setEnrichment,
-        isInvalid,
     } = useContext(ProcessingFormContext);
 
     /**
@@ -36,13 +35,6 @@ const ProcessingFormConfiguration = () => {
     const handleEnrichmentChange = (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
         setEnrichment(newEnrichment);
     };
-
-    /**
-     * Show a loading box will wait for the operations to be fetched
-     */
-    if (isInvalid) {
-        return <CircularWaiting />;
-    }
 
     return (
         <>

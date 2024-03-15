@@ -7,6 +7,13 @@ import Stepper from '@mui/material/Stepper';
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 import type { StepIconProps } from '@mui/material/StepIcon';
+import {
+    PROCESSING_CONFIGURATION_STEP,
+    PROCESSING_CONFIRMATION_STEP,
+    PROCESSING_UPLOAD_STEP,
+    PROCESSING_UPLOADING_STEP,
+    PROCESSING_VALIDATION_STEP,
+} from '~/app/provider/ProcessingFormContextProvider';
 import { colors } from '~/app/shared/theme';
 
 export type ProcessingFormStepperProps = {
@@ -95,8 +102,22 @@ const StepLabelIcon = ({ icon, completed, active }: StepIconProps) => {
  * Mui Stepper with the Istex theme
  */
 const ProcessingFormStepper = ({ step = 0 }: ProcessingFormStepperProps) => {
+    const activeStep = useMemo(() => {
+        switch (step) {
+            case PROCESSING_UPLOAD_STEP:
+            case PROCESSING_UPLOADING_STEP:
+                return 0;
+            case PROCESSING_CONFIGURATION_STEP:
+                return 1;
+            case PROCESSING_VALIDATION_STEP:
+                return 2;
+            case PROCESSING_CONFIRMATION_STEP:
+                return 3;
+        }
+    }, [step]);
+
     return (
-        <Stepper activeStep={step} alternativeLabel connector={<IstexStepConnector />}>
+        <Stepper activeStep={activeStep} alternativeLabel connector={<IstexStepConnector />}>
             {steps.map((stepEntry) => (
                 <Step key={stepEntry.id}>
                     <IstexStepLabel StepIconComponent={StepLabelIcon}>{stepEntry.title}</IstexStepLabel>

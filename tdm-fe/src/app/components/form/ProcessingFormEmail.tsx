@@ -14,7 +14,7 @@ const ProcessingFormEmail = () => {
     return (
         <div className="processing-form-field-group processing-form-field-with-label">
             <TextField
-                value={email}
+                value={email ?? ''}
                 onChange={handleChange}
                 error={isInvalid}
                 className="processing-form-field"
