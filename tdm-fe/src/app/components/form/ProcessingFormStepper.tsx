@@ -13,11 +13,6 @@ export type ProcessingFormStepperProps = {
     step?: number;
 };
 
-export const PROCESSING_UPLOAD_STEP = 1;
-export const PROCESSING_CONFIGURATION_STEP = 0;
-export const PROCESSING_VALIDATION_STEP = 2;
-export const PROCESSING_CONFIRMATION_STEP = 3;
-
 /**
  * List of all step available
  */

@@ -4,6 +4,7 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
+import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 
 export type ProcessingFormContextProviderProps = PropsWithChildren;
@@ -12,7 +13,9 @@ export type ProcessingFormContextType = {
     step: number;
     isInvalid: boolean;
     isPending: boolean;
+    isOnError: boolean;
     next: () => void;
+    mimes: string[];
     wrapperList: Wrapper[];
     enrichmentList: Enrichment[];
     // Upload step
@@ -29,28 +32,59 @@ export type ProcessingFormContextType = {
     // Validation step
     email: string | null;
     setEmail: (email: string | null) => void;
+    // Confirmation step
+    startingStatus: 202 | 400 | 409 | 428 | 500 | null;
 };
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ProcessingFormContext = createContext<ProcessingFormContextType>({} as ProcessingFormContextType);
 
 export const PROCESSING_UPLOAD_STEP = 0;
-export const PROCESSING_CONFIGURATION_STEP = 1;
-export const PROCESSING_VALIDATION_STEP = 2;
-export const PROCESSING_CONFIRMATION_STEP = 3;
+export const PROCESSING_UPLOADING_STEP = 1;
+export const PROCESSING_CONFIGURATION_STEP = 2;
+export const PROCESSING_VALIDATION_STEP = 3;
+export const PROCESSING_CONFIRMATION_STEP = 4;
 
+/**
+ * Processing creation form context provider
+ * This context handle all data processing of the Processing creation form
+ */
 const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProviderProps) => {
-    const [step, setStep] = useState<number>(0);
+    /**
+     * Form states
+     */
+    const [step, setStep] = useState<number>(PROCESSING_UPLOAD_STEP);
+    const [isPending, setIsPending] = useState<boolean>(false);
     const [isInvalid, setIsInvalid] = useState<boolean>(true);
+    const [isOnError, setIsOnError] = useState<boolean>(false);
 
+    /**
+     * Form file and processing id (upload step)
+     */
     const [file, setFile] = useState<File | null>(null);
     const [processingId, setProcessingId] = useState<string | null>(null);
 
+    /**
+     * Form configuration step
+     */
     const [wrapper, setWrapper] = useState<Wrapper | null>(null);
     const [wrapperParam, setWrapperParam] = useState<string | null>(null);
     const [enrichment, setEnrichment] = useState<Enrichment | null>(null);
 
+    /**
+     * Form validation step
+     */
     const [email, setEmail] = useState<string | null>(null);
 
+    /**
+     * Form confirmation step
+     */
+    const [startingStatus, setStartingStatus] = useState<202 | 400 | 409 | 428 | 500 | null>(null);
+
+    /**
+     * Get wrapper and enrichment available
+     */
     const operations = useQueries({
         queries: [
             {
@@ -74,19 +108,21 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         },
     });
 
+    /**
+     * Upload the corpus and get the associated processing id
+     */
     const {
         data: uploadResult,
         isPending: uploading,
         isError: uploadFailed,
     } = useQuery({
-        queryKey: ['upload', step, processingId, file],
+        queryKey: ['upload', step, processingId, file, isInvalid],
         queryFn: () => {
-            if (step !== PROCESSING_UPLOAD_STEP) {
+            if (step !== PROCESSING_UPLOADING_STEP) {
                 return null;
             }
 
-            // We can't have this state due to previous check (I hate ts some time)
-            if (!file) {
+            if (!file || isInvalid) {
                 return null;
             }
 
@@ -96,17 +132,59 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         gcTime: 3600000,
     });
 
+    /**
+     * Start the processing
+     */
+    const { data: startResponse, isPending: startPending } = useQuery({
+        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam],
+        queryFn: () => {
+            if (step !== PROCESSING_CONFIRMATION_STEP) {
+                return null;
+            }
+
+            // We can't have this state due to previous check (I hate ts some time)
+            if (!processingId || !wrapper || !enrichment || !email) {
+                return null;
+            }
+
+            return start({
+                id: processingId,
+                wrapper: wrapper,
+                wrapperParam: wrapperParam ?? undefined,
+                enrichment: enrichment,
+                mail: email,
+            });
+        },
+        staleTime: 3600000,
+        gcTime: 3600000,
+    });
+
+    /**
+     * Aggregate all mine type available
+     */
     const mimes = useMemo<string[]>(() => {
         if (!operations.pending && operations.data.wrapper) {
-            return operations.data.wrapper.flatMap((entry) => entry.fileType);
+            const mimeType = [...new Set(operations.data.wrapper.flatMap((entry) => entry.fileType))];
+
+            if (mimeType.includes('application/x-gzip')) {
+                mimeType.push('application/gzip');
+            }
+
+            return mimeType;
         }
         return [];
     }, [operations.data.wrapper, operations.pending]);
 
-    const isPending = useMemo(() => {
-        return operations.pending || uploading;
-    }, [operations.pending, uploading]);
+    /**
+     * Listen for network call and update the state
+     */
+    useEffect(() => {
+        setIsPending(operations.pending || uploading || startPending);
+    }, [operations.pending, uploading, startPending]);
 
+    /**
+     * Listen for the end of the upload and update the processing id state
+     */
     useEffect(() => {
         if (uploadResult) {
             setProcessingId(uploadResult);
@@ -114,17 +192,48 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         }
     }, [uploadResult]);
 
+    /**
+     * Listen for the upload error and set the form on error
+     */
     useEffect(() => {
         if (uploadFailed) {
-            setIsInvalid(true);
+            setIsOnError(true);
         }
     }, [uploadFailed]);
 
+    /**
+     * Listen for start response
+     */
+    useEffect(() => {
+        setStartingStatus(startResponse ?? null);
+    }, [startResponse]);
+
+    /**
+     * Handle the next button
+     */
     const handleNext = () => {
-        setStep(step + 1);
         setIsInvalid(true);
+
+        if (step === PROCESSING_VALIDATION_STEP) {
+            handleEmailChange(email);
+        }
+
+        if (step === PROCESSING_CONFIRMATION_STEP) {
+            setStep(PROCESSING_UPLOAD_STEP);
+            setFile(null);
+            setWrapper(null);
+            setWrapperParam(null);
+            setEnrichment(null);
+            return;
+        }
+
+        setStep(step + 1);
     };
 
+    /**
+     * Handle file change
+     * @param newFile newly add file
+     */
     const handleFileChange = (newFile: File | null) => {
         if (step === PROCESSING_UPLOAD_STEP) {
             setFile(newFile);
@@ -139,27 +248,70 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         }
     };
 
+    /**
+     * Handle wrapper selection
+     * @param newWrapper newly selected wrapper
+     */
     const handleWrapperChange = (newWrapper: Wrapper | null) => {
         if (step === PROCESSING_CONFIGURATION_STEP) {
             setWrapper(newWrapper);
+
+            let invalid = false;
+
+            if (operations.data.wrapper && !operations.data.wrapper.find((entry) => entry.url === newWrapper?.url)) {
+                invalid = true;
+            }
+
+            setIsInvalid(invalid);
         }
     };
 
+    /**
+     * Handle wrapper param change
+     * @param newWrapperParam newly added param
+     */
     const handleWrapperParamChange = (newWrapperParam: string | null) => {
         if (step === PROCESSING_CONFIGURATION_STEP) {
             setWrapperParam(newWrapperParam);
         }
     };
 
+    /**
+     * Handle enrichment selection
+     * @param newEnrichment newly selected enrichment
+     */
     const handleEnrichmentChange = (newEnrichment: Enrichment | null) => {
         if (step === PROCESSING_CONFIGURATION_STEP) {
             setEnrichment(newEnrichment);
+
+            let invalid = false;
+
+            if (
+                operations.data.enrichment &&
+                !operations.data.enrichment.find((entry) => entry.url === newEnrichment?.url)
+            ) {
+                invalid = true;
+            }
+
+            setIsInvalid(invalid);
         }
     };
 
+    /**
+     * Handle email change
+     * @param newEmail newly added email
+     */
     const handleEmailChange = (newEmail: string | null) => {
         if (step === PROCESSING_VALIDATION_STEP) {
             setEmail(newEmail);
+
+            let invalid = false;
+
+            if (!newEmail || !EMAIL_REGEX.test(newEmail)) {
+                invalid = true;
+            }
+
+            setIsInvalid(invalid);
         }
     };
 
@@ -169,7 +321,9 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
                 step,
                 isInvalid,
                 isPending,
+                isOnError,
                 next: handleNext,
+                mimes,
                 wrapperList: operations.data.wrapper ?? [],
                 enrichmentList: operations.data.enrichment ?? [],
                 file,
@@ -183,6 +337,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
                 setEnrichment: handleEnrichmentChange,
                 email,
                 setEmail: handleEmailChange,
+                startingStatus,
             }}
         >
             {children}

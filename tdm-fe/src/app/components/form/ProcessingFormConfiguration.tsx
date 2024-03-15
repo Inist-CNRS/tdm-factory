@@ -1,128 +1,47 @@
 import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
-import Alert from '@mui/material/Alert';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { useQueries } from '@tanstack/react-query';
-import { memo, useState } from 'react';
+import { useContext } from 'react';
 import type { SyntheticEvent, ChangeEvent } from 'react';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import Markdown from '~/app/components/text/Markdown';
-import { enrichment, wrapper } from '~/app/services/creation/operations';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 
-type Configuration = {
-    wrapper: Wrapper | null;
-    wrapperParam: string | null;
-    enrichment: Enrichment | null;
-};
-
-export type ChangeConfiguration = Configuration & {
-    invalidState: boolean;
-};
-
-export type ProcessingFormConfigurationProps = {
-    value: Partial<Configuration>;
-    onChange: (configuration: ChangeConfiguration) => void;
-};
-
-const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormConfigurationProps) => {
-    const { wrapper: wrapperIn, wrapperParam: wrapperParamIn, enrichment: enrichmentIn } = value;
-    const [selectedWrapper, setSelectedWrapper] = useState<Wrapper | null>(wrapperIn ?? null);
-    const [wrapperParam, setWrapperParam] = useState<string | null>(wrapperParamIn ?? null);
-    const [selectedEnrichment, setSelectedEnrichment] = useState<Enrichment | null>(enrichmentIn ?? null);
-
-    /**
-     * Get a wrapper and enrichment list
-     */
-    const operations = useQueries({
-        queries: [
-            {
-                queryKey: ['wrapper'],
-                queryFn: wrapper,
-                staleTime: 3600000, // 1 hour of cache
-                gcTime: 3600000, // 1000 * 60 * 60
-            },
-            {
-                queryKey: ['enrichment'],
-                queryFn: enrichment,
-                staleTime: 3600000,
-                gcTime: 3600000,
-            },
-        ],
-        combine: (results) => {
-            return {
-                data: { wrapper: results[0].data, enrichment: results[1].data },
-                pending: results.some((result) => result.isPending),
-            };
-        },
-    });
-
-    const handleChange = (configuration: Configuration) => {
-        let invalidState = false;
-
-        if (!configuration.wrapper) {
-            invalidState = true;
-        }
-
-        if (!configuration.enrichment) {
-            invalidState = true;
-        }
-
-        onChange({
-            wrapper: configuration.wrapper,
-            wrapperParam: configuration.wrapperParam,
-            enrichment: configuration.enrichment,
-            invalidState,
-        });
-    };
+const ProcessingFormConfiguration = () => {
+    const {
+        wrapperList,
+        enrichmentList,
+        wrapper,
+        setWrapper,
+        wrapperParam,
+        setWrapperParam,
+        enrichment,
+        setEnrichment,
+        isInvalid,
+    } = useContext(ProcessingFormContext);
 
     /**
      * Handle event from wrapper selection
      */
     const handleWrapperChange = (_: SyntheticEvent, newWrapper: Wrapper | null) => {
-        setSelectedWrapper(newWrapper);
-        handleChange({
-            wrapper: newWrapper,
-            wrapperParam: wrapperParam,
-            enrichment: selectedEnrichment,
-        });
+        setWrapper(newWrapper);
     };
 
     const handleWrapperParamChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setWrapperParam(event.target.value);
-        handleChange({
-            wrapper: selectedWrapper,
-            wrapperParam: event.target.value,
-            enrichment: selectedEnrichment,
-        });
     };
 
     const handleEnrichmentChange = (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
-        setSelectedEnrichment(newEnrichment);
-        handleChange({
-            wrapper: selectedWrapper,
-            wrapperParam: wrapperParam,
-            enrichment: newEnrichment,
-        });
+        setEnrichment(newEnrichment);
     };
 
     /**
      * Show a loading box will wait for the operations to be fetched
      */
-    if (operations.pending) {
+    if (isInvalid) {
         return <CircularWaiting />;
-    }
-
-    /**
-     * Show an error if we get empty operations
-     */
-    if (!operations.data.wrapper || !operations.data.enrichment) {
-        return (
-            <Alert severity="error">
-                Nous parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.
-            </Alert>
-        );
     }
 
     return (
@@ -133,22 +52,22 @@ const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormCon
                 <div className="processing-form-field-with-label">
                     <Autocomplete
                         className="processing-form-field"
-                        value={selectedWrapper}
+                        value={wrapper}
                         onChange={handleWrapperChange}
-                        options={operations.data.wrapper}
+                        options={wrapperList}
                         renderInput={(params) => <TextField {...params} label="Convertisseur" />}
                         fullWidth
                         disablePortal
                     />
-                    {selectedWrapper ? (
+                    {wrapper ? (
                         <div id="processing-form-wrapper-label">
                             <div id="processing-form-wrapper-label-style"></div>
-                            <Markdown className="text processing-form-field-label" text={selectedWrapper.description} />
+                            <Markdown className="text processing-form-field-label" text={wrapper.description} />
                         </div>
                     ) : null}
                 </div>
                 {/* Wrapper param */}
-                {selectedWrapper ? (
+                {wrapper ? (
                     <div id="processing-form-wrapper-param">
                         <div id="processing-form-wrapper-param-style"></div>
                         <TextField
@@ -165,19 +84,19 @@ const ProcessingFormConfiguration = ({ value = {}, onChange }: ProcessingFormCon
             <div className="processing-form-field-group processing-form-field-with-label">
                 <Autocomplete
                     className="processing-form-field"
-                    value={selectedEnrichment}
+                    value={enrichment}
                     onChange={handleEnrichmentChange}
-                    options={operations.data.enrichment}
+                    options={enrichmentList}
                     renderInput={(params) => <TextField {...params} label="Traitement" />}
                     fullWidth
                     disablePortal
                 />
-                {selectedEnrichment ? (
-                    <Markdown className="text processing-form-field-label" text={selectedEnrichment.description} />
+                {enrichment ? (
+                    <Markdown className="text processing-form-field-label" text={enrichment.description} />
                 ) : null}
             </div>
         </>
     );
 };
 
-export default memo(ProcessingFormConfiguration);
+export default ProcessingFormConfiguration;

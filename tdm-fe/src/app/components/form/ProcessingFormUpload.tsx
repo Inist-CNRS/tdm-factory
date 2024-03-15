@@ -1,48 +1,24 @@
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
-import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
-import { useState } from 'react';
+import { useContext, useMemo } from 'react';
 import FileUpload from '~/app/components/progress/FileUpload';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 import { colors } from '~/app/shared/theme';
 
-export type ChangeFile = {
-    file: File | null;
-    invalidState: boolean;
-};
+const ProcessingFormUpload = () => {
+    const { mimes, file, setFile, isPending, isInvalid, isOnError } = useContext(ProcessingFormContext);
 
-export type ProcessingFormUploadProps = {
-    isUploading: {
-        pending: boolean;
-        error: boolean;
-    };
-    mimes: string[];
-    value: File | null;
-    onChange: (file: ChangeFile) => void;
-};
-
-const ProcessingFormUpload = ({ isUploading, mimes, value, onChange }: ProcessingFormUploadProps) => {
-    const [file, setFile] = useState<File | null>(value);
-    const [error, setError] = useState<boolean>(false);
+    const stringifiesMineTypes = useMemo(() => {
+        return mimes.join(', ');
+    }, [mimes]);
 
     const handleFileChange = (newFile: File | null) => {
-        let invalidState = false;
-
         setFile(newFile);
-
-        if (!newFile || !mimes.includes(mimeTypes.getType(newFile.name) ?? '')) {
-            invalidState = true;
-        }
-
-        setError(invalidState);
-        onChange({
-            file: newFile,
-            invalidState,
-        });
     };
 
-    if (isUploading.pending || isUploading.error) {
-        return <FileUpload showError={isUploading.error} />;
+    if (isPending || isOnError) {
+        return <FileUpload showError={isOnError} />;
     }
 
     return (
@@ -52,10 +28,13 @@ const ProcessingFormUpload = ({ isUploading, mimes, value, onChange }: Processin
                 placeholder="Déposer un fichier"
                 value={file}
                 onChange={handleFileChange}
-                error={error}
+                error={isInvalid}
                 fullWidth
                 clearIconButtonProps={{
                     children: <CloseIcon fontSize="small" />,
+                }}
+                inputProps={{
+                    accept: stringifiesMineTypes,
                 }}
                 InputProps={{
                     startAdornment: <AttachFileIcon />,
@@ -66,14 +45,14 @@ const ProcessingFormUpload = ({ isUploading, mimes, value, onChange }: Processin
                     },
                 }}
             />
-            {error ? (
+            {isInvalid ? (
                 <div className="text processing-form-field-label error">
                     {!file ? (
                         <>Fichier manquant</>
                     ) : (
                         <>
                             Le fichier ne correspond pas a un format compatible, utilisé l&apos;un de ces format :
-                            {mimes.join(', ')}.
+                            {stringifiesMineTypes}.
                         </>
                     )}
                 </div>
