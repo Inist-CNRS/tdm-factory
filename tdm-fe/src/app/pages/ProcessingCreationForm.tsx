@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import type { ChangeConfiguration } from '~/app/components/form/ProcessingFormConfiguration';
 import type { ChangeEmail } from '~/app/components/form/ProcessingFormEmail';
+import type { ChangeFile } from '~/app/components/form/ProcessingFormUpload';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
 import ProcessingFormConfirmation from '~/app/components/form/ProcessingFormConfirmation';
 import ProcessingFormEmail from '~/app/components/form/ProcessingFormEmail';
@@ -13,7 +14,7 @@ import ProcessingFormStepper, {
     PROCESSING_UPLOAD_STEP,
     PROCESSING_VALIDATION_STEP,
 } from '~/app/components/form/ProcessingFormStepper';
-import FileUpload from '~/app/components/progress/FileUpload';
+import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 
@@ -27,6 +28,7 @@ const initialConfiguration = {
 
 const ProcessingCreationForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [file, setFile] = useState<ChangeFile>({ file: null, invalidState: true });
     const [configuration, setConfiguration] = useState<ChangeConfiguration>(initialConfiguration);
     const [processingId, setProcessingId] = useState<string | null>(null);
     const [email, setEmail] = useState<ChangeEmail>({ email: null, invalidState: true });
@@ -34,19 +36,23 @@ const ProcessingCreationForm = () => {
     /**
      * Query handler use to upload the file
      */
-    const { data: uploadResult, isError: uploadFailed } = useQuery({
-        queryKey: ['upload', currentStep, processingId, configuration.file],
+    const {
+        data: uploadResult,
+        isPending: uploading,
+        isError: uploadFailed,
+    } = useQuery({
+        queryKey: ['upload', currentStep, processingId, file.file],
         queryFn: () => {
             if (currentStep !== PROCESSING_UPLOAD_STEP) {
                 return null;
             }
 
             // We can't have this state due to previous check (I hate ts some time)
-            if (!configuration.file) {
+            if (!file.file) {
                 return null;
             }
 
-            return upload(configuration.file);
+            return upload(file.file);
         },
         staleTime: 3600000,
         gcTime: 3600000,
@@ -133,6 +139,10 @@ const ProcessingCreationForm = () => {
         }
     };
 
+    const handleFileChange = (newFile: ChangeFile) => {
+        setFile(newFile);
+    };
+
     /**
      * Event handler use to update the configuration state
      */
@@ -185,13 +195,23 @@ const ProcessingCreationForm = () => {
 
             {/* Content of the form */}
             <div id="processing-form-content">
+                {/* Upload step */}
+                {currentStep === PROCESSING_UPLOAD_STEP ? (
+                    <ProcessingFormUpload
+                        mimes={}
+                        isUploading={{
+                            pending: uploading,
+                            error: uploadFailed,
+                        }}
+                        value={file.file}
+                        onChange={handleFileChange}
+                    />
+                ) : null}
+
                 {/* Configuration step */}
                 {currentStep === PROCESSING_CONFIGURATION_STEP ? (
                     <ProcessingFormConfiguration value={configuration} onChange={handleConfigurationChange} />
                 ) : null}
-
-                {/* Waiting step (Upload) */}
-                {currentStep === PROCESSING_UPLOAD_STEP ? <FileUpload showError={uploadFailed} /> : null}
 
                 {/* Validation step */}
                 {currentStep === PROCESSING_VALIDATION_STEP ? (

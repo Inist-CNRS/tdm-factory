@@ -6,7 +6,6 @@ export type Processing = {
     id: string;
     status: Status;
     email: string | null;
-    fields: string[] | null;
     wrapper: string | null;
     wrapperParam: string | null;
     enrichment: string | null;
@@ -22,22 +21,14 @@ export type Processing = {
  * @param id ID of the processing
  * @param originalName Name of the original file
  * @param uploadFile Source file of processing
- * @param fields
  */
-export const createProcessing = (
-    id: string,
-    originalName: string,
-    uploadFile: string,
-    fields?: string[],
-): Processing | undefined => {
-    const stmt = database.prepare<[string, number, string, string, string | null]>(`
+export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
+    const stmt = database.prepare<[string, number, string, string]>(`
         insert into processing (id, status, uploadFile, originalName, fields)
         values (?, ?, ?, ?, ?);
     `);
 
-    const stringFields = fields ? JSON.stringify(fields) : null;
-
-    const result = stmt.run(id, Status.UNKNOWN, uploadFile, originalName, stringFields);
+    const result = stmt.run(id, Status.UNKNOWN, uploadFile, originalName);
 
     if (result.changes !== 0) {
         return {
@@ -45,7 +36,6 @@ export const createProcessing = (
             status: Status.UNKNOWN,
             uploadFile,
             originalName,
-            fields: fields ?? null,
             email: null,
             tmpFile: null,
             resultFile: null,

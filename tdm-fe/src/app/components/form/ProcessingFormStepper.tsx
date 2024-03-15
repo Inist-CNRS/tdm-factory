@@ -13,8 +13,8 @@ export type ProcessingFormStepperProps = {
     step?: number;
 };
 
-export const PROCESSING_CONFIGURATION_STEP = 0;
 export const PROCESSING_UPLOAD_STEP = 1;
+export const PROCESSING_CONFIGURATION_STEP = 0;
 export const PROCESSING_VALIDATION_STEP = 2;
 export const PROCESSING_CONFIRMATION_STEP = 3;
 
@@ -22,8 +22,8 @@ export const PROCESSING_CONFIRMATION_STEP = 3;
  * List of all step available
  */
 const steps = [
-    { id: 'processing-configuration-step', title: 'Configuration' },
     { id: 'processing-upload-step', title: 'Téléversement' },
+    { id: 'processing-configuration-step', title: 'Configuration' },
     { id: 'processing-validation-step', title: 'Vérification' },
     { id: 'processing-confirmation-step', title: 'Confirmation' },
 ];
@@ -101,15 +101,13 @@ const StepLabelIcon = ({ icon, completed, active }: StepIconProps) => {
  */
 const ProcessingFormStepper = ({ step = 0 }: ProcessingFormStepperProps) => {
     return (
-        <div>
-            <Stepper activeStep={step} alternativeLabel connector={<IstexStepConnector />}>
-                {steps.map((stepEntry) => (
-                    <Step key={stepEntry.id}>
-                        <IstexStepLabel StepIconComponent={StepLabelIcon}>{stepEntry.title}</IstexStepLabel>
-                    </Step>
-                ))}
-            </Stepper>
-        </div>
+        <Stepper activeStep={step} alternativeLabel connector={<IstexStepConnector />}>
+            {steps.map((stepEntry) => (
+                <Step key={stepEntry.id}>
+                    <IstexStepLabel StepIconComponent={StepLabelIcon}>{stepEntry.title}</IstexStepLabel>
+                </Step>
+            ))}
+        </Stepper>
     );
 };
 

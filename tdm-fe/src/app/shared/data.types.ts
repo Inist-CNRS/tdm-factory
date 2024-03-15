@@ -20,3 +20,7 @@ export type ProcessingStatus = {
     message: string;
     errorType: string;
 };
+
+export type ProcessingFields = {
+    fields?: string[];
+};

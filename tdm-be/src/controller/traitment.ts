@@ -247,34 +247,49 @@ const upload = multer({ storage: storage });
  */
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
-    const saveAndSend = (processingId: string, originalName: string, uploadedFile: string, fields?: string[]) => {
-        const result = createProcessing(processingId, originalName, uploadedFile, fields);
+    if (req.body.processingId && req.body.originalName && req.file?.filename) {
+        const processingId = req.body.processingId;
+        const originalName = req.body.originalName;
+        const uploadedFile = req.file.filename;
+
+        const result = createProcessing(processingId, originalName, uploadedFile);
         if (result) {
             res.status(HTTP_CREATED).send({
                 id: result.id,
-                fields,
             });
             return;
         }
         res.status(HTTP_INTERNAL_SERVER_ERROR).send({
             status: HTTP_INTERNAL_SERVER_ERROR,
         });
-    };
-
-    if (req.body.processingId && req.body.originalName && req.file?.filename) {
-        const processingId = req.body.processingId;
-        const originalName = req.body.originalName;
-        const uploadedFile = req.file.filename;
-
-        if (req.file.filename.endsWith('csv')) {
-            csvFields(req.file.filename).then((fields) => {
-                saveAndSend(processingId, originalName, uploadedFile, fields);
-            });
-            return;
-        }
-
-        saveAndSend(processingId, originalName, uploadedFile);
     }
+});
+
+router.get('/fields', (req, res) => {
+    const { id } = req.query;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    const initialProcessing = findProcessing(id);
+
+    // Check if the processing existe
+    if (!initialProcessing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    csvFields(initialProcessing.uploadFile).then((fields) => {
+        res.send({
+            fields,
+        });
+    });
 });
 
 /**
