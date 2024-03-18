@@ -1,49 +1,30 @@
-import { parse } from 'csv-string';
-import { createReadStream } from 'node:fs';
-import { createInterface } from 'node:readline/promises';
+import axios from 'axios';
+import { readFile } from 'node:fs/promises';
+import logger from '~/lib/logger';
 
 /**
  * Get fields from csv file
  * @param fileName file name (absolute or relative path)
  */
-const csvFields = async (fileName: string): Promise<string[] | undefined> => {
-    // Create a file read stream
-    const stream = createReadStream(fileName);
+const csvFields = async (fileName: string): Promise<string[]> => {
+    try {
+        const fileBuffer = await readFile(fileName);
+        const response = await axios.post('https://data-wrapper.services.istex.fr/v1/fields/csv', fileBuffer, {
+            responseType: 'arraybuffer',
+            timeout: 600000,
+        });
 
-    // Create a line reader
-    const lineReader = createInterface({
-        input: stream,
-    });
+        logger.info(Buffer.from(response.data, 'binary').toString('utf8'));
 
-    // Get the first line
-    let firstLine: string | undefined;
-    /* eslint-disable no-unreachable-loop */
-    // noinspection LoopStatementThatDoesntLoopJS
-    for await (const line of lineReader) {
-        firstLine = line;
-        break;
+        const json = JSON.parse(Buffer.from(response.data, 'binary').toString('utf8')) as Array<{
+            value: string;
+        }>;
+
+        return json.map((value) => value.value);
+    } catch (e) {
+        logger.error(e);
+        return [];
     }
-    /* eslint-enable no-unreachable-loop */
-
-    // Close all streams
-    lineReader.close();
-    stream.close();
-
-    // Return if we don't found any line
-    if (!firstLine) {
-        return undefined;
-    }
-
-    // Parse the first line with csv-string
-    const fields = parse(firstLine);
-
-    // Return if we don't have any data
-    if (fields.length < 1) {
-        return undefined;
-    }
-
-    // Return the fields
-    return fields[0];
 };
 
 export default csvFields;

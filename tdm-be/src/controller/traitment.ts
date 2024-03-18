@@ -285,10 +285,17 @@ router.get('/fields', (req, res) => {
         return;
     }
 
-    csvFields(uploadFile(initialProcessing.uploadFile)).then((fields) => {
-        res.send({
-            fields,
+    if (initialProcessing.uploadFile.endsWith('csv')) {
+        csvFields(uploadFile(initialProcessing.uploadFile)).then((fields) => {
+            res.send({
+                fields,
+            });
         });
+        return;
+    }
+
+    res.send({
+        fields: [],
     });
 });
 
