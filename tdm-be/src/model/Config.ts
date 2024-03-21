@@ -1,6 +1,7 @@
+import logger from '~/lib/logger';
+
 import { readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
-import logger from '~/lib/logger';
 
 export class Tag {
     name = '';

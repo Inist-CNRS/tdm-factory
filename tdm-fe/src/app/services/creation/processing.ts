@@ -1,5 +1,5 @@
-import type { Operation } from '~/app/shared/data.types';
 import { createQuery, environment } from '~/app/services/Environment';
+import type { Operation } from '~/app/shared/data.types';
 
 export type ProcessingStartParams = {
     wrapper: Operation;

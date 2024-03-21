@@ -1,6 +1,7 @@
-import express from 'express';
 import logger from '~/lib/logger';
 import config from '~/model/Config';
+
+import express from 'express';
 
 const router = express.Router();
 

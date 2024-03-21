@@ -1,5 +1,5 @@
-import type { EnrichmentList, WrapperList } from '~/app/shared/data.types';
 import { createQuery, environment, json } from '~/app/services/Environment';
+import type { EnrichmentList, WrapperList } from '~/app/shared/data.types';
 
 export const wrapper = async () => {
     const response = await fetch(createQuery(environment.get.list.wrapper));

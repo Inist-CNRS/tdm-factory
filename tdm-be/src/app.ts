@@ -1,11 +1,3 @@
-import cors from 'cors';
-import express from 'express';
-import basicAuth from 'express-basic-auth';
-import rateLimit from 'express-rate-limit';
-import cron from 'node-cron';
-import swaggerUi from 'swagger-ui-express';
-import fs from 'node:fs';
-import path from 'path';
 import configRoute from '~/controller/config';
 import dataEnrichmentRoute from '~/controller/data-enrichment';
 import dataWrapperRoute from '~/controller/data-wrapper';
@@ -15,6 +7,16 @@ import environment from '~/lib/config';
 import { filesLocation, initFilesSystem } from '~/lib/files';
 import logger, { httpLogger, cronLogger } from '~/lib/logger';
 import swaggerFile from '~/swagger/swagger-config.json';
+
+import cors from 'cors';
+import express from 'express';
+import basicAuth from 'express-basic-auth';
+import rateLimit from 'express-rate-limit';
+import cron from 'node-cron';
+import swaggerUi from 'swagger-ui-express';
+
+import fs from 'node:fs';
+import path from 'path';
 
 const app = express();
 

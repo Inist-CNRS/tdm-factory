@@ -1,6 +1,8 @@
-import { createLogger, format, transports } from 'winston';
-import type { Logger } from 'winston';
 import config from '~/lib/config';
+
+import { createLogger, format, transports } from 'winston';
+
+import type { Logger } from 'winston';
 
 /**
  * Create a winston logger with an associated label

@@ -1,11 +1,12 @@
 import '~/app/pages/scss/ProcessingStatus.scss';
+import StatusTimeline from '~/app/components/progress/StatusTimeline';
+import { status } from '~/app/services/status/status';
+import Status from '~/app/shared/Status';
+
 import Timeline from '@mui/lab/Timeline';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import StatusTimeline from '~/app/components/progress/StatusTimeline';
-import { status } from '~/app/services/status/status';
-import Status from '~/app/shared/Status';
 
 const ProcessingStatus = () => {
     const params = useParams();

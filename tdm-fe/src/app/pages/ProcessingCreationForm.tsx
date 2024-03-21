@@ -1,6 +1,4 @@
 import '~/app/pages/scss/ProcessingCreationForm.scss';
-import { Button } from '@mui/material';
-import { useContext } from 'react';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
 import ProcessingFormConfirmation from '~/app/components/form/ProcessingFormConfirmation';
 import ProcessingFormEmail from '~/app/components/form/ProcessingFormEmail';
@@ -14,6 +12,9 @@ import {
     PROCESSING_VALIDATION_STEP,
     PROCESSING_UPLOADING_STEP,
 } from '~/app/provider/ProcessingFormContextProvider';
+
+import { Button } from '@mui/material';
+import { useContext } from 'react';
 
 const ProcessingCreationForm = () => {
     const { step, isInvalid, isWaitingInput, next } = useContext(ProcessingFormContext);

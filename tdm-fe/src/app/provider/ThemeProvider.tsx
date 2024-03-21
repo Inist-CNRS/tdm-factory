@@ -1,7 +1,9 @@
+import theme, { colors } from '~/app/shared/theme';
+
 import { default as MuiThemeProvider } from '@mui/material/styles/ThemeProvider';
 import { useEffect } from 'react';
+
 import type { PropsWithChildren } from 'react';
-import theme, { colors } from '~/app/shared/theme';
 
 export type ThemeProviderType = PropsWithChildren;
 

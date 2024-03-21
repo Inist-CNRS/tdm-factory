@@ -1,6 +1,8 @@
-import axios from 'axios';
-import { readFile } from 'node:fs/promises';
 import logger from '~/lib/logger';
+
+import axios from 'axios';
+
+import { readFile } from 'node:fs/promises';
 
 /**
  * Get fields from csv file

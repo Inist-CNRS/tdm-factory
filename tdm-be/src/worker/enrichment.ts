@@ -1,6 +1,3 @@
-import axios from 'axios';
-import { readFile } from 'node:fs/promises';
-import type { AxiosResponse } from 'axios';
 import {
     ERROR_MESSAGE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR,
     ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR,
@@ -14,6 +11,12 @@ import { errorEmail } from '~/lib/utils';
 import { findProcessing } from '~/model/ProcessingModel';
 import { updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
+
+import axios from 'axios';
+
+import { readFile } from 'node:fs/promises';
+
+import type { AxiosResponse } from 'axios';
 
 const info = (id: string, message: string) => {
     workerLogger.info(`[enrichment/${id}] ${message}`);

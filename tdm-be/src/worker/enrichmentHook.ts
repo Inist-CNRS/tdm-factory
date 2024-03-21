@@ -1,7 +1,3 @@
-import axios from 'axios';
-import { writeFile } from 'node:fs/promises';
-import path from 'path';
-import type { AxiosResponse } from 'axios';
 import { ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR } from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
@@ -12,6 +8,13 @@ import { errorEmail } from '~/lib/utils';
 import configModel from '~/model/Config';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
+
+import axios from 'axios';
+
+import { writeFile } from 'node:fs/promises';
+import path from 'path';
+
+import type { AxiosResponse } from 'axios';
 
 const info = (id: string, message: string) => {
     workerLogger.info(`[enrichment-hook/${id}] ${message}`);
