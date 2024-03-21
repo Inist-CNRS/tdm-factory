@@ -1,7 +1,9 @@
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
+import { useContext } from 'react';
 import { useHref } from 'react-router-dom';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 import { RouteProcessingStatus } from '~/app/shared/routes';
 
 export type ProcessingFormConfirmationProps = {
@@ -12,20 +14,22 @@ export type ProcessingFormConfirmationProps = {
     };
 };
 
-const ProcessingFormConfirmation = ({ processingId, state }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = () => {
+    const { processingId, isPending, startingStatus } = useContext(ProcessingFormContext);
+
     const href = useHref(`${RouteProcessingStatus}/${processingId}`);
 
     /**
      * Show a loading box will wait for the start to be fetched
      */
-    if (state.pending) {
+    if (isPending) {
         return <CircularWaiting />;
     }
 
     /**
      * Show an error if we get empty operations
      */
-    if (!state.status) {
+    if (!startingStatus) {
         return (
             <Alert severity="error">
                 Nous ne parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.
@@ -36,25 +40,25 @@ const ProcessingFormConfirmation = ({ processingId, state }: ProcessingFormConfi
     /**
      * Show an error if we have no processing linked with the given id
      */
-    if (state.status === 428) {
+    if (startingStatus === 428) {
         return <Alert severity="error">Nous ne parvenons pas à trouver le fichier lié à ce traitement.</Alert>;
     }
 
     /**
      * Show an error if we get any other error
      */
-    if (state.status !== 202 && state.status !== 409) {
+    if (startingStatus !== 202 && startingStatus !== 409) {
         return <Alert severity="error">Un problème inattendu est survenu.</Alert>;
     }
 
     return (
-        <div>
+        <>
             <p>Le traitement a commencé. Vous allez recevoir un mail contenant un résumé.</p>
             <p>
                 Vous pouvez voir l&apos;avancement du traitement via la page de statut des traitements :{' '}
                 <Link href={href}>{processingId}</Link>
             </p>
-        </div>
+        </>
     );
 };
 

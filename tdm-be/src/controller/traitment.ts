@@ -6,7 +6,7 @@ import type { Parameter } from '~/model/Request';
 import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendStartedMail } from '~/lib/email';
-import { filesLocation, randomFileName } from '~/lib/files';
+import { filesLocation, randomFileName, uploadFile } from '~/lib/files';
 import {
     HTTP_ACCEPTED,
     HTTP_BAD_REQUEST,
@@ -19,6 +19,7 @@ import {
 import logger from '~/lib/logger';
 import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
+import csvFields from '~/worker/fields/csvFields';
 import wrapper from '~/worker/wrapper';
 
 const router = express.Router();
@@ -247,17 +248,54 @@ const upload = multer({ storage: storage });
 // Route to handle file upload
 router.post('/upload', upload.single('file'), (req, res: Response) => {
     if (req.body.processingId && req.body.originalName && req.file?.filename) {
-        const result = createProcessing(req.body.processingId, req.body.originalName, req.file.filename);
+        const processingId = req.body.processingId;
+        const originalName = req.body.originalName;
+        const uploadedFile = req.file.filename;
+
+        const result = createProcessing(processingId, originalName, uploadedFile);
         if (result) {
             res.status(HTTP_CREATED).send({
                 id: result.id,
             });
             return;
         }
+        res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+            status: HTTP_INTERNAL_SERVER_ERROR,
+        });
+    }
+});
+
+router.get('/fields', (req, res) => {
+    const { id } = req.query;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
     }
 
-    res.status(HTTP_INTERNAL_SERVER_ERROR).send({
-        status: HTTP_INTERNAL_SERVER_ERROR,
+    const initialProcessing = findProcessing(id);
+
+    // Check if the processing existe
+    if (!initialProcessing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    if (initialProcessing.uploadFile.endsWith('csv')) {
+        csvFields(uploadFile(initialProcessing.uploadFile)).then((fields) => {
+            res.send({
+                fields,
+            });
+        });
+        return;
+    }
+
+    res.send({
+        fields: [],
     });
 });
 

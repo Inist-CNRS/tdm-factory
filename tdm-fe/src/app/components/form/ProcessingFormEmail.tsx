@@ -1,47 +1,27 @@
 import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { useContext } from 'react';
 import type { ChangeEvent } from 'react';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-export type ChangeEmail = {
-    email: string | null;
-    invalidState: boolean;
-};
-
-export type ProcessingFormEmailProps = {
-    email: string | null;
-    onChange: (email: ChangeEmail) => void;
-};
-
-const ProcessingFormEmail = ({ email: emailIn, onChange }: ProcessingFormEmailProps) => {
-    const [email, setEmail] = useState(emailIn);
-    const [error, setError] = useState<boolean>(false);
+const ProcessingFormEmail = () => {
+    const { email, setEmail, isInvalid } = useContext(ProcessingFormContext);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const newEmail = event.target.value;
-        const isNotValid = !emailRegex.test(newEmail);
-
-        setEmail(newEmail);
-        setError(isNotValid);
-        onChange({
-            email: newEmail,
-            invalidState: isNotValid,
-        });
+        setEmail(event.target.value);
     };
 
     return (
         <div className="processing-form-field-group processing-form-field-with-label">
             <TextField
-                value={email}
+                value={email ?? ''}
                 onChange={handleChange}
-                error={error}
+                error={isInvalid}
                 className="processing-form-field"
                 label="Adresse électronique"
                 fullWidth
             />
-            {error ? (
+            {isInvalid ? (
                 <div className="text processing-form-field-label error">
                     L&apos;adresse électronique n&apos;est pas valide
                 </div>

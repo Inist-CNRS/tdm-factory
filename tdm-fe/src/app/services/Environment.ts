@@ -7,6 +7,7 @@ export const environment = {
         },
         processing: {
             status: '/api/traitment/status',
+            fields: '/api/traitment/fields',
         },
     },
     post: {

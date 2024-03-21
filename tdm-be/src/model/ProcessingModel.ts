@@ -58,6 +58,7 @@ export const findProcessing = (id: string): Processing | undefined => {
         select id,
                status,
                email,
+               fields,
                wrapper,
                wrapperParam,
                enrichment,
