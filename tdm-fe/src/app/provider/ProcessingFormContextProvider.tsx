@@ -136,7 +136,7 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
         gcTime: 3600000,
     });
 
-    const { data: fieldsData, isPending: fieldsPending } = useQuery({
+    const { data: fieldsData } = useQuery({
         queryKey: ['fields', step, processingId],
         queryFn: () => {
             if (step !== PROCESSING_CONFIGURATION_STEP) {
@@ -228,8 +228,8 @@ const ProcessingFormContextProvider = ({ children }: ProcessingFormContextProvid
      * Listen for network call and update the state
      */
     useEffect(() => {
-        setIsPending(operations.pending || uploading || startPending || fieldsPending);
-    }, [operations.pending, uploading, startPending, fieldsPending]);
+        setIsPending(operations.pending || uploading || startPending);
+    }, [operations.pending, uploading, startPending]);
 
     /**
      * Listen for the end of the upload and update the processing id state
