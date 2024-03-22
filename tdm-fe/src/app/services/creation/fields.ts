@@ -1,4 +1,5 @@
 import { createQuery, environment, json } from '~/app/services/Environment';
+
 import type { ProcessingFields } from '~/app/shared/data.types';
 
 export const fields = async (id: string) => {

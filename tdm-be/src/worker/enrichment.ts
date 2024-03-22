@@ -8,8 +8,7 @@ import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
-import { findProcessing } from '~/model/ProcessingModel';
-import { updateProcessing } from '~/model/ProcessingModel';
+import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
 import axios from 'axios';

@@ -8,5 +8,12 @@
     },
     "extends": [
         "@draconides/eslint-config-ts"
-    ]
+    ],
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "tsconfig.dev.json"
+            }
+        }
+    }
 }

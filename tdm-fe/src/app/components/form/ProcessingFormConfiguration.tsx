@@ -3,13 +3,13 @@ import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import Markdown from '~/app/components/text/Markdown';
 import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
-import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useContext, useMemo } from 'react';
 
 import type { SyntheticEvent } from 'react';
+import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 
 const ProcessingFormConfiguration = () => {
     const {

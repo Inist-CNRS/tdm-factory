@@ -8,8 +8,7 @@ import crash from '~/lib/crash';
 import { randomFileName, tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
-import { findProcessing } from '~/model/ProcessingModel';
-import { updateProcessing } from '~/model/ProcessingModel';
+import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import enrichment from '~/worker/enrichment';
 

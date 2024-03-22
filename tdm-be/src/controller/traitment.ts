@@ -11,11 +11,8 @@ import {
     HTTP_PRECONDITION_REQUIRED,
 } from '~/lib/http';
 import logger from '~/lib/logger';
-import type { Processing } from '~/model/ProcessingModel';
 import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
-import type { Parameter } from '~/model/Request';
 import Status from '~/model/Status';
-import type { Traitment } from '~/model/Traitment';
 import csvFields from '~/worker/fields/csvFields';
 import wrapper from '~/worker/wrapper';
 
@@ -23,6 +20,9 @@ import express from 'express';
 import multer from 'multer';
 
 import type { Request, Response } from 'express';
+import type { Processing } from '~/model/ProcessingModel';
+import type { Parameter } from '~/model/Request';
+import type { Traitment } from '~/model/Traitment';
 
 const router = express.Router();
 
