@@ -5,13 +5,14 @@ import ProcessingStatus from '~/app/pages/ProcessingStatus';
 import ProcessingFormContextProvider from '~/app/provider/ProcessingFormContextProvider';
 import { RouteProcessingStatus, RouteRoot } from '~/app/shared/routes';
 
+import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
 
 const App = () => {
     return (
         <>
             <Header />
-            <div id="app-container">
+            <Container>
                 <Routes>
                     <Route
                         path={RouteRoot}
@@ -23,7 +24,7 @@ const App = () => {
                     />
                     <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
                 </Routes>
-            </div>
+            </Container>
         </>
     );
 };
