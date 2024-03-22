@@ -1,7 +1,9 @@
+import logger from '~/lib/logger';
+
 import md5 from 'md5';
+
 import fs from 'node:fs/promises';
 import path from 'path';
-import logger from '~/lib/logger';
 
 export const filesLocation = {
     app: process.cwd(),

@@ -1,5 +1,6 @@
-import type { Processing } from '~/model/ProcessingModel';
 import { sendErrorMail } from '~/lib/email';
+
+import type { Processing } from '~/model/ProcessingModel';
 
 /**
  * Helper function use to compare two value and set a default value if both are null or undefined

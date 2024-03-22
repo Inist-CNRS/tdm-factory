@@ -1,12 +1,4 @@
 import '~/app/components/form/scss/ProcessingFormStepper.scss';
-import CheckIcon from '@mui/icons-material/Check';
-import Step from '@mui/material/Step';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
-import { styled } from '@mui/material/styles';
-import { useMemo } from 'react';
-import type { StepIconProps } from '@mui/material/StepIcon';
 import {
     PROCESSING_CONFIGURATION_STEP,
     PROCESSING_CONFIRMATION_STEP,
@@ -15,6 +7,16 @@ import {
     PROCESSING_VALIDATION_STEP,
 } from '~/app/provider/ProcessingFormContextProvider';
 import { colors } from '~/app/shared/theme';
+
+import CheckIcon from '@mui/icons-material/Check';
+import Step from '@mui/material/Step';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import { styled } from '@mui/material/styles';
+import { useMemo } from 'react';
+
+import type { StepIconProps } from '@mui/material/StepIcon';
 
 export type ProcessingFormStepperProps = {
     step?: number;

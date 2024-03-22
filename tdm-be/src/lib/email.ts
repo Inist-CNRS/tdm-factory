@@ -1,8 +1,9 @@
-import nodemailer from 'nodemailer';
-import nunjucks from 'nunjucks';
 import environment from '~/lib/config';
 import { templatesFiles } from '~/lib/files';
 import { mailLogger } from '~/lib/logger';
+
+import nodemailer from 'nodemailer';
+import nunjucks from 'nunjucks';
 
 nunjucks.configure(templatesFiles());
 

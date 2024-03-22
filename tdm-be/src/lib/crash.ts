@@ -1,6 +1,7 @@
-import { writeFile } from 'node:fs/promises';
 import { crashFile } from '~/lib/files';
 import logger from '~/lib/logger';
+
+import { writeFile } from 'node:fs/promises';
 
 /**
  * Crash handler use to crash a crash report for event who are normally unindented

@@ -1,10 +1,11 @@
+import FileUpload from '~/app/components/progress/FileUpload';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
+import { colors } from '~/app/shared/theme';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import { MuiFileInput } from 'mui-file-input';
 import { useContext, useMemo } from 'react';
-import FileUpload from '~/app/components/progress/FileUpload';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
-import { colors } from '~/app/shared/theme';
 
 const ProcessingFormUpload = () => {
     const { mimes, file, setFile, isPending, isInvalid, isOnError } = useContext(ProcessingFormContext);

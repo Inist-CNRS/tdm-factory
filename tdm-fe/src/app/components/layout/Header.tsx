@@ -1,5 +1,6 @@
 import '~/app/components/layout/Header.scss';
 import Link from '@mui/material/Link';
+
 import istexLogo from '/istex.png';
 
 const Header = () => {

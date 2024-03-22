@@ -1,6 +1,3 @@
-import axios from 'axios';
-import { readFile, writeFile } from 'node:fs/promises';
-import type { AxiosResponse } from 'axios';
 import {
     ERROR_MESSAGE_FILE_SYSTEM_ERROR,
     ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR,
@@ -11,10 +8,15 @@ import crash from '~/lib/crash';
 import { randomFileName, tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
-import { findProcessing } from '~/model/ProcessingModel';
-import { updateProcessing } from '~/model/ProcessingModel';
+import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import enrichment from '~/worker/enrichment';
+
+import axios from 'axios';
+
+import { readFile, writeFile } from 'node:fs/promises';
+
+import type { AxiosResponse } from 'axios';
 
 const info = (id: string, message: string) => {
     workerLogger.info(`[wrapper/${id}] ${message}`);

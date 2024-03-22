@@ -1,7 +1,8 @@
-import express from 'express';
 import { HTTP_NOT_FOUND } from '~/lib/http';
 import logger from '~/lib/logger';
 import enrichmentHook from '~/worker/enrichmentHook';
+
+import express from 'express';
 
 const router = express.Router();
 

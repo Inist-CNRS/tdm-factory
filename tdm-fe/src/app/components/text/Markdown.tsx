@@ -1,6 +1,7 @@
 import '~/app/components/text/Markdown.scss';
 import MarkDownIt from 'markdown-it';
 import { useMemo } from 'react';
+
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 
 export type MarkdownProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {

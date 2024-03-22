@@ -1,5 +1,6 @@
 import { frFR } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
+
 import type { TypographyStyleOptions } from '@mui/material/styles/createTypography';
 
 export const colors = {

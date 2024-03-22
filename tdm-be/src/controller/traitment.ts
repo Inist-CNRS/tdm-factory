@@ -1,9 +1,3 @@
-import express from 'express';
-import multer from 'multer';
-import type { Request, Response } from 'express';
-import type { Processing } from '~/model/ProcessingModel';
-import type { Parameter } from '~/model/Request';
-import type { Traitment } from '~/model/Traitment';
 import environment from '~/lib/config';
 import { sendStartedMail } from '~/lib/email';
 import { filesLocation, randomFileName, uploadFile } from '~/lib/files';
@@ -21,6 +15,14 @@ import { createProcessing, findProcessing, updateProcessing } from '~/model/Proc
 import Status from '~/model/Status';
 import csvFields from '~/worker/fields/csvFields';
 import wrapper from '~/worker/wrapper';
+
+import express from 'express';
+import multer from 'multer';
+
+import type { Request, Response } from 'express';
+import type { Processing } from '~/model/ProcessingModel';
+import type { Parameter } from '~/model/Request';
+import type { Traitment } from '~/model/Traitment';
 
 const router = express.Router();
 

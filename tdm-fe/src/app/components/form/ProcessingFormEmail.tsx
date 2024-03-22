@@ -1,8 +1,10 @@
 import '~/app/components/form/scss/ProcessingFormCommon.scss';
+import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
+
 import TextField from '@mui/material/TextField';
 import { useContext } from 'react';
+
 import type { ChangeEvent } from 'react';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 
 const ProcessingFormEmail = () => {
     const { email, setEmail, isInvalid } = useContext(ProcessingFormContext);

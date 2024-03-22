@@ -1,5 +1,6 @@
-import type { Request } from '~/model/Request';
 import Status from '~/model/Status';
+
+import type { Request } from '~/model/Request';
 
 export class Traitment {
     wrapper: Request = { url: '' };
