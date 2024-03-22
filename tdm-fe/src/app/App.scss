@@ -16,6 +16,10 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+#app-container {
+  flex: 1;
+}
+
 .text {
   color: $light-black;
 }

@@ -1,4 +1,5 @@
 import '~/app/App.scss';
+import Footer from '~/app/components/layout/Footer';
 import Header from '~/app/components/layout/Header';
 import ProcessingCreationForm from '~/app/pages/ProcessingCreationForm';
 import ProcessingStatus from '~/app/pages/ProcessingStatus';
@@ -12,7 +13,7 @@ const App = () => {
     return (
         <>
             <Header />
-            <Container>
+            <Container id="app-container">
                 <Routes>
                     <Route
                         path={RouteRoot}
@@ -25,6 +26,7 @@ const App = () => {
                     <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
                 </Routes>
             </Container>
+            <Footer />
         </>
     );
 };
