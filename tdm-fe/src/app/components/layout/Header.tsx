@@ -10,9 +10,9 @@ import Link from '@mui/material/Link';
 import istexLogo from '/istex.png';
 
 const navigations = [
-    { name: 'Objectif TDM', url: '#' },
-    { name: 'TDM Tools', url: '#' },
-    { name: 'Hébergement corpus', url: '#' },
+    { name: 'Objectif TDM', url: 'https://services.istex.fr/' },
+    { name: 'TDM Tools', url: 'https://tmtoolsfr-explorerfr.tdm.inist.fr/' },
+    { name: 'Hébergement corpus', url: 'https://www.lodex.fr/' },
 ];
 
 const Header = () => {
