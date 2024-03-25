@@ -58,7 +58,7 @@ const Header = () => {
                         <h1 id="header-title">IA Factory</h1>
                     </Link>
                     <h2 id="header-subtitle">
-                        <b>L&apos;IA appliquée à vos corpus</b>
+                        <b>L&lsquo;IA appliquée à vos corpus</b>
                     </h2>
                 </Container>
             </header>

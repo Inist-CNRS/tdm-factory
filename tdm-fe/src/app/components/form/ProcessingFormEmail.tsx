@@ -25,7 +25,7 @@ const ProcessingFormEmail = () => {
             />
             {isInvalid ? (
                 <div className="text processing-form-field-label error">
-                    L&apos;adresse électronique n&apos;est pas valide
+                    L&lsquo;adresse électronique n&apos;est pas valide
                 </div>
             ) : null}
         </div>
