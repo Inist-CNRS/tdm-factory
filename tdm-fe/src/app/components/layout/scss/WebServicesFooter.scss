@@ -1,0 +1,27 @@
+@import "../../../scss/colors";
+
+#ws-footer {
+  padding-top: 72px;
+  padding-bottom: 80px;
+  text-align: center;
+  // TODO add background image when available
+  background-color: #000;
+
+  #ws-footer-galaxy {
+    margin-bottom: 0;
+  }
+
+  #ws-footer-text {
+    margin-top: 32px;
+    margin-bottom: 48px;
+  }
+
+  h1 {
+    margin: 0;
+    color: $light-green;
+  }
+
+  p {
+    color: $white;
+  }
+}

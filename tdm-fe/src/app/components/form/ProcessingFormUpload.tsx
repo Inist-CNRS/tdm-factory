@@ -52,7 +52,7 @@ const ProcessingFormUpload = () => {
                         <>Fichier manquant</>
                     ) : (
                         <>
-                            Le fichier ne correspond pas a un format compatible, utilisé l&apos;un de ces format :{' '}
+                            Le fichier ne correspond pas a un format compatible, utilisé l&lsquo;un de ces format :{' '}
                             {stringifiesMineTypes}.
                         </>
                     )}

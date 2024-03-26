@@ -1,5 +1,9 @@
 @import "src/app/scss/colors";
 
+/*
+  Note: The app can't render properly under 500px
+*/
+
 body {
   min-height: 100vh;
   margin: 0;
@@ -14,6 +18,10 @@ body {
 
 * {
   font-family: "Open Sans", sans-serif;
+}
+
+#app-container {
+  flex: 1;
 }
 
 .text {
@@ -32,8 +40,4 @@ h5,
 h6 {
   font-family: Montserrat, sans-serif;
   color: $light-black;
-}
-
-#app-container {
-  margin: 12px 24px;
 }

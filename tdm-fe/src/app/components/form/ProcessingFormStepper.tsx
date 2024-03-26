@@ -16,6 +16,7 @@ import Stepper from '@mui/material/Stepper';
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
+import type { StepConnectorProps } from '@mui/material/StepConnector';
 import type { StepIconProps } from '@mui/material/StepIcon';
 
 export type ProcessingFormStepperProps = {
@@ -35,27 +36,48 @@ const steps = [
 /**
  * Istex themed step connector
  */
-const IstexStepConnector = styled(StepConnector)(({ theme }) => ({
-    [`&.${stepConnectorClasses.alternativeLabel}`]: {
-        top: 16,
-        left: 'calc(-50% + 18px)',
-        right: 'calc(50% + 18px)',
+const IstexStepConnector = (
+    props: StepConnectorProps & {
+        isExtended?: boolean;
+        isFirst?: boolean;
+        isLast?: boolean;
     },
-    [`&.${stepConnectorClasses.active}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: theme.palette.colors.blue,
-        },
-    },
-    [`&.${stepConnectorClasses.completed}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: theme.palette.colors.blue,
-        },
-    },
-    [`& .${stepConnectorClasses.line}`]: {
-        borderColor: theme.palette.colors.grey,
-        borderTopWidth: 2,
-    },
-}));
+) => {
+    const { isExtended, isFirst, isLast, ...rest } = props;
+
+    const CustomStepConnector = useMemo(() => {
+        let left = 'calc(-50% + 18px)';
+
+        if (isExtended && (isFirst || isLast)) {
+            left = '8px';
+        }
+
+        return styled(StepConnector)(({ theme }) => ({
+            [`&.${stepConnectorClasses.alternativeLabel}`]: {
+                top: 16,
+                left: left,
+                right: 'calc(50% + 18px)',
+                transform: isExtended && isLast ? 'translateX(calc(100% + 36px))' : undefined,
+            },
+            [`&.${stepConnectorClasses.active}`]: {
+                [`& .${stepConnectorClasses.line}`]: {
+                    borderColor: theme.palette.colors.blue,
+                },
+            },
+            [`&.${stepConnectorClasses.completed}`]: {
+                [`& .${stepConnectorClasses.line}`]: {
+                    borderColor: theme.palette.colors.blue,
+                },
+            },
+            [`& .${stepConnectorClasses.line}`]: {
+                borderColor: theme.palette.colors.grey,
+                borderTopWidth: 2,
+            },
+        }));
+    }, [isExtended, isFirst, isLast]);
+
+    return <CustomStepConnector {...rest} />;
+};
 
 /**
  * Istex themed step label
@@ -87,16 +109,22 @@ const StepLabelIcon = ({ icon, completed, active }: StepIconProps) => {
 
     if (completed) {
         return (
-            <div className={className}>
-                <CheckIcon />
-            </div>
+            <>
+                <div className={className}>
+                    <CheckIcon />
+                </div>
+                <IstexStepConnector isExtended={icon === 1 || icon === 4} isFirst={icon === 1} isLast={icon === 4} />
+            </>
         );
     }
 
     return (
-        <div className={className}>
-            <p>{icon}</p>
-        </div>
+        <>
+            <div className={className}>
+                <p>{icon}</p>
+            </div>
+            <IstexStepConnector isExtended={icon === 1 || icon === 4} isFirst={icon === 1} isLast={icon === 4} />
+        </>
     );
 };
 
