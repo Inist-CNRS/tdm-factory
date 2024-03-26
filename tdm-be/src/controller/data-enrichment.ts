@@ -1,9 +1,8 @@
-import singleton from '~/model/Config';
+import logger from '~/lib/logger';
+import config from '~/model/Config';
 
 import axios from 'axios';
 import express from 'express';
-
-import type { Request } from '~/model/Request';
 
 const router = express.Router();
 /**
@@ -62,28 +61,80 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/Request'
  */
 
-//Route to access all enrichments in the istex api due to config set
-router.get('/list', async (req, res) => {
-    const results = await Promise.all(
-        singleton.getConfig().enrichments?.map((enrichment) => axios.get(enrichment.url)),
-    );
+type PathParameters = {
+    name: string;
+};
 
-    const requests = results.flatMap((res) => {
-        const tags = singleton.getConfig().enrichments?.find((enrichment) => enrichment.url === res.config.url)?.tags;
-        return Object.entries(res.data.paths)
-            .filter((path: any) =>
-                tags?.some((t) => path[1].post?.tags?.includes(t.name) && t.excluded?.indexOf(path[0]) === -1),
-            )
-            .map<Request>((path: any) => {
-                return {
-                    label: `${path[1].post.summary} (${path[0]})`,
-                    description: path[1].post.description,
-                    url: `${res.data.servers[0].variables.scheme.default}://${res.data.servers[0].variables.hostname.default}${path[0]}`,
-                    parameters: path[1].post?.parameters?.map((param: any) => param.name),
-                };
-            });
+type Path = {
+    post: {
+        summary: string;
+        description: string;
+        tags?: string[];
+        parameters?: PathParameters[];
+    };
+};
+
+type ServerVariable = {
+    description: string;
+    default: string;
+    enum?: string[];
+};
+
+type Server = {
+    url: string;
+    description: string;
+    variables?: Record<string, ServerVariable>;
+};
+
+type Enrichment = {
+    servers: Server[];
+    paths: Record<string, Path>;
+};
+
+const getEnrichments = async () => {
+    const enrichments = [];
+
+    for (const enrichment of config.getConfig().enrichments) {
+        const ws = await axios.get<Enrichment>(enrichment.url);
+        const paths = ws.data.paths;
+        const servers = ws.data.servers;
+        const tags = enrichment.tags.flatMap((tag) => tag.name);
+        const excluded = enrichment.tags.flatMap((tag) => tag.excluded).filter((tag) => !!tag) as unknown as string[];
+        for (const path of Object.entries(paths)) {
+            const [key, value] = path;
+
+            if (
+                value.post.tags &&
+                servers[0].variables &&
+                value.post.tags.some((tag) => tags.includes(tag)) &&
+                !excluded.includes(key)
+            ) {
+                const label = `${value.post.summary} (${key})`;
+                const url = `${servers[0].variables.scheme.default}://${servers[0].variables.hostname.default}${key}`;
+                let parameters: string[] | undefined;
+                if (value.post.parameters) {
+                    parameters = value.post.parameters.map((parameter) => parameter.name);
+                }
+                enrichments.push({
+                    label,
+                    description: value.post.description,
+                    url,
+                    parameters,
+                });
+            } else {
+                logger.warning(`Invalid enrichment! (${enrichment.url})`);
+            }
+        }
+    }
+
+    return enrichments;
+};
+
+//Route to access all enrichments in the istex api due to config set
+router.get('/list', (req, res) => {
+    getEnrichments().then((enrichments) => {
+        res.json(enrichments);
     });
-    res.json(requests);
 });
 
 export default router;
