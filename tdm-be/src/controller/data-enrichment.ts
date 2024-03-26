@@ -122,7 +122,7 @@ const getEnrichments = async () => {
                     parameters,
                 });
             } else {
-                logger.warning(`Invalid enrichment! (${enrichment.url})`);
+                logger.debug(`(${enrichment.url}${key}) Excluded enrichment`);
             }
         }
     }

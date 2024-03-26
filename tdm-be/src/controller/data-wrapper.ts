@@ -102,7 +102,7 @@ const getWrappers = async () => {
                     fileType,
                 });
             } else {
-                logger.warning(`Invalid wrapper! (${wrapper.url})`);
+                logger.debug(`(${wrapper.url}${key}) Excluded wrapper`);
             }
         }
     }
