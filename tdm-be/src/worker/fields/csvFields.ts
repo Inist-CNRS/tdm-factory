@@ -24,7 +24,7 @@ const csvFields = async (fileName: string): Promise<string[]> => {
 
         return json.map((value) => value.value);
     } catch (e) {
-        logger.error(e);
+        logger.error(`csv fields - ${e}`);
         return [];
     }
 };
