@@ -3,13 +3,13 @@ import '~/app/components/layout/scss/Footer.scss';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
-import abesLogo from '/abes.svg';
-import cnrsLogo from '/cnrs.svg';
-import couperinLogo from '/couperin.svg';
-import franceUniversitesLogo from '/france_universites.svg';
-import investissementLogo from '/investissement.png';
-import mesrLogo from '/mesr.svg';
-import ulLogo from '/ul.svg';
+import abesLogo from '/logo/abes.svg';
+import cnrsLogo from '/logo/cnrs.svg';
+import couperinLogo from '/logo/couperin.svg';
+import franceUniversitesLogo from '/logo/france_universites.svg';
+import investissementLogo from '/logo/investissement.png';
+import mesrLogo from '/logo/mesr.svg';
+import ulLogo from '/logo/ul.svg';
 
 const partners = [
     {

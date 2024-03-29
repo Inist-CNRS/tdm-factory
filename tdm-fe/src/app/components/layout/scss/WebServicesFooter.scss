@@ -4,8 +4,10 @@
   padding-top: 72px;
   padding-bottom: 80px;
   text-align: center;
-  // TODO add background image when available
-  background-color: #000;
+  background-image: url("/ws-footer-background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 
   #ws-footer-galaxy {
     margin-bottom: 0;

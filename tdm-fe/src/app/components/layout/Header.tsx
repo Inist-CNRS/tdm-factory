@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
-import istexLogo from '/istex.png';
+import istexLogo from '/logo/istex.png';
 
 const navigations = [
     { name: 'Objectif TDM', url: 'https://services.istex.fr/' },
