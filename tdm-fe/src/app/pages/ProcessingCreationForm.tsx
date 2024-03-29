@@ -17,7 +17,7 @@ import { Button } from '@mui/material';
 import { useContext } from 'react';
 
 const ProcessingCreationForm = () => {
-    const { step, isInvalid, isWaitingInput, next } = useContext(ProcessingFormContext);
+    const { step, isInvalid, isWaitingInput, isPending, next } = useContext(ProcessingFormContext);
 
     return (
         <div id="processing-form">
@@ -41,11 +41,13 @@ const ProcessingCreationForm = () => {
                 {step === PROCESSING_CONFIRMATION_STEP ? <ProcessingFormConfirmation /> : null}
 
                 {/* Navigation button */}
-                <div id="processing-form-navigation">
-                    <Button onClick={next} variant="outlined" disabled={isInvalid || isWaitingInput}>
-                        {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
-                    </Button>
-                </div>
+                {!isPending ? (
+                    <div id="processing-form-navigation">
+                        <Button onClick={next} variant="outlined" size="large" disabled={isInvalid || isWaitingInput}>
+                            {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
+                        </Button>
+                    </div>
+                ) : null}
             </div>
         </div>
     );

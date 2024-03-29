@@ -1,22 +1,68 @@
-import '~/app/components/layout/Header.scss';
+import '~/app/components/layout/scss/Header.scss';
+
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { alpha } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
-import istexLogo from '/istex.png';
+import istexLogo from '/logo/istex.png';
+
+const navigations = [
+    { name: 'Objectif TDM', url: 'https://services.istex.fr/' },
+    { name: 'TM Tools', url: 'https://tmtoolsfr-explorerfr.tdm.inist.fr/' },
+    { name: 'Hébergement corpus', url: 'https://www.lodex.fr/' },
+];
 
 const Header = () => {
     return (
-        <header id="header">
-            <div id="header-container">
-                <Link href="/public" id="home-link">
-                    <img src={istexLogo} alt="Logo istex" />
-                    <h1 id="header-title">IA Factory</h1>
-                </Link>
-                <h2 id="header-subtitle">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fringilla non elit sit amet interdum.
-                    Sed placerat ex nec eleifend tempor. Nunc porta non nulla id vehicula. Nulla diam nunc.
-                </h2>
-            </div>
-        </header>
+        <>
+            <AppBar position="sticky" component="nav" id="nav-bar">
+                <Container id="nav-bar-container">
+                    <Button
+                        href="https://istex.fr/"
+                        target="_blank"
+                        rel="noreferrer nofollow noopener"
+                        id="nav-bar-istex-link"
+                        sx={(theme) => ({
+                            bgcolor: alpha(theme.palette.colors.blue, 0.2),
+                        })}
+                    >
+                        <KeyboardBackspaceIcon />
+                        istex.fr
+                    </Button>
+                    <ul id="nav-bar-navigation">
+                        {navigations.map((navigation) => (
+                            <li key={navigation.name}>
+                                <Button
+                                    className="nav-bar-navigation-button"
+                                    href={navigation.url}
+                                    target="_blank"
+                                    rel="noreferrer nofollow noopener"
+                                    sx={{
+                                        bgcolor: '#fff',
+                                    }}
+                                >
+                                    {navigation.name}
+                                </Button>
+                            </li>
+                        ))}
+                    </ul>
+                </Container>
+            </AppBar>
+            <header id="header">
+                <Container id="header-container">
+                    <Link href="/" id="home-link">
+                        <img src={istexLogo} alt="Logo istex" />
+                        <h1 id="header-title">IA Factory</h1>
+                    </Link>
+                    <h2 id="header-subtitle">
+                        <b>L&lsquo;IA appliquée à vos corpus</b>
+                    </h2>
+                </Container>
+            </header>
+        </>
     );
 };
 

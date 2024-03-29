@@ -56,7 +56,7 @@ const ProcessingFormConfirmation = () => {
         <>
             <p>Le traitement a commencé. Vous allez recevoir un mail contenant un résumé.</p>
             <p>
-                Vous pouvez voir l&apos;avancement du traitement via la page de statut des traitements :{' '}
+                Vous pouvez voir l&lsquo;avancement du traitement via la page de statut des traitements :{' '}
                 <Link href={href}>{processingId}</Link>
             </p>
         </>

@@ -1,18 +1,29 @@
+@import "../../scss/colors";
+
 #processing-form {
+  min-height: 275px;
   margin-top: 40px;
+  margin-bottom: 40px;
+
   #processing-form-content {
     margin-top: 40px;
-    margin-right: 10%;
-    margin-left: 10%;
+    margin-right: 13%;
+    margin-left: 13%;
 
     #processing-form-navigation {
       display: flex;
       flex-direction: row;
       margin-top: 40px;
-    }
 
-    #processing-form-navigation > button:first-child {
-      margin-right: auto;
+      button {
+        margin-left: auto;
+      }
+
+      button:hover {
+        color: $white;
+        background-color: $blue;
+        border-color: $blue;
+      }
     }
   }
 }
