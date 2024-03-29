@@ -1,11 +1,8 @@
 import logger from '~/lib/logger';
-import singleton from '~/model/Config';
-import config from '~/model/Config';
+import dynamicConfig from '~/model/DynamicConfig';
 
 import axios from 'axios';
 import express from 'express';
-
-import type { Parameter, Request } from '~/model/Request';
 
 const router = express.Router();
 
@@ -67,7 +64,7 @@ type Wrapper = {
 const getWrappers = async () => {
     const wrappers = [];
 
-    for (const wrapper of config.getConfig().wrappers) {
+    for (const wrapper of dynamicConfig.getConfig().wrappers) {
         const ws = await axios.get<Wrapper>(wrapper.url);
         const paths = ws.data.paths;
         const servers = ws.data.servers;

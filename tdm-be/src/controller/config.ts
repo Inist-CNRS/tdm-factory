@@ -1,5 +1,5 @@
 import logger from '~/lib/logger';
-import config from '~/model/Config';
+import dynamicConfig from '~/model/DynamicConfig';
 
 import express from 'express';
 
@@ -97,8 +97,8 @@ const router = express.Router();
 router.post(
     '/set',
     (req, res) => {
-        config.setConfig(req.body);
-        res.status(200).json({ message: 'Config data updated successfully', config: config.getConfig() });
+        dynamicConfig.setConfig(req.body);
+        res.status(200).json({ message: 'Config data updated successfully', config: dynamicConfig.getConfig() });
     },
     (error) => {
         logger.error(error);
@@ -120,7 +120,7 @@ router.post(
  */
 //Route to get config the current config
 router.get('/', (req, res) => {
-    res.json(config.getConfig());
+    res.json(dynamicConfig.getConfig());
 });
 
 export default router;

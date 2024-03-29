@@ -1,5 +1,5 @@
 import logger from '~/lib/logger';
-import config from '~/model/Config';
+import dynamicConfig from '~/model/DynamicConfig';
 
 import axios from 'axios';
 import express from 'express';
@@ -94,7 +94,7 @@ type Enrichment = {
 const getEnrichments = async () => {
     const enrichments = [];
 
-    for (const enrichment of config.getConfig().enrichments) {
+    for (const enrichment of dynamicConfig.getConfig().enrichments) {
         const ws = await axios.get<Enrichment>(enrichment.url);
         const paths = ws.data.paths;
         const servers = ws.data.servers;
