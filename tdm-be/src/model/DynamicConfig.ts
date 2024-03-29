@@ -26,7 +26,7 @@ type ConfigType = {
     mailError: Mail;
 };
 
-export class Config {
+export class DynamicConfig {
     private readonly config: ConfigType;
     constructor() {
         let localConfig: Partial<ConfigType>;
@@ -57,7 +57,24 @@ export class Config {
                     tags: [
                         {
                             name: 'data-computer',
-                            excluded: ['/v1/collect', '/v1/retrieve', '/v1/mock-error-async', '/v1/mock-error-sync'],
+                            excluded: [
+                                '/v1/collect',
+                                '/v1/retrieve',
+                                '/v1/retrieve-csv',
+                                '/v1/retrieve-json',
+                                '/v1/mock-error-async',
+                                '/v1/mock-error-sync',
+                            ],
+                        },
+                    ],
+                },
+                {
+                    url: 'https://data-termsuite.services.istex.fr',
+                    retrieveUrl: '/v1/retrieve',
+                    tags: [
+                        {
+                            name: 'data-termsuite',
+                            excluded: ['/v1/retrieve', '/v1/retrieve-csv', '/v1/retrieve-json'],
                         },
                     ],
                 },
@@ -113,6 +130,6 @@ export class Config {
     }
 }
 
-const singleton = new Config();
+const singleton = new DynamicConfig();
 
 export default singleton;

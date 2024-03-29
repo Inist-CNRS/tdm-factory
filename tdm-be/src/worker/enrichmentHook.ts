@@ -5,7 +5,7 @@ import { sendErrorMail, sendFinishedMail } from '~/lib/email';
 import { downloadFile, randomFileName } from '~/lib/files';
 import logger, { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
-import configModel from '~/model/Config';
+import dynamicConfig from '~/model/DynamicConfig';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
@@ -68,7 +68,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get dynamic config
-    const config = configModel.getConfig();
+    const config = dynamicConfig.getConfig();
 
     // Get the enrichment config
     const enrichmentEntry = config.enrichments.find((entry) => {
