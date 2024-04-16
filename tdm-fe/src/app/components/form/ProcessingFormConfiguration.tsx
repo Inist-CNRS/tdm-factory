@@ -8,7 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useContext, useMemo } from 'react';
 
-import type { SyntheticEvent } from 'react';
+import type { SyntheticEvent, FocusEvent } from 'react';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 
 const ProcessingFormConfiguration = () => {
@@ -67,7 +67,6 @@ const ProcessingFormConfiguration = () => {
                         options={wrapperList}
                         renderInput={(params) => <TextField {...params} label="Convertisseur" />}
                         fullWidth
-                        disablePortal
                     />
                     {wrapper ? (
                         <div id="processing-form-wrapper-label">
@@ -82,8 +81,14 @@ const ProcessingFormConfiguration = () => {
                         <div id="processing-form-wrapper-param-style"></div>
                         <Autocomplete
                             className="processing-form-field"
-                            value={wrapperParam}
+                            value={wrapperParam ?? ''}
                             onChange={handleWrapperParamChange}
+                            onBlur={(event: unknown) => {
+                                handleWrapperParamChange(
+                                    {} as unknown as SyntheticEvent,
+                                    (event as FocusEvent<HTMLInputElement | HTMLTextAreaElement>).target.value,
+                                );
+                            }}
                             options={cleanFields}
                             renderInput={(params) => (
                                 <TextField
@@ -92,6 +97,8 @@ const ProcessingFormConfiguration = () => {
                                 />
                             )}
                             fullWidth
+                            freeSolo
+                            disableClearable
                         />
                     </div>
                 ) : null}
@@ -105,7 +112,6 @@ const ProcessingFormConfiguration = () => {
                     options={enrichmentList}
                     renderInput={(params) => <TextField {...params} label="Traitement" />}
                     fullWidth
-                    disablePortal
                 />
                 {enrichment ? (
                     <Markdown className="text processing-form-field-label" text={enrichment.description} />
