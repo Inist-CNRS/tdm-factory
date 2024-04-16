@@ -1,10 +1,11 @@
 install:
-	cd tdm-be && \
+	cd tdm-types && \
 	npm install && \
-	cd ../tdm-fe && \
+	cd ../tdm-backend && \
+	npm install && \
+	cd ../tdm-frontend && \
 	npm install && \
 	cd ..
-
 
 run-dev:
 	docker compose -f docker-compose.dev.yml up --force-recreate

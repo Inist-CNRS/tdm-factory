@@ -1,10 +1,11 @@
 {
-  "name": "tdm-fe",
+  "name": "tdm-frontend",
   "private": true,
   "engines": {
     "node": "18"
   },
   "type": "module",
+  "license": "CeCILL",
   "scripts": {
     "dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 vite --host",
     "build": "tsc && vite build",
@@ -15,6 +16,12 @@
     "stylelint": "stylelint \"{src,public}/**/*.scss\" --fix",
     "stylelint:test": "stylelint \"{src,public}/**/*.scss\""
   },
+  "contributors": [
+    {
+      "name": "Pierre M (AlasDiablo) - Original Author",
+      "url": "https://github.com/AlasDiablo"
+    }
+  ],
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -46,6 +53,7 @@
     "stylelint": "^16.3.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "stylelint-config-twbs-bootstrap": "^14.1.0",
+    "tdm-types": "file:../tdm-types",
     "terser": "^5.30.3",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2",

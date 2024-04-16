@@ -5,13 +5,13 @@ FROM node:18.19-bullseye-slim AS react-build
 WORKDIR /app
 
 # Copy both package.json and package-lock.json files
-COPY tdm-fe/package*.json /app/
+COPY tdm-frontend/package*.json /app/
 
 # Install dependency
 RUN npm ci
 
 # Copy the front-end source code into the build container
-COPY tdm-fe /app/
+COPY tdm-frontend /app/
 
 # Build the React app
 RUN VITE_TDM_FACTORY_HOST="" npm run build
@@ -25,13 +25,13 @@ FROM node:18.19-bullseye-slim AS express-build
 WORKDIR /app
 
 # Copy package.json, package-lock.json and tsconfig.json files
-COPY tdm-be/package*.json tdm-be/ts*.json /app/
+COPY tdm-backend/package*.json tdm-backend/ts*.json /app/
 
 # Install dependency
 RUN npm ci --omit=dev
 
 # Copy the back-end source code into the build container
-COPY tdm-be /app/
+COPY tdm-backend /app/
 
 #######################################################
 

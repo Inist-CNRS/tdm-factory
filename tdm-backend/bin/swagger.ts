@@ -1,4 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import swaggerJsdoc from 'swagger-jsdoc';
+
 import { writeFileSync } from 'fs';
 
 // Replace this with http://localhost:3000 in dev mode and run `make update-front-api`

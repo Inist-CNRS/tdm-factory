@@ -1,0 +1,23 @@
+{
+  "name": "tdm-types",
+  "private": true,
+  "engines": {
+    "node": "18"
+  },
+  "type": "module",
+  "license": "CeCILL",
+  "types": "./type/index.d.ts",
+  "contributors": [
+    {
+      "name": "Pierre M (AlasDiablo) - Original Author",
+      "url": "https://github.com/AlasDiablo"
+    }
+  ],
+  "devDependencies": {
+    "@draconides/eslint-config-ts": "^1.4.1",
+    "eslint": "^8.57.0"
+  },
+  "peerDependencies": {
+    "@types/node": "^18.19.31"
+  }
+}
