@@ -5,7 +5,7 @@ import {
     PROCESSING_UPLOAD_STEP,
     PROCESSING_UPLOADING_STEP,
     PROCESSING_VALIDATION_STEP,
-} from '~/app/provider/ProcessingFormContextProvider';
+} from '~/app/pages/ProcessingCreationForm';
 import { colors } from '~/app/shared/theme';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -14,7 +14,7 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import { styled } from '@mui/material/styles';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import type { StepConnectorProps } from '@mui/material/StepConnector';
 import type { StepIconProps } from '@mui/material/StepIcon';
@@ -157,4 +157,4 @@ const ProcessingFormStepper = ({ step = 0 }: ProcessingFormStepperProps) => {
     );
 };
 
-export default ProcessingFormStepper;
+export default memo(ProcessingFormStepper);

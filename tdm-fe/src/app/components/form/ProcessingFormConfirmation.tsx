@@ -1,23 +1,18 @@
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 import { RouteProcessingStatus } from '~/app/shared/routes';
 
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
-import { useContext } from 'react';
+import { memo } from 'react';
 import { useHref } from 'react-router-dom';
 
 export type ProcessingFormConfirmationProps = {
-    processingId: string;
-    state: {
-        status: 202 | 400 | 409 | 428 | 500 | null | undefined;
-        pending: boolean;
-    };
+    processingId: string | null;
+    status: 202 | 400 | 409 | 428 | 500 | null;
+    isPending: boolean;
 };
 
-const ProcessingFormConfirmation = () => {
-    const { processingId, isPending, startingStatus } = useContext(ProcessingFormContext);
-
+const ProcessingFormConfirmation = ({ processingId, status, isPending }: ProcessingFormConfirmationProps) => {
     const href = useHref(`${RouteProcessingStatus}/${processingId}`);
 
     /**
@@ -30,7 +25,7 @@ const ProcessingFormConfirmation = () => {
     /**
      * Show an error if we get empty operations
      */
-    if (!startingStatus) {
+    if (!status) {
         return (
             <Alert severity="error">
                 Nous ne parvenons pas à contacter le serveur, merci de ré-essayer ultérieurement.
@@ -41,14 +36,14 @@ const ProcessingFormConfirmation = () => {
     /**
      * Show an error if we have no processing linked with the given id
      */
-    if (startingStatus === 428) {
+    if (status === 428) {
         return <Alert severity="error">Nous ne parvenons pas à trouver le fichier lié à ce traitement.</Alert>;
     }
 
     /**
      * Show an error if we get any other error
      */
-    if (startingStatus !== 202 && startingStatus !== 409) {
+    if (status !== 202 && status !== 409) {
         return <Alert severity="error">Un problème inattendu est survenu.</Alert>;
     }
 
@@ -63,4 +58,4 @@ const ProcessingFormConfirmation = () => {
     );
 };
 
-export default ProcessingFormConfirmation;
+export default memo(ProcessingFormConfirmation);

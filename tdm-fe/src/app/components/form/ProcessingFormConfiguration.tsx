@@ -2,28 +2,40 @@ import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import Markdown from '~/app/components/text/Markdown';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { useContext, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { SyntheticEvent, FocusEvent } from 'react';
-import type { Enrichment, Wrapper } from '~/app/shared/data.types';
+import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
-const ProcessingFormConfiguration = () => {
-    const {
-        wrapperList,
-        enrichmentList,
-        fields,
-        wrapper,
-        setWrapper,
-        wrapperParam,
-        setWrapperParam,
-        enrichment,
-        setEnrichment,
-        isPending,
-    } = useContext(ProcessingFormContext);
+export type ProcessingFormConfigurationValueType = {
+    wrapper: Wrapper | null;
+    wrapperParam: string | null;
+    enrichment: Enrichment | null;
+};
+
+type ProcessingFormConfigurationProps = {
+    wrapperList: Wrapper[];
+    enrichmentList: Enrichment[];
+    fields: ProcessingFields | null;
+    isPending: boolean;
+    value: ProcessingFormConfigurationValueType;
+    onChange: (value: ProcessingFormConfigurationValueType) => void;
+};
+
+const ProcessingFormConfiguration = ({
+    wrapperList,
+    enrichmentList,
+    fields,
+    isPending,
+    value,
+    onChange,
+}: ProcessingFormConfigurationProps) => {
+    const [wrapper, setWrapper] = useState<Wrapper | null>(value.wrapper);
+    const [wrapperParam, setWrapperParam] = useState<string>(value.wrapperParam ?? '');
+    const [enrichment, setEnrichment] = useState<Enrichment | null>(value.enrichment);
 
     const cleanFields = useMemo(() => {
         if (fields && fields.fields) {
@@ -32,20 +44,50 @@ const ProcessingFormConfiguration = () => {
         return [];
     }, [fields]);
 
-    /**
-     * Handle event from wrapper selection
-     */
-    const handleWrapperChange = (_: SyntheticEvent, newWrapper: Wrapper | null) => {
+    useEffect(() => {
+        let invalid = false;
+
+        // Check wrapper
+        if (wrapperList && !wrapperList.find((entry) => entry.url === wrapper?.url)) {
+            invalid = true;
+        }
+
+        // Check wrapper param
+        if (wrapperParam === null || wrapperParam === undefined) {
+            invalid = true;
+        }
+
+        // Check enrichment
+        if (enrichmentList && !enrichmentList.find((entry) => entry.url === enrichment?.url)) {
+            invalid = true;
+        }
+
+        if (!invalid) {
+            onChange({
+                wrapper,
+                wrapperParam,
+                enrichment,
+            });
+        }
+    }, [enrichment, enrichmentList, onChange, wrapper, wrapperList, wrapperParam]);
+
+    const handleWrapperChange = useCallback((_: SyntheticEvent, newWrapper: Wrapper | null) => {
         setWrapper(newWrapper);
-    };
+    }, []);
 
-    const handleWrapperParamChange = (_: SyntheticEvent, newWrapperParam: string | null) => {
-        setWrapperParam(newWrapperParam);
-    };
+    const handleWrapperParamChange = useCallback((_: SyntheticEvent, newWrapperParam: string | null) => {
+        setWrapperParam(newWrapperParam ?? '');
+    }, []);
 
-    const handleEnrichmentChange = (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
+    const handleWrapperParamBlur = useCallback((event: FocusEvent) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        setWrapperParam(event.target.value ?? '');
+    }, []);
+
+    const handleEnrichmentChange = useCallback((_: SyntheticEvent, newEnrichment: Enrichment | null) => {
         setEnrichment(newEnrichment);
-    };
+    }, []);
 
     /**
      * Show a loading box will wait for the operations to be fetched
@@ -81,14 +123,9 @@ const ProcessingFormConfiguration = () => {
                         <div id="processing-form-wrapper-param-style"></div>
                         <Autocomplete
                             className="processing-form-field"
-                            value={wrapperParam ?? ''}
+                            value={wrapperParam}
                             onChange={handleWrapperParamChange}
-                            onBlur={(event: unknown) => {
-                                handleWrapperParamChange(
-                                    {} as unknown as SyntheticEvent,
-                                    (event as FocusEvent<HTMLInputElement | HTMLTextAreaElement>).target.value,
-                                );
-                            }}
+                            onBlur={handleWrapperParamBlur}
                             options={cleanFields}
                             renderInput={(params) => (
                                 <TextField
@@ -121,4 +158,4 @@ const ProcessingFormConfiguration = () => {
     );
 };
 
-export default ProcessingFormConfiguration;
+export default memo(ProcessingFormConfiguration);

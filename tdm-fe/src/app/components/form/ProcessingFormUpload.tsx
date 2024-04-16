@@ -1,22 +1,44 @@
 import FileUpload from '~/app/components/progress/FileUpload';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 import { colors } from '~/app/shared/theme';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
-import { useContext, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
-const ProcessingFormUpload = () => {
-    const { mimes, file, setFile, isPending, isInvalid, isOnError } = useContext(ProcessingFormContext);
+type ProcessingFormUploadProps = {
+    mimes: string[];
+    value: File | null;
+    isOnError: boolean;
+    isPending: boolean;
+    onChange: (value: File | null) => void;
+};
+
+const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {
+    const [file, setFile] = useState<File | null>(value);
+    const [isInvalid, setIsInvalid] = useState(false);
 
     const stringifiesMineTypes = useMemo(() => {
         return mimes.join(', ');
     }, [mimes]);
 
-    const handleFileChange = (newFile: File | null) => {
+    useEffect(() => {
+        let invalid = false;
+
+        if (!file || !mimes.includes(mimeTypes.getType(file.name) ?? '')) {
+            invalid = true;
+        }
+
+        setIsInvalid(invalid);
+        if (!invalid) {
+            onChange(file);
+        }
+    }, [file, mimes, onChange]);
+
+    const handleFileChange = useCallback((newFile: File | null) => {
         setFile(newFile);
-    };
+    }, []);
 
     if (isPending || isOnError) {
         return <FileUpload showError={isOnError} />;
@@ -62,4 +84,4 @@ const ProcessingFormUpload = () => {
     );
 };
 
-export default ProcessingFormUpload;
+export default memo(ProcessingFormUpload);
