@@ -1,23 +1,43 @@
 import '~/app/components/form/scss/ProcessingFormCommon.scss';
-import { ProcessingFormContext } from '~/app/provider/ProcessingFormContextProvider';
 
 import TextField from '@mui/material/TextField';
-import { useContext } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
 
-const ProcessingFormEmail = () => {
-    const { email, setEmail, isInvalid } = useContext(ProcessingFormContext);
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+type ProcessingFormEmailProps = {
+    value: string | null;
+    onChange: (value: string | null) => void;
+};
+
+const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
+    const [email, setEmail] = useState<string>(value ?? '');
+    const [isInvalid, setIsInvalid] = useState(false);
+
+    useEffect(() => {
+        let invalid = false;
+
+        if (!email || !EMAIL_REGEX.test(email)) {
+            invalid = true;
+        }
+
+        setIsInvalid(invalid);
+        if (!invalid) {
+            onChange(email);
+        }
+    }, [email, onChange]);
+
+    const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEmail(event.target.value);
-    };
+    }, []);
 
     return (
         <div className="processing-form-field-group processing-form-field-with-label">
             <TextField
-                value={email ?? ''}
-                onChange={handleChange}
+                value={email}
+                onChange={handleEmailChange}
                 error={isInvalid}
                 className="processing-form-field"
                 label="Adresse électronique"
@@ -32,4 +52,4 @@ const ProcessingFormEmail = () => {
     );
 };
 
-export default ProcessingFormEmail;
+export default memo(ProcessingFormEmail);

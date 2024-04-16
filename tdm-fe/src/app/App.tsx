@@ -5,7 +5,6 @@ import WebServicesFooter from '~/app/components/layout/WebServicesFooter';
 import WebServicesHeader from '~/app/components/layout/WebServicesHeader';
 import ProcessingCreationForm from '~/app/pages/ProcessingCreationForm';
 import ProcessingStatus from '~/app/pages/ProcessingStatus';
-import ProcessingFormContextProvider from '~/app/provider/ProcessingFormContextProvider';
 import { RouteProcessingStatus, RouteRoot } from '~/app/shared/routes';
 
 import Container from '@mui/material/Container';
@@ -18,14 +17,7 @@ const App = () => {
             <WebServicesHeader />
             <Container id="app-container">
                 <Routes>
-                    <Route
-                        path={RouteRoot}
-                        element={
-                            <ProcessingFormContextProvider>
-                                <ProcessingCreationForm />
-                            </ProcessingFormContextProvider>
-                        }
-                    />
+                    <Route path={RouteRoot} element={<ProcessingCreationForm />} />
                     <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
                 </Routes>
             </Container>
