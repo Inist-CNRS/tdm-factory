@@ -1,5 +1,28 @@
+@import "../../../scss/colors";
+
 #ws-header {
+  width: 50%;
+  max-width: 650px;
   padding-top: 72px;
   padding-bottom: 24px;
+  margin-right: auto;
+  margin-left: auto;
   text-align: center;
+
+  #ws-header-pre-title {
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #ws-header-title {
+    margin: 0;
+
+    #ws-header-title-blue {
+      color: $blue;
+    }
+
+    #ws-header-title-green {
+      color: $light-green;
+    }
+  }
 }
