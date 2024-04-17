@@ -45,7 +45,7 @@ export class DynamicConfig {
                     tags: [
                         {
                             name: 'data-wrapper',
-                            excluded: [],
+                            excluded: ['/v1/fields/csv'],
                         },
                     ],
                 },
