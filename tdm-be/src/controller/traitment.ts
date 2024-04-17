@@ -21,7 +21,6 @@ import multer from 'multer';
 
 import type { Request, Response } from 'express';
 import type { Processing } from '~/model/ProcessingModel';
-import type { Parameter } from '~/model/Request';
 import type { Traitment } from '~/model/Traitment';
 
 const router = express.Router();
@@ -119,11 +118,8 @@ router.post(
 
         // Get wrapper param
         if (traitement.wrapper && traitement.wrapper.parameters) {
-            const tmpWrapperParam = traitement.wrapper.parameters
-                .filter((param) => param !== undefined && param.value !== undefined && param.name !== undefined)
-                .find((param) => (param as Required<Parameter>).name === 'value') as Required<Parameter> | undefined;
-            if (tmpWrapperParam) {
-                wrapperParam = tmpWrapperParam.value;
+            if (traitement.wrapper.parameters.length >= 1) {
+                wrapperParam = traitement.wrapper.parameters[0];
             }
         }
 
