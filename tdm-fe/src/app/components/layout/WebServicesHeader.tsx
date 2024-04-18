@@ -6,7 +6,7 @@ const WebServicesHeader = () => {
         <div id="ws-header">
             <Container>
                 <p className="text" id="ws-header-pre-title">
-                    Chargez bos corpus et découvrez les résultats des services TDM
+                    Chargez vos corpus et découvrez les résultats des services TDM
                 </p>
                 <h1 id="ws-header-title">
                     <span id="ws-header-title-blue">IA</span>
