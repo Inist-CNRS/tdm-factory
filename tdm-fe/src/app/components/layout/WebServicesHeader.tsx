@@ -2,16 +2,19 @@ import '~/app/components/layout/scss/WebServicesHeader.scss';
 import Container from '@mui/material/Container';
 
 const WebServicesHeader = () => {
-    // Todo add the correcte text when available
     return (
         <div id="ws-header">
             <Container>
+                <p className="text" id="ws-header-pre-title">
+                    Chargez vos corpus et découvrez les résultats des services TDM
+                </p>
+                <h1 id="ws-header-title">
+                    <span id="ws-header-title-blue">IA</span>
+                    <span id="ws-header-title-green">Factory</span>
+                </h1>
                 <p className="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet vulputate ex. Vivamus vitae
-                    volutpat elit. Mauris vitae efficitur urna. Duis eget nibh quis nibh ultricies viverra. Nullam sed
-                    ligula urna. Vestibulum bibendum ipsum eget neque ultrices, id elementum sapien interdum. Vivamus
-                    nec tortor dictum, scelerisque mauris lobortis, luctus dolor. Aenean pellentesque non risus vel
-                    vulputate. Pellentesque a nulla malesuada risus sollicitudin elementum eget non arcu.
+                    Une interface simple de chargement de corpus et d&apos;exécution d&apos;outils de TDM vous
+                    permettent d&apos;exploiter vos propres données simplement.
                 </p>
             </Container>
         </div>
