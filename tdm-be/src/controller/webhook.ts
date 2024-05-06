@@ -19,7 +19,8 @@ router.post(
             return;
         }
 
-        enrichmentHook.success(id);
+        enrichmentHook.success(id).then(undefined);
+        res.send();
     },
     (error) => {
         logger.error(error);
@@ -39,7 +40,8 @@ router.post(
             return;
         }
 
-        enrichmentHook.failure(id);
+        enrichmentHook.failure(id).then(undefined);
+        res.send();
     },
     (error) => {
         logger.error(error);
