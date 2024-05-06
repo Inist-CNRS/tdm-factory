@@ -10,7 +10,10 @@ export class Tag {
 
 export class SwaggerApi {
     url = '';
-    retrieveUrl?: string;
+    retrieveUrl?: {
+        url: string;
+        fileExtension: string;
+    };
     tags: Tag[] = [];
 }
 
@@ -53,7 +56,10 @@ export class DynamicConfig {
             enrichments: localConfig.enrichments ?? [
                 {
                     url: 'https://data-computer.services.istex.fr',
-                    retrieveUrl: '/v1/retrieve',
+                    retrieveUrl: {
+                        url: '/v1/retrieve-csv',
+                        fileExtension: 'csv',
+                    },
                     tags: [
                         {
                             name: 'data-computer',
@@ -70,7 +76,10 @@ export class DynamicConfig {
                 },
                 {
                     url: 'https://data-termsuite.services.istex.fr',
-                    retrieveUrl: '/v1/retrieve',
+                    retrieveUrl: {
+                        url: '/v1/retrieve-csv',
+                        fileExtension: 'csv',
+                    },
                     tags: [
                         {
                             name: 'data-termsuite',
