@@ -79,7 +79,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     if (!enrichmentEntry || !enrichmentEntry.url || !enrichmentEntry.retrieveUrl) {
         error(processingId, 'Enrichment-Hook config dos not contain the enrichment url');
         // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook config dos not contain the enrichment url');
+        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enrichment url');
     }
 
     let response: AxiosResponse;
