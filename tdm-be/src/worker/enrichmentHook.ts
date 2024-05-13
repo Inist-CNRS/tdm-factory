@@ -210,9 +210,10 @@ const enrichmentHookFailure = async (processingId: string) => {
 };
 
 const catchEnrichmentHook = (enrichmentHook: { (processingId: string): Promise<void> }) => {
-    return (processingId: string) => {
-        const enrichmentPromise = enrichmentHook(processingId);
-        enrichmentPromise.catch((e) => {
+    return async (processingId: string) => {
+        try {
+            await enrichmentHook(processingId);
+        } catch (e) {
             const message = 'Receive an un-catch error from enrichment hook';
             error(processingId, 'Receive an un-catch error from enrichment hook');
             crash(e, message, processingId);
@@ -225,7 +226,7 @@ const catchEnrichmentHook = (enrichmentHook: { (processingId: string): Promise<v
             } catch (ignored) {
                 /* empty */
             }
-        });
+        }
     };
 };
 
