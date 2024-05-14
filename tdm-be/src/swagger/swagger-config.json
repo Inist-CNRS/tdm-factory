@@ -103,7 +103,7 @@
             "example": [
               {
                 "url": "https://data-computer.services.istex.fr",
-                "retrieveUrl": "/v1/retrieve",
+                "retrieveUrl": {"url": "/v1/retrieve-csv", "fileExtension": "csv"},
                 "tags": [
                   {
                     "name": "data-computer",
@@ -117,24 +117,6 @@
                 ]
               }
             ]
-          },
-          "mailSuccess": {
-            "type": {
-              "$ref": "#/components/schemas/Mail"
-            },
-            "example": {
-              "subject": "Objet du mail succès",
-              "text": "Vous pouvez télécharger le fichier enrichi à l&apos;adresse ci-dessous"
-            }
-          },
-          "mailError": {
-            "type": {
-              "$ref": "#/components/schemas/Mail"
-            },
-            "example": {
-              "subject": "Objet du mail d&apos;erreur",
-              "text": "Une erreur s&apos;est produite lors de l&apos;enrichissement"
-            }
           }
         }
       },
@@ -146,7 +128,17 @@
             "example": "https://data-wrapper.services.istex.fr"
           },
           "retrieveUrl": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "example": "/v1/retrieve-csv"
+              },
+              "fileExtension": {
+                "type": "string",
+                "example": "csv"
+              }
+            }
           },
           "tags": {
             "type": "array",
@@ -171,17 +163,6 @@
             "example": [
               "csv"
             ]
-          }
-        }
-      },
-      "Mail": {
-        "type": "object",
-        "properties": {
-          "subject": {
-            "type": "string"
-          },
-          "text": {
-            "type": "string"
           }
         }
       }

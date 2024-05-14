@@ -17,16 +17,9 @@ export class SwaggerApi {
     tags: Tag[] = [];
 }
 
-export class Mail {
-    subject = '';
-    text = '';
-}
-
 type ConfigType = {
     wrappers: SwaggerApi[];
     enrichments: SwaggerApi[];
-    mailSuccess: Mail;
-    mailError: Mail;
 };
 
 export class DynamicConfig {
@@ -88,14 +81,6 @@ export class DynamicConfig {
                     ],
                 },
             ],
-            mailSuccess: localConfig.mailSuccess ?? {
-                subject: 'Objet du mail succès',
-                text: "Vous pouvez télécharger le fichier enrichi à l'adresse ci-dessous",
-            },
-            mailError: localConfig.mailError ?? {
-                subject: "Objet du mail d'erreur",
-                text: "Une erreur s'est produite lors de l'enrichissement",
-            },
         };
         logger.info('Dynamic config loaded');
         this.saveConfig();
@@ -115,16 +100,6 @@ export class DynamicConfig {
         if (data.enrichments) {
             hasChange = true;
             this.config.enrichments = data.enrichments;
-        }
-
-        if (data.mailSuccess) {
-            hasChange = true;
-            this.config.mailSuccess = data.mailSuccess;
-        }
-
-        if (data.mailError) {
-            hasChange = true;
-            this.config.mailError = data.mailError;
         }
 
         if (hasChange) {

@@ -21,15 +21,7 @@ const router = express.Router();
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/SwaggerApi'
- *           example: [{'url':'https://data-computer.services.istex.fr', 'retrieveUrl':'/v1/retrieve', 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
- *         mailSuccess:
- *           type:
- *             $ref: '#/components/schemas/Mail'
- *           example: {'subject':'Objet du mail succès', 'text':'Vous pouvez télécharger le fichier enrichi à l&apos;adresse ci-dessous' }
- *         mailError:
- *           type:
- *             $ref: '#/components/schemas/Mail'
- *           example: {'subject':'Objet du mail d&apos;erreur', 'text':'Une erreur s&apos;est produite lors de l&apos;enrichissement' }
+ *           example: [{'url':'https://data-computer.services.istex.fr', 'retrieveUrl':{url: '/v1/retrieve-csv', fileExtension: 'csv'}, 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
  *
  *     SwaggerApi:
  *       type: object
@@ -38,7 +30,14 @@ const router = express.Router();
  *           type: string
  *           example: 'https://data-wrapper.services.istex.fr'
  *         retrieveUrl:
- *           type: string
+ *           type: object
+ *           properties:
+ *             url:
+ *               type: string
+ *               example: /v1/retrieve-csv
+ *             fileExtension:
+ *               type: string
+ *               example: csv
  *         tags:
  *           type: array
  *           items:
@@ -54,13 +53,6 @@ const router = express.Router();
  *           items:
  *             type: string
  *           example: ['csv']
- *     Mail:
- *       type: object
- *       properties:
- *         subject:
- *           type: string
- *         text:
- *           type: string
  *
  */
 
