@@ -41,7 +41,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // Find the processing in the cache db
     const initialProcessing = findProcessing(processingId);
 
-    // Check if the processing existe
+    // Check if the processing exist
     if (!initialProcessing) {
         error(processingId, 'Enrichment-Hook initial processing is undefined');
         // Send error the global catcher because this is normally impossible
@@ -60,7 +60,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         status: Status.PROCESSING_WEBHOOK,
     });
 
-    // Check if the variable existe
+    // Check if the variable exist
     if (!enrichmentUrl || !enrichmentHook || !email) {
         error(processingId, 'Enrichment-Hook value are undefined or null');
         // Send error the global catcher because this is normally impossible
@@ -75,17 +75,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
         return enrichmentUrl.includes(entry.url);
     });
 
-    // Check if enrichment entry existe
+    // Check if enrichment entry exist
     if (!enrichmentEntry || !enrichmentEntry.url || !enrichmentEntry.retrieveUrl) {
-        error(processingId, 'Enrichment-Hook config dos not contait the enrichment url');
+        error(processingId, 'Enrichment-Hook config dos not contain the enrichment url');
         // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook config dos not contait the enrichment url');
+        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enrichment url');
     }
 
     let response: AxiosResponse;
     try {
         response = await axios.post(
-            path.join(enrichmentEntry.url, enrichmentEntry.retrieveUrl),
+            path.join(enrichmentEntry.url, enrichmentEntry.retrieveUrl.url),
             [{ value: enrichmentHook }],
             {
                 responseType: 'arraybuffer',
@@ -110,7 +110,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get tmp file name
-    const finalFileName = `${randomFileName()}.tar.gz`;
+    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveUrl.fileExtension}`;
     const finalFile = downloadFile(finalFileName);
 
     // Save the tmp file
@@ -162,7 +162,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     // Find the processing in the cache db
     const initialProcessing = findProcessing(processingId);
 
-    // Check if the processing existe
+    // Check if the processing exist
     if (!initialProcessing) {
         error(processingId, 'Enrichment-Hook initial processing is undefined');
         // Send error the global catcher because this is normally impossible
@@ -181,7 +181,7 @@ const enrichmentHookFailure = async (processingId: string) => {
         status: Status.PROCESSING_WEBHOOK,
     });
 
-    // Check if the variable existe
+    // Check if the variable exist
     if (!email) {
         error(processingId, 'Enrichment-Hook value are undefined or null');
         // Send error the global catcher because this is normally impossible
