@@ -18,7 +18,9 @@ const WebServicesHeader = () => {
                         <li>Choisissez le service web de TDM que vous voulez exécuter,</li>
                         <li>Remplissez votre adresse mail.</li>
                     </ul>
-                    <p>À l&apos;issue du traitement vous recevrez un mail avec un lien de téléchargement du résultat.</p>
+                    <p>
+                        À l&apos;issue du traitement vous recevrez un mail avec un lien de téléchargement du résultat.
+                    </p>
                 </div>
             </Container>
         </div>

@@ -8,13 +8,13 @@ const WebServicesDescription = () => {
                 <p>Par exemple&#8239;:</p>
                 <ul>
                     <li>
-                        chargez vos données au format CSV&#8239;: VosData.csv (dans le cas de corpus ISTEX on pourra utiliser
-                        le fichier compressé fourni par ISTEX),
+                        chargez vos données au format CSV&#8239;: VosData.csv (dans le cas de corpus ISTEX on pourra
+                        utiliser le fichier compressé fourni par ISTEX),
                     </li>
                     <li>
-                        choisissez le convertisseur adapté au csv («&#8239;Transformation d&apos;un fichier CSV en fichier&#8239;»)
-                        (Dans le cas de corpus ISTEX on pourra utiliser «&#8239;Transformation d&apos;un fichier ISTEX (format
-                        tar.gz) en fichier corpus&#8239;»),
+                        choisissez le convertisseur adapté au csv («&#8239;Transformation d&apos;un fichier CSV en
+                        fichier&#8239;») (Dans le cas de corpus ISTEX on pourra utiliser «&#8239;Transformation
+                        d&apos;un fichier ISTEX (format tar.gz) en fichier corpus&#8239;»),
                     </li>
                     <li>dans la liste déroulante, sélectionnez le nom de la colonne que vous voulez traiter,</li>
                     <li>puis sélectionnez le web service que vous voulez exécuter,</li>
