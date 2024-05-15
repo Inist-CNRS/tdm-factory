@@ -12,7 +12,7 @@ const WebServicesFooter = () => {
                     L&apos;équipe Istex vous propose une pluralité d&apos;outils pour répondre à vos besoins
                 </p>
                 <Button variant="contained" size="large" href="https://services.istex.fr/">
-                    Objectif TDM
+                    ISTEX TDM
                 </Button>
             </Container>
         </div>
