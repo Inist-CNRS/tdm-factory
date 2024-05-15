@@ -10,15 +10,15 @@ const WebServicesHeader = () => {
                 </p>
                 <div className="text" id="ws-header-content">
                     <p>
-                        IA Factory est une interface de chargement de corpus et d&apos;exécution d&apos;outils de tdm
-                        vous permettant d&apos;exploiter vos propres données en simplement 3 étapes :
+                        IA Factory est une interface de chargement de corpus et d&apos;exécution d&apos;outils de TDM
+                        vous permettant d&apos;exploiter vos propres données en simplement 3 étapes&#8239;:
                     </p>
                     <ul>
-                        <li>Téléchargez vos donnée et choisissez le format et le champ à traiter,</li>
-                        <li>Choisissez le web service de TDM que vous voulez exécuter,</li>
+                        <li>Téléchargez vos données et choisissez le format et le champ à traiter,</li>
+                        <li>Choisissez le service web de TDM que vous voulez exécuter,</li>
                         <li>Remplissez votre adresse mail.</li>
                     </ul>
-                    <p>A l&apos;issu du traitement vous recevrez un mail avec un lien de téléchargement du résultat.</p>
+                    <p>À l&apos;issue du traitement vous recevrez un mail avec un lien de téléchargement du résultat.</p>
                 </div>
             </Container>
         </div>
