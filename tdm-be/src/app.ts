@@ -25,6 +25,9 @@ const limiter = rateLimit({
     limit: 2000, // Limit each IP to 1000 requests per `window` (here, per 10 minutes)
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    validate: {
+        trustProxy: false, // Enable been being a proxy server
+    },
 });
 app.use(limiter);
 
@@ -41,7 +44,7 @@ const auth = basicAuth({
 });
 
 app.use((req, res, next) => {
-    httpLogger.info(`${req.method} ${req.url} - ${req.ip} - ${req.get('user-agent')}`);
+    httpLogger.debug(`${req.method} ${req.url} - ${req.ip} - ${req.get('user-agent')}`);
     next();
 });
 
