@@ -9,20 +9,25 @@
   margin-left: auto;
   text-align: center;
 
-  #ws-header-pre-title {
-    font-size: .85em;
+  #ws-header-title {
+    font-size: 1em;
+    font-weight: 700;
     text-transform: uppercase;
   }
 
-  #ws-header-title {
+  #ws-header-content {
     margin: 0;
+    font-size: .75em;
 
-    #ws-header-title-blue {
-      color: $blue;
-    }
+    ul {
+      width: fit-content;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: justify;
 
-    #ws-header-title-green {
-      color: $light-green;
+      li {
+        width: fit-content;
+      }
     }
   }
 }
