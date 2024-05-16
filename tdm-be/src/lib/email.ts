@@ -43,7 +43,7 @@ export const sendStartedMail = async (options: StartedMailOptions) => {
         const text = nunjucks.render('processing-started.njk', options.data);
 
         await transporter.sendMail({
-            from: 'no-reply@inist.fr',
+            from: environment.mailFrom ?? 'dev@local',
             to: options.email,
             subject: `IA Factory - Notification de creation - Traitement ${options.data.processingId}`,
             text,
@@ -66,7 +66,7 @@ export const sendFinishedMail = async (options: FinishedMailOptions) => {
         const text = nunjucks.render('processing-finished.njk', options.data);
 
         await transporter.sendMail({
-            from: 'no-reply@inist.fr',
+            from: environment.mailFrom ?? 'dev@local',
             to: options.email,
             subject: `IA Factory - Résultat - Traitement ${options.data.processingId}`,
             text,
@@ -89,7 +89,7 @@ export const sendErrorMail = async (options: ErrorMailOptions) => {
         const text = nunjucks.render('processing-error.njk', options.data);
 
         await transporter.sendMail({
-            from: 'no-reply@inist.fr',
+            from: environment.mailFrom ?? 'dev@local',
             to: options.email,
             subject: `IA Factory - Rapport d'erreur - Traitement ${options.data.processingId}`,
             text,

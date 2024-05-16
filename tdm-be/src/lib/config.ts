@@ -26,6 +26,7 @@ type Config = {
         internal: Host;
         external: Host;
     };
+    mailFrom?: string;
     smtp: SMTP;
     cron: {
         schedule: string;
