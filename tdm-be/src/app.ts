@@ -12,6 +12,7 @@ import cors from 'cors';
 import express from 'express';
 import basicAuth from 'express-basic-auth';
 import rateLimit from 'express-rate-limit';
+import expressStaticGzip from 'express-static-gzip';
 import cron from 'node-cron';
 import swaggerUi from 'swagger-ui-express';
 
@@ -62,7 +63,7 @@ app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const dirname = process.cwd();
 
-app.use(express.static(path.join(dirname, 'public')));
+app.use(expressStaticGzip(path.join(dirname, 'public'), { enableBrotli: true }));
 
 // Rewrite reverse proxy, this is required because we use a single page application
 // We need to declare all route used by the front application
