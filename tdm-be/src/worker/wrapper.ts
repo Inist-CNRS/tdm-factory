@@ -137,7 +137,9 @@ const catchWrapper = (processingId: string) => {
                 return;
             }
             errorEmail(processing, ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR);
-        } catch (ignored) {}
+        } catch (ignored) {
+            /* empty */
+        }
     });
 };
 
