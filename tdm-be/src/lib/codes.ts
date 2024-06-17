@@ -19,7 +19,7 @@ export const ERROR_CODE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR = '54';
 export const ERROR_MESSAGE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR = `L'enrichissement a refusé le traitement. Code d'erreur ${ERROR_CODE_ENRICHMENT_PAYLOAD_NOT_ACCEPTED_ERROR}`;
 
 export const ERROR_CODE_ENRICHMENT_UNEXPECTED_ERROR = '55';
-export const ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR = `Le enrichissement a rencontré une erreur inattendue. Code d'erreur ${ERROR_CODE_ENRICHMENT_UNEXPECTED_ERROR}`;
+export const ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR = `L'enrichissement a rencontré une erreur inattendue. Code d'erreur ${ERROR_CODE_ENRICHMENT_UNEXPECTED_ERROR}`;
 
 export const ERROR_CODE_ENRICHMENT_HOOK_UNEXPECTED_ERROR = '56';
 export const ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR = `La récuperation des données a rencontré une erreur inattendue. Code d'erreur ${ERROR_CODE_ENRICHMENT_HOOK_UNEXPECTED_ERROR}`;
