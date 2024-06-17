@@ -123,7 +123,9 @@ const catchEnrichment = (processingId: string) => {
                 return;
             }
             errorEmail(processing, ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR);
-        } catch (ignored) {}
+        } catch (ignored) {
+            /* empty */
+        }
     });
 };
 

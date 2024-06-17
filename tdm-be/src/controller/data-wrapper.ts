@@ -107,7 +107,7 @@ const getWrappers = async () => {
     return wrappers;
 };
 
-//Route to access all wrapper available due to config set
+//Route to access all wrappers available due to config set
 router.get('/list', (req, res) => {
     getWrappers().then((wrappers) => {
         res.json(wrappers);

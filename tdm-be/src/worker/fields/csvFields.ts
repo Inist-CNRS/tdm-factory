@@ -16,8 +16,6 @@ const csvFields = async (fileName: string): Promise<string[]> => {
             timeout: 600000,
         });
 
-        logger.info(Buffer.from(response.data, 'binary').toString('utf8'));
-
         const json = JSON.parse(Buffer.from(response.data, 'binary').toString('utf8')) as Array<{
             value: string;
         }>;
