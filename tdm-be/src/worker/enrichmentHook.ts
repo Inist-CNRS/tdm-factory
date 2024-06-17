@@ -1,9 +1,14 @@
-import { ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR } from '~/lib/codes';
+import {
+    ERROR_MESSAGE_ENRICHMENT_HOOK_PAYLOAD_NOT_ACCEPTED_ERROR,
+    ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR,
+    ERROR_MESSAGE_ENRICHMENT_HOOK_UNREACHABLE_ERROR,
+    ERROR_MESSAGE_FILE_SYSTEM_ERROR,
+} from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { sendErrorMail, sendFinishedMail } from '~/lib/email';
 import { downloadFile, randomFileName } from '~/lib/files';
-import logger, { workerLogger } from '~/lib/logger';
+import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
 import dynamicConfig from '~/model/DynamicConfig';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
@@ -41,7 +46,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // Find the processing in the cache db
     const initialProcessing = findProcessing(processingId);
 
-    // Check if the processing exist
+    // Check if the processing exists
     if (!initialProcessing) {
         error(processingId, 'Enrichment-Hook initial processing is undefined');
         // Send error the global catcher because this is normally impossible
@@ -75,7 +80,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         return enrichmentUrl.includes(entry.url);
     });
 
-    // Check if enrichment entry exist
+    // Check if enrichment entry exists
     if (!enrichmentEntry || !enrichmentEntry.url || !enrichmentEntry.retrieveUrl) {
         error(processingId, 'Enrichment-Hook config dos not contain the enrichment url');
         // Send error the global catcher because this is normally impossible
@@ -94,7 +99,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = 'Impossible to contact enrichment-hook api';
         error(processingId, message);
-        // TODO Send an error email
+        sendErrorMail({
+            email,
+            data: {
+                processingId: initialProcessing.id,
+                originalName: initialProcessing.originalName,
+                wrapper: initialProcessing.wrapper as string,
+                wrapperParam: initialProcessing.wrapperParam as string,
+                enrichment: initialProcessing.enrichment as string,
+                errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_UNREACHABLE_ERROR,
+            },
+        }).then(undefined);
         crash(e, message, initialProcessing);
         return;
     }
@@ -105,7 +120,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // Check if we receive a non 200 status code
     if (response.status !== 200) {
         error(processingId, 'Enrichment-hook api return an non 200 status');
-        // TODO Send an error email
+        sendErrorMail({
+            email,
+            data: {
+                processingId: initialProcessing.id,
+                originalName: initialProcessing.originalName,
+                wrapper: initialProcessing.wrapper as string,
+                wrapperParam: initialProcessing.wrapperParam as string,
+                enrichment: initialProcessing.enrichment as string,
+                errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_PAYLOAD_NOT_ACCEPTED_ERROR,
+            },
+        }).then(undefined);
         return;
     }
 
@@ -120,7 +145,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = "Can't write tmp file";
         error(processingId, message);
-        // TODO Send an error email
+        sendErrorMail({
+            email,
+            data: {
+                processingId: initialProcessing.id,
+                originalName: initialProcessing.originalName,
+                wrapper: initialProcessing.wrapper as string,
+                wrapperParam: initialProcessing.wrapperParam as string,
+                enrichment: initialProcessing.enrichment as string,
+                errorMessage: ERROR_MESSAGE_FILE_SYSTEM_ERROR,
+            },
+        }).then(undefined);
         crash(e, message, initialProcessing);
         return;
     }
@@ -128,7 +163,6 @@ const enrichmentHookSuccess = async (processingId: string) => {
     const resultUrl = `${
         environment.hosts.external.isHttps ? 'https' : 'http'
     }://${environment.hosts.external.host}/downloads/${finalFileName}`;
-    logger.info('mail sent to smtp');
 
     sendFinishedMail({
         email,
@@ -162,7 +196,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     // Find the processing in the cache db
     const initialProcessing = findProcessing(processingId);
 
-    // Check if the processing exist
+    // Check if the processing exists
     if (!initialProcessing) {
         error(processingId, 'Enrichment-Hook initial processing is undefined');
         // Send error the global catcher because this is normally impossible
