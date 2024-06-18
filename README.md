@@ -105,7 +105,7 @@ There are two level of properties :
       }
    }
     ```
-2. Dynamic property updatable from post request on swagger `${environment.url}/swagger-ui` protected with `user/${environment.password}`
+2. Dynamic property updatable from post request on swagger `${environment.url}/swagger-config` protected with `user/${environment.password}`
 
    ```json
       {
