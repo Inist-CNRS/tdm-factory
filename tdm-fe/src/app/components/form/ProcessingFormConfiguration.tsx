@@ -118,7 +118,7 @@ const ProcessingFormConfiguration = ({
                     ) : null}
                 </div>
                 {/* Wrapper param */}
-                {wrapper ? (
+                {wrapper && wrapper.parameters ? (
                     <div id="processing-form-wrapper-param">
                         <div id="processing-form-wrapper-param-style"></div>
                         <Autocomplete
@@ -130,7 +130,7 @@ const ProcessingFormConfiguration = ({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
+                                    label={'Nom du champ à exploiter comme identifiant de ligne (par défaut value)'}
                                 />
                             )}
                             fullWidth

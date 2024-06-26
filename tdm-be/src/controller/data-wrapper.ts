@@ -61,8 +61,26 @@ type Wrapper = {
     paths: Record<string, Path>;
 };
 
+type WrapperOutput = {
+    label: string;
+    description: string;
+    url: string | null;
+    parameters?: Array<{
+        name: string;
+        displayName: string;
+    }>;
+    fileType: string[];
+};
+
 const getWrappers = async () => {
-    const wrappers = [];
+    const wrappers: WrapperOutput[] = [
+        {
+            label: 'Aucune Transformation',
+            description: 'Ce convertisseur est à utilisé avec des traitement qui ne require pas de transformation',
+            url: null,
+            fileType: ['*/*', ...dynamicConfig.getConfig().wrapperNoneFileType],
+        },
+    ];
 
     for (const wrapper of dynamicConfig.getConfig().wrappers) {
         const ws = await axios.get<Wrapper>(wrapper.url);

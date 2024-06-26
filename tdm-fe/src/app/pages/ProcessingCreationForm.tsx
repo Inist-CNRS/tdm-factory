@@ -176,6 +176,9 @@ const ProcessingCreationForm = () => {
 
         if (file) {
             return list.filter((entry) => {
+                if (entry.fileType.includes('*/*')) {
+                    return true;
+                }
                 return entry.fileType.includes(mimeTypes.getType(file.name) ?? '');
             });
         }

@@ -133,7 +133,7 @@ router.post(
         }
 
         // Check if default params is pressent
-        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email) {
+        if (!urlEnrichment || !email) {
             res.status(HTTP_BAD_REQUEST).send({
                 status: HTTP_BAD_REQUEST,
                 message: 'Bad Request - Required parameter cannot be null',
