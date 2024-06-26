@@ -60,6 +60,8 @@ const wrapper = async (processingId: string) => {
 
     // Check if we ignore the wrapper process
     if (!wrapperUrl) {
+        debug(processingId, 'Skipping wrapper');
+
         // Update processing information
         updateProcessing(processingId, {
             tmpFile: uploadFile(file),
