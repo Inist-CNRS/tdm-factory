@@ -6,6 +6,10 @@ export type Operation = {
 
 export type Wrapper = Operation & {
     fileType: string[];
+    parameters?: Array<{
+        name: string;
+        displayName: string;
+    }>;
 };
 
 export type WrapperList = Wrapper[];

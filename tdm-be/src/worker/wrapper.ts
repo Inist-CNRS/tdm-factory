@@ -51,8 +51,27 @@ const wrapper = async (processingId: string) => {
     // Get wrapper variable from the processing
     const { uploadFile: file, wrapper: wrapperUrl, wrapperParam } = initialProcessing;
 
-    // Check if the variable existe
-    if (!file || !wrapperUrl || !wrapperParam) {
+    // Check if the file existe
+    if (!file) {
+        error(processingId, 'Wrapper value are undefined or null');
+        // Send error the global catcher because this is normally impossible
+        throw new Error('This is normally impossible - Wrapper value are undefined or null');
+    }
+
+    // Check if we ignore the wrapper process
+    if (!wrapperUrl) {
+        // Update processing information
+        updateProcessing(processingId, {
+            tmpFile: uploadFile(file),
+        });
+
+        // Start the enrichment step
+        enrichment(processingId);
+        return;
+    }
+
+    // Check if the wrapperParam existe
+    if (!wrapperParam) {
         error(processingId, 'Wrapper value are undefined or null');
         // Send error the global catcher because this is normally impossible
         throw new Error('This is normally impossible - Wrapper value are undefined or null');

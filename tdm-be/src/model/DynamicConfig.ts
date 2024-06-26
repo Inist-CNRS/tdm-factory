@@ -18,6 +18,7 @@ export class SwaggerApi {
 }
 
 type ConfigType = {
+    wrapperNoneFileType: string[];
     wrappers: SwaggerApi[];
     enrichments: SwaggerApi[];
 };
@@ -35,6 +36,7 @@ export class DynamicConfig {
         }
 
         this.config = {
+            wrapperNoneFileType: localConfig.wrapperNoneFileType ?? ['application/pdf'],
             wrappers: localConfig.wrappers ?? [
                 {
                     url: 'https://data-wrapper.services.istex.fr',

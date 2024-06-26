@@ -25,6 +25,21 @@ type ProcessingFormConfigurationProps = {
     onChange: (value: ProcessingFormConfigurationValueType) => void;
 };
 
+const getWrapperParamDescription = (wrapper: Required<Wrapper>) => {
+    const defaultReturn = 'Nom du champ à exploiter comme identifiant de ligne (par défaut value)';
+    if (wrapper.parameters.length === 0) {
+        return defaultReturn;
+    }
+
+    const wrapperParamDescription = wrapper.parameters.find((value) => value.name === 'value');
+
+    if (wrapperParamDescription && wrapperParamDescription.displayName) {
+        return wrapperParamDescription.displayName;
+    }
+
+    return defaultReturn;
+};
+
 const ProcessingFormConfiguration = ({
     wrapperList,
     enrichmentList,
@@ -118,7 +133,7 @@ const ProcessingFormConfiguration = ({
                     ) : null}
                 </div>
                 {/* Wrapper param */}
-                {wrapper ? (
+                {wrapper && wrapper.parameters ? (
                     <div id="processing-form-wrapper-param">
                         <div id="processing-form-wrapper-param-style"></div>
                         <Autocomplete
@@ -130,7 +145,7 @@ const ProcessingFormConfiguration = ({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
+                                    label={getWrapperParamDescription(wrapper as Required<Wrapper>)}
                                 />
                             )}
                             fullWidth
