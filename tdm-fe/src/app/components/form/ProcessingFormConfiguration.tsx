@@ -25,21 +25,6 @@ type ProcessingFormConfigurationProps = {
     onChange: (value: ProcessingFormConfigurationValueType) => void;
 };
 
-const getWrapperParamDescription = (wrapper: Required<Wrapper>) => {
-    const defaultReturn = 'Nom du champ à exploiter comme identifiant de ligne (par défaut value)';
-    if (wrapper.parameters.length === 0) {
-        return defaultReturn;
-    }
-
-    const wrapperParamDescription = wrapper.parameters.find((value) => value.name === 'value');
-
-    if (wrapperParamDescription && wrapperParamDescription.displayName) {
-        return wrapperParamDescription.displayName;
-    }
-
-    return defaultReturn;
-};
-
 const ProcessingFormConfiguration = ({
     wrapperList,
     enrichmentList,
@@ -145,7 +130,7 @@ const ProcessingFormConfiguration = ({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label={getWrapperParamDescription(wrapper as Required<Wrapper>)}
+                                    label={'Nom du champ à exploiter comme identifiant de ligne (par défaut value)'}
                                 />
                             )}
                             fullWidth
