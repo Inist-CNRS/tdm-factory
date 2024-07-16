@@ -2,9 +2,9 @@ import '~/app/page/css/Setting.scss';
 
 import EnrichmentList from '~/app/components/setting/EnrichmentList';
 import WrapperList from '~/app/components/setting/WrapperList';
-import { config } from '~/app/services/setting/setting';
+import { config, configPost } from '~/app/services/setting/setting';
 
-import { Button } from '@mui/material';
+import { Button, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -21,6 +21,7 @@ const Setting = () => {
     const [localConfig, setLocalConfig] = useState<Config | undefined>(undefined);
     const [configUpdateIndex, setConfigUpdateIndex] = useState<number>(0);
     const [asChange, setAsChange] = useState<boolean>(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
     const { data, isLoading, isFetching } = useQuery({
         queryKey: ['config', configUpdateIndex],
@@ -38,8 +39,8 @@ const Setting = () => {
         setAsChange(!isEqual(data, localConfig));
     }, [data, localConfig]);
 
-    const handleCancelClick = () => {
-        setConfigUpdateIndex(configUpdateIndex + 1);
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: '' });
     };
 
     const handleWrapperChange = (wrappers: ConfigWrapper[]) => {
@@ -58,6 +59,29 @@ const Setting = () => {
         }
     };
 
+    const handleCancelClick = () => {
+        setConfigUpdateIndex(configUpdateIndex + 1);
+    };
+
+    const handleSaveClick = () => {
+        if (localConfig) {
+            configPost(localConfig).then((res) => {
+                if (res.ok) {
+                    setSnackbar({
+                        open: true,
+                        message: 'La configuration a été sauvegardé',
+                    });
+                    setConfigUpdateIndex(configUpdateIndex + 1);
+                } else {
+                    setSnackbar({
+                        open: true,
+                        message: 'Un erreur durrent la sauvegardé a été rencontrais',
+                    });
+                }
+            });
+        }
+    };
+
     if (isLoading || isFetching) {
         return <LinearProgress />;
     }
@@ -71,31 +95,40 @@ const Setting = () => {
     }
 
     return (
-        <Box id="setting-container">
-            <Box id="setting-action">
-                <Button variant="contained" color="warning" onClick={handleCancelClick}>
-                    Annulée
-                </Button>
-                <Button variant="contained" color="success" disabled={!asChange}>
-                    Sauvegardé
-                </Button>
+        <>
+            <Snackbar
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                open={snackbar.open}
+                onClose={handleSnackBarClose}
+                autoHideDuration={5000}
+                message={snackbar.message}
+            />
+            <Box id="setting-container">
+                <Box id="setting-action">
+                    <Button variant="contained" color="warning" onClick={handleCancelClick}>
+                        Annulée
+                    </Button>
+                    <Button variant="contained" color="success" disabled={!asChange} onClick={handleSaveClick}>
+                        Sauvegardé
+                    </Button>
+                </Box>
+                <Divider />
+                <Stack
+                    divider={<Divider orientation="vertical" flexItem />}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                    spacing={2}
+                >
+                    <Paper className="setting-block" elevation={0}>
+                        <WrapperList wrappers={localConfig.wrappers} onChange={handleWrapperChange} />
+                    </Paper>
+                    <Paper className="setting-block" elevation={0}>
+                        <EnrichmentList enrichments={localConfig.enrichments} onChange={handleEnrichmentChange} />
+                    </Paper>
+                </Stack>
             </Box>
-            <Divider />
-            <Stack
-                divider={<Divider orientation="vertical" flexItem />}
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                spacing={2}
-            >
-                <Paper className="setting-block" elevation={0}>
-                    <WrapperList wrappers={localConfig.wrappers} onChange={handleWrapperChange} />
-                </Paper>
-                <Paper className="setting-block" elevation={0}>
-                    <EnrichmentList enrichments={localConfig.enrichments} onChange={handleEnrichmentChange} />
-                </Paper>
-            </Stack>
-        </Box>
+        </>
     );
 };
 

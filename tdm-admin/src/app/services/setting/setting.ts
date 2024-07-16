@@ -13,3 +13,15 @@ export const config = async () => {
     }
     return await json<Config>(response);
 };
+
+export const configPost = async (newConfig: Config) => {
+    return fetch(createQuery(environment.post.config), {
+        method: 'post',
+        headers: {
+            Authorization: getAuthHeader(),
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newConfig),
+    });
+};
