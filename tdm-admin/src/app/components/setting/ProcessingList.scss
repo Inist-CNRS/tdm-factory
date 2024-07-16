@@ -1,0 +1,68 @@
+#processing-setting {
+  margin-bottom: 6px;
+}
+
+.processing-box {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+}
+
+.processing-card {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.processing-params {
+  margin-right: 12px;
+  margin-left: 12px;
+  border-radius: inherit;
+}
+
+.processing-card-divider {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 6px;
+
+  span {
+    flex-grow: 0;
+  }
+
+  hr {
+    flex-grow: 1;
+  }
+}
+
+.processing-card-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 0;
+  border-color: rgba(0, 0, 0, .23);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: inherit;
+}
+
+.processing-card-input-box {
+  display: flex;
+  gap: 6px;
+}
+
+.processing-card-tag-excluded-input {
+  margin-bottom: 2px;
+}
+
+.processing-card-tag-delete {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.processing-add {
+  margin-top: 6px;
+}

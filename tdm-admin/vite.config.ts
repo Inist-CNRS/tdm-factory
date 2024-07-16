@@ -18,6 +18,10 @@ const linter =
           ];
 
 export default defineConfig({
+    base: '/admin',
+    server: {
+        port: 5174,
+    },
     plugins: [react(), tsconfigPaths(), ...linter],
     css: {
         devSourcemap: true,

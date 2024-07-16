@@ -1,0 +1,20 @@
+#setting-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 48px;
+}
+
+#setting-action {
+  display: flex;
+  gap: 12px;
+
+  button {
+    flex: 1 1 0;
+  }
+}
+
+.setting-block {
+  flex: 1 1 0;
+  padding: 12px;
+}
