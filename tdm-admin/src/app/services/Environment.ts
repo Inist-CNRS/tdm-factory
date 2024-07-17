@@ -3,6 +3,7 @@ export const environment = {
     get: {
         login: '/api/admin',
         config: '/config',
+        files: '/api/admin/files',
     },
     post: {
         config: '/config/set',
