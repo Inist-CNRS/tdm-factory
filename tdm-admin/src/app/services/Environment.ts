@@ -4,6 +4,7 @@ export const environment = {
         login: '/api/admin',
         config: '/config',
         files: '/api/admin/files',
+        logs: '/api/admin/logs',
     },
     post: {
         config: '/config/set',

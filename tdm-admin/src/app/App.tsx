@@ -2,6 +2,7 @@ import '~/app/App.scss';
 
 import Menu from '~/app/components/Menu';
 import File from '~/app/page/File';
+import Log from '~/app/page/Log';
 import Setting from '~/app/page/Setting';
 import { getPageTitle } from '~/app/util/utils';
 
@@ -62,6 +63,7 @@ const App = () => {
 
             <Container id="container" maxWidth="xl">
                 {page === 'file' ? <File /> : null}
+                {page === 'log' ? <Log /> : null}
                 {page === 'setting' ? <Setting /> : null}
             </Container>
         </Box>

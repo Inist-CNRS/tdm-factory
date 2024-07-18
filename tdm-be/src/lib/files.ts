@@ -7,6 +7,7 @@ import path from 'path';
 
 export const filesLocation = {
     app: process.cwd(),
+    log: 'logs',
     tmp: 'tmp',
     upload: 'uploads',
     crash: 'crash',
@@ -28,6 +29,10 @@ export const readDir = async (directory: string) => {
 
 export const randomFileName = (): string => {
     return md5(`${Date.now()}-${Math.round(Math.random() * 1e9)}`);
+};
+
+export const logFile = (fileName: string): string => {
+    return path.join(filesLocation.app, filesLocation.log, fileName);
 };
 
 export const tmpFile = (fileName: string): string => {

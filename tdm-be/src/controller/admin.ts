@@ -1,8 +1,39 @@
-import { filesLocation, readDir } from '~/lib/files';
+import { filesLocation, logFile, readDir } from '~/lib/files';
+import { loggerName } from '~/lib/logger';
 
 import express from 'express';
 
+import fs from 'node:fs/promises';
+
 const router = express.Router();
+
+router.get('/logs', (req, res) => {
+    res.json(loggerName);
+});
+
+router.get('/logs/:name/:level', (req, res) => {
+    const { name, level } = req.params;
+
+    if (!name || !level) {
+        res.status(400).send();
+        return;
+    }
+
+    if (!loggerName.includes(req.params.name) || !['combined', 'debug'].includes(level)) {
+        res.status(400).send();
+        return;
+    }
+
+    let fileName = name === 'default' ? 'combined.log' : `${name}-combined.log`;
+
+    if (level === 'debug') {
+        fileName = name === 'default' ? 'debug.log' : `${name}-debug.log`;
+    }
+
+    fs.readFile(logFile(fileName)).then((value) => {
+        res.send(value);
+    });
+});
 
 router.get('/files', (req, res) => {
     Promise.all([readDir(filesLocation.upload), readDir(filesLocation.tmp), readDir(filesLocation.download)]).then(
