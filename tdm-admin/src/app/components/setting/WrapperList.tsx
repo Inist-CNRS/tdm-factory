@@ -25,20 +25,20 @@ type WrapperListProps = {
 
 const text = {
     title: {
-        main: 'Paramétrage des Wrapper',
+        main: 'Paramétrage des Wrappers',
         tagSubTitle: 'Tag',
-        excludedSubTitle: 'Elément exclus',
+        excludedSubTitle: 'Éléments exclus',
     },
     label: {
         url: 'Url du wrapper',
         tagName: 'Nom du tag',
-        excludedPath: 'Chemin exclue',
+        excludedPath: 'Chemin exclu',
     },
     tooltip: {
-        addWrapper: 'Ajouté un wrapper',
-        deleteWrapper: 'Supprimé le wrapper',
-        addExcluded: 'Ajouté une route a exclure',
-        deleteExcluded: 'Supprimé la route exclue',
+        addWrapper: 'Ajouter un wrapper',
+        deleteWrapper: 'Supprimer le wrapper',
+        addExcluded: 'Ajouter une route à exclure',
+        deleteExcluded: 'Supprimer la route exclue',
     },
 };
 
