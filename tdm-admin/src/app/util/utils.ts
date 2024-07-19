@@ -7,13 +7,13 @@ export const getPageTitle = (page: Page) => {
         case 'home':
             return 'Tableau de bord';
         case 'database':
-            return 'Enrichissement';
+            return 'Enrichissements';
         case 'file':
-            return 'Fichier';
+            return 'Fichiers';
         case 'log':
-            return 'Journal';
+            return 'Journaux';
         case 'setting':
-            return 'Paramètre';
+            return 'Paramètres';
         default:
             return 'Erreur 404';
     }
