@@ -1,11 +1,20 @@
 import { filesLocation, logFile, readDir } from '~/lib/files';
 import { loggerName } from '~/lib/logger';
+import { findAllProcessing } from '~/model/ProcessingModel';
 
 import express from 'express';
 
 import fs from 'node:fs/promises';
 
 const router = express.Router();
+
+router.get('/database', (req, res) => {
+    let page = 1;
+    if (req.query.page && Number(req.query.page) > 1) {
+        page = Number(req.query.page);
+    }
+    res.json(findAllProcessing(page));
+});
 
 router.get('/logs', (req, res) => {
     res.json(loggerName);

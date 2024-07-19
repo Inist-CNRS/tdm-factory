@@ -58,7 +58,7 @@ const Log = () => {
     }
 
     return (
-        <Box sx={{ padding: '24px', display: 'flex', gap: '12px', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
             <Paper sx={{ padding: '12px', paddingLeft: '24px', display: 'flex', gap: '12px', flexDirection: 'column' }}>
                 <Box sx={{ flex: '1 1 0' }}>
                     <Typography variant="subtitle1">Type de log</Typography>

@@ -23,9 +23,7 @@ const File = () => {
 
     const { data, isLoading, isFetching } = useQuery({
         queryKey: ['file'],
-        queryFn: () => {
-            return files();
-        },
+        queryFn: files,
     });
 
     const handleChange = (event: SyntheticEvent, newValue: string) => {

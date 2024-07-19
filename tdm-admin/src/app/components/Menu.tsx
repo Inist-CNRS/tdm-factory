@@ -37,18 +37,9 @@ const Menu = ({ onChange }: MenuProps) => {
                 </ListItem>
 
                 <ListItem disablePadding>
-                    <ListItemButton onClick={handleClick('processing')}>
-                        <ListItemIcon>
-                            <ScienceIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={getPageTitle('processing')} />
-                    </ListItemButton>
-                </ListItem>
-
-                <ListItem disablePadding>
                     <ListItemButton onClick={handleClick('database')}>
                         <ListItemIcon>
-                            <DataArrayIcon />
+                            <ScienceIcon />
                         </ListItemIcon>
                         <ListItemText primary={getPageTitle('database')} />
                     </ListItemButton>

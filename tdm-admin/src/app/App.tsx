@@ -1,6 +1,7 @@
 import '~/app/App.scss';
 
 import Menu from '~/app/components/Menu';
+import Database from '~/app/page/Database';
 import File from '~/app/page/File';
 import Log from '~/app/page/Log';
 import Setting from '~/app/page/Setting';
@@ -61,7 +62,8 @@ const App = () => {
                 <Menu onChange={handlePageChange} />
             </Drawer>
 
-            <Container id="container" maxWidth="xl">
+            <Container id="container" maxWidth="xl" sx={{ padding: '24px' }}>
+                {page === 'database' ? <Database /> : null}
                 {page === 'file' ? <File /> : null}
                 {page === 'log' ? <Log /> : null}
                 {page === 'setting' ? <Setting /> : null}
