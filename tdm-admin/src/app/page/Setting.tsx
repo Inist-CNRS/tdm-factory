@@ -8,14 +8,37 @@ import { Button, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import { useQuery } from '@tanstack/react-query';
 import { isEqual, cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import type { Config, ConfigEnrichment, ConfigWrapper } from '~/app/util/type';
+
+const SettingSkeleton = () => {
+    return (
+        <Box id="setting-container">
+            <Skeleton id="setting-action" height={36.5} animation="wave" variant="rounded" />
+            <Divider />
+            <Stack
+                divider={<Divider orientation="vertical" flexItem />}
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                spacing={2}
+            >
+                <Paper className="setting-block" elevation={0}>
+                    <Skeleton animation="wave" variant="rounded" height={500} />
+                </Paper>
+                <Paper className="setting-block" elevation={0}>
+                    <Skeleton animation="wave" variant="rounded" height={500} />
+                </Paper>
+            </Stack>
+        </Box>
+    );
+};
 
 const Setting = () => {
     const [localConfig, setLocalConfig] = useState<Config | undefined>(undefined);
@@ -83,7 +106,7 @@ const Setting = () => {
     };
 
     if (isLoading || isFetching) {
-        return <LinearProgress />;
+        return <SettingSkeleton />;
     }
 
     if (!data || !localConfig) {

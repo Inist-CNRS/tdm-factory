@@ -2,8 +2,8 @@ import FileTable from '~/app/components/file/FileTable';
 import { files } from '~/app/services/admin/files';
 
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useQuery } from '@tanstack/react-query';
@@ -41,7 +41,7 @@ const File = () => {
             </Box>
             <Box sx={{ padding: '8px' }}>
                 {isLoading || isFetching ? (
-                    <LinearProgress />
+                    <Skeleton animation="wave" variant="rounded" height={400} />
                 ) : (
                     <>
                         <FileTable currentTable={value} tableIndex={0} rows={data?.upload ?? []} />

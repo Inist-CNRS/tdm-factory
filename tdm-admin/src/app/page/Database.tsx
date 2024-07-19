@@ -23,13 +23,6 @@ const DatabaseSkeleton = () => {
     return (
         <Paper>
             <Box sx={{ padding: '12px' }}>
-                <Skeleton
-                    component="div"
-                    sx={{ width: '100%', marginBottom: '12px' }}
-                    animation="wave"
-                    variant="rounded"
-                    height={40}
-                />
                 <Skeleton component="div" sx={{ width: '100%' }} animation="wave" variant="rounded" height={600} />
                 <Skeleton
                     sx={{

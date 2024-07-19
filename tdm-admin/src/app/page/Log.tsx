@@ -2,10 +2,10 @@ import { logList, logs } from '~/app/services/admin/log';
 
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
@@ -50,7 +50,12 @@ const Log = () => {
     };
 
     if (isListFetching || isListLoading) {
-        return <LinearProgress />;
+        return (
+            <Box sx={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+                <Skeleton animation="wave" variant="rounded" height={200} />
+                <Skeleton animation="wave" variant="rounded" height={500} />
+            </Box>
+        );
     }
 
     if (!list) {
@@ -78,9 +83,16 @@ const Log = () => {
             </Paper>
             <Paper sx={{ padding: '12px' }} elevation={0}>
                 {isLogDataFetching || isLogDataLoading ? (
-                    <LinearProgress />
+                    <Skeleton animation="wave" variant="rounded" height={500} />
                 ) : (
-                    <TextField value={logData} disabled fullWidth multiline size="small" />
+                    <TextField
+                        inputProps={{ style: { minHeight: '500px' } }}
+                        value={logData}
+                        disabled
+                        fullWidth
+                        multiline
+                        size="small"
+                    />
                 )}
             </Paper>
         </Box>
