@@ -28,7 +28,7 @@ router.get('/logs/:name/:level', (req, res) => {
         return;
     }
 
-    if (!loggerName.includes(req.params.name) || !['combined', 'debug'].includes(level)) {
+    if (!loggerName.includes(name) || !['combined', 'debug'].includes(level)) {
         res.status(400).send();
         return;
     }
