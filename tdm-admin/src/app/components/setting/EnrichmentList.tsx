@@ -25,23 +25,23 @@ type EnrichmentListProps = {
 
 const text = {
     title: {
-        main: 'Paramétrage des Enrichment',
+        main: 'Paramétrage des Enrichments',
         retrieveSubTitle: 'Retrieve',
         tagSubTitle: 'Tag',
-        excludedSubTitle: 'Elément exclus',
+        excludedSubTitle: 'Éléments exclus',
     },
     label: {
         url: 'Url du enrichment',
         tagName: 'Nom du tag',
-        excludedPath: 'Chemin exclue',
+        excludedPath: 'Chemin exclu',
         retrieveUrl: 'Url de retrieve',
         retrieveFile: 'Extension de fichier',
     },
     tooltip: {
-        addEnrichment: 'Ajouté un enrichment',
-        deleteEnrichment: 'Supprimé le enrichment',
-        addExcluded: 'Ajouté une route a exclure',
-        deleteExcluded: 'Supprimé la route exclue',
+        addEnrichment: 'Ajouter un enrichment',
+        deleteEnrichment: 'Supprimer le enrichment',
+        addExcluded: 'Ajouter une route à exclure',
+        deleteExcluded: 'Supprimer la route exclue',
     },
 };
 
