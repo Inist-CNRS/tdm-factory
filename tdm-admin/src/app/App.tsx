@@ -1,6 +1,7 @@
 import '~/app/App.scss';
 
 import Menu from '~/app/components/Menu';
+import Dashboard from '~/app/page/Dashboard';
 import Database from '~/app/page/Database';
 import File from '~/app/page/File';
 import Log from '~/app/page/Log';
@@ -63,6 +64,7 @@ const App = () => {
             </Drawer>
 
             <Container id="container" maxWidth="xl" sx={{ padding: '24px' }}>
+                {page === 'home' ? <Dashboard /> : null}
                 {page === 'database' ? <Database /> : null}
                 {page === 'file' ? <File /> : null}
                 {page === 'log' ? <Log /> : null}

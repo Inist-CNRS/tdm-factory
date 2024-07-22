@@ -45,7 +45,7 @@ export type Files = {
 };
 
 // eslint-disable-next-line no-shadow
-export enum DatabaseStatus {
+export enum ProcessingStatus {
     UNKNOWN,
     STARTING,
     WRAPPER_RUNNING,
@@ -60,7 +60,7 @@ export enum DatabaseStatus {
 
 export type Database = {
     id: string;
-    status: DatabaseStatus;
+    status: ProcessingStatus;
     email: string | null;
     wrapper: string | null;
     wrapperParam: string | null;
@@ -76,4 +76,22 @@ export type Databases = {
     page: number;
     total: number;
     results: Database[];
+};
+
+export type StorageDashboard = {
+    date: string;
+    size: number;
+};
+
+export type Dashboard = {
+    status: Partial<Record<ProcessingStatus, number>>;
+    storage: {
+        free: number;
+        used: number;
+        files: {
+            upload: StorageDashboard[];
+            tmp: StorageDashboard[];
+            download: StorageDashboard[];
+        };
+    };
 };

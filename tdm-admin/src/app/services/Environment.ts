@@ -6,6 +6,7 @@ export const environment = {
         files: '/api/admin/files',
         logs: '/api/admin/logs',
         database: '/api/admin/database',
+        dashboard: '/api/admin/dashboard',
     },
     post: {
         config: '/config/set',

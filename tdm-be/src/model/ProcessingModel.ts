@@ -63,6 +63,14 @@ export const countAllProcessing = (): number => {
     return 0;
 };
 
+export const findAllStatus = (): Array<{ status: number }> => {
+    const stmt = database.prepare<unknown[], { status: number }>(`
+        select status from processing;
+    `);
+
+    return stmt.all();
+};
+
 export const findAllProcessing = (page: number): { page: number; total: number; results: Processing[] } => {
     const stmt = database.prepare<[number], Processing>(`
         select id,

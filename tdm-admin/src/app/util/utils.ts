@@ -1,4 +1,4 @@
-import { DatabaseStatus } from '~/app/util/type';
+import { ProcessingStatus } from '~/app/util/type';
 
 import type { Page } from '~/app/util/type';
 
@@ -19,36 +19,36 @@ export const getPageTitle = (page: Page) => {
     }
 };
 
-export const getDatabaseStatus = (status: DatabaseStatus) => {
+export const getDatabaseStatus = (status: ProcessingStatus) => {
     switch (status) {
-        case DatabaseStatus.UNKNOWN: {
+        case ProcessingStatus.UNKNOWN: {
             return 'UNKNOWN';
         }
-        case DatabaseStatus.STARTING: {
+        case ProcessingStatus.STARTING: {
             return 'STARTING';
         }
-        case DatabaseStatus.WRAPPER_RUNNING: {
+        case ProcessingStatus.WRAPPER_RUNNING: {
             return 'WRAPPER_RUNNING';
         }
-        case DatabaseStatus.WRAPPER_ERROR: {
+        case ProcessingStatus.WRAPPER_ERROR: {
             return 'WRAPPER_ERROR';
         }
-        case DatabaseStatus.ENRICHMENT_RUNNING: {
+        case ProcessingStatus.ENRICHMENT_RUNNING: {
             return 'ENRICHMENT_RUNNING';
         }
-        case DatabaseStatus.ENRICHMENT_ERROR: {
+        case ProcessingStatus.ENRICHMENT_ERROR: {
             return 'ENRICHMENT_ERROR';
         }
-        case DatabaseStatus.WAITING_WEBHOOK: {
+        case ProcessingStatus.WAITING_WEBHOOK: {
             return 'WAITING_WEBHOOK';
         }
-        case DatabaseStatus.PROCESSING_WEBHOOK: {
+        case ProcessingStatus.PROCESSING_WEBHOOK: {
             return 'PROCESSING_WEBHOOK';
         }
-        case DatabaseStatus.FINISHED: {
+        case ProcessingStatus.FINISHED: {
             return 'FINISHED';
         }
-        case DatabaseStatus.FINISHED_ERROR: {
+        case ProcessingStatus.FINISHED_ERROR: {
             return 'FINISHED_ERROR';
         }
     }

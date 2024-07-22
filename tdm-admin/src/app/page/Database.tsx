@@ -66,7 +66,7 @@ const Database = () => {
     }
 
     if (!data) {
-        return <Alert color="error">No database found.</Alert>;
+        return <Alert color="error">Nous n&apos;as vont pas peu récupérais les donnée.</Alert>;
     }
 
     return (
