@@ -3,6 +3,9 @@ tdm-be/dist/*
 tdm-fe/dist/*
 tdm-fe/node_modules/
 tdm-fe/.stylelintcache
+tdm-admin/dist/*
+tdm-admin/node_modules/
+tdm-admin/.stylelintcache
 .gitlab-ci.yml
 helm/*
 tdm-be/environment-recette.ts

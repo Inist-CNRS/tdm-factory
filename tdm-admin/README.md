@@ -1,6 +1,6 @@
-# TDM Frontend React.js Application
+# TDM Backoffice React.js Application
 
-This project is a React.js application built to provide TDM application.
+This project is a React.js application built to provide TDM backoffice.
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ Make sure you have the following installed on your machine:
 2. Navigate to the project directory:
 
    ```bash
-   cd tdm-factory/tdm-fe
+   cd tdm-factory/tdm-admin
    ```
 
 3. Install dependencies:
@@ -47,19 +47,19 @@ The application will run on `http://localhost:3000` by default. Open this URL in
 
 The project structure is organized as follows:
 
-- `public/`: Contains the public assets, HTML template, and favicon.
 - `src/`: Contains the source code of the React application.
+  - `index.tsx`: entry point
   - `app/`: 
     - `components/`: Reusable UI components.
-    - `globals.css`: Global CSS of the application.
-    - `page.tsx`: Main component where components are assembled.
-    - `layout.tsx`: Entry point of the application.
-  - `generated`: Generated from open api and swagger.json file.
+    - `page/`: Individual application page
+    - `services/`: Application network tools
+    - `util/`: Tools, types and utils
+    - `App.scss`: Global CSS of the application.
+    - `App.tsx`: Main elements where application is assembled.
 
 ## Available Scripts
 
 In the project directory, you can run the following scripts:
 
 - `npm run dev`: Runs the app in development mode.
-- `npm run generate-api`: To generate front end api calls from `..\tdm-be\swagger.json` file.
 - `npm run build`: Builds the app for production to the `.next` folder.

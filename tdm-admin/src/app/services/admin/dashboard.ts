@@ -9,7 +9,7 @@ export const dashboard = async (): Promise<Dashboard> => {
         },
     });
     if (response.status !== 200) {
-        return { status: {}, storage: { download: [], tmp: [], upload: [] } };
+        return { storage: { files: { download: [], tmp: [], upload: [] }, free: 0, used: 0 }, status: {} };
     }
     return await json<Dashboard>(response);
 };

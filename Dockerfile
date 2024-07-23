@@ -1,5 +1,5 @@
 # Stage 1 - Building Stage: Build the front-end application
-FROM node:18.19-bullseye-slim AS react-build
+FROM node:18.19-bullseye-slim AS front-end-build
 
 # Switch to the main working directory
 WORKDIR /app
@@ -12,6 +12,26 @@ RUN npm ci
 
 # Copy the front-end source code into the build container
 COPY tdm-fe /app/
+
+# Build the React app
+RUN VITE_TDM_FACTORY_HOST="" npm run build
+
+#######################################################
+
+# Stage 1 - Building Stage: Build the back-office application
+FROM node:18.19-bullseye-slim AS back-office-build
+
+# Switch to the main working directory
+WORKDIR /app
+
+# Copy both package.json and package-lock.json files
+COPY tdm-admin/package*.json /app/
+
+# Install dependency
+RUN npm ci
+
+# Copy the front-end source code into the build container
+COPY tdm-admin /app/
 
 # Build the React app
 RUN VITE_TDM_FACTORY_HOST="" npm run build
@@ -63,7 +83,10 @@ COPY --chown=daemon:daemon --from=express-build /app/config/production.json /app
 COPY --chown=daemon:daemon --from=express-build /app/src /app/src
 
 # Copy front-end files from the build container
-COPY --chown=daemon:daemon --from=react-build /app/dist /app/public/
+COPY --chown=daemon:daemon --from=front-end-build /app/dist /app/public/
+
+# Copy front-end files from the build container
+COPY --chown=daemon:daemon --from=back-office-build /app/dist /app/public/admin/
 
 # Create the required folder
 RUN mkdir /app/public/downloads
