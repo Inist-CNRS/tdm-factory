@@ -80,6 +80,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
                         />
                         <TextField
                             size="small"
+                            type="password"
                             fullWidth
                             label={text.label.password}
                             value={password}
