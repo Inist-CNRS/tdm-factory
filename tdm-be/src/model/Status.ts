@@ -11,4 +11,5 @@ enum Status {
     FINISHED,
     FINISHED_ERROR,
 }
+
 export default Status;

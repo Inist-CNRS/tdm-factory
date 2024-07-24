@@ -3,6 +3,8 @@ install:
 	npm install && \
 	cd ../tdm-fe && \
 	npm install && \
+	cd ../tdm-admin && \
+	npm install && \
 	cd ..
 
 
@@ -12,10 +14,3 @@ run-dev:
 run-docker:
 	docker build --tag 'tdm-factory:latest' .
 	docker run -p 3000:3000 'tdm-factory:latest'
-
-update-front-api:
-	cd tdm-be && \
-	npm run swagger-autogen && \
-	cd ../tdm-fe && \
-	npm run generate-api && \
-	cd ..

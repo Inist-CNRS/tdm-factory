@@ -1,3 +1,4 @@
+import adminRoute from '~/controller/admin';
 import configRoute from '~/controller/config';
 import dataEnrichmentRoute from '~/controller/data-enrichment';
 import dataWrapperRoute from '~/controller/data-wrapper';
@@ -59,6 +60,7 @@ app.use('/webhook', webhookRoute);
 //to secure
 app.use('/config', auth, configRoute);
 app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use('/api/admin', auth, adminRoute);
 
 const dirname = process.cwd();
 
@@ -71,6 +73,9 @@ app.get('/', function (req, res) {
 });
 app.get('/status/:id', function (req, res) {
     res.sendFile(path.join(dirname, 'public', 'index.html'));
+});
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(dirname, 'public', 'admin', 'index.html'));
 });
 
 // Middleware pour gérer les erreurs 404 (route non trouvée)

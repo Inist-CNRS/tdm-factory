@@ -4,11 +4,15 @@ import { createLogger, format, transports } from 'winston';
 
 import type { Logger } from 'winston';
 
+export const loggerName: string[] = [];
+
 /**
  * Create a winston logger with an associated label
  * @param name Label use with the logger
  */
 const create = (name: string): Logger => {
+    loggerName.push(name);
+
     return createLogger({
         format: format.combine(
             format.label({ label: name }),

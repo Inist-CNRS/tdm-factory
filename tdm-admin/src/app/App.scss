@@ -1,0 +1,15 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: rgba(246, 247, 248, .5);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#container {
+  margin-top: 24px;
+}

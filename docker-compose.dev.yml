@@ -27,6 +27,20 @@ services:
     networks:
       - tdm-factory-network
 
+  tdm-factory-admin:
+    container_name: tdm-factory-dev-admin
+    image: node:18.19-bullseye-slim
+    environment:
+      NODE_ENV: development
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./tdm-admin:/app
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - tdm-factory-network
+
   tdm-factory-maildev:
     container_name: tdm-factory-dev-maildev
     image: maildev/maildev

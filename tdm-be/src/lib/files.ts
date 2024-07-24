@@ -7,6 +7,7 @@ import path from 'path';
 
 export const filesLocation = {
     app: process.cwd(),
+    log: 'logs',
     tmp: 'tmp',
     upload: 'uploads',
     crash: 'crash',
@@ -14,8 +15,24 @@ export const filesLocation = {
     templates: 'src/templates',
 };
 
+export const readDir = async (directory: string) => {
+    const dirContent = await fs.readdir(path.join(filesLocation.app, directory));
+    return Promise.all(
+        dirContent.map(async (file) => {
+            return {
+                file,
+                stats: await fs.stat(path.join(filesLocation.app, directory, file)),
+            };
+        }),
+    );
+};
+
 export const randomFileName = (): string => {
     return md5(`${Date.now()}-${Math.round(Math.random() * 1e9)}`);
+};
+
+export const logFile = (fileName: string): string => {
+    return path.join(filesLocation.app, filesLocation.log, fileName);
 };
 
 export const tmpFile = (fileName: string): string => {

@@ -74,7 +74,7 @@ const getWrappers = async () => {
             const [key, value] = path;
 
             if (
-                value.post.tags &&
+                value?.post?.tags &&
                 servers[0].variables &&
                 value.post.tags.some((tag) => tags.includes(tag)) &&
                 !excluded.includes(key)

@@ -23,7 +23,7 @@ export type Processing = {
  * @param uploadFile Source file of processing
  */
 export const createProcessing = (id: string, originalName: string, uploadFile: string): Processing | undefined => {
-    const stmt = database.prepare<[string, number, string, string]>(`
+    const stmt = database.prepare<[string, number, string, string], Processing>(`
         insert into processing (id, status, uploadFile, originalName)
         values (?, ?, ?, ?);
     `);
@@ -49,12 +49,59 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
     return undefined;
 };
 
+export const countAllProcessing = (): number => {
+    const stmt = database.prepare<unknown[], { total: number }>(`
+        select count(id) as total from processing;
+    `);
+
+    const res = stmt.get();
+
+    if (res) {
+        return res.total;
+    }
+
+    return 0;
+};
+
+export const findAllStatus = (): Array<{ status: number }> => {
+    const stmt = database.prepare<unknown[], { status: number }>(`
+        select status from processing;
+    `);
+
+    return stmt.all();
+};
+
+export const findAllProcessing = (page: number): { page: number; total: number; results: Processing[] } => {
+    const stmt = database.prepare<[number], Processing>(`
+        select id,
+               status,
+               email,
+               wrapper,
+               wrapperParam,
+               enrichment,
+               enrichmentHook,
+               uploadFile,
+               originalName,
+               tmpFile,
+               resultFile
+        from processing
+        limit 10
+        offset ?;
+    `);
+
+    return {
+        page,
+        total: countAllProcessing(),
+        results: stmt.all((page - 1) * 10),
+    };
+};
+
 /**
  * Find a processing
  * @param id ID of the processing
  */
 export const findProcessing = (id: string): Processing | undefined => {
-    const stmt = database.prepare<[string]>(`
+    const stmt = database.prepare<[string], Processing>(`
         select id,
                status,
                email,
@@ -70,7 +117,7 @@ export const findProcessing = (id: string): Processing | undefined => {
         where id = ?;
     `);
 
-    return stmt.get(id) as Processing | undefined;
+    return stmt.get(id);
 };
 
 /**
@@ -108,7 +155,8 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
             string | null,
             string | null,
             string | null,
-        ]
+        ],
+        Processing
     >(`
         update processing
         set status         = ?,
