@@ -66,7 +66,7 @@ const Database = () => {
     }
 
     if (!data) {
-        return <Alert color="error">Nous n&apos;as vont pas peu récupérais les donnée.</Alert>;
+        return <Alert color="error">Nous n&apos;avons pas pu récupérer les données.</Alert>;
     }
 
     return (

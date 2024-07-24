@@ -57,7 +57,7 @@ const Dashboard = () => {
         <Box>
             <Paper sx={{ width: '500px', height: '300px', padding: '12px' }}>
                 <Typography sx={{ textAlign: 'center' }} variant="h5">
-                    Résumé des Status
+                    Résumé des Statuts
                 </Typography>
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="60%" data={statusData}>

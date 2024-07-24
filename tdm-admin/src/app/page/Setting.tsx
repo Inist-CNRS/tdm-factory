@@ -92,13 +92,13 @@ const Setting = () => {
                 if (res.ok) {
                     setSnackbar({
                         open: true,
-                        message: 'La configuration a été sauvegardé',
+                        message: 'La configuration a été sauvegardée',
                     });
                     setConfigUpdateIndex(configUpdateIndex + 1);
                 } else {
                     setSnackbar({
                         open: true,
-                        message: 'Un erreur durrent la sauvegardé a été rencontrais',
+                        message: 'Une erreur durant la sauvegarde a été rencontrée',
                     });
                 }
             });
@@ -112,7 +112,7 @@ const Setting = () => {
     if (!data || !localConfig) {
         return (
             <Box>
-                <Alert severity="error">Impossible de récupérais la configuration.</Alert>
+                <Alert severity="error">Impossible de récupérer la configuration.</Alert>
             </Box>
         );
     }
