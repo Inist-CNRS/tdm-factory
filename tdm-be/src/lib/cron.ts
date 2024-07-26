@@ -24,38 +24,38 @@ const createFileCron = async (directory: string) => {
 };
 
 const initCron = () => {
-    cronLogger.debug('Creating upload file cron');
+    cronLogger.debug('Creating upload files cron');
     cron.schedule(environment.cron.schedule, () => {
         createFileCron(filesLocation.upload)
             .then(() => {
-                cronLogger.info('Upload file cron ended successfully');
+                cronLogger.info('Upload files cron ended successfully');
             })
             .catch((reason) => {
-                cronLogger.error('Upload file cron ended with a crash');
+                cronLogger.error('Upload files cron ended with a crash');
                 cronLogger.error(reason);
             });
     });
 
-    cronLogger.debug('Creating temporary file cron');
+    cronLogger.debug('Creating temporary files cron');
     cron.schedule(environment.cron.schedule, () => {
         createFileCron(filesLocation.tmp)
             .then(() => {
-                cronLogger.info('Temporary file cron ended successfully');
+                cronLogger.info('Temporary files cron ended successfully');
             })
             .catch((reason) => {
-                cronLogger.error('Temporary file cron ended with a crash');
+                cronLogger.error('Temporary files cron ended with a crash');
                 cronLogger.error(reason);
             });
     });
 
-    cronLogger.debug('Creating download file cron');
+    cronLogger.debug('Creating download files cron');
     cron.schedule(environment.cron.schedule, () => {
         createFileCron(filesLocation.download)
             .then(() => {
-                cronLogger.info('Download file cron ended successfully');
+                cronLogger.info('Download files cron ended successfully');
             })
             .catch((reason) => {
-                cronLogger.error('Download file cron ended with a crash');
+                cronLogger.error('Download files cron ended with a crash');
                 cronLogger.error(reason);
             });
     });
