@@ -6,7 +6,7 @@ import cron from 'node-cron';
 
 import fs from 'node:fs/promises';
 
-const createFileCron = async (directory: string) => {
+const deleteOldFiles = async (directory: string) => {
     const oneWeekAgo = new Date(); // Date actuelle
     oneWeekAgo.setDate(oneWeekAgo.getDate() - environment.cron.deleteFileOlderThan);
 
@@ -26,7 +26,7 @@ const createFileCron = async (directory: string) => {
 const initCron = () => {
     cronLogger.debug('Creating upload files cron');
     cron.schedule(environment.cron.schedule, () => {
-        createFileCron(filesLocation.upload)
+        deleteOldFiles(filesLocation.upload)
             .then(() => {
                 cronLogger.info('Upload files cron ended successfully');
             })
@@ -38,7 +38,7 @@ const initCron = () => {
 
     cronLogger.debug('Creating temporary files cron');
     cron.schedule(environment.cron.schedule, () => {
-        createFileCron(filesLocation.tmp)
+        deleteOldFiles(filesLocation.tmp)
             .then(() => {
                 cronLogger.info('Temporary files cron ended successfully');
             })
@@ -50,7 +50,7 @@ const initCron = () => {
 
     cronLogger.debug('Creating download files cron');
     cron.schedule(environment.cron.schedule, () => {
-        createFileCron(filesLocation.download)
+        deleteOldFiles(filesLocation.download)
             .then(() => {
                 cronLogger.info('Download files cron ended successfully');
             })
