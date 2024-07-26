@@ -27,6 +27,10 @@ export const readDir = async (directory: string) => {
     );
 };
 
+export const customFile = (...paths: string[]): string => {
+    return path.join(filesLocation.app, ...paths);
+};
+
 export const randomFileName = (): string => {
     return md5(`${Date.now()}-${Math.round(Math.random() * 1e9)}`);
 };

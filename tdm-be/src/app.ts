@@ -5,18 +5,17 @@ import dataWrapperRoute from '~/controller/data-wrapper';
 import traitmentRoute from '~/controller/traitment';
 import webhookRoute from '~/controller/webhook';
 import environment from '~/lib/config';
-import { filesLocation, initFilesSystem } from '~/lib/files';
-import logger, { httpLogger, cronLogger } from '~/lib/logger';
+import initCron from '~/lib/cron';
+import { initFilesSystem } from '~/lib/files';
+import logger, { httpLogger } from '~/lib/logger';
 import swaggerFile from '~/swagger/swagger-config.json';
 
 import cors from 'cors';
 import express from 'express';
 import basicAuth from 'express-basic-auth';
 import rateLimit from 'express-rate-limit';
-import cron from 'node-cron';
 import swaggerUi from 'swagger-ui-express';
 
-import fs from 'node:fs';
 import path from 'path';
 
 const app = express();
@@ -86,43 +85,11 @@ app.use((req, res) => {
 });
 
 initFilesSystem().then(() => {
+    initCron();
+
     const server = app.listen(environment.port, () => {
         logger.debug(`Running on ${environment.port}`);
     });
 
     server.setTimeout(600000); // 10 minutes timeout for all routes
-});
-
-cron.schedule(environment.cron.schedule, () => {
-    const oneWeekAgo = new Date(); // Date actuelle
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - environment.cron.deleteFileOlderThan); // Soustrait une semaine
-
-    fs.readdir(filesLocation.upload, (err, files) => {
-        if (err) {
-            cronLogger.error('Erreur de lecture du dossier', err);
-            return;
-        }
-
-        files.forEach((file) => {
-            const filePath = path.join(filesLocation.upload, file);
-
-            fs.stat(filePath, (error, stats) => {
-                if (error) {
-                    cronLogger.error('Erreur de récupération des informations sur le fichier', error);
-                    return;
-                }
-
-                // Vérifie si le fichier est plus ancien d'une semaine
-                if (stats.isFile() && stats.mtime < oneWeekAgo) {
-                    fs.unlink(filePath, (unlinkError) => {
-                        if (unlinkError) {
-                            cronLogger.error('Erreur de suppression du fichier', unlinkError);
-                            return;
-                        }
-                        cronLogger.info(`Le fichier ${file} a été supprimé.`);
-                    });
-                }
-            });
-        });
-    });
 });
