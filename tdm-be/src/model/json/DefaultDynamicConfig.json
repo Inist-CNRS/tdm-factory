@@ -1,0 +1,54 @@
+{
+    "wrappers": [
+        {
+            "url": "https://data-wrapper.services.istex.fr",
+            "tags": [
+                {
+                    "name": "data-wrapper",
+                    "excluded": [
+                        "/v1/fields/csv"
+                    ]
+                }
+            ]
+        }
+    ],
+    "enrichments": [
+        {
+            "url": "https://data-computer.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "data-computer",
+                    "excluded": [
+                        "/v1/collect",
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json",
+                        "/v1/mock-error-async",
+                        "/v1/mock-error-sync"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://data-termsuite.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "data-termsuite",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json"
+                    ]
+                }
+            ]
+        }
+    ]
+}
