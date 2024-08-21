@@ -54,6 +54,7 @@ The project structure is organized as follows:
 - `src/`: Contains the source code of the Express application.
   - `controller/`: Contains route definitions for different endpoints.
   - `model/`: Defines data models or interacts with the database.
+    - `json/DefaultDynamicConfig.json`: Default value for the dynamic config system
   - `lib/`: Contains utility fonction.
   - `templates/`: Contains email template.
   - `worker/`: Contains processing fonction.
