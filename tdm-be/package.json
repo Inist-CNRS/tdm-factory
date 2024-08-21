@@ -15,7 +15,7 @@
   "author": "",
   "license": "CeCILL",
   "dependencies": {
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "better-sqlite3": "^11.1.2",
     "config": "^3.3.12",
     "cors": "^2.8.5",
