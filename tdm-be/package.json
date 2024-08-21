@@ -4,6 +4,12 @@
   "engines": {
     "node": "18"
   },
+  "contributors": [
+    {
+      "name": "Pierre M (AlasDiablo) - Maintainer",
+      "url": "https://github.com/AlasDiablo"
+    }
+  ],
   "scripts": {
     "dev": "nodemon src/app.ts",
     "start": "ts-node --transpile-only ./src/app.ts",
