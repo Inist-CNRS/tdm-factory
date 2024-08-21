@@ -60,4 +60,4 @@ The project structure is organized as follows:
 In the project directory, you can run the following scripts:
 
 - `npm run dev`: Runs the app in development mode.
-- `npm run build`: Builds the app for production to the `.next` folder.
+- `npm run build`: Builds the app for production to the `dist` folder.
