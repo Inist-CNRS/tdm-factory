@@ -41,7 +41,7 @@ To start the development server:
 npm run dev
 ```
 
-The application will run on `http://localhost:3000` by default. Open this URL in your browser to view it.
+The application will run on `http://localhost:5174` by default. Open this URL in your browser to view it.
 
 ## Folder Structure
 
@@ -53,7 +53,8 @@ The project structure is organized as follows:
     - `components/`: Reusable UI components.
     - `page/`: Individual application page
     - `services/`: Application network tools
-    - `util/`: Tools, types and utils
+    - `scss/`: Css utils
+    - `shared/`: Tools, types and utils
     - `App.scss`: Global CSS of the application.
     - `App.tsx`: Main elements where application is assembled.
 
