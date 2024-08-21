@@ -28,7 +28,12 @@
                         "/v1/retrieve-csv",
                         "/v1/retrieve-json",
                         "/v1/mock-error-async",
-                        "/v1/mock-error-sync"
+                        "/v1/mock-error-sync",
+                        "/v1/base-line",
+                        "/v1/graph-segment",
+                        "/v1/statistics",
+                        "/v1/tree-segment",
+                        "/v1/lda-segment"
                     ]
                 }
             ]
@@ -46,6 +51,65 @@
                         "/v1/retrieve",
                         "/v1/retrieve-csv",
                         "/v1/retrieve-json"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://data-workflow.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "data-workflow",
+                    "excluded": [
+                        "/v1/base-line",
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json",
+                        "/v1/conditormetrie",
+                        "/v1/tag-cloud-en",
+                        "/v1/tag-cloud-fr"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://text-clustering.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-json",
+                "fileExtension": "json"
+            },
+            "tags": [
+                {
+                    "name": "clustering",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json",
+                        "/v1/noise-lodex",
+                        "/v1/clustering"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://text-clustering.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "clustering",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json",
+                        "/v1/noise-lodex",
+                        "/v1/noise"
                     ]
                 }
             ]
