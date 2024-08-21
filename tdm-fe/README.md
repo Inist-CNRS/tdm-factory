@@ -41,7 +41,7 @@ To start the development server:
 npm run dev
 ```
 
-The application will run on `http://localhost:3000` by default. Open this URL in your browser to view it.
+The application will run on `http://localhost:5173` by default. Open this URL in your browser to view it.
 
 ## Folder Structure
 
@@ -54,12 +54,10 @@ The project structure is organized as follows:
     - `globals.css`: Global CSS of the application.
     - `page.tsx`: Main component where components are assembled.
     - `layout.tsx`: Entry point of the application.
-  - `generated`: Generated from open api and swagger.json file.
 
 ## Available Scripts
 
 In the project directory, you can run the following scripts:
 
 - `npm run dev`: Runs the app in development mode.
-- `npm run generate-api`: To generate front end api calls from `..\tdm-be\swagger.json` file.
-- `npm run build`: Builds the app for production to the `.next` folder.
+- `npm run build`: Builds the app for production to the `dist` folder.

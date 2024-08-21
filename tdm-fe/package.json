@@ -4,6 +4,12 @@
   "engines": {
     "node": "18"
   },
+  "contributors": [
+    {
+      "name": "Pierre M (AlasDiablo) - Maintainer",
+      "url": "https://github.com/AlasDiablo"
+    }
+  ],
   "type": "module",
   "scripts": {
     "dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 vite --host",

@@ -45,13 +45,19 @@ The server will start running at `http://localhost:3000` (or the port specified 
 
 The project structure is organized as follows:
 
+- `config/`: Contains application config files
+- `crash/`: Contains crash reports.
+- `logs/`: Contains logs.
+- `public/`: Contains serv HTML and files.
+- `tmp/`: Contains temporary files.
+- `upload/`: Contains uploaded files.
 - `src/`: Contains the source code of the Express application.
-  - `routers/`: Contains route definitions for different endpoints.
+  - `controller/`: Contains route definitions for different endpoints.
   - `model/`: Defines data models or interacts with the database.
-  - `services/`: Custom services here we have only one to send mail.
-- `app.ts`: Entry point of the application.
-- `config.json`: Configuration file of the application.
-- `swagger.ts`: script to generate swagger files.
+  - `lib/`: Contains utility fonction.
+  - `templates/`: Contains email template.
+  - `worker/`: Contains processing fonction.
+  - `app.ts`: Entry point of the application.
 
 ## Available Scripts
 
