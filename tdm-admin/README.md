@@ -1,6 +1,6 @@
 # TDM Backoffice React.js Application
 
-This project is a React.js application built to provide TDM backoffice.
+This project is a React.js application built to provide TDM back-office.
 
 ## Getting Started
 
@@ -49,7 +49,7 @@ The project structure is organized as follows:
 
 - `src/`: Contains the source code of the React application.
   - `index.tsx`: entry point
-  - `app/`: 
+  - `app/`:
     - `components/`: Reusable UI components.
     - `page/`: Individual application page
     - `services/`: Application network tools

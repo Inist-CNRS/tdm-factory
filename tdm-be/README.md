@@ -48,7 +48,7 @@ The project structure is organized as follows:
 - `config/`: Contains application config files
 - `crash/`: Contains crash reports.
 - `logs/`: Contains logs.
-- `public/`: Contains serv HTML and files.
+- `public/`: Contains server HTML and files.
 - `tmp/`: Contains temporary files.
 - `upload/`: Contains uploaded files.
 - `src/`: Contains the source code of the Express application.

@@ -49,7 +49,7 @@ The project structure is organized as follows:
 
 - `public/`: Contains the public assets, HTML template, and favicon.
 - `src/`: Contains the source code of the React application.
-  - `app/`: 
+  - `app/`:
     - `components/`: Reusable UI components.
     - `globals.css`: Global CSS of the application.
     - `page.tsx`: Main component where components are assembled.

@@ -130,7 +130,7 @@ const ProcessingFormConfiguration = ({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Nom du champ à exploiter comme identifiant de ligne (par défaut value)"
+                                    label="Nom du champ à exploiter"
                                 />
                             )}
                             fullWidth
