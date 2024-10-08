@@ -62,11 +62,11 @@ docker run -p 3000:3000 tdm:v1.0.0
 ```
 
 The frontend will be accessible at `http://localhost:3000/`, the swagger configuration
-at `http://localhost:3000/swagger-config` and the backoffice at `http://localhost:3000/admin`.
+at `http://localhost:3000/swagger-config` and the back-office at `http://localhost:3000/admin`.
 
 ## Development mode
 
-You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/devlopement.json`,
+You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/development.json`,
 to create a ngrok endpoints run `ngrok http 3000`.
 
 After setting up this you can run `make run-dev`
