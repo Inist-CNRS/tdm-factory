@@ -113,6 +113,23 @@
                     ]
                 }
             ]
+        },
+        {
+            "url": "https://data-topcitation.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "topcitation",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json"
+                    ]
+                }
+            ]
         }
     ]
 }
