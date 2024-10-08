@@ -122,7 +122,7 @@
             },
             "tags": [
                 {
-                    "name": "topcitation",
+                    "name": "data-topcitation",
                     "excluded": [
                         "/v1/retrieve",
                         "/v1/retrieve-csv",
