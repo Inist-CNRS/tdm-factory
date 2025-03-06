@@ -1,6 +1,5 @@
 import { getPageTitle } from '~/app/util/utils';
 
-import DataArrayIcon from '@mui/icons-material/DataArray';
 import FolderIcon from '@mui/icons-material/Folder';
 import HomeIcon from '@mui/icons-material/Home';
 import ScienceIcon from '@mui/icons-material/Science';

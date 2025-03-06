@@ -7,9 +7,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import {
-    Area,
-    AreaChart,
+import { 
     PolarAngleAxis,
     PolarGrid,
     PolarRadiusAxis,
@@ -17,11 +15,7 @@ import {
     RadarChart,
     ResponsiveContainer,
     Tooltip,
-    XAxis,
-    YAxis,
 } from 'recharts';
-
-import type { StorageDashboard } from '~/app/util/type';
 
 const Dashboard = () => {
     const { data, isFetching, isLoading } = useQuery({
