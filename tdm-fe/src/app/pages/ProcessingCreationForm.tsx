@@ -270,9 +270,9 @@ const ProcessingCreationForm = () => {
      * Handle file change
      * @param value newly add file
      */
-    const handleUploadChange = useCallback((value: File | null) => {
+    const handleUploadChange = useCallback((value: File | null, isValid: boolean) => {
         setFile(value);
-        setIsWaitingInput(false);
+        setIsWaitingInput(!isValid);
     }, []);
 
     /**
@@ -292,7 +292,8 @@ const ProcessingCreationForm = () => {
      */
     const handleEmailChange = useCallback((value: string | null) => {
         setEmail(value);
-        setIsWaitingInput(false);
+        setIsWaitingInput(!value || !EMAIL_REGEX.test(value));
+        setIsInvalid(!value || !EMAIL_REGEX.test(value));
     }, []);
 
     return (

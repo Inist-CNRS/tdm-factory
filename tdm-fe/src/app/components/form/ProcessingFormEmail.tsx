@@ -15,6 +15,7 @@ type ProcessingFormEmailProps = {
 const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
     const [email, setEmail] = useState<string>(value ?? '');
     const [isInvalid, setIsInvalid] = useState(false);
+    const [hasAttemptedInput, setHasAttemptedInput] = useState(false);
 
     useEffect(() => {
         let invalid = false;
@@ -24,13 +25,12 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
         }
 
         setIsInvalid(invalid);
-        if (!invalid) {
-            onChange(email);
-        }
+        onChange(invalid ? null : email);
     }, [email, onChange]);
 
     const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEmail(event.target.value);
+        setHasAttemptedInput(true);
     }, []);
 
     return (
@@ -38,12 +38,12 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
             <TextField
                 value={email}
                 onChange={handleEmailChange}
-                error={isInvalid}
+                error={isInvalid ? hasAttemptedInput : false}
                 className="processing-form-field"
                 label="Adresse électronique"
                 fullWidth
             />
-            {isInvalid ? (
+            {isInvalid && hasAttemptedInput ? (
                 <div className="text processing-form-field-label error">
                     L&apos;adresse électronique n&apos;est pas valide
                 </div>
