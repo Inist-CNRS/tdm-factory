@@ -124,7 +124,7 @@ const EnrichmentList = ({ enrichments, onChange }: EnrichmentListProps) => {
 
         excluded[excludedIndex] = null;
 
-        tag.excluded = excluded.filter((datum) => datum !== null) as string[];
+        tag.excluded = excluded.filter((datum) => datum !== null);
 
         enrichment.tags[tagIndex] = tag;
         localEnrichments[enrichmentIndex] = enrichment;
@@ -150,7 +150,7 @@ const EnrichmentList = ({ enrichments, onChange }: EnrichmentListProps) => {
 
         localEnrichments[enrichmentIndex] = null;
 
-        setModifiableEnrichments(localEnrichments.filter((datum) => datum !== null) as ConfigEnrichment[]);
+        setModifiableEnrichments(localEnrichments.filter((datum) => datum !== null));
     };
 
     const handleEnrichmentAddClick = () => () => {

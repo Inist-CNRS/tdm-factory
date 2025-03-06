@@ -43,7 +43,7 @@ const DatabaseSkeleton = () => {
 const Database = () => {
     const [page, setPage] = useState(1);
 
-    const { data, isFetching, isLoading } = useQuery({
+    const { data, isFetching } = useQuery({
         queryKey: ['database', page],
         queryFn: () => {
             return database(page);
@@ -61,7 +61,7 @@ const Database = () => {
         setPage(newPage);
     };
 
-    if (isFetching || isFetching) {
+    if (isFetching) {
         return <DatabaseSkeleton />;
     }
 

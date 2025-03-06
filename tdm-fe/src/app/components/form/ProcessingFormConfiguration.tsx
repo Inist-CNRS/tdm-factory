@@ -127,12 +127,7 @@ const ProcessingFormConfiguration = ({
                             onChange={handleWrapperParamChange}
                             onBlur={handleWrapperParamBlur}
                             options={cleanFields}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Nom du champ à exploiter"
-                                />
-                            )}
+                            renderInput={(params) => <TextField {...params} label="Nom du champ à exploiter" />}
                             fullWidth
                             freeSolo
                             disableClearable

@@ -96,7 +96,7 @@ const WrapperList = ({ wrappers, onChange }: WrapperListProps) => {
 
         excluded[excludedIndex] = null;
 
-        tag.excluded = excluded.filter((datum) => datum !== null) as string[];
+        tag.excluded = excluded.filter((datum) => datum !== null);
 
         wrapper.tags[tagIndex] = tag;
         localWrappers[wrapperIndex] = wrapper;
@@ -122,7 +122,7 @@ const WrapperList = ({ wrappers, onChange }: WrapperListProps) => {
 
         localWrappers[wrapperIndex] = null;
 
-        setModifiableWrappers(localWrappers.filter((datum) => datum !== null) as ConfigWrapper[]);
+        setModifiableWrappers(localWrappers.filter((datum) => datum !== null));
     };
 
     const handleWrapperAddClick = () => () => {
