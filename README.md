@@ -69,7 +69,20 @@ at `http://localhost:3000/swagger-config` and the back-office at `http://localho
 You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/development.json`,
 to create a ngrok endpoints run `ngrok http 3000`.
 
+> [!WARNING]  
+> Don't copy the whole URL for `hosts.internal.host` but only the part after
+> `https://` (ex: `b562-88-123-62-113.ngrok-free.app`).  
+
 After setting up this you can run `make run-dev`
+
+You can run the whole application in dev mode using `make run-dev`.
+
+> [!WARNING]  
+> The `tdm-be/dynamic-config.json` file is created for
+> `tdm-be/src/model/defaultDynamicConfig.json` only if it does not already
+> exist.  
+> Quitting the application in dev mode will not delete this file.  
+> This can lead to weird behavior when this old file is not deleted.  
 
 ### Services address
 
