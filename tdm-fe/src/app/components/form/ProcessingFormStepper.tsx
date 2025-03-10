@@ -10,7 +10,9 @@ import { colors } from '~/app/shared/theme';
 
 import CheckIcon from '@mui/icons-material/Check';
 import Step from '@mui/material/Step';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import StepConnector, {
+    stepConnectorClasses,
+} from '@mui/material/StepConnector';
 import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import { styled } from '@mui/material/styles';
@@ -57,7 +59,10 @@ const IstexStepConnector = (
                 top: 16,
                 left: left,
                 right: 'calc(50% + 18px)',
-                transform: isExtended && isLast ? 'translateX(calc(100% + 36px))' : undefined,
+                transform:
+                    isExtended && isLast
+                        ? 'translateX(calc(100% + 36px))'
+                        : undefined,
             },
             [`&.${stepConnectorClasses.active}`]: {
                 [`& .${stepConnectorClasses.line}`]: {
@@ -113,7 +118,11 @@ const StepLabelIcon = ({ icon, completed, active }: StepIconProps) => {
                 <div className={className}>
                     <CheckIcon />
                 </div>
-                <IstexStepConnector isExtended={icon === 1 || icon === 4} isFirst={icon === 1} isLast={icon === 4} />
+                <IstexStepConnector
+                    isExtended={icon === 1 || icon === 4}
+                    isFirst={icon === 1}
+                    isLast={icon === 4}
+                />
             </>
         );
     }
@@ -123,7 +132,11 @@ const StepLabelIcon = ({ icon, completed, active }: StepIconProps) => {
             <div className={className}>
                 <p>{icon}</p>
             </div>
-            <IstexStepConnector isExtended={icon === 1 || icon === 4} isFirst={icon === 1} isLast={icon === 4} />
+            <IstexStepConnector
+                isExtended={icon === 1 || icon === 4}
+                isFirst={icon === 1}
+                isLast={icon === 4}
+            />
         </>
     );
 };
@@ -147,10 +160,16 @@ const ProcessingFormStepper = ({ step = 0 }: ProcessingFormStepperProps) => {
     }, [step]);
 
     return (
-        <Stepper activeStep={activeStep} alternativeLabel connector={<IstexStepConnector />}>
+        <Stepper
+            activeStep={activeStep}
+            alternativeLabel
+            connector={<IstexStepConnector />}
+        >
             {steps.map((stepEntry) => (
                 <Step key={stepEntry.id}>
-                    <IstexStepLabel StepIconComponent={StepLabelIcon}>{stepEntry.title}</IstexStepLabel>
+                    <IstexStepLabel StepIconComponent={StepLabelIcon}>
+                        {stepEntry.title}
+                    </IstexStepLabel>
                 </Step>
             ))}
         </Stepper>

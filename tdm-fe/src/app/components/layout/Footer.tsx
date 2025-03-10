@@ -60,8 +60,15 @@ const Footer = () => {
                             xs={MAX_ITEMS_PER_LINE / 2}
                             md={MAX_ITEMS_PER_LINE / partners.length}
                         >
-                            <div className="footer-collaborator" style={width ? { width } : undefined}>
-                                <a href={url} target="_blank" rel="noreferrer nofollow noopener">
+                            <div
+                                className="footer-collaborator"
+                                style={width ? { width } : undefined}
+                            >
+                                <a
+                                    href={url}
+                                    target="_blank"
+                                    rel="noreferrer nofollow noopener"
+                                >
                                     <img src={logo} alt={alt} />
                                 </a>
                             </div>
@@ -70,8 +77,15 @@ const Footer = () => {
                 </Grid>
 
                 <div id="footer-financing">
-                    <a href="https://anr.fr/ProjetIA-10-IDEX-0004" target="_blank" rel="noreferrer">
-                        <img src={investissementLogo} alt="Programme Investissement d'Avenir" />
+                    <a
+                        href="https://anr.fr/ProjetIA-10-IDEX-0004"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <img
+                            src={investissementLogo}
+                            alt="Programme Investissement d'Avenir"
+                        />
                     </a>
                     <p>Financement : ANR-10-IDEX-0004-02</p>
                 </div>

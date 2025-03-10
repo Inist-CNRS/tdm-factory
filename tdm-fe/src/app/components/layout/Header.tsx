@@ -11,7 +11,10 @@ import istexLogo from '/logo/istex.png';
 
 const navigations = [
     { name: 'ISTEX TDM', url: 'https://services.istex.fr/' },
-    { name: 'TM Tools Explorer', url: 'https://tmtoolsfr-explorerfr.tdm.inist.fr/' },
+    {
+        name: 'TM Tools Explorer',
+        url: 'https://tmtoolsfr-explorerfr.tdm.inist.fr/',
+    },
     { name: 'Hébergement corpus', url: 'https://lodex.istex.fr/' },
 ];
 

@@ -1,11 +1,16 @@
 import '~/app/pages/scss/ProcessingCreationForm.scss';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
 import ProcessingFormConfirmation from '~/app/components/form/ProcessingFormConfirmation';
-import ProcessingFormEmail, { EMAIL_REGEX } from '~/app/components/form/ProcessingFormEmail';
+import ProcessingFormEmail, {
+    EMAIL_REGEX,
+} from '~/app/components/form/ProcessingFormEmail';
 import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
 import { fields as fieldsService } from '~/app/services/creation/fields';
-import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
+import {
+    wrapper as wrapperService,
+    enrichment as enrichmentService,
+} from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 
@@ -54,7 +59,9 @@ const ProcessingCreationForm = () => {
     /**
      * Form confirmation step
      */
-    const [startingStatus, setStartingStatus] = useState<202 | 400 | 409 | 428 | 500 | null>(null);
+    const [startingStatus, setStartingStatus] = useState<
+        202 | 400 | 409 | 428 | 500 | null
+    >(null);
 
     /**
      * Get wrapper and enrichment available
@@ -125,7 +132,15 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam],
+        queryKey: [
+            'start',
+            step,
+            processingId,
+            wrapper,
+            enrichment,
+            email,
+            wrapperParam,
+        ],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
@@ -153,7 +168,11 @@ const ProcessingCreationForm = () => {
      */
     const mimes = useMemo<string[]>(() => {
         if (!operations.pending && operations.data.wrapper) {
-            const mimeType = [...new Set(operations.data.wrapper.flatMap((entry) => entry.fileType))];
+            const mimeType = [
+                ...new Set(
+                    operations.data.wrapper.flatMap((entry) => entry.fileType),
+                ),
+            ];
 
             if (mimeType.includes('application/x-gzip')) {
                 mimeType.push('application/gzip');
@@ -176,7 +195,9 @@ const ProcessingCreationForm = () => {
 
         if (file) {
             return list.filter((entry) => {
-                return entry.fileType.includes(mimeTypes.getType(file.name) ?? '');
+                return entry.fileType.includes(
+                    mimeTypes.getType(file.name) ?? '',
+                );
             });
         }
 
@@ -270,21 +291,27 @@ const ProcessingCreationForm = () => {
      * Handle file change
      * @param value newly add file
      */
-    const handleUploadChange = useCallback((value: File | null, isValid: boolean) => {
-        setFile(value);
-        setIsWaitingInput(!isValid);
-    }, []);
+    const handleUploadChange = useCallback(
+        (value: File | null, isValid: boolean) => {
+            setFile(value);
+            setIsWaitingInput(!isValid);
+        },
+        [],
+    );
 
     /**
      * Handle configuration change
      * @param value newly selected wrapper, wrapperParam and enrichment
      */
-    const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
-        setWrapper(value.wrapper);
-        setWrapperParam(value.wrapperParam);
-        setEnrichment(value.enrichment);
-        setIsWaitingInput(false);
-    }, []);
+    const handleConfigurationChange = useCallback(
+        (value: ProcessingFormConfigurationValueType) => {
+            setWrapper(value.wrapper);
+            setWrapperParam(value.wrapperParam);
+            setEnrichment(value.enrichment);
+            setIsWaitingInput(false);
+        },
+        [],
+    );
 
     /**
      * Handle email change
@@ -304,7 +331,8 @@ const ProcessingCreationForm = () => {
             {/* Content of the form */}
             <div id="processing-form-content">
                 {/* Upload step */}
-                {step === PROCESSING_UPLOAD_STEP || step === PROCESSING_UPLOADING_STEP ? (
+                {step === PROCESSING_UPLOAD_STEP ||
+                step === PROCESSING_UPLOADING_STEP ? (
                     <ProcessingFormUpload
                         mimes={mimes}
                         value={file}
@@ -332,7 +360,10 @@ const ProcessingCreationForm = () => {
 
                 {/* Validation step */}
                 {step === PROCESSING_VALIDATION_STEP ? (
-                    <ProcessingFormEmail value={email} onChange={handleEmailChange} />
+                    <ProcessingFormEmail
+                        value={email}
+                        onChange={handleEmailChange}
+                    />
                 ) : null}
 
                 {/* Confirmation step */}
@@ -353,7 +384,9 @@ const ProcessingCreationForm = () => {
                             size="large"
                             disabled={isInvalid || isWaitingInput}
                         >
-                            {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
+                            {step === PROCESSING_CONFIRMATION_STEP
+                                ? 'Nouveau traitement'
+                                : 'Suivant'}
                         </Button>
                     </div>
                 ) : null}

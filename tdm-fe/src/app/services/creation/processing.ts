@@ -17,28 +17,31 @@ export const start = async ({
     mail,
     id,
 }: ProcessingStartParams): Promise<202 | 400 | 409 | 428 | 500> => {
-    const response = await fetch(createQuery(environment.post.processing.start), {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            wrapper: wrapperParam
-                ? {
-                      url: wrapper.url,
-                      parameters: [wrapperParam],
-                  }
-                : {
-                      url: wrapper.url,
-                  },
-            enrichment: {
-                url: enrichment.url,
+    const response = await fetch(
+        createQuery(environment.post.processing.start),
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-            mail,
-            file: id,
-        }),
-    });
+            body: JSON.stringify({
+                wrapper: wrapperParam
+                    ? {
+                          url: wrapper.url,
+                          parameters: [wrapperParam],
+                      }
+                    : {
+                          url: wrapper.url,
+                      },
+                enrichment: {
+                    url: enrichment.url,
+                },
+                mail,
+                file: id,
+            }),
+        }
+    );
 
     switch (response.status) {
         case 202:

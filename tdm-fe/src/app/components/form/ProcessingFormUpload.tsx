@@ -17,7 +17,13 @@ type ProcessingFormUploadProps = {
     onChange: (value: File | null, isValid: boolean) => void;
 };
 
-const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({
+    mimes,
+    value,
+    isOnError,
+    isPending,
+    onChange,
+}: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -111,8 +117,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
             />
             {isInvalid && hasAttemptedUpload ? (
                 <div className="text processing-form-field-label error">
-                    Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
-                    {stringifiesMineTypes}.
+                    Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMineTypes}.
                 </div>
             ) : null}
         </div>
