@@ -12,7 +12,11 @@ export type ProcessingFormConfirmationProps = {
     isPending: boolean;
 };
 
-const ProcessingFormConfirmation = ({ processingId, status, isPending }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({
+    processingId,
+    status,
+    isPending,
+}: ProcessingFormConfirmationProps) => {
     const href = useHref(`${RouteProcessingStatus}/${processingId}`);
 
     /**
@@ -37,21 +41,31 @@ const ProcessingFormConfirmation = ({ processingId, status, isPending }: Process
      * Show an error if we have no processing linked with the given id
      */
     if (status === 428) {
-        return <Alert severity="error">Nous ne parvenons pas à trouver le fichier lié à ce traitement.</Alert>;
+        return (
+            <Alert severity="error">
+                Nous ne parvenons pas à trouver le fichier lié à ce traitement.
+            </Alert>
+        );
     }
 
     /**
      * Show an error if we get any other error
      */
     if (status !== 202 && status !== 409) {
-        return <Alert severity="error">Un problème inattendu est survenu.</Alert>;
+        return (
+            <Alert severity="error">Un problème inattendu est survenu.</Alert>
+        );
     }
 
     return (
         <>
-            <p>Le traitement a commencé. Vous allez recevoir un mail contenant un résumé.</p>
             <p>
-                Vous pouvez voir l&lsquo;avancement du traitement via la page de statut des traitements :{' '}
+                Le traitement a commencé. Vous allez recevoir un mail contenant
+                un résumé.
+            </p>
+            <p>
+                Vous pouvez voir l&lsquo;avancement du traitement via la page de
+                statut des traitements :
                 <Link href={href}>{processingId}</Link>
             </p>
         </>

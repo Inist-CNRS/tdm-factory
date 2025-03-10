@@ -18,8 +18,14 @@ const App = () => {
             <WebServicesHeader />
             <Container id="app-container">
                 <Routes>
-                    <Route path={RouteRoot} element={<ProcessingCreationForm />} />
-                    <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
+                    <Route
+                        path={RouteRoot}
+                        element={<ProcessingCreationForm />}
+                    />
+                    <Route
+                        path={`${RouteProcessingStatus}/:id`}
+                        element={<ProcessingStatus />}
+                    />
                 </Routes>
             </Container>
             <WebServicesDescription />

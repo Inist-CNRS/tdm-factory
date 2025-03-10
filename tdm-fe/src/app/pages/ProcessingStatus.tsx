@@ -41,7 +41,10 @@ const ProcessingStatus = () => {
                 return undefined;
             }
 
-            if (stateData === Status.WRAPPER_RUNNING || stateData === Status.WAITING_WEBHOOK) {
+            if (
+                stateData === Status.WRAPPER_RUNNING ||
+                stateData === Status.WAITING_WEBHOOK
+            ) {
                 return 1000 * 30; // 30 Secs
             }
 

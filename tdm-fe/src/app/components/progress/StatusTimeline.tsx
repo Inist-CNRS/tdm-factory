@@ -50,7 +50,12 @@ const CustomTimelineDot = ({
     );
 };
 
-const StatusTimeline = ({ isRunning = false, isComplete = false, isOnError = false, text }: StatusTimelineProps) => {
+const StatusTimeline = ({
+    isRunning = false,
+    isComplete = false,
+    isOnError = false,
+    text,
+}: StatusTimelineProps) => {
     const dotColor = useMemo<TimelineDotProps['color']>(() => {
         if (isComplete) {
             return 'primary';
@@ -72,10 +77,18 @@ const StatusTimeline = ({ isRunning = false, isComplete = false, isOnError = fal
         <TimelineItem>
             <TimelineSeparator>
                 <TimelineConnector />
-                <CustomTimelineDot color={dotColor} isRunning={isRunning} isOnError={isOnError} />
+                <CustomTimelineDot
+                    color={dotColor}
+                    isRunning={isRunning}
+                    isOnError={isOnError}
+                />
                 <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent className="status-timeline-content" align="right" color={textColor}>
+            <TimelineContent
+                className="status-timeline-content"
+                align="right"
+                color={textColor}
+            >
                 {text}
             </TimelineContent>
         </TimelineItem>
