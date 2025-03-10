@@ -3,14 +3,14 @@
     "hosts": {
         "internal": {
             "host": "{machine ip or internal host}",
-            "isHttps": true
+            "isHttps": false
         },
         "external": {
             "host": "{external host / revers proxy host}",
-            "isHttps": false
+            "isHttps": true
         }
     },
-    "mailFrom": "\"ISTEX IA Factory\" <no-reply@inist.fr>" ,
+    "mailFrom": "\"ISTEX IA Factory\" <no-reply@inist.fr>",
     "smtp": {
         "host": "{mail services host}",
         "port": 1025,

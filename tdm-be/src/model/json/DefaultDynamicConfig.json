@@ -6,7 +6,8 @@
                 {
                     "name": "data-wrapper",
                     "excluded": [
-                        "/v1/fields/csv"
+                        "v1/fields/csv",
+                        "/v1/retrieve-csv"
                     ]
                 }
             ]
@@ -29,7 +30,6 @@
                         "/v1/retrieve-json",
                         "/v1/mock-error-async",
                         "/v1/mock-error-sync",
-                        "/v1/base-line",
                         "/v1/graph-segment",
                         "/v1/statistics",
                         "/v1/tree-segment",
@@ -51,27 +51,6 @@
                         "/v1/retrieve",
                         "/v1/retrieve-csv",
                         "/v1/retrieve-json"
-                    ]
-                }
-            ]
-        },
-        {
-            "url": "https://data-workflow.services.istex.fr",
-            "retrieveUrl": {
-                "url": "/v1/retrieve-csv",
-                "fileExtension": "csv"
-            },
-            "tags": [
-                {
-                    "name": "data-workflow",
-                    "excluded": [
-                        "/v1/base-line",
-                        "/v1/retrieve",
-                        "/v1/retrieve-csv",
-                        "/v1/retrieve-json",
-                        "/v1/conditormetrie",
-                        "/v1/tag-cloud-en",
-                        "/v1/tag-cloud-fr"
                     ]
                 }
             ]
@@ -117,8 +96,8 @@
         {
             "url": "https://data-topcitation.services.istex.fr",
             "retrieveUrl": {
-                "url": "/v1/retrieve-csv",
-                "fileExtension": "csv"
+                "url": "/v1/retrieve-json",
+                "fileExtension": "json"
             },
             "tags": [
                 {
@@ -128,6 +107,91 @@
                         "/v1/retrieve-csv",
                         "/v1/retrieve-json"
                     ]
+                }
+            ]
+        },
+        {
+            "url": "https://data-thesesul.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve",
+                "fileExtension": "tar.gz"
+            },
+            "tags": [
+                {
+                    "name": "sudoc",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-tests"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://data-rapido.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-json",
+                "fileExtension": "json"
+            },
+            "tags": [
+                {
+                    "name": "data-rapido",
+                    "excluded": [
+                        "/v1/retrieve",
+                        "/v1/retrieve-csv",
+                        "/v1/retrieve-json"
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "https://data-workflow.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "bibcheck-pdf",
+                    "excluded": []
+                }
+            ]
+        },
+        {
+            "url": "https://data-workflow.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "sciencemetrix-class",
+                    "excluded": []
+                }
+            ]
+        },
+        {
+            "url": "https://data-workflow.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-csv",
+                "fileExtension": "csv"
+            },
+            "tags": [
+                {
+                    "name": "tag-cloud",
+                    "excluded": []
+                }
+            ]
+        },
+        {
+            "url": "https://data-workflow.services.istex.fr",
+            "retrieveUrl": {
+                "url": "/v1/retrieve-txt",
+                "fileExtension": "txt"
+            },
+            "tags": [
+                {
+                    "name": "pdf-text",
+                    "excluded": []
                 }
             ]
         }
