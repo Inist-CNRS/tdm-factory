@@ -97,7 +97,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
             },
         );
     } catch (e) {
-        const message = 'Impossible to contact enrichment-hook api';
+        const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.url} / ${enrichmentEntry.retrieveUrl.url})`;
         error(processingId, message);
         sendErrorMail({
             email,
