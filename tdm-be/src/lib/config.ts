@@ -33,7 +33,7 @@ type Config = {
         deleteFileOlderThan: number;
     };
     verbose: string;
-    flows: {
+    flows: Array<{
         input: string;
         inputFormat: string;
         wrapper: string;
@@ -45,7 +45,7 @@ type Config = {
         retrieveExtension: string;
         summary: string;
         description: string;
-    }[];
+    }>;
 };
 
 export default config as unknown as Config;
