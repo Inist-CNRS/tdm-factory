@@ -23,5 +23,73 @@
     "cron": {
         "schedule": "0 0 * * *",
         "deleteFileOlderThan": 7
-    }
+    },
+    "flows": [
+        {
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck-pdf",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**bibCheck** - Contrôle de références bibliographiques - pdf -> csv",
+            "description": "Contrôle les références bibliographiques d'un article en PDF, en vérifiant leur présence dans Crossref tout en s'assurant que l'article associé n'est pas rétracté."
+        },
+        {
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/pdf-text",
+            "retrieve": "/v1/retrieve-txt",
+            "retrieveExtension": "txt",
+            "summary": "**textExtract** - Transforme un PDF en texte - pdf -> txt",
+            "description": "Transforme un PDF en texte en excluant les éléments qui perturberaient un traitement de fouille de texte ultérieur.\n\nLe PDF ne doit pas être un PDF image."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais - istex.tar.gz -> csv",
+            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais - csv -> csv",
+            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en anglais. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait 5 termes de textes en français - istex.tar.gz -> csv",
+            "description": "Extrait les 5 termes les plus spécifiques de chacun des *abstract*s en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait 5 termes de textes en français - csv -> csv",
+            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter."
+        }
+    ]
 }
