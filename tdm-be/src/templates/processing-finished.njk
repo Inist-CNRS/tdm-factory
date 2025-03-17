@@ -1,17 +1,94 @@
-Bonjour,
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            line-height: 1.6;
+            color: #4a4a4a;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #458ca5;
+        }
+        .header {
+            border-bottom: 4px solid;
+            border-image: linear-gradient(to right, #458ca5 50%, #c4d733) 1;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .content {
+            background: #f6f9fa;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .info-list {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .info-item {
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            background: #458ca5;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .success-message {
+            background: #c4d733;
+            color: #667F00;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #D9D9D9;
+            font-size: 0.9em;
+            color: #8f8f8f;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>IA Factory</h1>
+    </div>
+    
+    <div class="content">
+        <p>Bonjour,</p>
 
-Vous trouverez dans ce mail le résultat du traitement {{ processingId }} « {{ originalName }} ».
+        <p>Vous trouverez dans ce mail le résultat du traitement <strong>{{ processingId }}</strong> « {{ originalName }} ».</p>
 
-Vous trouverez le résultat de votre traitement en suivant ce lien : {{ resultFile }}
+        <div class="success-message">
+            Votre traitement est terminé avec succès !
+        </div>
 
-Voici un récapitulatif des informations liées à ce traitement :
+        <a href="{{ resultFile }}" class="button">Télécharger le résultat</a>
 
-- Id du traitement : {{ processingId }}
-- Nom du fichier d'origine : {{ originalName }}
-- Convertisseur : {{ wrapper }}
-- Paramètre du convertisseur : {{ wrapperParam }}
-- Enrichissement : {{ enrichment }}
+        <div class="info-list">
+            <h3>Récapitulatif du traitement :</h3>
+            <div class="info-item">• Id du traitement : <strong>{{ processingId }}</strong></div>
+            <div class="info-item">• Nom du fichier d'origine : <strong>{{ originalName }}</strong></div>
+            <div class="info-item">• Convertisseur : <strong>{{ wrapper }}</strong></div>
+            <div class="info-item">• Paramètre du convertisseur : <strong>{{ wrapperParam }}</strong></div>
+            <div class="info-item">• Enrichissement : <strong>{{ enrichment }}</strong></div>
+        </div>
+    </div>
 
-
-Service IA Factory,
-Merci de ne pas répondre.
+    <div class="footer">
+        <p>Service IA Factory<br>
+        Merci de ne pas répondre.</p>
+    </div>
+</body>
+</html>
