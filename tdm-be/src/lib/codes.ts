@@ -1,10 +1,10 @@
 // User input error
-export const ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT = 'Le convertisseur a rencontré une erreur inattendue due à une entrée utilisateur invalide.';
+export const ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT = 'Le format du fichier fourni n\'était pas le bon.';
 
 // Server Error
-export const ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR = 'Le convertisseur a rencontré une erreur inattendue.';
+export const ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR = 'Le changement de format du fichier s'est mal passé.';
 
-export const ERROR_MESSAGE_FILE_SYSTEM_ERROR = 'Le traitement a rencontré une erreur inattendue liée au système de fichiers.';
+export const ERROR_MESSAGE_FILE_SYSTEM_ERROR = 'Le traitement n'a pas pu lire le fichier après changement de format.';
 
 export const ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR = 'Le convertisseur est actuellement inaccessible.';
 
