@@ -96,6 +96,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
                 responseType: 'arraybuffer',
             },
         );
+        debug(processingId, 'Enrichment-Hook api ${enrichmentEntry.url}/${enrichmentEntry.retrieveUrl.url} called');
     } catch (e) {
         const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.url} / ${enrichmentEntry.retrieveUrl.url})`;
         error(processingId, message);

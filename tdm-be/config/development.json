@@ -2,8 +2,8 @@
     "hosts": {
         "internal": {
             "comment": "don't put https://",
-            "hostExample": "b562-88-123-62-113.ngrok-free.app",
             "host": "{ngrok host}",
+            "hostExample": "363f-88-123-62-113.ngrok-free.app",
             "isHttps": true
         },
         "external": {
@@ -30,7 +30,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/base-line",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**BaseLine** - Opération blanche - json -> csv",
+            "summary": "**BaseLine** - Opération blanche",
             "description": "Opération blanche pour tester le flux."
         },
         {
@@ -40,8 +40,22 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/pdf-text",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
-            "summary": "**textExtract** - Transforme un PDF en texte - pdf -> txt",
-            "description": "Transforme un PDF en texte en excluant les éléments qui perturberaient un traitement de fouille de texte ultérieur. Le PDF ne doit pas être un PDF image."
+            "summary": "**textExtract** - Transforme un PDF en texte",
+            "description": "Transforme un PDF en texte en excluant les éléments qui perturberaient un traitement de fouille de texte ultérieur.\n\nLe PDF ne doit pas être un PDF image.",
+            "descriptionLink": "https://services.istex.fr/extraction-du-texte-epure-de-pdf/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais",
+            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         }
     ]
 }
