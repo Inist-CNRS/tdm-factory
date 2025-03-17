@@ -73,6 +73,8 @@
             "input": "corpus",
             "inputFormat": "json",
             "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
