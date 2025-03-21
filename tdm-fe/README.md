@@ -61,3 +61,32 @@ In the project directory, you can run the following scripts:
 
 - `npm run dev`: Runs the app in development mode.
 - `npm run build`: Builds the app for production to the `dist` folder.
+
+## Static config
+
+You can use this service in any React component, for example, the
+`tdm-fe/src/app/components/MyComponent.tsx` file:
+
+````typescript
+import { useQuery } from '@tanstack/react-query';
+import { getStaticConfig } from '~/app/services/config';
+
+export const MyComponent = () => {
+    const { data: config, isLoading, error } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading configuration</div>;
+
+    return (
+        <div>
+            <h2>Configuration</h2>
+            <pre>{JSON.stringify(config, null, 2)}</pre>
+        </div>
+    );
+};
+````
+
+Static config contains `flows`.
