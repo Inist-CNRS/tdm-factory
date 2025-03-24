@@ -5,10 +5,7 @@
             "tags": [
                 {
                     "name": "data-wrapper",
-                    "excluded": [
-                        "v1/fields/csv",
-                        "/v1/retrieve-csv"
-                    ]
+                    "excluded": ["v1/fields/csv", "/v1/retrieve-csv"]
                 }
             ]
         }
@@ -47,11 +44,7 @@
             "tags": [
                 {
                     "name": "data-termsuite",
-                    "excluded": [
-                        "/v1/retrieve",
-                        "/v1/retrieve-csv",
-                        "/v1/retrieve-json"
-                    ]
+                    "excluded": ["/v1/retrieve", "/v1/retrieve-csv", "/v1/retrieve-json"]
                 }
             ]
         },
@@ -102,11 +95,7 @@
             "tags": [
                 {
                     "name": "data-topcitation",
-                    "excluded": [
-                        "/v1/retrieve",
-                        "/v1/retrieve-csv",
-                        "/v1/retrieve-json"
-                    ]
+                    "excluded": ["/v1/retrieve", "/v1/retrieve-csv", "/v1/retrieve-json"]
                 }
             ]
         },
@@ -119,10 +108,7 @@
             "tags": [
                 {
                     "name": "sudoc",
-                    "excluded": [
-                        "/v1/retrieve",
-                        "/v1/retrieve-tests"
-                    ]
+                    "excluded": ["/v1/retrieve", "/v1/retrieve-tests"]
                 }
             ]
         },
@@ -135,11 +121,7 @@
             "tags": [
                 {
                     "name": "data-rapido",
-                    "excluded": [
-                        "/v1/retrieve",
-                        "/v1/retrieve-csv",
-                        "/v1/retrieve-json"
-                    ]
+                    "excluded": ["/v1/retrieve", "/v1/retrieve-csv", "/v1/retrieve-json"]
                 }
             ]
         },

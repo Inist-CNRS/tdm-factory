@@ -28,13 +28,10 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
         onChange(invalid ? null : email);
     }, [email, onChange]);
 
-    const handleEmailChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-            setEmail(event.target.value);
-            setHasAttemptedInput(true);
-        },
-        [],
-    );
+    const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setEmail(event.target.value);
+        setHasAttemptedInput(true);
+    }, []);
 
     return (
         <div className="processing-form-field-group processing-form-field-with-label">

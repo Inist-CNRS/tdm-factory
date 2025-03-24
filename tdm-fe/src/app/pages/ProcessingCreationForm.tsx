@@ -1,19 +1,16 @@
 import '~/app/pages/scss/ProcessingCreationForm.scss';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
 import ProcessingFormConfirmation from '~/app/components/form/ProcessingFormConfirmation';
-import ProcessingFormEmail, {
-    EMAIL_REGEX,
-} from '~/app/components/form/ProcessingFormEmail';
+import ProcessingFormEmail, { EMAIL_REGEX } from '~/app/components/form/ProcessingFormEmail';
+import ProcessingFormFormat from '~/app/components/form/ProcessingFormFormat';
 import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
 import { fields as fieldsService } from '~/app/services/creation/fields';
-import {
-    wrapper as wrapperService,
-    enrichment as enrichmentService,
-} from '~/app/services/creation/operations';
+import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
@@ -22,21 +19,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ProcessingFormConfigurationValueType } from '~/app/components/form/ProcessingFormConfiguration';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
 
-export const PROCESSING_UPLOAD_STEP = 0;
-export const PROCESSING_UPLOADING_STEP = 1;
-export const PROCESSING_CONFIGURATION_STEP = 2;
-export const PROCESSING_VALIDATION_STEP = 3;
-export const PROCESSING_CONFIRMATION_STEP = 4;
+export const PROCESSING_FORMAT_STEP = 0;
+export const PROCESSING_UPLOAD_STEP = 1;
+export const PROCESSING_UPLOADING_STEP = 2;
+export const PROCESSING_CONFIGURATION_STEP = 3;
+export const PROCESSING_VALIDATION_STEP = 4;
+export const PROCESSING_CONFIRMATION_STEP = 5;
 
 const ProcessingCreationForm = () => {
     /**
      * Form states
      */
-    const [step, setStep] = useState<number>(PROCESSING_UPLOAD_STEP);
+    const [step, setStep] = useState<number>(PROCESSING_FORMAT_STEP);
     const [isPending, setIsPending] = useState<boolean>(false);
     const [isInvalid, setIsInvalid] = useState<boolean>(false);
     const [isOnError, setIsOnError] = useState<boolean>(false);
     const [isWaitingInput, setIsWaitingInput] = useState<boolean>(true);
+    const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
 
     /**
      * Form file and processing id (upload step)
@@ -59,9 +58,7 @@ const ProcessingCreationForm = () => {
     /**
      * Form confirmation step
      */
-    const [startingStatus, setStartingStatus] = useState<
-        202 | 400 | 409 | 428 | 500 | null
-    >(null);
+    const [startingStatus, setStartingStatus] = useState<202 | 400 | 409 | 428 | 500 | null>(null);
 
     /**
      * Get wrapper and enrichment available
@@ -132,15 +129,7 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: [
-            'start',
-            step,
-            processingId,
-            wrapper,
-            enrichment,
-            email,
-            wrapperParam,
-        ],
+        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
@@ -168,11 +157,7 @@ const ProcessingCreationForm = () => {
      */
     const mimes = useMemo<string[]>(() => {
         if (!operations.pending && operations.data.wrapper) {
-            const mimeType = [
-                ...new Set(
-                    operations.data.wrapper.flatMap((entry) => entry.fileType),
-                ),
-            ];
+            const mimeType = [...new Set(operations.data.wrapper.flatMap((entry) => entry.fileType))];
 
             if (mimeType.includes('application/x-gzip')) {
                 mimeType.push('application/gzip');
@@ -195,9 +180,7 @@ const ProcessingCreationForm = () => {
 
         if (file) {
             return list.filter((entry) => {
-                return entry.fileType.includes(
-                    mimeTypes.getType(file.name) ?? '',
-                );
+                return entry.fileType.includes(mimeTypes.getType(file.name) ?? '');
             });
         }
 
@@ -291,27 +274,21 @@ const ProcessingCreationForm = () => {
      * Handle file change
      * @param value newly add file
      */
-    const handleUploadChange = useCallback(
-        (value: File | null, isValid: boolean) => {
-            setFile(value);
-            setIsWaitingInput(!isValid);
-        },
-        [],
-    );
+    const handleUploadChange = useCallback((value: File | null, isValid: boolean) => {
+        setFile(value);
+        setIsWaitingInput(!isValid);
+    }, []);
 
     /**
      * Handle configuration change
      * @param value newly selected wrapper, wrapperParam and enrichment
      */
-    const handleConfigurationChange = useCallback(
-        (value: ProcessingFormConfigurationValueType) => {
-            setWrapper(value.wrapper);
-            setWrapperParam(value.wrapperParam);
-            setEnrichment(value.enrichment);
-            setIsWaitingInput(false);
-        },
-        [],
-    );
+    const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
+        setWrapper(value.wrapper);
+        setWrapperParam(value.wrapperParam);
+        setEnrichment(value.enrichment);
+        setIsWaitingInput(false);
+    }, []);
 
     /**
      * Handle email change
@@ -323,73 +300,127 @@ const ProcessingCreationForm = () => {
         setIsInvalid(!value || !EMAIL_REGEX.test(value));
     }, []);
 
+    const handleBack = useCallback(() => {
+        let previousStep = step - 1;
+
+        // Gérer le retour spécial depuis l'étape de configuration
+        if (step === PROCESSING_CONFIGURATION_STEP) {
+            previousStep = PROCESSING_UPLOAD_STEP;
+        }
+
+        // Gérer l'état du bouton "Suivant" en fonction de l'étape précédente
+        if (previousStep === PROCESSING_FORMAT_STEP) {
+            if (selectedFormat) {
+                setIsWaitingInput(false);
+            } else {
+                setIsWaitingInput(true);
+            }
+        } else if (previousStep === PROCESSING_UPLOAD_STEP) {
+            setIsWaitingInput(!file);
+        } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
+            setIsWaitingInput(!(wrapper && enrichment));
+        } else if (previousStep === PROCESSING_VALIDATION_STEP) {
+            setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
+        }
+
+        setStep(previousStep);
+    }, [step, selectedFormat, file, wrapper, enrichment, email]);
+
+    const handleFormatChange = useCallback((format: string) => {
+        setSelectedFormat(format);
+        // Forcer la mise à jour de isWaitingInput à false quand un format est sélectionné
+        setIsWaitingInput(false);
+    }, []);
+
     return (
         <div id="processing-form">
-            {/* Visual stepper use to indicate the current step of the form */}
-            <ProcessingFormStepper step={step} />
+            <h1>Traiter un corpus</h1>
+            <h2>Traitement</h2>
 
-            {/* Content of the form */}
-            <div id="processing-form-content">
-                {/* Upload step */}
-                {step === PROCESSING_UPLOAD_STEP ||
-                step === PROCESSING_UPLOADING_STEP ? (
-                    <ProcessingFormUpload
-                        mimes={mimes}
-                        value={file}
-                        onChange={handleUploadChange}
-                        isOnError={isOnError}
-                        isPending={isPending}
-                    />
-                ) : null}
+            <div className="processing-form-layout">
+                {/* Visual stepper use to indicate the current step of the form */}
+                <div className="stepper-container">
+                    <ProcessingFormStepper step={step} />
+                </div>
 
-                {/* Configuration step */}
-                {step === PROCESSING_CONFIGURATION_STEP ? (
-                    <ProcessingFormConfiguration
-                        wrapperList={wrapperList}
-                        enrichmentList={enrichmentList}
-                        fields={fields}
-                        value={{
-                            wrapper,
-                            wrapperParam,
-                            enrichment,
-                        }}
-                        onChange={handleConfigurationChange}
-                        isPending={isPending}
-                    />
-                ) : null}
+                {/* Content of the form */}
+                <div id="processing-form-content">
+                    <div className="form-content">
+                        {/* Back button */}
+                        {step > PROCESSING_FORMAT_STEP && step !== PROCESSING_CONFIRMATION_STEP ? (
+                            <Button
+                                startIcon={<ArrowBackIcon />}
+                                onClick={handleBack}
+                                sx={{ alignSelf: 'flex-start', marginBottom: 2 }}
+                            >
+                                Retour
+                            </Button>
+                        ) : null}
 
-                {/* Validation step */}
-                {step === PROCESSING_VALIDATION_STEP ? (
-                    <ProcessingFormEmail
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                ) : null}
+                        {/* Format step */}
+                        {step === PROCESSING_FORMAT_STEP ? (
+                            <ProcessingFormFormat
+                                onChange={handleFormatChange}
+                                value={selectedFormat} // Ajoutons une prop value pour gérer l'état
+                            />
+                        ) : null}
 
-                {/* Confirmation step */}
-                {step === PROCESSING_CONFIRMATION_STEP ? (
-                    <ProcessingFormConfirmation
-                        processingId={processingId}
-                        status={startingStatus}
-                        isPending={isPending}
-                    />
-                ) : null}
+                        {/* Upload step */}
+                        {step === PROCESSING_UPLOAD_STEP ? (
+                            <ProcessingFormUpload
+                                mimes={mimes}
+                                value={file}
+                                onChange={handleUploadChange}
+                                isOnError={isOnError}
+                                isPending={isPending}
+                            />
+                        ) : null}
 
-                {/* Navigation button */}
-                {!isPending ? (
-                    <div id="processing-form-navigation">
-                        <Button
-                            onClick={handleNext}
-                            variant="outlined"
-                            size="large"
-                            disabled={isInvalid || isWaitingInput}
-                        >
-                            {step === PROCESSING_CONFIRMATION_STEP
-                                ? 'Nouveau traitement'
-                                : 'Suivant'}
-                        </Button>
+                        {/* Configuration step */}
+                        {step === PROCESSING_CONFIGURATION_STEP ? (
+                            <ProcessingFormConfiguration
+                                wrapperList={wrapperList}
+                                enrichmentList={enrichmentList}
+                                fields={fields}
+                                value={{
+                                    wrapper,
+                                    wrapperParam,
+                                    enrichment,
+                                }}
+                                onChange={handleConfigurationChange}
+                                isPending={isPending}
+                            />
+                        ) : null}
+
+                        {/* Validation step */}
+                        {step === PROCESSING_VALIDATION_STEP ? (
+                            <ProcessingFormEmail value={email} onChange={handleEmailChange} />
+                        ) : null}
+
+                        {/* Confirmation step */}
+                        {step === PROCESSING_CONFIRMATION_STEP ? (
+                            <ProcessingFormConfirmation
+                                processingId={processingId}
+                                status={startingStatus}
+                                isPending={isPending}
+                            />
+                        ) : null}
                     </div>
-                ) : null}
+
+                    {/* Navigation button */}
+                    {!isPending ? (
+                        <div id="processing-form-navigation">
+                            <Button
+                                onClick={handleNext}
+                                variant="outlined"
+                                size="large"
+                                disabled={isInvalid || isWaitingInput}
+                            >
+                                {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
+                            </Button>
+                        </div>
+                    ) : null}
+                </div>
             </div>
         </div>
     );

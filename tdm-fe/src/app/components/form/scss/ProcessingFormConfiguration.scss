@@ -1,10 +1,20 @@
 @import "../../../scss/colors";
 
 .processing-form-field-group {
-  margin-bottom: 16px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 8px;
+  margin-bottom: 24px;
   border: 2px dashed transparent;
   border-radius: 4px;
   transition: all .3s ease;
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .MuiFormLabel-root {
+    padding-top: 2px;
+    line-height: 1.2;
+  }
 
   &.dragging {
     background-color: rgba($blue, .05);
@@ -27,26 +37,35 @@
   }
 }
 
-#processing-form-wrapper-param,
-#processing-form-wrapper-label {
+.processing-form-field-with-label {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  #processing-form-wrapper-param-style,
+#processing-form-wrapper-label {
+  position: relative;
+  padding-left: 16px;
+
   #processing-form-wrapper-label-style {
-    width: 24px;
-    margin-left: 12px;
-    user-select: none;
-    border-left: solid #bdbdbd 1px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    margin-left: 16px;
+    background-color: #e0e0e0;
   }
 }
 
 #processing-form-wrapper-param {
+  padding-left: 16px;
   margin-top: 8px;
   margin-bottom: 8px;
 
   #processing-form-wrapper-param-style {
-    height: 36px; // Base 28 px
+    display: none;
+    height: 36px;
     margin-top: -8px;
     margin-left: 12px;
     border-bottom: solid #bdbdbd 1px;
@@ -54,3 +73,6 @@
   }
 }
 
+.processing-form-field-label {
+  color: rgba(0, 0, 0, .6);
+}

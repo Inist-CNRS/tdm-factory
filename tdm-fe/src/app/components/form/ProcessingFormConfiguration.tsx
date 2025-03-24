@@ -5,14 +5,11 @@ import Markdown from '~/app/components/text/Markdown';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { SyntheticEvent, FocusEvent } from 'react';
-import type {
-    Enrichment,
-    ProcessingFields,
-    Wrapper,
-} from '~/app/shared/data.types';
+import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
@@ -38,12 +35,8 @@ const ProcessingFormConfiguration = ({
     onChange,
 }: ProcessingFormConfigurationProps) => {
     const [wrapper, setWrapper] = useState<Wrapper | null>(value.wrapper);
-    const [wrapperParam, setWrapperParam] = useState<string>(
-        value.wrapperParam ?? '',
-    );
-    const [enrichment, setEnrichment] = useState<Enrichment | null>(
-        value.enrichment,
-    );
+    const [wrapperParam, setWrapperParam] = useState<string>(value.wrapperParam ?? '');
+    const [enrichment, setEnrichment] = useState<Enrichment | null>(value.enrichment);
 
     const cleanFields = useMemo(() => {
         if (fields && fields.fields) {
@@ -56,10 +49,7 @@ const ProcessingFormConfiguration = ({
         let invalid = false;
 
         // Check wrapper
-        if (
-            wrapperList &&
-            !wrapperList.find((entry) => entry.url === wrapper?.url)
-        ) {
+        if (wrapperList && !wrapperList.find((entry) => entry.url === wrapper?.url)) {
             invalid = true;
         }
 
@@ -69,10 +59,7 @@ const ProcessingFormConfiguration = ({
         }
 
         // Check enrichment
-        if (
-            enrichmentList &&
-            !enrichmentList.find((entry) => entry.url === enrichment?.url)
-        ) {
+        if (enrichmentList && !enrichmentList.find((entry) => entry.url === enrichment?.url)) {
             invalid = true;
         }
 
@@ -83,28 +70,15 @@ const ProcessingFormConfiguration = ({
                 enrichment,
             });
         }
-    }, [
-        enrichment,
-        enrichmentList,
-        onChange,
-        wrapper,
-        wrapperList,
-        wrapperParam,
-    ]);
+    }, [enrichment, enrichmentList, onChange, wrapper, wrapperList, wrapperParam]);
 
-    const handleWrapperChange = useCallback(
-        (_: SyntheticEvent, newWrapper: Wrapper | null) => {
-            setWrapper(newWrapper);
-        },
-        [],
-    );
+    const handleWrapperChange = useCallback((_: SyntheticEvent, newWrapper: Wrapper | null) => {
+        setWrapper(newWrapper);
+    }, []);
 
-    const handleWrapperParamChange = useCallback(
-        (_: SyntheticEvent, newWrapperParam: string | null) => {
-            setWrapperParam(newWrapperParam ?? '');
-        },
-        [],
-    );
+    const handleWrapperParamChange = useCallback((_: SyntheticEvent, newWrapperParam: string | null) => {
+        setWrapperParam(newWrapperParam ?? '');
+    }, []);
 
     const handleWrapperParamBlur = useCallback((event: FocusEvent) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -112,12 +86,9 @@ const ProcessingFormConfiguration = ({
         setWrapperParam(event.target.value ?? '');
     }, []);
 
-    const handleEnrichmentChange = useCallback(
-        (_: SyntheticEvent, newEnrichment: Enrichment | null) => {
-            setEnrichment(newEnrichment);
-        },
-        [],
-    );
+    const handleEnrichmentChange = useCallback((_: SyntheticEvent, newEnrichment: Enrichment | null) => {
+        setEnrichment(newEnrichment);
+    }, []);
 
     /**
      * Show a loading box will wait for the operations to be fetched
@@ -128,6 +99,9 @@ const ProcessingFormConfiguration = ({
 
     return (
         <>
+            <Typography variant="h3" gutterBottom>
+                Choisir un type de service
+            </Typography>
             {/* Wrapper input */}
             <div className="processing-form-field-group">
                 {/* Wrapper selection */}
@@ -137,18 +111,13 @@ const ProcessingFormConfiguration = ({
                         value={wrapper}
                         onChange={handleWrapperChange}
                         options={wrapperList}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Convertisseur" />
-                        )}
+                        renderInput={(params) => <TextField {...params} label="Convertisseur" />}
                         fullWidth
                     />
                     {wrapper ? (
                         <div id="processing-form-wrapper-label">
                             <div id="processing-form-wrapper-label-style"></div>
-                            <Markdown
-                                className="text processing-form-field-label"
-                                text={wrapper.description}
-                            />
+                            <Markdown className="text processing-form-field-label" text={wrapper.description} />
                         </div>
                     ) : null}
                 </div>
@@ -162,12 +131,7 @@ const ProcessingFormConfiguration = ({
                             onChange={handleWrapperParamChange}
                             onBlur={handleWrapperParamBlur}
                             options={cleanFields}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Nom du champ à exploiter"
-                                />
-                            )}
+                            renderInput={(params) => <TextField {...params} label="Nom du champ à exploiter" />}
                             fullWidth
                             freeSolo
                             disableClearable
@@ -182,16 +146,11 @@ const ProcessingFormConfiguration = ({
                     value={enrichment}
                     onChange={handleEnrichmentChange}
                     options={enrichmentList}
-                    renderInput={(params) => (
-                        <TextField {...params} label="Traitement" />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="Traitement" />}
                     fullWidth
                 />
                 {enrichment ? (
-                    <Markdown
-                        className="text processing-form-field-label"
-                        text={enrichment.description}
-                    />
+                    <Markdown className="text processing-form-field-label" text={enrichment.description} />
                 ) : null}
             </div>
         </>

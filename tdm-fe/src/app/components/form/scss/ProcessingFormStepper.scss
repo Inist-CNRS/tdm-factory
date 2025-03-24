@@ -6,12 +6,62 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  margin-left: 8px;
   border: solid $grey 2px;
-  border-radius: 32px;
+  border-radius: 50%;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: $grey;
+  }
 
   &.processing-form-stepper-icon-active {
     color: $white;
     background-color: $blue;
     border-color: $blue;
+
+    p {
+      color: $white;
+    }
   }
 }
+
+/* stylelint-disable selector-class-pattern */
+.MuiStepper-vertical {
+  padding: 24px 0 !important;
+}
+
+.MuiStep-root {
+  margin-bottom: 0 !important;
+}
+
+.MuiStepLabel-root {
+  padding: 0 !important;
+}
+
+.MuiStepConnector-root {
+  margin-left: 24px;
+
+  .MuiStepConnector-line {
+    border-color: $grey;
+  }
+
+  &.Mui-active,
+  &.Mui-completed {
+    .MuiStepConnector-line {
+      border-color: $blue;
+    }
+  }
+}
+
+.MuiStepConnector-vertical {
+  margin-left: 24px !important;
+}
+
+.MuiStepConnector-lineVertical {
+  min-height: 20px !important;
+  border-left-width: 2px !important;
+}
+/* stylelint-enable selector-class-pattern */

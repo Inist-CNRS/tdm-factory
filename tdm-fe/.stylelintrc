@@ -15,5 +15,6 @@
         "selector-max-type": null,
         "selector-no-qualifying-type": null,
         "selector-max-id": 3
-    }
+    },
+    "quietDeprecationWarnings": true
 }
