@@ -9,6 +9,9 @@ export const environment = {
             status: '/api/traitment/status',
             fields: '/api/traitment/fields',
         },
+        config: {
+            static: '/config/static'
+        }
     },
     post: {
         processing: {

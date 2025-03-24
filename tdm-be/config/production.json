@@ -98,6 +98,121 @@
             "summary": "**Teeft** - Extrait 5 termes de textes en français",
             "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-computer.services.istex.fr/v1/lda",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**LDA** - Extrait des thématique d'un corpus",
+            "description": "Extrait des thématiques d’un corpus : une thématique (ou topic) est caractérisée par dix mots. Une fois les thématiques extraites, chaque document se voit attribuer une ou plusieurs thématique(s).",
+            "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "tei",
+            "wrapper": "/v1/no-convert",
+            "enricher": "https://data-rapido.services.istex.fr/v1/rapido-algorithme",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**Rapido phase 1** - Recherche d'entités et d'alignement avec idRef, projet Rapido",
+            "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "tei",
+            "wrapper": "/v1/no-convert",
+            "enricher": "https://data-rapido.services.istex.fr/v1/rapido-apprentissage",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**Rapido phase 2** - Détecte des entités puis aligne avec idRef, projet Rapido",
+            "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite EN** - Extraction terminologique en anglais",
+            "description": "Extraction de termes à partir d'un corpus ISTEX (en anglais).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite FR** - Extraction terminologique en français",
+            "description": "Extraction de termes à partir d'un corpus ISTEX (en français).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "txt",
+            "wrapper": "/v1/tar-txt2json",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite EN** - Extraction terminologique en anglais",
+            "description": "Extraction de termes à partir d'un ensemble de fichiers texte (en anglais).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "txt",
+            "wrapper": "/v1/tar-txt2json",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite FR** - Extraction terminologique en français",
+            "description": "Extraction de termes à partir d'un ensemble de fichiers texte (en français).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-thesesul.services.istex.fr/v1/sudoc",
+            "retrieve": "/v1/retrieve",
+            "retrieveExtension": "tar.gz",
+            "summary": "**ThesesUL** - Récupère les métadonnées du Sudoc et les PDF",
+            "description": "Récupère les métadonnées du Sudoc à partir d'une liste d'identifiants et les xml-ise au format Hal-TEI. Récupère les PDFs associés."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TopCitation** - Extraction des références phares",
+            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Clustering** - Classification de textes",
+            "description": "Crée plusieurs groupes afin d'y classifier les différents textes en fonction de leur similarité."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://text-clustering.services.istex.fr/v1/noise",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**Noise Detection** - Détection du bruit",
+            "description": "Utilise l'algorithme de *clustering* et retourne uniquement la liste des identifiants considérés comme du bruit par [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html)."
         }
     ]
 }
