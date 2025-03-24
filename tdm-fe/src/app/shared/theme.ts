@@ -19,7 +19,7 @@ export const colors = {
     lightBlack: '#4a4a4a',
     veryLightBlack: '#4a4a4a33',
     red: '#d34315',
-    white: '#f0f0f0',
+    white: '#fefefe',
 } as const;
 
 /* eslint-disable @typescript-eslint/consistent-type-definitions */

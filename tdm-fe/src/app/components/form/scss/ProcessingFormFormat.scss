@@ -1,0 +1,33 @@
+/* stylelint-disable selector-class-pattern */
+.form-content .MuiTypography-h3 {
+  font-size: 1em;
+}
+
+.processing-form-format {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  background-color: var(--white);
+  border-radius: 8px;
+
+  .mui-form-control-root {
+    width: 100%;
+  }
+
+  .mui-form-control-label-root {
+    margin: 12px 0;
+
+    .mui-radio-root {
+      color: var(--grey);
+
+      &.mui-checked {
+        color: var(--blue);
+      }
+    }
+
+    .mui-typography-root {
+      font-size: 1.1em;
+    }
+  }
+}

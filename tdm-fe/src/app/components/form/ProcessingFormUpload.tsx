@@ -1,13 +1,24 @@
+import './scss/ProcessingFormUpload.scss';
 import FileUpload from '~/app/components/progress/FileUpload';
-import { colors } from '~/app/shared/theme';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DescriptionIcon from '@mui/icons-material/Description';
 import CloseIcon from '@mui/icons-material/Close';
+import { Button } from '@mui/material';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import type React from 'react';
+
+const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) {
+        return '0 B';
+    }
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+};
 
 type ProcessingFormUploadProps = {
     mimes: string[];
@@ -17,13 +28,7 @@ type ProcessingFormUploadProps = {
     onChange: (value: File | null, isValid: boolean) => void;
 };
 
-const ProcessingFormUpload = ({
-    mimes,
-    value,
-    isOnError,
-    isPending,
-    onChange,
-}: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -33,9 +38,6 @@ const ProcessingFormUpload = ({
         return mimes.join(', ');
     }, [mimes]);
 
-    /**
-     * Check file validity and update parent component
-     */
     useEffect(() => {
         let invalid = false;
 
@@ -86,40 +88,68 @@ const ProcessingFormUpload = ({
     }
 
     return (
-        <div
-            className={`processing-form-field-group processing-form-field-with-label ${isDragging ? 'dragging' : ''}`}
-            onDragEnter={handleDragEnter}
-            onDragOver={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-        >
-            <MuiFileInput
-                className="processing-form-field"
-                placeholder="Déposer un fichier ou glisser-déposer ici"
-                value={file}
-                onChange={handleFileChange}
-                error={isInvalid ? hasAttemptedUpload : false}
-                fullWidth
-                clearIconButtonProps={{
-                    children: <CloseIcon fontSize="small" />,
-                }}
-                inputProps={{
-                    accept: stringifiesMineTypes,
-                }}
-                InputProps={{
-                    startAdornment: <AttachFileIcon />,
-                }}
-                sx={{
-                    '& .MuiFileInput-placeholder': {
-                        color: `${colors.lightBlack} !important`,
-                    },
-                }}
-            />
-            {isInvalid && hasAttemptedUpload ? (
-                <div className="text processing-form-field-label error">
-                    Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMineTypes}.
+        <div className="processing-form-upload">
+            <div className="upload-container">
+                <h3>Téléverser votre fichier</h3>
+                <div
+                    className={`upload-zone ${isDragging ? 'dragging' : ''} ${file ? 'has-file' : ''}`}
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragEnter}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                >
+                    {!file ? (
+                        <>
+                            <DescriptionIcon className="file-icon" />
+                            <p>Faites glisser votre fichier ou</p>
+                            <MuiFileInput
+                                className="file-input"
+                                value={file}
+                                onChange={handleFileChange}
+                                error={isInvalid ? hasAttemptedUpload : false}
+                                hideSizeText
+                                inputProps={{
+                                    accept: stringifiesMineTypes,
+                                }}
+                                InputProps={{
+                                    sx: { display: 'none' },
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                component="label"
+                                onClick={() => {
+                                    (document.querySelector('.file-input input') as HTMLInputElement)?.click();
+                                }}
+                            >
+                                Parcourir vos fichiers
+                            </Button>
+                        </>
+                    ) : (
+                        <div className="file-info">
+                            <div className="file-details">
+                                <span className="file-name">{file.name}</span>
+                                <span className="file-size">{formatFileSize(file.size)}</span>
+                            </div>
+                            <Button
+                                className="remove-file"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleFileChange(null);
+                                }}
+                            >
+                                <CloseIcon />
+                            </Button>
+                        </div>
+                    )}
                 </div>
-            ) : null}
+                {isInvalid && hasAttemptedUpload ? (
+                    <div className="error-message">
+                        Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
+                        {stringifiesMineTypes}.
+                    </div>
+                ) : null}
+            </div>
         </div>
     );
 };
