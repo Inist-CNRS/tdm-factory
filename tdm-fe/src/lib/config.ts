@@ -1,4 +1,4 @@
-export type Config = {
+export type StaticConfig = {
     flows: Array<{
         input: string;
         inputFormat: string;
