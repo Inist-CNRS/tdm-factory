@@ -92,3 +92,12 @@ When you start the dev mode, you will be able to access those links:
 - `http://localhost:5173` - Frontend part
 - `http://localhost:5174` - Backoffice part
 - `http://localhost:1080` - Mail service (use to test the mail sending functionality)
+
+### Results downloading
+
+When you start the dev mode, you will be able to access the results of the services
+at `http://localhost:3000/downloads/{treatmentId}.{extension}`.
+
+> [!CAUTION]  
+> You have to change the frontend port (5173) to the backend port (3000) to get
+> the results.
