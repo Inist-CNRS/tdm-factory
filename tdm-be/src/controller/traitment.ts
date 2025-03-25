@@ -80,7 +80,7 @@ const router = express.Router();
 //Route to start traitment wrapping and then enrichment
 router.post(
     '/start',
-    (req: Request<unknown, unknown, Traitment>, res) => {
+    async (req: Request<unknown, unknown, Traitment>, res) => {
         const traitement: Traitment = req.body;
 
         // --- Find the processing associated with the uploaded file
@@ -168,12 +168,8 @@ router.post(
         const statusPanelUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
         }://${environment.hosts.external.host}/status/${updatedProcessing.id}`;
-
-        // Start the processing by starting the wrapper
-        wrapper(updatedProcessing.id);
-
-        // Send a mail with the processing information
-        sendStartedMail({
+        // Wait for the notification email to be sent before starting the processing
+        await sendStartedMail({
             email: req.body.mail,
             data: {
                 processingId: updatedProcessing.id,
@@ -183,7 +179,10 @@ router.post(
                 enrichment: updatedProcessing.enrichment as string,
                 statusPage: statusPanelUrl,
             },
-        }).then(undefined);
+        });
+
+        // Start the processing only after sending the email
+        wrapper(updatedProcessing.id);
 
         // Send an http response with code 202
         res.status(HTTP_ACCEPTED).send({
