@@ -24,6 +24,24 @@
         "schedule": "0 0 * * *",
         "deleteFileOlderThan": 7
     },
+    "inputFormat2labels": {
+        "pdf": {
+            "summary": "PDF",
+            "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image."
+        },
+        "istex.tar.gz": {
+            "summary": "Corpus Istex `.tar.gz`",
+            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON.\n\nIl est préférable qu'il contienne les `abstract`s."
+        },
+        "csv": {
+            "summary": "Tableur `.csv`",
+            "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8."
+        },
+        "tei": {
+            "summary": "Corpus TEI `.tar.gz`",
+            "description": "Un corpus TEI au format `.tar.gz`."
+        }
+    },
     "flows": [
         {
             "input": "article",
@@ -49,7 +67,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "value",
             "wrapperParameterDefault": "abstract",
@@ -75,7 +93,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "value",
             "wrapperParameterDefault": "abstract",
@@ -101,8 +119,10 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -132,8 +152,10 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
             "enricher": "https://data-termsuite.services.istex.fr/v1/en",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -143,8 +165,10 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
             "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -178,6 +202,8 @@
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-thesesul.services.istex.fr/v1/sudoc",
             "retrieve": "/v1/retrieve",
             "retrieveExtension": "tar.gz",
@@ -186,7 +212,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
@@ -196,7 +222,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
@@ -206,7 +232,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-json",

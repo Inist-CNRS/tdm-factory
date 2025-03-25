@@ -22,10 +22,32 @@
         }
     },
     "verbose": "debug",
+    "inputFormat2labels": {
+        "pdf": {
+            "summary": "PDF",
+            "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image."
+        },
+        "istex.tar.gz": {
+            "summary": "Corpus Istex `.tar.gz`",
+            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON.\n\nIl est préférable qu'il contienne les `abstract`s."
+        },
+        "csv": {
+            "summary": "Tableur `.csv`",
+            "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8."
+        },
+        "tei": {
+            "summary": "Corpus TEI `.tar.gz`",
+            "description": "Un corpus TEI au format `.tar.gz`."
+        },
+        "*": {
+            "summary": "Peu importe",
+            "description": "N'importe quel format."
+        }
+    },
     "flows": [
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "*",
             "wrapper": "/v1/no-convert",
             "enricher": "https://data-workflow.services.istex.fr/v1/base-line",
             "retrieve": "/v1/retrieve-csv",
@@ -46,7 +68,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "json",
+            "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "value",
             "wrapperParameterDefault": "abstract",
