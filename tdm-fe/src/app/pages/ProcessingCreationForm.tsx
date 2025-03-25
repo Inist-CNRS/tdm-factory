@@ -262,7 +262,9 @@ const ProcessingCreationForm = () => {
             setWrapper(null);
             setWrapperParam(null);
             setEnrichment(null);
-            nextStep = PROCESSING_UPLOAD_STEP;
+            setSelectedFormat(null);
+            setIsWaitingInput(true);
+            nextStep = PROCESSING_FORMAT_STEP;
         }
 
         setIsInvalid(invalid);
@@ -303,18 +305,15 @@ const ProcessingCreationForm = () => {
     const handleBack = useCallback(() => {
         let previousStep = step - 1;
 
-        // Gérer le retour spécial depuis l'étape de configuration
+        // Handle return from config step
         if (step === PROCESSING_CONFIGURATION_STEP) {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
-        // Gérer l'état du bouton "Suivant" en fonction de l'étape précédente
+        // If we go to format step, reset selected format
         if (previousStep === PROCESSING_FORMAT_STEP) {
-            if (selectedFormat) {
-                setIsWaitingInput(false);
-            } else {
-                setIsWaitingInput(true);
-            }
+            setSelectedFormat(null);
+            setIsWaitingInput(true);
         } else if (previousStep === PROCESSING_UPLOAD_STEP) {
             setIsWaitingInput(!file);
         } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
@@ -324,11 +323,10 @@ const ProcessingCreationForm = () => {
         }
 
         setStep(previousStep);
-    }, [step, selectedFormat, file, wrapper, enrichment, email]);
+    }, [step, file, wrapper, enrichment, email]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
-        // Forcer la mise à jour de isWaitingInput à false quand un format est sélectionné
         setIsWaitingInput(false);
     }, []);
 

@@ -3,6 +3,8 @@ import { defaultNull } from '~/lib/utils';
 import Status from '~/model/Status';
 
 export type Processing = {
+    createdAt: any;
+    updatedAt: any;
     id: string;
     status: Status;
     email: string | null;
@@ -43,6 +45,8 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
             wrapperParam: null,
             enrichment: null,
             enrichmentHook: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         } satisfies Processing;
     }
 

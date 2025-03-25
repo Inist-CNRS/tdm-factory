@@ -76,11 +76,12 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
             e.preventDefault();
             e.stopPropagation();
             setIsDragging(false);
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                handleFileChange(e.dataTransfer.files[0]);
+            const droppedFile = e.dataTransfer.files[0];
+            if (droppedFile && mimes.includes(mimeTypes.getType(droppedFile.name) ?? '')) {
+                handleFileChange(droppedFile);
             }
         },
-        [handleFileChange],
+        [handleFileChange, mimes],
     );
 
     if (isPending || isOnError) {
