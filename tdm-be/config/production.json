@@ -241,6 +241,18 @@
             "retrieveExtension": "json",
             "summary": "**Noise Detection** - Détection du bruit",
             "description": "Utilise l'algorithme de *clustering* et retourne uniquement la liste des identifiants considérés comme du bruit par [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html)."
+        },
+        {
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
+            "enricher": "https://data-computer.services.istex.fr/v1/corpus-similarity",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**Corpus Similarity** - Similarité entre documents",
+            "description": "Calcule la similarité entre documents à partir des abstracts d'un corpus ISTEX."
         }
     ]
 }
