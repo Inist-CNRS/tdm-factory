@@ -7,15 +7,11 @@ import {
     PROCESSING_UPLOADING_STEP,
     PROCESSING_VALIDATION_STEP,
 } from '~/app/pages/ProcessingCreationForm';
-import { colors } from '~/app/shared/theme';
-
 import CheckIcon from '@mui/icons-material/Check';
 import Step from '@mui/material/Step';
-import StepConnector from '@mui/material/StepConnector';
-import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
+import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import { styled } from '@mui/material/styles';
-import clsx from 'clsx';
 import { memo, useMemo } from 'react';
 
 import type { StepIconProps } from '@mui/material/StepIcon';
@@ -54,14 +50,7 @@ const steps = [
  * Istex themed step label
  */
 const IstexStepLabel = styled(StepLabel)(() => ({
-    [`& .${stepLabelClasses.label}`]: {
-        [`&.${stepLabelClasses.completed}`]: {
-            color: colors.blue,
-        },
-        [`&.${stepLabelClasses.active}`]: {
-            color: colors.blue,
-        },
-    },
+    // Styles are now managed in the CSS file
 }));
 
 /**
