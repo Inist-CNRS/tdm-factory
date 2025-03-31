@@ -37,9 +37,9 @@
             "summary": "Tableur `.csv`",
             "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8."
         },
-        "tei": {
+        "tei.tar.gz": {
             "summary": "Corpus TEI `.tar.gz`",
-            "description": "Un corpus TEI au format `.tar.gz`."
+            "description": "Un corpus contenant des fichiers XML-TEI dans un répertoire `data`, au format `.tar.gz`."
         }
     },
     "flows": [
@@ -132,7 +132,7 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "tei",
+            "inputFormat": "tei.tar.gz",
             "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-algorithme",
             "retrieve": "/v1/retrieve-json",
@@ -142,12 +142,12 @@
         },
         {
             "input": "corpus",
-            "inputFormat": "tei",
+            "inputFormat": "tei.tar.gz",
             "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-apprentissage",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
-            "summary": "**Rapido phase 2** - Détecte des entités puis aligne avec idRef, projet Rapido",
+            "summary": "**Rapido phase 2** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
@@ -214,10 +214,12 @@
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "doi.0",
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**TopCitation** - Extraction des références phares",
+            "summary": "**TopRefExtract** - Extraction des références phares",
             "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus."
         },
         {
