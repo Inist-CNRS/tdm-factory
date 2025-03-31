@@ -3,8 +3,8 @@ import { defaultNull } from '~/lib/utils';
 import Status from '~/model/Status';
 
 export type Processing = {
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     id: string;
     status: Status;
     email: string | null;
