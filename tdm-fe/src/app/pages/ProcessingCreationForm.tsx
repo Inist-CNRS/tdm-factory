@@ -229,6 +229,21 @@ const ProcessingCreationForm = () => {
     }, [uploadFailed]);
 
     /**
+     * Update button state when step changes
+     */
+    useEffect(() => {
+        if (step === PROCESSING_FORMAT_STEP) {
+            setIsWaitingInput(!selectedFormat);
+        } else if (step === PROCESSING_UPLOAD_STEP) {
+            setIsWaitingInput(!file);
+        } else if (step === PROCESSING_CONFIGURATION_STEP) {
+            setIsWaitingInput(!(wrapper && enrichment));
+        } else if (step === PROCESSING_VALIDATION_STEP) {
+            setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
+        }
+    }, [step, selectedFormat, file, wrapper, enrichment, email]);
+
+    /**
      * Listen for start response
      */
     useEffect(() => {
@@ -310,20 +325,8 @@ const ProcessingCreationForm = () => {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
-        // If we go to format step, reset selected format
-        if (previousStep === PROCESSING_FORMAT_STEP) {
-            setSelectedFormat(null);
-            setIsWaitingInput(true);
-        } else if (previousStep === PROCESSING_UPLOAD_STEP) {
-            setIsWaitingInput(!file);
-        } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!(wrapper && enrichment));
-        } else if (previousStep === PROCESSING_VALIDATION_STEP) {
-            setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
-        }
-
         setStep(previousStep);
-    }, [step, file, wrapper, enrichment, email]);
+    }, [step]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
@@ -359,7 +362,7 @@ const ProcessingCreationForm = () => {
                         {step === PROCESSING_FORMAT_STEP ? (
                             <ProcessingFormFormat
                                 onChange={handleFormatChange}
-                                value={selectedFormat} // Ajoutons une prop value pour gérer l'état
+                                value={selectedFormat}
                             />
                         ) : null}
 

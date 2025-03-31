@@ -122,25 +122,28 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
                                 onClick={() => {
                                     (document.querySelector('.file-input input') as HTMLInputElement)?.click();
                                 }}
+                                sx={{
+                                    textTransform: 'none'
+                                }}
                             >
                                 Parcourir vos fichiers
                             </Button>
                         </>
                     ) : (
                         <div className="file-info">
-                            <div className="file-details">
-                                <span className="file-name">{file.name}</span>
+                            <span className="file-name">{file.name}</span>
+                            <div className="file-actions">
                                 <span className="file-size">{formatFileSize(file.size)}</span>
+                                <Button
+                                    className="remove-file"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFileChange(null);
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </Button>
                             </div>
-                            <Button
-                                className="remove-file"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleFileChange(null);
-                                }}
-                            >
-                                <CloseIcon />
-                            </Button>
                         </div>
                     )}
                 </div>

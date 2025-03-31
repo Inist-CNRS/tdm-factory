@@ -41,6 +41,23 @@
   padding: 0 !important;
 }
 
+.MuiStepLabel-label {
+  font-family: Montserrat, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #8f8f8f !important;
+
+  &.Mui-completed {
+    font-weight: 500 !important;
+    color: #4a4a4a !important;
+  }
+
+  &.Mui-active {
+    font-weight: 700 !important;
+    color: #4a4a4a !important;
+  }
+}
+
 .MuiStepConnector-root {
   margin-left: 24px;
 
