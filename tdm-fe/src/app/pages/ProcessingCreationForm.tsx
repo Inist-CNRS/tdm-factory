@@ -325,8 +325,24 @@ const ProcessingCreationForm = () => {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
+        // Mettre à jour isWaitingInput et isInvalid en fonction de l'étape précédente
+        if (previousStep === PROCESSING_FORMAT_STEP) {
+            setIsWaitingInput(!selectedFormat);
+            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+        } else if (previousStep === PROCESSING_UPLOAD_STEP) {
+            setIsWaitingInput(!file);
+            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+        } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
+            setIsWaitingInput(!(wrapper && enrichment));
+            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+        } else if (previousStep === PROCESSING_VALIDATION_STEP) {
+            const isEmailValid = email && EMAIL_REGEX.test(email || '');
+            setIsWaitingInput(!isEmailValid);
+            setIsInvalid(!isEmailValid); // Mettre à jour l'état d'invalidité pour l'email
+        }
+
         setStep(previousStep);
-    }, [step]);
+    }, [step, selectedFormat, file, wrapper, enrichment, email]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
@@ -360,10 +376,7 @@ const ProcessingCreationForm = () => {
 
                         {/* Format step */}
                         {step === PROCESSING_FORMAT_STEP ? (
-                            <ProcessingFormFormat
-                                onChange={handleFormatChange}
-                                value={selectedFormat}
-                            />
+                            <ProcessingFormFormat onChange={handleFormatChange} value={selectedFormat} />
                         ) : null}
 
                         {/* Upload step */}

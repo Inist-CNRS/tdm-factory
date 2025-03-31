@@ -1,7 +1,8 @@
-import { Router } from 'express';
 import staticConfig from '~/lib/config';
-import dynamicConfig from '~/model/DynamicConfig';
 import logger from '~/lib/logger';
+import dynamicConfig from '~/model/DynamicConfig';
+
+import { Router } from 'express';
 
 const router = Router();
 
