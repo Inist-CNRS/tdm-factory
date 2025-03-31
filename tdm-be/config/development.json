@@ -46,6 +46,7 @@
     },
     "flows": [
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "*",
             "wrapper": "/v1/no-convert",
@@ -56,6 +57,7 @@
             "description": "Opération blanche pour tester le flux."
         },
         {
+            "featured": true,
             "input": "article",
             "inputFormat": "pdf",
             "wrapper": "/v1/pdf",
@@ -67,6 +69,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-du-texte-epure-de-pdf/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",

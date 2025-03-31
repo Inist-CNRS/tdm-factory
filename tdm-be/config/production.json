@@ -44,6 +44,7 @@
     },
     "flows": [
         {
+            "featured": true,
             "input": "article",
             "inputFormat": "pdf",
             "wrapper": "/v1/pdf",
@@ -55,6 +56,7 @@
             "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
         },
         {
+            "featured": true,
             "input": "article",
             "inputFormat": "pdf",
             "wrapper": "/v1/pdf",
@@ -66,6 +68,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-du-texte-epure-de-pdf/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -79,6 +82,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
@@ -92,6 +96,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -105,6 +110,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
@@ -118,6 +124,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -131,6 +138,7 @@
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "tei.tar.gz",
             "wrapper": "/v1/no-convert",
@@ -141,6 +149,7 @@
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "tei.tar.gz",
             "wrapper": "/v1/no-convert",
@@ -151,6 +160,7 @@
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -164,6 +174,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -177,6 +188,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "txt",
             "wrapper": "/v1/tar-txt2json",
@@ -188,6 +200,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "txt",
             "wrapper": "/v1/tar-txt2json",
@@ -199,6 +212,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
@@ -211,6 +225,7 @@
             "description": "Récupère les métadonnées du Sudoc à partir d'une liste d'identifiants et les xml-ise au format Hal-TEI. Récupère les PDFs associés."
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -223,6 +238,7 @@
             "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus."
         },
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -233,6 +249,7 @@
             "description": "Crée plusieurs groupes afin d'y classifier les différents textes en fonction de leur similarité."
         },
         {
+            "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -243,6 +260,7 @@
             "description": "Utilise l'algorithme de *clustering* et retourne uniquement la liste des identifiants considérés comme du bruit par [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html)."
         },
         {
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
