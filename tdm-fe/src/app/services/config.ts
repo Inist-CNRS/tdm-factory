@@ -1,4 +1,5 @@
 import { createQuery, json } from '~/app/services/Environment';
+
 import type { StaticConfig } from '~/lib/config';
 
 export const getStaticConfig = async (): Promise<StaticConfig> => {

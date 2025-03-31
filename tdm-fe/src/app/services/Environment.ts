@@ -10,8 +10,8 @@ export const environment = {
             fields: '/api/traitment/fields',
         },
         config: {
-            static: '/config/static'
-        }
+            static: '/config/static',
+        },
     },
     post: {
         processing: {

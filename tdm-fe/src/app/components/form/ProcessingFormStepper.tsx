@@ -7,6 +7,7 @@ import {
     PROCESSING_UPLOADING_STEP,
     PROCESSING_VALIDATION_STEP,
 } from '~/app/pages/ProcessingCreationForm';
+
 import CheckIcon from '@mui/icons-material/Check';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';

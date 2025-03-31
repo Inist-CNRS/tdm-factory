@@ -1,8 +1,8 @@
 import './scss/ProcessingFormUpload.scss';
 import FileUpload from '~/app/components/progress/FileUpload';
 
-import DescriptionIcon from '@mui/icons-material/Description';
 import CloseIcon from '@mui/icons-material/Close';
+import DescriptionIcon from '@mui/icons-material/Description';
 import { Button } from '@mui/material';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
@@ -123,7 +123,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
                                     (document.querySelector('.file-input input') as HTMLInputElement)?.click();
                                 }}
                                 sx={{
-                                    textTransform: 'none'
+                                    textTransform: 'none',
                                 }}
                             >
                                 Parcourir vos fichiers

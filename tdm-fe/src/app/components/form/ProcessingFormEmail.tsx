@@ -35,6 +35,7 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
 
     return (
         <div className="processing-form-field-group processing-form-field-with-label">
+            <h3> Adresse e-mail </h3>
             <TextField
                 value={email}
                 onChange={handleEmailChange}

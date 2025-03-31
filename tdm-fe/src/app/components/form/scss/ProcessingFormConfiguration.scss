@@ -10,6 +10,13 @@
   border-radius: 4px;
   transition: all .3s ease;
 
+  h3 {
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark-black);
+  }
+
   /* stylelint-disable-next-line selector-class-pattern */
   .MuiFormLabel-root {
     padding-top: 2px;

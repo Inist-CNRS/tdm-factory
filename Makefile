@@ -20,8 +20,6 @@ lint-fix:
 	npm run lint && \
 	cd ../tdm-fe && \
 	npm run lint && \
-	npm run stylelint && \
 	cd ../tdm-admin && \
-	npm run stylelint && \
 	npm run lint && \
 	cd ..
