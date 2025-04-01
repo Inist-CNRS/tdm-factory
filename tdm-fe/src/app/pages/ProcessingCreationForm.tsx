@@ -325,20 +325,20 @@ const ProcessingCreationForm = () => {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
-        // Mettre à jour isWaitingInput et isInvalid en fonction de l'étape précédente
+        // Update isWaitingInput and isInvalid based on the previous step
         if (previousStep === PROCESSING_FORMAT_STEP) {
             setIsWaitingInput(!selectedFormat);
-            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+            setIsInvalid(false);
         } else if (previousStep === PROCESSING_UPLOAD_STEP) {
             setIsWaitingInput(!file);
-            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+            setIsInvalid(false);
         } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
             setIsWaitingInput(!(wrapper && enrichment));
-            setIsInvalid(false); // Réinitialiser l'état d'invalidité
+            setIsInvalid(false);
         } else if (previousStep === PROCESSING_VALIDATION_STEP) {
             const isEmailValid = email && EMAIL_REGEX.test(email || '');
             setIsWaitingInput(!isEmailValid);
-            setIsInvalid(!isEmailValid); // Mettre à jour l'état d'invalidité pour l'email
+            setIsInvalid(!isEmailValid);
         }
 
         setStep(previousStep);
