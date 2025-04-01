@@ -23,15 +23,15 @@
     .step {
       flex: 1;
       padding: 24px;
-      text-align: center;
+      text-align: left;
       background: #fff;
-      border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
 
       .icon {
-        margin-bottom: 16px;
-        font-size: 32px;
-        color: $blue;
+        width: 25px;
+        height: 25px;
+        font-size: 25px;
+        color: #1a5a71;
       }
 
       h3 {
@@ -50,13 +50,14 @@
   .start-button {
     display: flex;
     justify-content: center;
+    text-decoration: none;
 
     button {
       padding: 12px 24px;
       color: #fff;
       text-transform: none;
       background-color: $blue;
-      border-radius: 4px;
+      border-radius: 5px;
 
       &:hover {
         background-color: var(--blue);

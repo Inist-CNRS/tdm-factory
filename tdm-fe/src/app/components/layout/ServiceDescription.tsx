@@ -1,7 +1,7 @@
 import './scss/ServiceDescription.scss';
 import DownloadIcon from '@mui/icons-material/Download';
 import EmailIcon from '@mui/icons-material/Email';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import CheckIcon from '@mui/icons-material/Check';
 import { Button, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ const ServiceDescription = () => {
                     </div>
 
                     <div className="step">
-                        <TaskAltIcon className="icon" />
+                        <CheckIcon className="icon" />
                         <h3>Choisir un service</h3>
                         <p>Choisissez le service web pour la fouille de textes ou TDM que vous voulez exécuter.</p>
                     </div>
