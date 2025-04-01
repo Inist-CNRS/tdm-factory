@@ -100,7 +100,7 @@ const ProcessingFormConfiguration = ({
     return (
         <>
             <Typography variant="h3" gutterBottom>
-                Choisir un type de service
+                Choisir un service
             </Typography>
             {/* Wrapper input */}
             <div className="processing-form-field-group">

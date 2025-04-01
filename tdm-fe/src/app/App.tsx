@@ -1,6 +1,7 @@
 import '~/app/App.scss';
 import Footer from '~/app/components/layout/Footer';
 import Header from '~/app/components/layout/Header';
+import ServiceDescription from '~/app/components/layout/ServiceDescription';
 import WebServicesDescription from '~/app/components/layout/WebServicesDescription';
 import WebServicesFooter from '~/app/components/layout/WebServicesFooter';
 import WebServicesHeader from '~/app/components/layout/WebServicesHeader';
@@ -23,6 +24,7 @@ const App = () => {
                 </Routes>
             </Container>
             <WebServicesDescription />
+            <ServiceDescription />
             <WebServicesFooter />
             <Footer />
         </>
