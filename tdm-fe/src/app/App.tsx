@@ -15,14 +15,26 @@ const App = () => {
     return (
         <>
             <Header />
-            <Container id="app-container">
-                <Routes>
-                    <Route path={RouteRoot} element={<HomePage />} />
-                    <Route path="/process/:type" element={<ProcessingCreationForm />} />
-                    <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
-                </Routes>
-            </Container>
-            <ServiceDescription />
+            <Routes>
+                <Route path={RouteRoot} element={
+                    <>
+                        <Container id="app-container">
+                            <HomePage />
+                        </Container>
+                        <ServiceDescription />
+                    </>
+                } />
+                <Route path="/process/:type" element={
+                    <Container id="app-container">
+                        <ProcessingCreationForm />
+                    </Container>
+                } />
+                <Route path={`${RouteProcessingStatus}/:id`} element={
+                    <Container id="app-container">
+                        <ProcessingStatus />
+                    </Container>
+                } />
+            </Routes>
             <WebServicesFooter />
             <Footer />
         </>
