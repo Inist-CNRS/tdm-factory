@@ -9,13 +9,15 @@ import { fields as fieldsService } from '~/app/services/creation/fields';
 import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
+import ProcessingExample from '~/app/components/layout/ProcessingExample';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { Button } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import type { ProcessingFormConfigurationValueType } from '~/app/components/form/ProcessingFormConfiguration';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
@@ -29,6 +31,11 @@ export const PROCESSING_CONFIRMATION_STEP = 5;
 
 const ProcessingCreationForm = () => {
     const { type } = useParams();
+    const navigate = useNavigate();
+
+    const handleHomeReturn = () => {
+        navigate('/');
+    };
 
     /**
      * Form states
@@ -354,7 +361,15 @@ const ProcessingCreationForm = () => {
 
     return (
         <div id="processing-form">
-            <h1>Traiter un {type}</h1>
+            <Button 
+                onClick={handleHomeReturn}
+                startIcon={<KeyboardBackspaceIcon />}
+                className="back-button"
+                sx={{ color: '#4a4a4a' }}
+            >
+                RETOUR
+            </Button>
+            <h1>Traiter un {type === 'corpus' ? 'corpus' : 'article'}</h1>
             <h2>Traitement</h2>
 
             <div className="processing-form-layout">
@@ -439,6 +454,7 @@ const ProcessingCreationForm = () => {
                     ) : null}
                 </div>
             </div>
+            <ProcessingExample currentStep={step} />
         </div>
     );
 };
