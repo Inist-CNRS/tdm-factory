@@ -2,9 +2,8 @@ import '~/app/App.scss';
 import Footer from '~/app/components/layout/Footer';
 import Header from '~/app/components/layout/Header';
 import ServiceDescription from '~/app/components/layout/ServiceDescription';
-import WebServicesDescription from '~/app/components/layout/WebServicesDescription';
 import WebServicesFooter from '~/app/components/layout/WebServicesFooter';
-import WebServicesHeader from '~/app/components/layout/WebServicesHeader';
+import HomePage from '~/app/pages/HomePage';
 import ProcessingCreationForm from '~/app/pages/ProcessingCreationForm';
 import ProcessingStatus from '~/app/pages/ProcessingStatus';
 import { RouteProcessingStatus, RouteRoot } from '~/app/shared/routes';
@@ -16,14 +15,13 @@ const App = () => {
     return (
         <>
             <Header />
-            <WebServicesHeader />
             <Container id="app-container">
                 <Routes>
-                    <Route path={RouteRoot} element={<ProcessingCreationForm />} />
+                    <Route path={RouteRoot} element={<HomePage />} />
+                    <Route path="/process/:type" element={<ProcessingCreationForm />} />
                     <Route path={`${RouteProcessingStatus}/:id`} element={<ProcessingStatus />} />
                 </Routes>
             </Container>
-            <WebServicesDescription />
             <ServiceDescription />
             <WebServicesFooter />
             <Footer />
