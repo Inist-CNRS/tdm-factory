@@ -56,10 +56,8 @@ app.use('/api/data-enrichments', dataEnrichmentRoute);
 app.use('/api/traitment', traitmentRoute);
 app.use('/webhook', webhookRoute);
 
-//Routes publiques
-app.use('/config', configRoute);
-
-//Routes sécurisées
+//to secure
+app.use('/config', auth, configRoute);
 app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api/admin', auth, adminRoute);
 

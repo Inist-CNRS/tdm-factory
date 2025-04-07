@@ -6,33 +6,6 @@
   color: var(--dark-black);
 }
 
-.loading-container,
-.no-formats-message {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 32px;
-
-  .MuiTypography-root {
-    font-size: 16px;
-    color: var(--dark-black);
-  }
-}
-
-.no-formats-message {
-  padding: 24px;
-  text-align: center;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-
-  .MuiTypography-root {
-    color: #666;
-  }
-}
-
 .processing-form-format {
   display: flex;
   flex-direction: column;
