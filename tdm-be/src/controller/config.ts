@@ -20,10 +20,10 @@ const router = Router();
  *               $ref: '#/components/schemas/StaticConfig'
  */
 router.get('/static', (req, res) => {
-    // Keep only flows field, as the other ones are confidential
+    // Keep only flows and inputFormat2labels fields, as the other ones are confidential
     // (passwords, IPs, etc.), and not used by the frontend
-    const { flows } = staticConfig;
-    res.json({ flows });
+    const { flows, inputFormat2labels } = staticConfig;
+    res.json({ flows, inputFormat2labels });
 });
 
 /**

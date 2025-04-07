@@ -19,6 +19,11 @@ type SMTP = {
     };
 };
 
+type Format = {
+    summary: string;
+    description: string;
+};
+
 type Config = {
     port: number;
     password: string;
@@ -33,6 +38,7 @@ type Config = {
         deleteFileOlderThan: number;
     };
     verbose: string;
+    inputFormat2labels?: Record<string, Format>;
     flows: Array<{
         input: string;
         inputFormat: string;
@@ -45,6 +51,8 @@ type Config = {
         retrieveExtension: string;
         summary: string;
         description: string;
+        descriptionLink?: string;
+        featured?: boolean;
     }>;
 };
 

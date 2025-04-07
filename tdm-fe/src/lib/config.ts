@@ -1,3 +1,8 @@
+export type Format = {
+    summary: string;
+    description: string;
+};
+
 export type StaticConfig = {
     flows: Array<{
         input: string;
@@ -12,5 +17,7 @@ export type StaticConfig = {
         summary: string;
         description: string;
         descriptionLink?: string;
+        featured?: boolean;
     }>;
+    inputFormat2labels?: Record<string, Format>;
 };
