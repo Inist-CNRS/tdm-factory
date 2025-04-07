@@ -8,35 +8,21 @@ import './scss/ProcessingFormFormat.scss';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getStaticConfig } from '~/app/services/config';
+import Markdown from '~/app/components/text/Markdown';
 
 type ProcessingFormFormatProps = {
     onChange: (format: string) => void;
     value: string | null;
 };
 
-const formatDetails = {
-    istex: 'Pour obtenir un fichier corpus ISTEX, utiliser ISTEX Search, le format LODEX (ou au minimum les métadonnées JSON), et le format de compression .tar.gz.',
-    text: 'Le format texte permet de traiter des documents textuels bruts. Les fichiers doivent être au format tar.gz.',
-    csv: 'Le format CSV permet de traiter des données tabulaires. Les fichiers doivent être au format .csv.',
-};
-
 const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) => {
     const { type } = useParams();
+    const [expandedFormat, setExpandedFormat] = useState<string | null>(null);
 
     const { data: config, isLoading, error } = useQuery({
         queryKey: ['static-config'],
         queryFn: getStaticConfig,
     });
-    
-    if (error) {
-        console.error('Error loading configuration:', error);
-    }
-    
-    if (!config || !config.inputFormat2labels) {
-        return <div>No configuration data available</div>;
-    }
-
-    const [expandedFormat, setExpandedFormat] = useState<string | null>(null);
 
     const handleFormatChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +50,28 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
         [expandedFormat],
     );
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        console.error('Error loading configuration:', error);
+        return <div>Error loading configuration</div>;
+    }
+
+    if (!config || !config.inputFormat2labels) {
+        return <div>No configuration data available</div>;
+    }
+
+    // Filtrer les formats disponibles en fonction du type (corpus ou article)
+    const availableFormats = Object.entries(config.inputFormat2labels)
+        .filter(([format]) => {
+            const matchingFlows = config.flows.filter(
+                flow => flow.input === type && flow.inputFormat === format
+            );
+            return matchingFlows.length > 0;
+        });
+
     return (
         <>
             <Typography variant="h3" gutterBottom>
@@ -72,30 +80,24 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
             <div className="processing-form-format">
                 <FormControl component="fieldset" fullWidth>
                     <RadioGroup aria-label="format" name="format" onChange={handleFormatChange} value={value || ''}>
-                        {Object.entries(formatDetails).map(([format, details]) => (
+                        {availableFormats.map(([format, labels]) => (
                             <div
                                 key={format}
                                 className={`format-container ${expandedFormat === format ? 'expanded' : ''}`}
-                                onClick={(e) => {
-                                    handleFormatClick(format, e as React.MouseEvent);
-                                }}
+                                onClick={(e) => handleFormatClick(format, e)}
                             >
                                 <div className="format-label-container">
                                     <FormControlLabel
                                         value={format}
                                         control={<Radio />}
-                                        label={
-                                            format === 'istex'
-                                                ? 'Corpus Istex (tar.gz)'
-                                                : format === 'text'
-                                                  ? 'Corpus de documents textes (tar.gz)'
-                                                  : 'Tableur (.csv)'
-                                        }
+                                        label={<Markdown text={labels.summary} />}
                                     />
                                     <ExpandMoreIcon className="arrow-icon" />
                                 </div>
                                 <Collapse in={expandedFormat === format}>
-                                    <div className="format-details">{details}</div>
+                                    <div className="format-details">
+                                        <Markdown text={labels.description} />
+                                    </div>
                                 </Collapse>
                             </div>
                         ))}
