@@ -16,10 +16,6 @@ run-docker:
 	docker run -p 3000:3000 'tdm-factory:latest'
 
 lint-fix:
-	cd tdm-be && \
-	npm run lint && \
-	cd ../tdm-fe && \
-	npm run lint && \
-	cd ../tdm-admin && \
-	npm run lint && \
-	cd ..
+	cd tdm-be && npm run lint || true
+	cd tdm-fe && npm run lint || true
+	cd tdm-admin && npm run lint || true

@@ -361,7 +361,7 @@ const ProcessingCreationForm = () => {
 
     return (
         <div id="processing-form">
-            <Button 
+            <Button
                 onClick={handleHomeReturn}
                 startIcon={<KeyboardBackspaceIcon />}
                 className="back-button"
@@ -394,7 +394,11 @@ const ProcessingCreationForm = () => {
 
                         {/* Format step */}
                         {step === PROCESSING_FORMAT_STEP ? (
-                            <ProcessingFormFormat onChange={handleFormatChange} value={selectedFormat} />
+                            <ProcessingFormFormat
+                                onChange={handleFormatChange}
+                                value={selectedFormat}
+                                type={type as 'article' | 'corpus'}
+                            />
                         ) : null}
 
                         {/* Upload step */}
@@ -405,6 +409,7 @@ const ProcessingCreationForm = () => {
                                 onChange={handleUploadChange}
                                 isOnError={isOnError}
                                 isPending={isPending}
+                                selectedFormat={selectedFormat}
                             />
                         ) : null}
 

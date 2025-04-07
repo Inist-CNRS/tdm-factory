@@ -1,0 +1,163 @@
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+  padding: 24px;
+}
+
+.confirmation-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .success-icon {
+    font-size: 24px;
+    color: #4caf50;
+  }
+
+  span {
+    font-size: 16px;
+    color: #458ca5;
+  }
+}
+
+.file-details-container {
+  padding: 16px;
+  background-color: #f6f9fa;
+  border-radius: 4px;
+
+  .detail-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      color: #333;
+    }
+
+    .value {
+      color: #333;
+    }
+  }
+}
+
+.status-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+.status-timeline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.status-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+
+    .step-icon-svg {
+      width: 16px;
+      height: 16px;
+      color: #fff;
+
+      &.error {
+        color: #f44336;
+      }
+    }
+  }
+
+  span {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+  }
+
+  &.completed {
+    .step-icon {
+      background-color: #4caf50;
+      border-color: #4caf50;
+    }
+  }
+
+  &.current {
+    .step-icon {
+      background-color: #458ca5;
+      border-color: #458ca5;
+    }
+  }
+
+  &.error {
+    .step-icon {
+      background-color: rgba(244, 67, 54, .08);
+      border-color: #f44336;
+    }
+
+    .step-icon-svg {
+      color: #f44336;
+    }
+
+    span {
+      font-weight: 500;
+      color: #f44336;
+    }
+  }
+}
+
+.step-separator {
+  margin-top: 12px;
+  font-size: 24px;
+  line-height: 24px;
+  color: #ccc;
+}
+
+.new-processing-button {
+  align-self: center;
+  padding: 8px 16px !important;
+  font-weight: 400 !important;
+  color: #fff !important;
+  text-transform: none !important;
+  background-color: #458ca5 !important;
+  border-radius: 4px !important;
+
+  &:hover {
+    background-color: darken(#458ca5, 10%) !important;
+  }
+}
+
+.status-message {
+  padding: 8px 16px;
+  margin: 16px 0;
+  font-weight: 500;
+  color: #666;
+  text-align: center;
+  border-radius: 4px;
+
+  &.error {
+    color: #f44336;
+    background-color: rgba(244, 67, 54, .08);
+    border: 1px solid rgba(244, 67, 54, .5);
+  }
+}
