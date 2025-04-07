@@ -5,6 +5,10 @@ import { useCallback, memo, useState } from 'react';
 import type React from 'react';
 import './scss/ProcessingFormFormat.scss';
 
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getStaticConfig } from '~/app/services/config';
+
 type ProcessingFormFormatProps = {
     onChange: (format: string) => void;
     value: string | null;
@@ -17,6 +21,21 @@ const formatDetails = {
 };
 
 const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) => {
+    const { type } = useParams();
+
+    const { data: config, isLoading, error } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig,
+    });
+    
+    if (error) {
+        console.error('Error loading configuration:', error);
+    }
+    
+    if (!config || !config.inputFormat2labels) {
+        return <div>No configuration data available</div>;
+    }
+
     const [expandedFormat, setExpandedFormat] = useState<string | null>(null);
 
     const handleFormatChange = useCallback(
@@ -48,7 +67,7 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
     return (
         <>
             <Typography variant="h3" gutterBottom>
-                Choisir le format de votre corpus
+                Choisir le format de votre {type === 'corpus' ? 'corpus' : 'article'}
             </Typography>
             <div className="processing-form-format">
                 <FormControl component="fieldset" fullWidth>
