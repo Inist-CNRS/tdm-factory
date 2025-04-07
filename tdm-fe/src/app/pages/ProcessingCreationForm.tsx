@@ -445,7 +445,7 @@ const ProcessingCreationForm = () => {
                     </div>
 
                     {/* Navigation button */}
-                    {!isPending ? (
+                    {!isPending && step !== PROCESSING_CONFIRMATION_STEP ? (
                         <div id="processing-form-navigation">
                             <Button
                                 onClick={handleNext}
@@ -453,7 +453,7 @@ const ProcessingCreationForm = () => {
                                 size="large"
                                 disabled={isInvalid || isWaitingInput}
                             >
-                                {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
+                                Suivant
                             </Button>
                         </div>
                     ) : null}

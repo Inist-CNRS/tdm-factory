@@ -10,10 +10,12 @@ import './scss/ProcessingFormConfirmation.scss';
 
 export type ProcessingFormConfirmationProps = {
     processingId: string | null;
-    fileName: string;
+    fileName?: string;
+    status?: 202 | 400 | 409 | 428 | 500 | null;
+    isPending?: boolean;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPending }: ProcessingFormConfirmationProps) => {
     const [currentStatus, setCurrentStatus] = useState<number>(Status.STARTING);
 
     useEffect(() => {
