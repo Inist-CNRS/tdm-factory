@@ -438,8 +438,9 @@ const ProcessingCreationForm = () => {
                         {step === PROCESSING_CONFIRMATION_STEP ? (
                             <ProcessingFormConfirmation
                                 processingId={processingId}
+                                fileName={file?.name}
                                 status={startingStatus}
-                                isPending={isPending}
+                                isPending={uploading}
                             />
                         ) : null}
                     </div>

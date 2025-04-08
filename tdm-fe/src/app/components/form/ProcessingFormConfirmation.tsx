@@ -15,11 +15,20 @@ export type ProcessingFormConfirmationProps = {
     isPending?: boolean;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPending }: ProcessingFormConfirmationProps) => {
-    const [currentStatus, setCurrentStatus] = useState<number>(Status.STARTING);
+const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending }: ProcessingFormConfirmationProps) => {
+    const [currentStatus, setCurrentStatus] = useState<number>(() => {
+        if (initialStatus === 400 || initialStatus === 409) {
+            return Status.WRAPPER_ERROR;
+        } else if (initialStatus === 428) {
+            return Status.ENRICHMENT_ERROR;
+        } else if (initialStatus === 500) {
+            return Status.FINISHED_ERROR;
+        }
+        return Status.STARTING;
+    });
 
     useEffect(() => {
-        if (!processingId) {
+        if (!processingId || isPending) {
             return;
         }
 
@@ -31,24 +40,32 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
                 return;
             }
 
-            const result = await status(processingId);
-            if (result !== undefined && isMounted) {
-                setCurrentStatus(result);
+            try {
+                const result = await status(processingId);
+                if (result !== undefined && isMounted) {
+                    setCurrentStatus(result);
 
-                // Si le statut est terminal, arrêter les vérifications
-                if (isTerminalStatus(result)) {
-                    if (intervalId) {
-                        clearInterval(intervalId);
-                        intervalId = null;
+                    if (isTerminalStatus(result)) {
+                        if (intervalId) {
+                            clearInterval(intervalId);
+                            intervalId = null;
+                        }
                     }
+                }
+            } catch (error) {
+                console.error('Error checking status:', error);
+                if (isMounted) {
+                    setCurrentStatus(Status.FINISHED_ERROR);
+                }
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
                 }
             }
         };
 
-        // Vérifier immédiatement le statut
         checkStatus();
 
-        // Créer l'intervalle pour vérifier périodiquement le statut
         intervalId = setInterval(checkStatus, 5000);
 
         return () => {
@@ -57,7 +74,7 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
                 clearInterval(intervalId);
             }
         };
-    }, [processingId]); // Retirer currentStatus des dépendances
+    }, [processingId, isPending]);
 
     const getStepIcon = (step: number) => {
         const stepStatus = getStepStatus(step);
@@ -78,36 +95,16 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
     };
 
     const getStepStatus = (step: number) => {
-        // Vérifier d'abord si on est dans un état d'erreur
         if (currentStatus === Status.WRAPPER_ERROR) {
-            if (step < 3) {
-                return 'completed';
-            }
-            if (step === 3) {
-                return 'error';
-            }
-            return '';
+            return step === 3 ? 'error' : step < 3 ? 'completed' : '';
         }
         if (currentStatus === Status.ENRICHMENT_ERROR) {
-            if (step < 4) {
-                return 'completed';
-            }
-            if (step === 4) {
-                return 'error';
-            }
-            return '';
+            return step === 4 ? 'error' : step < 4 ? 'completed' : '';
         }
         if (currentStatus === Status.FINISHED_ERROR) {
-            if (step < 5) {
-                return 'completed';
-            }
-            if (step === 5) {
-                return 'error';
-            }
-            return '';
+            return step === 5 ? 'error' : step < 5 ? 'completed' : '';
         }
 
-        // Si pas d'erreur, gérer les états normaux
         switch (step) {
             case 1: // Initialisé
                 return currentStatus >= Status.STARTING ? 'completed' : '';
@@ -122,14 +119,10 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
                 }
                 return currentStatus > Status.WRAPPER_RUNNING ? 'completed' : '';
             case 4: // Traitement en cours
-                if (
-                    [Status.ENRICHMENT_RUNNING, Status.WAITING_WEBHOOK, Status.PROCESSING_WEBHOOK].includes(
-                        currentStatus,
-                    )
-                ) {
+                if ([Status.ENRICHMENT_RUNNING, Status.WAITING_WEBHOOK, Status.PROCESSING_WEBHOOK].includes(currentStatus)) {
                     return 'current';
                 }
-                return currentStatus === Status.FINISHED ? 'completed' : '';
+                return currentStatus > Status.PROCESSING_WEBHOOK ? 'completed' : '';
             case 5: // Traitement terminé
                 return currentStatus === Status.FINISHED ? 'completed' : '';
             default:
@@ -138,21 +131,13 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
     };
 
     const getStatusMessage = () => {
-        // Créer un objet avec des clés de type string pour éviter les erreurs TypeScript
         const messages: Record<number, string> = {
-            [Status.WRAPPER_ERROR]:
-                'Erreur lors de la conversion du fichier. Veuillez vérifier le format de votre fichier.',
+            [Status.WRAPPER_ERROR]: 'Erreur lors de la conversion du fichier. Veuillez vérifier le format de votre fichier.',
             [Status.ENRICHMENT_ERROR]: "Erreur lors du traitement des données. L'enrichissement a échoué.",
             [Status.FINISHED_ERROR]: 'Erreur lors de la finalisation du traitement.',
-            [Status.FINISHED]: 'Traitement terminé avec succès',
-            [Status.STARTING]: 'Initialisation du traitement...',
-            [Status.WRAPPER_RUNNING]: 'Conversion du fichier en cours...',
-            [Status.ENRICHMENT_RUNNING]: 'Traitement des données en cours...',
-            [Status.WAITING_WEBHOOK]: 'En attente de traitement...',
-            [Status.PROCESSING_WEBHOOK]: 'Finalisation du traitement...',
         };
 
-        return messages[currentStatus] || 'Traitement en cours...';
+        return messages[currentStatus] || '';
     };
 
     const isErrorStatus = (status: number): boolean => {
@@ -160,7 +145,12 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
     };
 
     const isTerminalStatus = (status: number): boolean => {
-        return [Status.WRAPPER_ERROR, Status.ENRICHMENT_ERROR, Status.FINISHED_ERROR, Status.FINISHED].includes(status);
+        return [
+            Status.WRAPPER_ERROR,
+            Status.ENRICHMENT_ERROR,
+            Status.FINISHED_ERROR,
+            Status.FINISHED
+        ].includes(status);
     };
 
     return (
@@ -182,11 +172,6 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
             </div>
 
             <h3 className="status-title">Statut du traitement de votre fichier</h3>
-            <div
-                className={`status-message ${isTerminalStatus(currentStatus) ? 'terminal' : ''} ${isErrorStatus(currentStatus) ? 'error' : ''}`}
-            >
-                {getStatusMessage()}
-            </div>
 
             <div className="status-timeline">
                 <div className={`status-step ${getStepStatus(1)}`}>
@@ -196,22 +181,22 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status, isPen
                 <div className="step-separator">›</div>
                 <div className={`status-step ${getStepStatus(2)}`}>
                     <div className="step-icon">{getStepIcon(2)}</div>
-                    <span>Démarrage</span>
+                    <span>{getStepStatus(2) === 'error' ? getStatusMessage() : 'Démarrage'}</span>
                 </div>
                 <div className="step-separator">›</div>
                 <div className={`status-step ${getStepStatus(3)}`}>
                     <div className="step-icon">{getStepIcon(3)}</div>
-                    <span>Conversion</span>
+                    <span>{getStepStatus(3) === 'error' ? getStatusMessage() : 'Conversion'}</span>
                 </div>
                 <div className="step-separator">›</div>
                 <div className={`status-step ${getStepStatus(4)}`}>
                     <div className="step-icon">{getStepIcon(4)}</div>
-                    <span>Traitement en cours</span>
+                    <span>{getStepStatus(4) === 'error' ? getStatusMessage() : 'Traitement en cours'}</span>
                 </div>
                 <div className="step-separator">›</div>
                 <div className={`status-step ${getStepStatus(5)}`}>
                     <div className="step-icon">{getStepIcon(5)}</div>
-                    <span>Traitement terminé</span>
+                    <span>{getStepStatus(5) === 'error' ? getStatusMessage() : 'Traitement terminé'}</span>
                 </div>
             </div>
 

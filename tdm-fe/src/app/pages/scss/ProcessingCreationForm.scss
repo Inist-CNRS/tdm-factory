@@ -30,6 +30,7 @@
       display: flex;
       flex: 1;
       flex-direction: column;
+      max-width: 870px;
       height: auto;
       padding: 32px;
       background-color: $very-light-blue;
@@ -43,7 +44,6 @@
   flex-direction: column;
   gap: 24px;
   min-height: 0;
-  padding-bottom: 80px;
   * {
     margin: 0;
   }

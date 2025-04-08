@@ -1,35 +1,53 @@
+/* Remove background for confirmation page
+.processing-form-layout {
+  #processing-form-content:has(.confirmation-container) {
+    background: transparent !important;
+  }
+}
+*/
+
 .confirmation-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  align-items: stretch;
+  align-items: left;
+  max-width: 100%;
   padding: 24px;
+  overflow-x: hidden;
 }
 
 .confirmation-header {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  align-items: left;
+  text-align: left;
 
   .success-icon {
-    font-size: 24px;
-    color: #4caf50;
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a5a71;
   }
 
   span {
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 700;
     color: #458ca5;
   }
 }
 
 .file-details-container {
+  box-sizing: border-box;
+  width: 100%;
   padding: 16px;
-  background-color: #f6f9fa;
+  background-color: #e6f2f7;
   border-radius: 4px;
 
   .detail-item {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
+    padding-left: 30px;
     margin-bottom: 8px;
 
     &:last-child {
@@ -37,29 +55,33 @@
     }
 
     .label {
+      font-size: 15px;
+      font-weight: 700;
       color: #333;
     }
 
     .value {
       color: #333;
+      word-break: break-word;
     }
   }
 }
 
 .status-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0d0d0d;
   text-align: center;
 }
 
 .status-timeline {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
   justify-content: center;
   padding: 0 16px;
+  padding-bottom: 20px;
 }
 
 .status-step {
@@ -67,6 +89,8 @@
   flex-direction: column;
   gap: 8px;
   align-items: center;
+  min-width: 140px;
+  max-width: 100%;
 
   .step-icon {
     display: flex;
@@ -74,13 +98,13 @@
     justify-content: center;
     width: 24px;
     height: 24px;
-    background-color: #fff;
+    background-color: #f0f0f0;
     border: 2px solid #ccc;
     border-radius: 50%;
 
     .step-icon-svg {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       color: #fff;
 
       &.error {
@@ -90,15 +114,33 @@
   }
 
   span {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    font-size: 16px;
+    color: #4a4a4a;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .step-message {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 160px;
+    min-height: 40px;
+    margin-top: -4px;
+    font-size: 13px;
     color: #666;
-    text-align: center;
+    text-align: left;
   }
 
   &.completed {
     .step-icon {
-      background-color: #4caf50;
-      border-color: #4caf50;
+      background-color: #c4d733;
+      border-color: #c4d733;
     }
   }
 
@@ -106,6 +148,10 @@
     .step-icon {
       background-color: #458ca5;
       border-color: #458ca5;
+    }
+    .step-message {
+      font-weight: 500;
+      color: #458ca5;
     }
   }
 
@@ -123,41 +169,59 @@
       font-weight: 500;
       color: #f44336;
     }
+
+    .step-message {
+      font-weight: 500;
+      color: #f44336;
+    }
   }
 }
 
 .step-separator {
-  margin-top: 12px;
-  font-size: 24px;
-  line-height: 24px;
-  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 0 8px;
+  font-size: 48px;
+  color: #8f8f8f;
 }
 
 .new-processing-button {
   align-self: center;
-  padding: 8px 16px !important;
-  font-weight: 400 !important;
+  max-width: 100%;
+  padding: 10px 20px !important;
+  padding-top: 12px;
+  overflow: hidden;
+  font-size: 16px !important;
+  font-weight: 500 !important;
   color: #fff !important;
+  text-overflow: ellipsis;
   text-transform: none !important;
+  white-space: nowrap;
   background-color: #458ca5 !important;
   border-radius: 4px !important;
-
   &:hover {
     background-color: darken(#458ca5, 10%) !important;
   }
 }
 
-.status-message {
-  padding: 8px 16px;
-  margin: 16px 0;
-  font-weight: 500;
-  color: #666;
-  text-align: center;
-  border-radius: 4px;
+@media (max-width: 768px) {
+  .confirmation-container {
+    padding: 16px;
+  }
 
-  &.error {
-    color: #f44336;
-    background-color: rgba(244, 67, 54, .08);
-    border: 1px solid rgba(244, 67, 54, .5);
+  .status-timeline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .status-step {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .step-separator {
+    display: none;
   }
 }

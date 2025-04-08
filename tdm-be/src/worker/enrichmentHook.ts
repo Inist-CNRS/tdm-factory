@@ -111,6 +111,9 @@ const enrichmentHookSuccess = async (processingId: string) => {
                 errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_UNREACHABLE_ERROR,
             },
         }).then(undefined);
+        updateProcessing(processingId, {
+            status: Status.FINISHED_ERROR,
+        });
         crash(e, message, initialProcessing);
         return;
     }
@@ -132,6 +135,9 @@ const enrichmentHookSuccess = async (processingId: string) => {
                 errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_PAYLOAD_NOT_ACCEPTED_ERROR,
             },
         }).then(undefined);
+        updateProcessing(processingId, {
+            status: Status.FINISHED_ERROR,
+        });
         return;
     }
 
@@ -157,6 +163,9 @@ const enrichmentHookSuccess = async (processingId: string) => {
                 errorMessage: ERROR_MESSAGE_FILE_SYSTEM_ERROR,
             },
         }).then(undefined);
+        updateProcessing(processingId, {
+            status: Status.FINISHED_ERROR,
+        });
         crash(e, message, initialProcessing);
         return;
     }
@@ -189,7 +198,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
  * @param processingId
  */
 const enrichmentHookFailure = async (processingId: string) => {
-    info(processingId, 'Enrichment-Hook process started');
+    info(processingId, 'Enrichment-Hook failure process started');
 
     // --- Get processing information
     debug(processingId, 'Getting processing information');
@@ -204,23 +213,14 @@ const enrichmentHookFailure = async (processingId: string) => {
         throw new Error('This is normally impossible - Enrichment-Hook initial processing is undefined');
     }
 
-    // Get wrapper variable from the processing
-    const { email, status } = initialProcessing;
-
-    // Check if we still wait for webhook
-    if (status !== Status.WAITING_WEBHOOK) {
-        return;
-    }
-
-    updateProcessing(processingId, {
-        status: Status.PROCESSING_WEBHOOK,
-    });
+    // Get email from the processing
+    const { email } = initialProcessing;
 
     // Check if the variable exist
     if (!email) {
-        error(processingId, 'Enrichment-Hook value are undefined or null');
+        error(processingId, 'Enrichment-Hook email is undefined or null');
         // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook value are undefined or null');
+        throw new Error('This is normally impossible - Enrichment-Hook email is undefined or null');
     }
 
     // --- Save enrichment-hook result
@@ -240,7 +240,7 @@ const enrichmentHookFailure = async (processingId: string) => {
 
     // Update processing information
     updateProcessing(processingId, {
-        status: Status.FINISHED_ERROR,
+        status: Status.ENRICHMENT_ERROR,
     });
 };
 
