@@ -1,7 +1,173 @@
 @import "../../../scss/colors";
 
-.form-content:has(.processing-form-field-group) {
-  padding-bottom: 50px;
+.processing-form-configuration {
+  max-width: 1200px;
+  padding-bottom: 60px;
+
+  h3 {
+    width: 100%;
+    margin: 0 0 24px;
+    overflow: hidden;
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark-black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .service-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    margin: 0 0 24px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .tab {
+      position: relative;
+      padding: 12px 0;
+      font-size: 16px;
+      color: #666;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color .2s ease;
+
+      &:hover {
+        color: $blue;
+      }
+
+      &.active {
+        color: $blue;
+        &::after {
+          position: absolute;
+          right: 0;
+          bottom: -1px;
+          left: 0;
+          height: 2px;
+          content: "";
+          background-color: $blue;
+        }
+      }
+    }
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .MuiFormControl-root {
+    width: 100%;
+    padding: 0;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .MuiRadioGroup-root {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-items: flex-start;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .service-container {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all .2s ease;
+
+    &:hover {
+      border-color: $blue;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    }
+
+    &.expanded {
+      height: auto;
+      .arrow-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .service-label-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+
+    /* stylelint-disable-next-line selector-class-pattern */
+    .MuiFormControlLabel-root {
+      width: 100%;
+      padding-right: 40px;
+      margin: 0;
+
+      /* stylelint-disable-next-line selector-class-pattern */
+      .MuiRadio-root {
+        padding: 6px;
+        margin-right: 12px;
+        color: #bdbdbd;
+
+        /* stylelint-disable-next-line selector-class-pattern */
+        &.Mui-checked {
+          color: $blue;
+        }
+      }
+
+      /* stylelint-disable-next-line selector-class-pattern */
+      .MuiTypography-root {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #333;
+
+        @media (max-width: 768px) {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .arrow-icon {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      color: #666;
+      transition: transform .2s ease;
+      transform: translateY(-50%);
+    }
+  }
+
+  .service-details {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+
+    @media (max-width: 768px) {
+      padding: 16px;
+      font-size: 13px;
+    }
+
+    .service-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-weight: 500;
+      color: $blue;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .processing-form-field-group {
@@ -14,6 +180,7 @@
   border-radius: 4px;
   transition: all .3s ease;
 
+  /* stylelint-disable-next-line selector-max-specificity */
   h3 {
     font-family: "Open Sans", sans-serif !important;
     font-size: 15px;
@@ -86,4 +253,25 @@
 
 .processing-form-field-label {
   color: rgba(0, 0, 0, .6);
+}
+
+@media (max-width: 768px) {
+  .processing-form-configuration {
+    padding: 16px 0;
+
+    .service-tabs {
+      gap: 12px;
+      padding: 0;
+
+      .tab {
+        padding: 8px 0;
+        font-size: 14px;
+      }
+    }
+
+    /* stylelint-disable-next-line selector-class-pattern */
+    .MuiFormControl-root {
+      padding: 0;
+    }
+  }
 }
