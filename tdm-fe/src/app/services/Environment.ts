@@ -19,11 +19,6 @@ export const environment = {
             start: '/api/traitment/start',
         },
     },
-    // Identifiants d'authentification pour les API
-    auth: {
-        username: 'user',
-        password: 'xwVgG,mjSYsT)p5h',
-    },
 } as const;
 
 const internalHost = environment.host === '' ? window.location.origin : environment.host;
