@@ -386,6 +386,7 @@ const ProcessingCreationForm = () => {
                             <Button
                                 startIcon={<ArrowBackIcon />}
                                 onClick={handleBack}
+                                className="back-button"
                                 sx={{ alignSelf: 'flex-start', marginBottom: 2 }}
                             >
                                 Retour
@@ -421,7 +422,9 @@ const ProcessingCreationForm = () => {
                                 }}
                                 onChange={handleConfigurationChange}
                                 isPending={isPending}
-                            />
+                                onValidityChange={(isValid) => {
+                                    setIsWaitingInput(!isValid);
+                                } }                            />
                         ) : null}
 
                         {/* Validation step */}

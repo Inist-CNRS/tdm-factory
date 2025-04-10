@@ -2,13 +2,19 @@ import '~/app/components/form/scss/ProcessingFormCommon.scss';
 import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
 import CircularWaiting from '~/app/components/progress/CircularWaiting';
 import Markdown from '~/app/components/text/Markdown';
+import { getStaticConfig } from '~/app/services/config';
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Typography from '@mui/material/Typography';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { memo, useCallback, useState, useMemo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-import type { SyntheticEvent, FocusEvent } from 'react';
 import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 export type ProcessingFormConfigurationValueType = {
@@ -24,136 +30,183 @@ type ProcessingFormConfigurationProps = {
     isPending: boolean;
     value: ProcessingFormConfigurationValueType;
     onChange: (value: ProcessingFormConfigurationValueType) => void;
+    onValidityChange: (isValid: boolean) => void;
+};
+
+type ServiceInfo = {
+    featured: boolean;
+    summary: string;
+    description: string;
+    descriptionLink?: string;
+    url: string;
+};
+
+const getServicePath = (url: string): string => {
+    try {
+        return new URL(url).pathname;
+    } catch {
+        return url;
+    }
 };
 
 const ProcessingFormConfiguration = ({
     wrapperList,
     enrichmentList,
-    fields,
     isPending,
     value,
     onChange,
+    onValidityChange,
 }: ProcessingFormConfigurationProps) => {
-    const [wrapper, setWrapper] = useState<Wrapper | null>(value.wrapper);
-    const [wrapperParam, setWrapperParam] = useState<string>(value.wrapperParam ?? '');
-    const [enrichment, setEnrichment] = useState<Enrichment | null>(value.enrichment);
+    const { type } = useParams();
+    const [activeTab, setActiveTab] = useState('featured');
+    const [expandedService, setExpandedService] = useState<string | null>(null);
+    const [selectedService, setSelectedService] = useState<Enrichment | null>(value.enrichment);
 
-    const cleanFields = useMemo(() => {
-        if (fields && fields.fields) {
-            return fields.fields;
+    const { data: config, isLoading: isConfigLoading } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig,
+    });
+
+    const availableServices = useMemo(() => {
+        if (!config || !enrichmentList) return [];
+
+        return config.flows
+            .filter(flow => flow.input === type)
+            .reduce<ServiceInfo[]>((services, flow) => {
+                const flowPath = getServicePath(flow.enricher);
+                const matchingService = enrichmentList.find(service => 
+                    getServicePath(service.url) === flowPath
+                );
+
+                if (matchingService) {
+                    services.push({
+                        featured: flow.featured,
+                        summary: flow.summary,
+                        description: flow.description,
+                        descriptionLink: flow.descriptionLink,
+                        url: matchingService.url
+                    });
+                }
+                return services;
+            }, []);
+    }, [config, enrichmentList, type]);
+
+    const filteredServices = useMemo(() => {
+        switch (activeTab) {
+            case 'featured':
+                return availableServices.filter(service => service.featured);
+            case 'advanced':
+                return availableServices.filter(service => !service.featured);
+            default:
+                return availableServices;
         }
-        return [];
-    }, [fields]);
+    }, [activeTab, availableServices]);
+
+    const handleServiceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const newService = enrichmentList.find((service) => service.url === event.target.value);
+        if (newService && newService !== selectedService) {
+            setSelectedService(newService);
+        }
+    }, [enrichmentList, selectedService]);
+
+    const handleServiceClick = useCallback((serviceUrl: string, event: React.MouseEvent<HTMLDivElement>) => {
+        const isInteractive = (event.target as HTMLElement).closest('.MuiRadio-root, a');
+        if (!isInteractive) {
+            setExpandedService(prev => prev === serviceUrl ? null : serviceUrl);
+        }
+    }, []);
 
     useEffect(() => {
-        let invalid = false;
+        if (!selectedService || !config) return;
 
-        // Check wrapper
-        if (wrapperList && !wrapperList.find((entry) => entry.url === wrapper?.url)) {
-            invalid = true;
-        }
+        const matchingFlow = config.flows.find(flow => 
+            getServicePath(flow.enricher) === getServicePath(selectedService.url)
+        );
 
-        // Check wrapper param
-        if (wrapperParam === null || wrapperParam === undefined) {
-            invalid = true;
-        }
+        if (matchingFlow) {
+            const wrapper = wrapperList.find(w => 
+                getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
+            );
 
-        // Check enrichment
-        if (enrichmentList && !enrichmentList.find((entry) => entry.url === enrichment?.url)) {
-            invalid = true;
-        }
-
-        if (!invalid) {
             onChange({
-                wrapper,
-                wrapperParam,
-                enrichment,
+                wrapper: wrapper || null,
+                wrapperParam: matchingFlow.wrapperParameterDefault || null,
+                enrichment: selectedService
             });
         }
-    }, [enrichment, enrichmentList, onChange, wrapper, wrapperList, wrapperParam]);
+    }, [selectedService, config, wrapperList, onChange]);
 
-    const handleWrapperChange = useCallback((_: SyntheticEvent, newWrapper: Wrapper | null) => {
-        setWrapper(newWrapper);
-    }, []);
+    useEffect(() => {
+        const isValid = !!selectedService && !!config && config.flows.some(flow => 
+            getServicePath(flow.enricher) === getServicePath(selectedService.url)
+        );
+        onValidityChange(isValid);
+    }, [selectedService, config, onValidityChange]);
 
-    const handleWrapperParamChange = useCallback((_: SyntheticEvent, newWrapperParam: string | null) => {
-        setWrapperParam(newWrapperParam ?? '');
-    }, []);
-
-    const handleWrapperParamBlur = useCallback((event: FocusEvent) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        setWrapperParam(event.target.value ?? '');
-    }, []);
-
-    const handleEnrichmentChange = useCallback((_: SyntheticEvent, newEnrichment: Enrichment | null) => {
-        setEnrichment(newEnrichment);
-    }, []);
-
-    /**
-     * Show a loading box will wait for the operations to be fetched
-     */
-    if (isPending) {
+    if (isPending || isConfigLoading) {
         return <CircularWaiting />;
     }
 
     return (
-        <>
-            <Typography variant="h3" gutterBottom>
-                Choisir un service
-            </Typography>
-            {/* Wrapper input */}
-            <div className="processing-form-field-group">
-                {/* Wrapper selection */}
-                <div className="processing-form-field-with-label">
-                    <Autocomplete
-                        className="processing-form-field"
-                        value={wrapper}
-                        onChange={handleWrapperChange}
-                        options={wrapperList}
-                        renderInput={(params) => <TextField {...params} label="Convertisseur" />}
-                        fullWidth
-                    />
-                    {wrapper ? (
-                        <div id="processing-form-wrapper-label">
-                            <div id="processing-form-wrapper-label-style"></div>
-                            <Markdown className="text processing-form-field-label" text={wrapper.description} />
-                        </div>
-                    ) : null}
-                </div>
-                {/* Wrapper param */}
-                {wrapper ? (
-                    <div id="processing-form-wrapper-param">
-                        <div id="processing-form-wrapper-param-style"></div>
-                        <Autocomplete
-                            className="processing-form-field"
-                            value={wrapperParam}
-                            onChange={handleWrapperParamChange}
-                            onBlur={handleWrapperParamBlur}
-                            options={cleanFields}
-                            renderInput={(params) => <TextField {...params} label="Nom du champ à exploiter" />}
-                            fullWidth
-                            freeSolo
-                            disableClearable
-                        />
+        <div className="processing-form-configuration">
+            <h3>Choisir un service</h3>
+            <div className="service-tabs">
+                {[
+                    { id: 'featured', label: 'Services à la une' },
+                    { id: 'advanced', label: 'Services avancés' },
+                    { id: 'all', label: 'Tous les services' }
+                ].map(tab => (
+                    <div 
+                        key={tab.id}
+                        className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+                        onClick={() => setActiveTab(tab.id)}
+                    >
+                        {tab.label}
                     </div>
-                ) : null}
+                ))}
             </div>
-            {/* Enrichment input */}
-            <div className="processing-form-field-group processing-form-field-with-label">
-                <Autocomplete
-                    className="processing-form-field"
-                    value={enrichment}
-                    onChange={handleEnrichmentChange}
-                    options={enrichmentList}
-                    renderInput={(params) => <TextField {...params} label="Traitement" />}
-                    fullWidth
-                />
-                {enrichment ? (
-                    <Markdown className="text processing-form-field-label" text={enrichment.description} />
-                ) : null}
-            </div>
-        </>
+
+            <FormControl component="fieldset" fullWidth>
+                <RadioGroup
+                    aria-label="service"
+                    name="service"
+                    onChange={handleServiceChange}
+                    value={selectedService?.url || ''}
+                >
+                    {filteredServices.map((service, index) => (
+                        <div
+                            key={`${service.url}-${index}`}
+                            className={`service-container ${expandedService === service.url ? 'expanded' : ''}`}
+                            onClick={(e) => handleServiceClick(service.url, e)}
+                        >
+                            <div className="service-label-container">
+                                <FormControlLabel
+                                    value={service.url}
+                                    control={<Radio />}
+                                    label={<Markdown text={service.summary} />}
+                                />
+                                <ExpandMoreIcon className="arrow-icon" />
+                            </div>
+                            <Collapse in={expandedService === service.url}>
+                                <div className="service-details">
+                                    <Markdown text={service.description} />
+                                    {service.descriptionLink && (
+                                        <a 
+                                            href={service.descriptionLink}
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="service-link"
+                                        >
+                                            En savoir plus
+                                        </a>
+                                    )}
+                                </div>
+                            </Collapse>
+                        </div>
+                    ))}
+                </RadioGroup>
+            </FormControl>
+        </div>
     );
 };
 
