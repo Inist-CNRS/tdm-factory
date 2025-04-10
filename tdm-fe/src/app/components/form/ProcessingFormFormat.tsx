@@ -68,9 +68,9 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
     const inputFormats: Array<string> = availableFlows
         .map(flow => flow.inputFormat)
         .reduce( // Dédoublonne les formats
-            (deduplicated, format) => deduplicated.includes(format)
+            (deduplicated: Array<string>, format) => deduplicated.includes(format)
                 ? deduplicated : [...deduplicated, format],
-            []
+            [] as Array<string>
         );
     const availableFormats = inputFormats
         .map(formatId => [formatId, config.inputFormat2labels[formatId]])
