@@ -23,11 +23,6 @@ export const environment = {
 
 const internalHost = environment.host === '' ? window.location.origin : environment.host;
 
-// Fonction pour obtenir l'en-tête d'authentification Basic
-export const getAuthHeader = (): string => {
-    return `Basic ${btoa(`${environment.auth.username}:${environment.auth.password}`)}`;
-};
-
 export const createQuery = (uri: string, param?: Record<string, string> | undefined): URL => {
     const url = new URL(internalHost + uri);
     if (param !== undefined) {
