@@ -1,5 +1,9 @@
 @import "../../../scss/colors";
 
+.form-content:has(.processing-form-field-group) {
+  padding-bottom: 50px;
+}
+
 .processing-form-field-group {
   display: flex;
   flex-direction: column;

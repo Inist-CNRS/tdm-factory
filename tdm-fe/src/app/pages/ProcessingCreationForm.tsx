@@ -394,7 +394,11 @@ const ProcessingCreationForm = () => {
 
                         {/* Format step */}
                         {step === PROCESSING_FORMAT_STEP ? (
-                            <ProcessingFormFormat onChange={handleFormatChange} value={selectedFormat} />
+                            <ProcessingFormFormat
+                                onChange={handleFormatChange}
+                                value={selectedFormat}
+                                type={type as 'article' | 'corpus'}
+                            />
                         ) : null}
 
                         {/* Upload step */}
@@ -405,6 +409,7 @@ const ProcessingCreationForm = () => {
                                 onChange={handleUploadChange}
                                 isOnError={isOnError}
                                 isPending={isPending}
+                                selectedFormat={selectedFormat}
                             />
                         ) : null}
 
@@ -433,14 +438,15 @@ const ProcessingCreationForm = () => {
                         {step === PROCESSING_CONFIRMATION_STEP ? (
                             <ProcessingFormConfirmation
                                 processingId={processingId}
+                                fileName={file?.name}
                                 status={startingStatus}
-                                isPending={isPending}
+                                isPending={uploading}
                             />
                         ) : null}
                     </div>
 
                     {/* Navigation button */}
-                    {!isPending ? (
+                    {!isPending && step !== PROCESSING_CONFIRMATION_STEP ? (
                         <div id="processing-form-navigation">
                             <Button
                                 onClick={handleNext}
@@ -448,7 +454,7 @@ const ProcessingCreationForm = () => {
                                 size="large"
                                 disabled={isInvalid || isWaitingInput}
                             >
-                                {step === PROCESSING_CONFIRMATION_STEP ? 'Nouveau traitement' : 'Suivant'}
+                                Suivant
                             </Button>
                         </div>
                     ) : null}

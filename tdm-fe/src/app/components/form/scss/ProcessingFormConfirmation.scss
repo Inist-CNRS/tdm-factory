@@ -1,0 +1,227 @@
+/* Remove background for confirmation page
+.processing-form-layout {
+  #processing-form-content:has(.confirmation-container) {
+    background: transparent !important;
+  }
+}
+*/
+
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: left;
+  max-width: 100%;
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+.confirmation-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: left;
+  text-align: left;
+
+  .success-icon {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a5a71;
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #458ca5;
+  }
+}
+
+.file-details-container {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  background-color: #e6f2f7;
+  border-radius: 4px;
+
+  .detail-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-left: 30px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .value {
+      color: #333;
+      word-break: break-word;
+    }
+  }
+}
+
+.status-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0d0d0d;
+  text-align: center;
+}
+
+.status-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  padding: 0 16px;
+  padding-bottom: 20px;
+}
+
+.status-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  min-width: 140px;
+  max-width: 100%;
+
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+
+    .step-icon-svg {
+      width: 14px;
+      height: 14px;
+      color: #fff;
+
+      &.error {
+        color: #f44336;
+      }
+    }
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    font-size: 16px;
+    color: #4a4a4a;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .step-message {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 160px;
+    min-height: 40px;
+    margin-top: -4px;
+    font-size: 13px;
+    color: #666;
+    text-align: left;
+  }
+
+  &.completed {
+    .step-icon {
+      background-color: #c4d733;
+      border-color: #c4d733;
+    }
+  }
+
+  &.current {
+    .step-icon {
+      background-color: #458ca5;
+      border-color: #458ca5;
+    }
+    .step-message {
+      font-weight: 500;
+      color: #458ca5;
+    }
+  }
+
+  &.error {
+    .step-icon {
+      background-color: rgba(244, 67, 54, .08);
+      border-color: #f44336;
+    }
+
+    .step-icon-svg {
+      color: #f44336;
+    }
+
+    span {
+      font-weight: 500;
+      color: #f44336;
+    }
+
+    .step-message {
+      font-weight: 500;
+      color: #f44336;
+    }
+  }
+}
+
+.step-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 0 8px;
+  font-size: 48px;
+  color: #8f8f8f;
+}
+
+.new-processing-button {
+  align-self: center;
+  max-width: 100%;
+  padding: 10px 20px !important;
+  padding-top: 12px;
+  overflow: hidden;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+  text-overflow: ellipsis;
+  text-transform: none !important;
+  white-space: nowrap;
+  background-color: #458ca5 !important;
+  border-radius: 4px !important;
+  &:hover {
+    background-color: darken(#458ca5, 10%) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .confirmation-container {
+    padding: 16px;
+  }
+
+  .status-timeline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .status-step {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .step-separator {
+    display: none;
+  }
+}
