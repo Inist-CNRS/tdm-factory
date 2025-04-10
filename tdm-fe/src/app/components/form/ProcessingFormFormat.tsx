@@ -64,13 +64,17 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
     }
 
     // Filtrer les formats disponibles en fonction du type (corpus ou article)
-    const availableFormats = Object.entries(config.inputFormat2labels)
-        .filter(([format]) => {
-            const matchingFlows = config.flows.filter(
-                flow => flow.input === type && flow.inputFormat === format
-            );
-            return matchingFlows.length > 0;
-        });
+    const availableFlows = config.flows.filter(flow => flow.input === type);
+    const inputFormats: Array<string> = availableFlows
+        .map(flow => flow.inputFormat)
+        .reduce( // Dédoublonne les formats
+            (deduplicated: Array<string>, format) => deduplicated.includes(format)
+                ? deduplicated : [...deduplicated, format],
+            [] as Array<string>
+        );
+    const availableFormats = inputFormats
+        .map(formatId => [formatId, config.inputFormat2labels[formatId]])
+        .filter(([, format]) => format !== undefined);
 
     return (
         <>

@@ -1,3 +1,7 @@
+.form-content:has(.processing-form-format) {
+  padding-bottom: 70px;
+}
+
 /* stylelint-disable selector-class-pattern */
 .form-content .MuiTypography-h3 {
   font-family: "Open Sans", sans-serif !important;

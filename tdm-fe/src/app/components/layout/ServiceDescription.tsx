@@ -1,7 +1,7 @@
 import './scss/ServiceDescription.scss';
+import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import EmailIcon from '@mui/icons-material/Email';
-import CheckIcon from '@mui/icons-material/Check';
 import { Button, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,8 +17,8 @@ const ServiceDescription = () => {
             <Container>
                 <h2>IA Factory c'est quoi ?</h2>
                 <p className="description-text">
-                    IA Factory est une interface de chargement de corpus et d'exécution d'outils de TDM vous permettant 
-                    d'exploiter vos propres données en quelques étapes. Nous garantissons l'anonymat, les données 
+                    IA Factory est une interface de chargement de corpus et d'exécution d'outils de TDM vous permettant
+                    d'exploiter vos propres données en quelques étapes. Nous garantissons l'anonymat, les données
                     que vous nous confiez sont traitées sur notre serveur interne et ne sont pas conservées.
                 </p>
 
