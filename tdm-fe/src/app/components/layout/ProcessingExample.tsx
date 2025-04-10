@@ -60,8 +60,9 @@ const ProcessingExample = ({ currentStep = 0 }: ProcessingExampleProps) => {
                         <div className="step-number">ÉTAPE 3</div>
                         <h3>Choix du service</h3>
                         <p>
-                            Choisissez le service qui répond à votre besoin. Par exemple choisissez l'option : «
-                            Extraction d'entités nommées (Personnes, Localisations, Organismes et autres) ».
+                            Choisissez le service qui répond à votre besoin. Par exemple choisissez l'option&nbsp;:
+                            «&nbsp;Extraction d'entités nommées (Personnes, Localisations, Organismes et 
+                            autres)&nbsp;».
                         </p>
                     </div>
 
