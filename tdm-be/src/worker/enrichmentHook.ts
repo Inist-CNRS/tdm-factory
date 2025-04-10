@@ -54,7 +54,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { enrichment: enrichmentUrl, enrichmentHook, email, status } = initialProcessing;
+    const { enrichment: enrichmentUrl, enrichmentHook, email, status, flowId } = initialProcessing;
 
     // Check if we still wait for webhook
     if (status !== Status.WAITING_WEBHOOK) {
@@ -72,33 +72,36 @@ const enrichmentHookSuccess = async (processingId: string) => {
         throw new Error('This is normally impossible - Enrichment-Hook value are undefined or null');
     }
 
-    // Get dynamic config
-    const config = dynamicConfig.getConfig();
+    // // Get dynamic config
+    // const config = dynamicConfig.getConfig();
 
     // Get the enrichment config
-    const enrichmentEntry = config.enrichments.find((entry) => {
-        return enrichmentUrl.includes(entry.url);
+    // const enrichmentEntry = config.enrichments.find((entry) => {
+    //     return enrichmentUrl.includes(entry.url);
+    // });
+    const enrichmentEntry = environment.flows.find((flow) => {
+        flow.id === flowId
     });
 
     // Check if enrichment entry exists
-    if (!enrichmentEntry || !enrichmentEntry.url || !enrichmentEntry.retrieveUrl) {
-        error(processingId, 'Enrichment-Hook config dos not contain the enrichment url');
+    if (!enrichmentEntry || !enrichmentEntry.enricher || !enrichmentEntry.retrieve) {
+        error(processingId, 'Enrichment-Hook config dos not contain the enricher url');
         // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enrichment url');
+        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enricher url');
     }
 
     let response: AxiosResponse;
     try {
         response = await axios.post(
-            path.join(enrichmentEntry.url, enrichmentEntry.retrieveUrl.url),
+            path.join(enrichmentEntry.enricher, enrichmentEntry.retrieve),
             [{ value: enrichmentHook }],
             {
                 responseType: 'arraybuffer',
             },
         );
-        debug(processingId, 'Enrichment-Hook api ${enrichmentEntry.url}/${enrichmentEntry.retrieveUrl.url} called');
+        debug(processingId, `Enrichment-Hook api ${enrichmentEntry.enricher}/${enrichmentEntry.retrieve} called`);
     } catch (e) {
-        const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.url} / ${enrichmentEntry.retrieveUrl.url})`;
+        const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.enricher} / ${enrichmentEntry.retrieve})`;
         error(processingId, message);
         sendErrorMail({
             email,
@@ -142,7 +145,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get tmp file name
-    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveUrl.fileExtension}`;
+    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveExtension}`;
     const finalFile = downloadFile(finalFileName);
 
     // Save the tmp file

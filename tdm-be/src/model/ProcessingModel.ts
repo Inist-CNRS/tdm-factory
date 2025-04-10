@@ -6,6 +6,7 @@ export type Processing = {
     createdAt: Date;
     updatedAt: Date;
     id: string;
+    flowId: string | null;
     status: Status;
     email: string | null;
     wrapper: string | null;
@@ -35,6 +36,7 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
     if (result.changes !== 0) {
         return {
             id,
+            flowId: null, // TODO: Add flowId
             status: Status.UNKNOWN,
             uploadFile,
             originalName,
@@ -78,6 +80,7 @@ export const findAllStatus = (): Array<{ status: number }> => {
 export const findAllProcessing = (page: number): { page: number; total: number; results: Processing[] } => {
     const stmt = database.prepare<[number], Processing>(`
         select id,
+               flowId,
                status,
                email,
                wrapper,
@@ -107,6 +110,7 @@ export const findAllProcessing = (page: number): { page: number; total: number; 
 export const findProcessing = (id: string): Processing | undefined => {
     const stmt = database.prepare<[string], Processing>(`
         select id,
+               flowId,
                status,
                email,
                wrapper,
@@ -138,6 +142,7 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
 
     const newValue: Processing = {
         ...previousValue,
+        flowId: defaultNull<string>(processing.flowId, previousValue.flowId),
         status: defaultNull<number>(processing.status, previousValue.status) ?? Status.UNKNOWN,
         email: defaultNull<string>(processing.email, previousValue.email),
         wrapper: defaultNull<string>(processing.wrapper, previousValue.wrapper),
@@ -159,11 +164,13 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
             string | null,
             string | null,
             string | null,
+            string | null,
         ],
         Processing
     >(`
         update processing
         set status         = ?,
+            flowId         = ?,
             email          = ?,
             wrapper        = ?,
             wrapperParam   = ?,
@@ -176,6 +183,7 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
 
     const result = stmt.run(
         newValue.status,
+        newValue.flowId,
         newValue.email,
         newValue.wrapper,
         newValue.wrapperParam,
