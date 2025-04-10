@@ -33,7 +33,10 @@ type Config = {
         deleteFileOlderThan: number;
     };
     verbose: string;
+    inputFormat2labels: Record<string, { summary: string; description: string }>;
     flows: Array<{
+        id: string;
+        featured: boolean;
         input: string;
         inputFormat: string;
         wrapper: string;
@@ -45,6 +48,7 @@ type Config = {
         retrieveExtension: string;
         summary: string;
         description: string;
+        descriptionLink?: string;
     }>;
 };
 
