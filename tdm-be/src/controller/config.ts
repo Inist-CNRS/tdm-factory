@@ -1,30 +1,9 @@
-import staticConfig from '~/lib/config';
 import logger from '~/lib/logger';
 import dynamicConfig from '~/model/DynamicConfig';
 
 import { Router } from 'express';
 
 const router = Router();
-
-/**
- * @swagger
- * /config/static:
- *   get:
- *     summary: Get the static configuration
- *     responses:
- *       200:
- *         description: Static configuration of the tdm project
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/StaticConfig'
- */
-router.get('/static', (req, res) => {
-    // Keep only flows field, as the other ones are confidential
-    // (passwords, IPs, etc.), and not used by the frontend
-    const { flows } = staticConfig;
-    res.json({ flows });
-});
 
 /**
  * @swagger

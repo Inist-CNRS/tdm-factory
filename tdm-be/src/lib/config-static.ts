@@ -1,4 +1,6 @@
-export type StaticConfig = {
+import config from 'config';
+
+type StaticConfig = {
     flows: Array<{
         featured: boolean;
         input: string;
@@ -16,3 +18,5 @@ export type StaticConfig = {
     }>;
     inputFormat2labels: Record<string, { summary: string; description: string }>;
 };
+
+export default config as unknown as StaticConfig;

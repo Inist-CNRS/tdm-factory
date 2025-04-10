@@ -36,7 +36,7 @@ const swaggerOptionsConfig = {
             },
         ],
     },
-    apis: ['./src/controller/config.ts'], // Specify the file containing your routes
+    apis: ['./src/controller/config.ts', './src/controller/config-static.ts'], // Specify the file containing your routes
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

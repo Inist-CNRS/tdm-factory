@@ -361,7 +361,7 @@ const ProcessingCreationForm = () => {
 
     return (
         <div id="processing-form">
-            <Button 
+            <Button
                 onClick={handleHomeReturn}
                 startIcon={<KeyboardBackspaceIcon />}
                 className="back-button"
