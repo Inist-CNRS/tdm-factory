@@ -110,6 +110,7 @@ router.post(
         let wrapperParam = 'value';
         let urlEnrichment: string | undefined = undefined;
         let email: string | undefined = undefined;
+        let flowId: string | undefined = undefined;
 
         // Get wrapper url
         if (traitement.wrapper && traitement.wrapper.url) {
@@ -132,6 +133,14 @@ router.post(
             email = traitement.mail;
         }
 
+        // Get flowId
+        if (traitement.flowId) {
+            flowId = traitement.flowId;
+            logger.debug(`Received flowId: ${flowId}`);
+        } else {
+            logger.debug('No flowId received in request');
+        }
+
         // Check if default params is pressent
         if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email) {
             res.status(HTTP_BAD_REQUEST).send({
@@ -149,6 +158,7 @@ router.post(
             enrichment: urlEnrichment,
             status: Status.STARTING,
             email,
+            flowId,
         };
 
         // Update the cache db

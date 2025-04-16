@@ -21,6 +21,7 @@ export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
     wrapperParam: string | null;
     enrichment: Enrichment | null;
+    flowId?: string | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -74,7 +75,7 @@ const ProcessingFormConfiguration = ({
             .filter(flow => flow.input === type)
             .reduce<ServiceInfo[]>((services, flow) => {
                 const flowPath = getServicePath(flow.enricher);
-                const matchingService = enrichmentList.find(service => 
+                const matchingService = enrichmentList.find(service =>
                     getServicePath(service.url) === flowPath
                 );
 
@@ -119,25 +120,26 @@ const ProcessingFormConfiguration = ({
     useEffect(() => {
         if (!selectedService || !config) return;
 
-        const matchingFlow = config.flows.find(flow => 
+        const matchingFlow = config.flows.find(flow =>
             getServicePath(flow.enricher) === getServicePath(selectedService.url)
         );
 
         if (matchingFlow) {
-            const wrapper = wrapperList.find(w => 
+            const wrapper = wrapperList.find(w =>
                 getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
             );
 
             onChange({
                 wrapper: wrapper || null,
                 wrapperParam: matchingFlow.wrapperParameterDefault || null,
-                enrichment: selectedService
+                enrichment: selectedService,
+                flowId: matchingFlow.id
             });
         }
     }, [selectedService, config, wrapperList, onChange]);
 
     useEffect(() => {
-        const isValid = !!selectedService && !!config && config.flows.some(flow => 
+        const isValid = !!selectedService && !!config && config.flows.some(flow =>
             getServicePath(flow.enricher) === getServicePath(selectedService.url)
         );
         onValidityChange(isValid);
@@ -156,7 +158,7 @@ const ProcessingFormConfiguration = ({
                     { id: 'advanced', label: 'Services avancés' },
                     { id: 'all', label: 'Tous les services' }
                 ].map(tab => (
-                    <div 
+                    <div
                         key={tab.id}
                         className={`tab ${activeTab === tab.id ? 'active' : ''}`}
                         onClick={() => setActiveTab(tab.id)}
@@ -191,9 +193,9 @@ const ProcessingFormConfiguration = ({
                                 <div className="service-details">
                                     <Markdown text={service.description} />
                                     {service.descriptionLink && (
-                                        <a 
+                                        <a
                                             href={service.descriptionLink}
-                                            target="_blank" 
+                                            target="_blank"
                                             rel="noopener noreferrer"
                                             className="service-link"
                                         >

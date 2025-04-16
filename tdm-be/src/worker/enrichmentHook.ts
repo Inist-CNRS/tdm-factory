@@ -17,7 +17,6 @@ import Status from '~/model/Status';
 import axios from 'axios';
 
 import { writeFile } from 'node:fs/promises';
-import path from 'path';
 
 import type { AxiosResponse } from 'axios';
 
@@ -63,6 +62,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
 
     updateProcessing(processingId, {
         status: Status.PROCESSING_WEBHOOK,
+        flowId,
     });
 
     // Check if the variable exist
@@ -79,9 +79,16 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // const enrichmentEntry = config.enrichments.find((entry) => {
     //     return enrichmentUrl.includes(entry.url);
     // });
-    const enrichmentEntry = environment.flows.find((flow) => {
-        flow.id === flowId
-    });
+
+    // Get the enrichment config from static config using flowId
+    debug(processingId, `Looking for flow with ID: ${flowId}`);
+    const enrichmentEntry = environment.flows.find((flow) => flow.id === flowId);
+
+    if (enrichmentEntry) {
+        debug(processingId, `Found flow: ${enrichmentEntry.id} with extension: ${enrichmentEntry.retrieveExtension}`);
+    } else {
+        error(processingId, `Flow with ID ${flowId} not found in environment.flows`);
+    }
 
     // Check if enrichment entry exists
     if (!enrichmentEntry || !enrichmentEntry.enricher || !enrichmentEntry.retrieve) {
@@ -91,17 +98,29 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     let response: AxiosResponse;
+    const enricherUrlObj = new URL(enrichmentEntry.enricher);
+    const baseUrl = `${enricherUrlObj.protocol}//${enricherUrlObj.host}`;
+
+    // Get the retrieve path, ensuring it starts with a slash
+    const retrievePath = enrichmentEntry.retrieve.startsWith('/')
+        ? enrichmentEntry.retrieve
+        : '/' + enrichmentEntry.retrieve;
+
+    // Construct the full URL
+    const fullUrl = `${baseUrl}${retrievePath}`;
+    debug(processingId, `Calling URL: ${fullUrl}`);
+
     try {
         response = await axios.post(
-            path.join(enrichmentEntry.enricher, enrichmentEntry.retrieve),
+            fullUrl,
             [{ value: enrichmentHook }],
             {
                 responseType: 'arraybuffer',
             },
         );
-        debug(processingId, `Enrichment-Hook api ${enrichmentEntry.enricher}/${enrichmentEntry.retrieve} called`);
+        debug(processingId, `Enrichment-Hook api call successful`);
     } catch (e) {
-        const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.enricher} / ${enrichmentEntry.retrieve})`;
+        const message = `Impossible to contact enrichment-hook api (${fullUrl})`;
         error(processingId, message);
         sendErrorMail({
             email,
@@ -116,6 +135,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         crash(e, message, initialProcessing);
         return;
@@ -140,6 +160,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         return;
     }
@@ -168,6 +189,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         crash(e, message, initialProcessing);
         return;
@@ -193,6 +215,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.FINISHED,
         resultFile: finalFile,
+        flowId,
     });
 };
 
@@ -244,6 +267,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     // Update processing information
     updateProcessing(processingId, {
         status: Status.ENRICHMENT_ERROR,
+        flowId: initialProcessing.flowId,
     });
 };
 

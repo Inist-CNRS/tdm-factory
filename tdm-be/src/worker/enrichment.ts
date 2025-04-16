@@ -48,7 +48,7 @@ const enrichment = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { tmpFile: file, enrichment: enrichmentUrl } = initialProcessing;
+    const { tmpFile: file, enrichment: enrichmentUrl, flowId } = initialProcessing;
 
     // Check if the variable existe
     if (!file || !enrichmentUrl) {
@@ -108,6 +108,7 @@ const enrichment = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.WAITING_WEBHOOK,
         enrichmentHook: response.data[0].value,
+        flowId: flowId,
     });
 };
 
