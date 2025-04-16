@@ -16,6 +16,7 @@ const init = () => {
         create table if not exists processing
         (
             id             text primary key,
+            flowId         text default null,
             status         integer,
             email          text default null,
             wrapper        text default null,

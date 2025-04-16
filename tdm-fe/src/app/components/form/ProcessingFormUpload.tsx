@@ -26,6 +26,7 @@ type ProcessingFormUploadProps = {
     isOnError: boolean;
     isPending: boolean;
     onChange: (value: File | null, isValid: boolean) => void;
+    selectedFormat?: string | null;
 };
 
 const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {

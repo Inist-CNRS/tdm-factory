@@ -13,10 +13,12 @@ import Markdown from '~/app/components/text/Markdown';
 type ProcessingFormFormatProps = {
     onChange: (format: string) => void;
     value: string | null;
+    type?: 'article' | 'corpus';
 };
 
-const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) => {
-    const { type } = useParams();
+const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFormFormatProps) => {
+    const { type: paramType } = useParams();
+    const type = propType || paramType;
     const [expandedFormat, setExpandedFormat] = useState<string | null>(null);
 
     const { data: config, isLoading, error } = useQuery({
@@ -72,9 +74,11 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
                 ? deduplicated : [...deduplicated, format],
             [] as Array<string>
         );
-    const availableFormats = inputFormats
+    type FormatLabels = { summary: string; description: string };
+
+    const availableFormats: Array<[string, FormatLabels]> = inputFormats
         .map(formatId => [formatId, config.inputFormat2labels[formatId]])
-        .filter(([, format]) => format !== undefined);
+        .filter(([, format]) => format !== undefined) as Array<[string, FormatLabels]>;
 
     return (
         <>
@@ -84,27 +88,30 @@ const ProcessingFormFormat = ({ onChange, value }: ProcessingFormFormatProps) =>
             <div className="processing-form-format">
                 <FormControl component="fieldset" fullWidth>
                     <RadioGroup aria-label="format" name="format" onChange={handleFormatChange} value={value || ''}>
-                        {availableFormats.map(([format, labels]) => (
-                            <div
-                                key={format}
-                                className={`format-container ${expandedFormat === format ? 'expanded' : ''}`}
-                                onClick={(e) => handleFormatClick(format, e)}
-                            >
-                                <div className="format-label-container">
-                                    <FormControlLabel
-                                        value={format}
-                                        control={<Radio />}
-                                        label={<Markdown text={labels.summary} />}
-                                    />
-                                    <ExpandMoreIcon className="arrow-icon" />
-                                </div>
-                                <Collapse in={expandedFormat === format}>
-                                    <div className="format-details">
-                                        <Markdown text={labels.description} />
+                        {availableFormats.map(([format, labels]) => {
+                            if (!labels) return null;
+                            return (
+                                <div
+                                    key={format}
+                                    className={`format-container ${expandedFormat === format ? 'expanded' : ''}`}
+                                    onClick={(e) => handleFormatClick(format, e)}
+                                >
+                                    <div className="format-label-container">
+                                        <FormControlLabel
+                                            value={format}
+                                            control={<Radio />}
+                                            label={<Markdown text={labels.summary || format} />}
+                                        />
+                                        <ExpandMoreIcon className="arrow-icon" />
                                     </div>
-                                </Collapse>
-                            </div>
-                        ))}
+                                    <Collapse in={expandedFormat === format}>
+                                        <div className="format-details">
+                                            <Markdown text={labels.description || 'No description available'} />
+                                        </div>
+                                    </Collapse>
+                                </div>
+                            );
+                        })}
                     </RadioGroup>
                 </FormControl>
             </div>
