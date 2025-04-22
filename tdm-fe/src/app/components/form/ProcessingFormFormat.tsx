@@ -14,6 +14,7 @@ type ProcessingFormFormatProps = {
     onChange: (format: string) => void;
     value: string | null;
     type?: 'article' | 'corpus';
+    inputFormat?: string;
 };
 
 const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFormFormatProps) => {
@@ -48,8 +49,10 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
                 event.stopPropagation();
                 setExpandedFormat(expandedFormat === format ? null : format);
             }
+            // Stocker format selectionné dans inputFormat qu'on recupere dans "processingFormConfiguration"
+            onChange(format);
         },
-        [expandedFormat],
+        [expandedFormat, onChange],
     );
 
     if (isLoading) {
