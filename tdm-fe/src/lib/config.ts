@@ -1,5 +1,6 @@
 export type StaticConfig = {
     flows: Array<{
+        id: string;
         featured: boolean;
         input: string;
         inputFormat: string;

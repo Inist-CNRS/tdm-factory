@@ -17,7 +17,6 @@ import Status from '~/model/Status';
 import axios from 'axios';
 
 import { writeFile } from 'node:fs/promises';
-import path from 'path';
 
 import type { AxiosResponse } from 'axios';
 
@@ -54,7 +53,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { enrichment: enrichmentUrl, enrichmentHook, email, status } = initialProcessing;
+    const { enrichment: enrichmentUrl, enrichmentHook, email, status, flowId } = initialProcessing;
 
     // Check if we still wait for webhook
     if (status !== Status.WAITING_WEBHOOK) {
@@ -63,6 +62,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
 
     updateProcessing(processingId, {
         status: Status.PROCESSING_WEBHOOK,
+        flowId,
     });
 
     // Check if the variable exist
@@ -72,33 +72,55 @@ const enrichmentHookSuccess = async (processingId: string) => {
         throw new Error('This is normally impossible - Enrichment-Hook value are undefined or null');
     }
 
-    // Get dynamic config
-    const config = dynamicConfig.getConfig();
+    // // Get dynamic config
+    // const config = dynamicConfig.getConfig();
 
     // Get the enrichment config
-    const enrichmentEntry = config.enrichments.find((entry) => {
-        return enrichmentUrl.includes(entry.url);
-    });
+    // const enrichmentEntry = config.enrichments.find((entry) => {
+    //     return enrichmentUrl.includes(entry.url);
+    // });
+
+    // Get the enrichment config from static config using flowId
+    debug(processingId, `Looking for flow with ID: ${flowId}`);
+    const enrichmentEntry = environment.flows.find((flow) => flow.id === flowId);
+
+    if (enrichmentEntry) {
+        debug(processingId, `Found flow: ${enrichmentEntry.id} with extension: ${enrichmentEntry.retrieveExtension}`);
+    } else {
+        error(processingId, `Flow with ID ${flowId} not found in environment.flows`);
+    }
 
     // Check if enrichment entry exists
-    if (!enrichmentEntry || !enrichmentEntry.url || !enrichmentEntry.retrieveUrl) {
-        error(processingId, 'Enrichment-Hook config dos not contain the enrichment url');
+    if (!enrichmentEntry || !enrichmentEntry.enricher || !enrichmentEntry.retrieve) {
+        error(processingId, 'Enrichment-Hook config dos not contain the enricher url');
         // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enrichment url');
+        throw new Error('This is normally impossible - Enrichment-Hook config does not contain the enricher url');
     }
 
     let response: AxiosResponse;
+    const enricherUrlObj = new URL(enrichmentEntry.enricher);
+    const baseUrl = `${enricherUrlObj.protocol}//${enricherUrlObj.host}`;
+
+    // Get the retrieve path, ensuring it starts with a slash
+    const retrievePath = enrichmentEntry.retrieve.startsWith('/')
+        ? enrichmentEntry.retrieve
+        : '/' + enrichmentEntry.retrieve;
+
+    // Construct the full URL
+    const fullUrl = `${baseUrl}${retrievePath}`;
+    debug(processingId, `Calling URL: ${fullUrl}`);
+
     try {
         response = await axios.post(
-            path.join(enrichmentEntry.url, enrichmentEntry.retrieveUrl.url),
+            fullUrl,
             [{ value: enrichmentHook }],
             {
                 responseType: 'arraybuffer',
             },
         );
-        debug(processingId, 'Enrichment-Hook api ${enrichmentEntry.url}/${enrichmentEntry.retrieveUrl.url} called');
+        debug(processingId, `Enrichment-Hook api call successful`);
     } catch (e) {
-        const message = `Impossible to contact enrichment-hook api (${enrichmentEntry.url} / ${enrichmentEntry.retrieveUrl.url})`;
+        const message = `Impossible to contact enrichment-hook api (${fullUrl})`;
         error(processingId, message);
         sendErrorMail({
             email,
@@ -113,6 +135,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         crash(e, message, initialProcessing);
         return;
@@ -137,12 +160,13 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         return;
     }
 
     // Get tmp file name
-    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveUrl.fileExtension}`;
+    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveExtension}`;
     const finalFile = downloadFile(finalFileName);
 
     // Save the tmp file
@@ -165,6 +189,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         }).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
+            flowId,
         });
         crash(e, message, initialProcessing);
         return;
@@ -190,6 +215,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.FINISHED,
         resultFile: finalFile,
+        flowId,
     });
 };
 
@@ -241,6 +267,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     // Update processing information
     updateProcessing(processingId, {
         status: Status.ENRICHMENT_ERROR,
+        flowId: initialProcessing.flowId,
     });
 };
 

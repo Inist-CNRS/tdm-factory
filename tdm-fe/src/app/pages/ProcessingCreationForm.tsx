@@ -59,6 +59,7 @@ const ProcessingCreationForm = () => {
     const [wrapper, setWrapper] = useState<Wrapper | null>(null);
     const [wrapperParam, setWrapperParam] = useState<string | null>(null);
     const [enrichment, setEnrichment] = useState<Enrichment | null>(null);
+    const [flowId, setFlowId] = useState<string | null>(null);
 
     /**
      * Form validation step
@@ -139,7 +140,7 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam],
+        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam, flowId],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
@@ -156,6 +157,7 @@ const ProcessingCreationForm = () => {
                 wrapperParam: wrapperParam ?? undefined,
                 enrichment: enrichment,
                 mail: email,
+                flowId: flowId ?? undefined,
             });
         },
         staleTime: 3600000,
@@ -314,6 +316,7 @@ const ProcessingCreationForm = () => {
         setWrapper(value.wrapper);
         setWrapperParam(value.wrapperParam);
         setEnrichment(value.enrichment);
+        setFlowId(value.flowId || null);
         setIsWaitingInput(false);
     }, []);
 
@@ -424,6 +427,7 @@ const ProcessingCreationForm = () => {
                                     wrapper,
                                     wrapperParam,
                                     enrichment,
+                                    flowId
                                 }}
                                 onChange={handleConfigurationChange}
                                 isPending={isPending}

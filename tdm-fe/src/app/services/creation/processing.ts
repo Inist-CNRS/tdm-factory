@@ -8,6 +8,7 @@ export type ProcessingStartParams = {
     enrichment: Operation;
     mail: string;
     id: string;
+    flowId?: string;
 };
 
 export const start = async ({
@@ -16,6 +17,7 @@ export const start = async ({
     enrichment,
     mail,
     id,
+    flowId,
 }: ProcessingStartParams): Promise<202 | 400 | 409 | 428 | 500> => {
     const response = await fetch(createQuery(environment.post.processing.start), {
         method: 'POST',
@@ -37,6 +39,7 @@ export const start = async ({
             },
             mail,
             file: id,
+            flowId,
         }),
     });
 

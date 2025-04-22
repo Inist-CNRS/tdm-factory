@@ -7,6 +7,7 @@ export class Traitment {
     enrichment: Request = { url: '' };
     mail = '';
     file = '';
+    flowId?: string;
     timestamp?: number;
     id?: string;
     retrieveValue?: string;
