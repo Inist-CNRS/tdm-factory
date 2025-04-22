@@ -427,7 +427,7 @@ const ProcessingCreationForm = () => {
                                     wrapper,
                                     wrapperParam,
                                     enrichment,
-                                    flowId
+                                    inputFormat: selectedFormat,
                                 }}
                                 onChange={handleConfigurationChange}
                                 isPending={isPending}

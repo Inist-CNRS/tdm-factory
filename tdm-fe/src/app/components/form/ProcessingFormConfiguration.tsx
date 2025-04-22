@@ -21,7 +21,7 @@ export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
     wrapperParam: string | null;
     enrichment: Enrichment | null;
-    flowId?: string | null;
+    inputFormat?: string | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -35,6 +35,7 @@ type ProcessingFormConfigurationProps = {
 };
 
 type ServiceInfo = {
+    inputFormat: string;
     featured: boolean;
     summary: string;
     description: string;
@@ -81,6 +82,7 @@ const ProcessingFormConfiguration = ({
 
                 if (matchingService) {
                     services.push({
+                        inputFormat: flow.inputFormat,
                         featured: flow.featured,
                         summary: flow.summary,
                         description: flow.description,
@@ -89,7 +91,8 @@ const ProcessingFormConfiguration = ({
                     });
                 }
                 return services;
-            }, []);
+            }, [])
+            .filter(service => service.inputFormat === value.inputFormat);
     }, [config, enrichmentList, type]);
 
     const filteredServices = useMemo(() => {
