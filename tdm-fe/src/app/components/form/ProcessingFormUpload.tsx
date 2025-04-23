@@ -29,9 +29,10 @@ type ProcessingFormUploadProps = {
     selectedFormat?: string | null;
 };
 
-const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, selectedFormat }: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
+    const [formatError, setFormatError] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [hasAttemptedUpload, setHasAttemptedUpload] = useState(false);
 
@@ -39,19 +40,42 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
         return mimes.join(', ');
     }, [mimes]);
 
+    const checkFileFormat = useCallback((file: File | null, format: string | null | undefined): boolean => {
+        if (!file || !format) return true;
+
+        const fileName = file.name.toLowerCase();
+        const fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+        if (format === 'istex.tar.gz' || format === 'tei.tar.gz') {
+            // Vérifier les différentes variantes d'archives compressées
+            return fileName.endsWith('.tar.gz') ||
+                   fileName.endsWith('.tgz') ||
+                   fileName.endsWith('.targz');
+        }
+
+        return fileName.endsWith('.' + format);
+    }, []);
+
     useEffect(() => {
         let invalid = false;
+        let wrongFormat = false;
 
         if (file) {
             if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
                 invalid = true;
             }
+            
+            if (selectedFormat && !checkFileFormat(file, selectedFormat)) {
+                wrongFormat = true;
+            }
+
             setHasAttemptedUpload(true);
         }
 
         setIsInvalid(invalid);
-        onChange(file, file !== null && !invalid);
-    }, [file, mimes, onChange]);
+        setFormatError(wrongFormat);
+        onChange(file, file !== null && !invalid && !wrongFormat);
+    }, [file, mimes, onChange, selectedFormat, checkFileFormat]);
 
     const handleFileChange = useCallback((newFile: File | null) => {
         setFile(newFile);
@@ -148,10 +172,21 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
                         </div>
                     )}
                 </div>
-                {isInvalid && hasAttemptedUpload ? (
+                {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
-                        Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
-                        {stringifiesMineTypes}.
+                        {isInvalid ? (
+                            <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMineTypes}.</p>
+                        ) : null}
+                        {formatError ? (
+                            <p>
+                                Le fichier ne correspond pas au format sélectionné ({selectedFormat}).
+                                {selectedFormat && (selectedFormat.includes('tar.gz') || selectedFormat.includes('tgz')) ? (
+                                    <span> Les formats acceptés sont : .tar.gz, .tgz, .targz</span>
+                                ) : (
+                                    <span> Le fichier doit avoir l&apos;extension .{selectedFormat}</span>
+                                )}
+                            </p>
+                        ) : null}
                     </div>
                 ) : null}
             </div>

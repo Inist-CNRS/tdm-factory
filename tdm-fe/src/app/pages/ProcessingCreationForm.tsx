@@ -302,10 +302,12 @@ const ProcessingCreationForm = () => {
     /**
      * Handle file change
      * @param value newly add file
+     * @param isValid indicates if the file is valid (correct MIME type and format)
      */
     const handleUploadChange = useCallback((value: File | null, isValid: boolean) => {
         setFile(value);
         setIsWaitingInput(!isValid);
+        setIsInvalid(value !== null && !isValid);
     }, []);
 
     /**
@@ -343,8 +345,8 @@ const ProcessingCreationForm = () => {
             setIsWaitingInput(!selectedFormat);
             setIsInvalid(false);
         } else if (previousStep === PROCESSING_UPLOAD_STEP) {
-            setIsWaitingInput(!file);
-            setIsInvalid(false);
+            const fileIsValid = file !== null && !isInvalid;
+            setIsWaitingInput(!fileIsValid);
         } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
             setIsWaitingInput(!(wrapper && enrichment));
             setIsInvalid(false);

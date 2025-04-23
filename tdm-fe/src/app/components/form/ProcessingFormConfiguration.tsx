@@ -22,6 +22,7 @@ export type ProcessingFormConfigurationValueType = {
     wrapperParam: string | null;
     enrichment: Enrichment | null;
     inputFormat?: string | null;
+    flowId?: string | null;
 };
 
 type ProcessingFormConfigurationProps = {
