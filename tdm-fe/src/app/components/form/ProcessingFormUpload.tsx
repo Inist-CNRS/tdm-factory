@@ -43,7 +43,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
         queryFn: getStaticConfig,
     });
 
-    const stringifiesMineTypes = useMemo(() => {
+    const stringifiesMimeTypes = useMemo(() => {
         return mimes.join(', ');
     }, [mimes]);
 
@@ -137,7 +137,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                                 error={isInvalid ? hasAttemptedUpload : false}
                                 hideSizeText
                                 inputProps={{
-                                    accept: stringifiesMineTypes,
+                                    accept: stringifiesMimeTypes,
                                 }}
                                 InputProps={{
                                     sx: { display: 'none' },
@@ -177,7 +177,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                 {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
                         {isInvalid ? (
-                            <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMineTypes}.</p>
+                            <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMimeTypes}.</p>
                         ) : null}
                         {formatError && selectedFormat && config ? (
                             <p>

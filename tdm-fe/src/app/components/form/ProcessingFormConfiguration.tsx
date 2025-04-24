@@ -22,7 +22,6 @@ export type ProcessingFormConfigurationValueType = {
     wrapperParam: string | null;
     enrichment: Enrichment | null;
     inputFormat?: string | null;
-    flowId?: string | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -136,8 +135,7 @@ const ProcessingFormConfiguration = ({
             onChange({
                 wrapper: wrapper || null,
                 wrapperParam: matchingFlow.wrapperParameterDefault || null,
-                enrichment: selectedService,
-                flowId: matchingFlow.id
+                enrichment: selectedService
             });
         }
     }, [selectedService, config, wrapperList, onChange]);
