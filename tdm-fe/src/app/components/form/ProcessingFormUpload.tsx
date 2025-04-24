@@ -1,5 +1,6 @@
 import './scss/ProcessingFormUpload.scss';
 import FileUpload from '~/app/components/progress/FileUpload';
+import { getStaticConfig } from '~/app/services/config';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -7,6 +8,7 @@ import { Button } from '@mui/material';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import type React from 'react';
 
@@ -36,25 +38,25 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
     const [isDragging, setIsDragging] = useState(false);
     const [hasAttemptedUpload, setHasAttemptedUpload] = useState(false);
 
+    const { data: config } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig,
+    });
+
     const stringifiesMineTypes = useMemo(() => {
         return mimes.join(', ');
     }, [mimes]);
 
     const checkFileFormat = useCallback((file: File | null, format: string | null | undefined): boolean => {
-        if (!file || !format) return true;
+        if (!file || !format || !config) return true;
 
         const fileName = file.name.toLowerCase();
-        const fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+        const extensions = config.inputFormat2labels[format]?.extensions;
 
-        if (format === 'istex.tar.gz' || format === 'tei.tar.gz') {
-            // Vérifier les différentes variantes d'archives compressées
-            return fileName.endsWith('.tar.gz') ||
-                   fileName.endsWith('.tgz') ||
-                   fileName.endsWith('.targz');
-        }
+        if (!extensions) return true;
 
-        return fileName.endsWith('.' + format);
-    }, []);
+        return extensions.some(ext => fileName.endsWith(`.${ext}`));
+    }, [config]);
 
     useEffect(() => {
         let invalid = false;
@@ -177,14 +179,10 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                         {isInvalid ? (
                             <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiesMineTypes}.</p>
                         ) : null}
-                        {formatError ? (
+                        {formatError && selectedFormat && config ? (
                             <p>
-                                Le fichier ne correspond pas au format sélectionné ({selectedFormat}).
-                                {selectedFormat && (selectedFormat.includes('tar.gz') || selectedFormat.includes('tgz')) ? (
-                                    <span> Les formats acceptés sont : .tar.gz, .tgz, .targz</span>
-                                ) : (
-                                    <span> Le fichier doit avoir l&apos;extension .{selectedFormat}</span>
-                                )}
+                                Le fichier ne correspond pas au format sélectionné.
+                                <span> Les formats acceptés sont : {config.inputFormat2labels[selectedFormat]?.extensions?.map((ext: string) => `.${ext}`).join(', ')}</span>
                             </p>
                         ) : null}
                     </div>
