@@ -10,7 +10,6 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 import { memo, useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -22,6 +21,7 @@ export type ProcessingFormConfigurationValueType = {
     wrapperParam: string | null;
     enrichment: Enrichment | null;
     inputFormat?: string | null;
+    flowId?: string | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -126,7 +126,7 @@ const ProcessingFormConfiguration = ({
         const matchingFlow = config.flows.find(flow =>
             getServicePath(flow.enricher) === getServicePath(selectedService.url)
         );
-
+    
         if (matchingFlow) {
             const wrapper = wrapperList.find(w =>
                 getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
@@ -135,7 +135,8 @@ const ProcessingFormConfiguration = ({
             onChange({
                 wrapper: wrapper || null,
                 wrapperParam: matchingFlow.wrapperParameterDefault || null,
-                enrichment: selectedService
+                enrichment: selectedService,
+                flowId: matchingFlow.id
             });
         }
     }, [selectedService, config, wrapperList, onChange]);
