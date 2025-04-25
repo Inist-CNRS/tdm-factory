@@ -1,5 +1,6 @@
 import './scss/ProcessingFormUpload.scss';
 import FileUpload from '~/app/components/progress/FileUpload';
+import { getStaticConfig } from '~/app/services/config';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -7,6 +8,7 @@ import { Button } from '@mui/material';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import type React from 'react';
 
@@ -29,29 +31,53 @@ type ProcessingFormUploadProps = {
     selectedFormat?: string | null;
 };
 
-const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, selectedFormat }: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
+    const [formatError, setFormatError] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [hasAttemptedUpload, setHasAttemptedUpload] = useState(false);
 
-    const stringifiesMineTypes = useMemo(() => {
+    const { data: config } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig,
+    });
+
+    const stringifiedMimeTypes = useMemo(() => {
         return mimes.join(', ');
     }, [mimes]);
 
+    const checkFileFormat = useCallback((file: File | null, format: string | null | undefined): boolean => {
+        if (!file || !format || !config) return true;
+
+        const fileName = file.name.toLowerCase();
+        const extensions = config.inputFormat2labels[format]?.extensions;
+
+        if (!extensions) return true;
+
+        return extensions.some(ext => fileName.endsWith(`.${ext}`));
+    }, [config]);
+
     useEffect(() => {
         let invalid = false;
+        let wrongFormat = false;
 
         if (file) {
             if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
                 invalid = true;
             }
+            
+            if (selectedFormat && !checkFileFormat(file, selectedFormat)) {
+                wrongFormat = true;
+            }
+
             setHasAttemptedUpload(true);
         }
 
         setIsInvalid(invalid);
-        onChange(file, file !== null && !invalid);
-    }, [file, mimes, onChange]);
+        setFormatError(wrongFormat);
+        onChange(file, file !== null && !invalid && !wrongFormat);
+    }, [file, mimes, onChange, selectedFormat, checkFileFormat]);
 
     const handleFileChange = useCallback((newFile: File | null) => {
         setFile(newFile);
@@ -111,7 +137,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
                                 error={isInvalid ? hasAttemptedUpload : false}
                                 hideSizeText
                                 inputProps={{
-                                    accept: stringifiesMineTypes,
+                                    accept: stringifiedMimeTypes,
                                 }}
                                 InputProps={{
                                     sx: { display: 'none' },
@@ -148,10 +174,17 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange }: 
                         </div>
                     )}
                 </div>
-                {isInvalid && hasAttemptedUpload ? (
+                {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
-                        Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
-                        {stringifiesMineTypes}.
+                        {isInvalid ? (
+                            <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiedMimeTypes}.</p>
+                        ) : null}
+                        {formatError && selectedFormat && config ? (
+                            <p>
+                                Le fichier ne correspond pas au format sélectionné.
+                                <span> Les formats acceptés sont : {config.inputFormat2labels[selectedFormat]?.extensions?.map((ext: string) => `.${ext}`).join(', ')}</span>
+                            </p>
+                        ) : null}
                     </div>
                 ) : null}
             </div>
