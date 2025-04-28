@@ -95,6 +95,35 @@ const ProcessingFormConfiguration = ({
             .filter(service => service.inputFormat === value.inputFormat);
     }, [config, enrichmentList, type]);
 
+    // Determine which categories have services
+    const hasFeaturedServices = useMemo(() =>
+        availableServices.some(service => service.featured),
+        [availableServices]
+    );
+
+    const hasAdvancedServices = useMemo(() =>
+        availableServices.some(service => !service.featured),
+        [availableServices]
+    );
+
+    // Get available tabs based on which categories have services
+    const availableTabs = useMemo(() => {
+        const tabs = [];
+        if (hasFeaturedServices) tabs.push({ id: 'featured', label: 'Services à la une' });
+        if (hasAdvancedServices) tabs.push({ id: 'advanced', label: 'Services avancés' });
+        tabs.push({ id: 'all', label: 'Tous les services' });
+        return tabs;
+    }, [hasFeaturedServices, hasAdvancedServices]);
+
+    // Update activeTab if current tab has no services
+    useEffect(() => {
+        if (activeTab === 'featured' && !hasFeaturedServices) {
+            setActiveTab(hasAdvancedServices ? 'advanced' : 'all');
+        } else if (activeTab === 'advanced' && !hasAdvancedServices) {
+            setActiveTab(hasFeaturedServices ? 'featured' : 'all');
+        }
+    }, [activeTab, hasFeaturedServices, hasAdvancedServices]);
+
     const filteredServices = useMemo(() => {
         switch (activeTab) {
             case 'featured':
@@ -126,7 +155,7 @@ const ProcessingFormConfiguration = ({
         const matchingFlow = config.flows.find(flow =>
             getServicePath(flow.enricher) === getServicePath(selectedService.url)
         );
-    
+
         if (matchingFlow) {
             const wrapper = wrapperList.find(w =>
                 getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
@@ -155,21 +184,19 @@ const ProcessingFormConfiguration = ({
     return (
         <div className="processing-form-configuration">
             <h3>Choisir un service</h3>
-            <div className="service-tabs">
-                {[
-                    { id: 'featured', label: 'Services à la une' },
-                    { id: 'advanced', label: 'Services avancés' },
-                    { id: 'all', label: 'Tous les services' }
-                ].map(tab => (
-                    <div
-                        key={tab.id}
-                        className={`tab ${activeTab === tab.id ? 'active' : ''}`}
-                        onClick={() => setActiveTab(tab.id)}
-                    >
-                        {tab.label}
-                    </div>
-                ))}
-            </div>
+            {availableTabs.length > 1 && (
+                <div className="service-tabs">
+                    {availableTabs.map(tab => (
+                        <div
+                            key={tab.id}
+                            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            {tab.label}
+                        </div>
+                    ))}
+                </div>
+            )}
 
             <FormControl component="fieldset" fullWidth>
                 <RadioGroup
