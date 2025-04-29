@@ -211,7 +211,12 @@ const ProcessingCreationForm = () => {
     }, [operations.data.enrichment]);
 
     const fields = useMemo(() => {
-        return fieldsData ?? null;
+        if (!fieldsData || !fieldsData.fields) {
+            return null;
+        }
+        return {
+            fields: fieldsData.fields
+        };
     }, [fieldsData]);
 
     /**
@@ -316,11 +321,13 @@ const ProcessingCreationForm = () => {
      */
     const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
         setWrapper(value.wrapper);
-        setWrapperParam(value.wrapperParam);
+        if (!wrapperParam) {
+            setWrapperParam(value.wrapperParam);
+        }
         setEnrichment(value.enrichment);
         setFlowId(value.flowId || null);
         setIsWaitingInput(false);
-    }, []);
+    }, [wrapperParam]);
 
     /**
      * Handle email change
@@ -340,6 +347,36 @@ const ProcessingCreationForm = () => {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
+        // Réinitialiser pour un nouveau traitement
+        if (step === PROCESSING_CONFIRMATION_STEP) {
+            setWrapper(null);
+            setWrapperParam(null);
+            setEnrichment(null);
+            setFlowId(null);
+            setStartingStatus(null);
+            if (file) {
+                setIsPending(true);
+                upload(file)
+                    .then(newProcessingId => {
+                        if (!newProcessingId) return;
+                        setProcessingId(newProcessingId);
+                        // Récupérer les champs disponibles
+                        return fieldsService(newProcessingId);
+                    })
+                    .then(fields => {
+                        if (fields && fields.fields.length > 0) {
+                            setWrapperParam(fields.fields[0]);
+                        }
+                        setStep(PROCESSING_CONFIGURATION_STEP);
+                    })
+                    .finally(() => {
+                        setIsPending(false);
+                    });
+                return;
+            }
+            previousStep = PROCESSING_CONFIGURATION_STEP;
+        }
+
         // Update isWaitingInput and isInvalid based on the previous step
         if (previousStep === PROCESSING_FORMAT_STEP) {
             setIsWaitingInput(!selectedFormat);
@@ -357,11 +394,17 @@ const ProcessingCreationForm = () => {
         }
 
         setStep(previousStep);
-    }, [step, selectedFormat, file, wrapper, enrichment, email]);
+    }, [step, selectedFormat, file, wrapper, enrichment, email, isInvalid]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
         setIsWaitingInput(false);
+    }, []);
+
+    const handleFieldsChange = useCallback((fields: string[]) => {
+        if (fields && fields.length > 0) {
+            setWrapperParam(fields[0]);
+        }
     }, []);
 
     return (
@@ -416,6 +459,7 @@ const ProcessingCreationForm = () => {
                                 isOnError={isOnError}
                                 isPending={isPending}
                                 selectedFormat={selectedFormat}
+                                onFieldsChange={handleFieldsChange}
                             />
                         ) : null}
 

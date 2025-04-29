@@ -26,14 +26,10 @@ export const start = async ({
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            wrapper: wrapperParam
-                ? {
-                      url: wrapper.url,
-                      parameters: [wrapperParam],
-                  }
-                : {
-                      url: wrapper.url,
-                  },
+            wrapper: {
+                url: wrapper.url,
+                parameters: [wrapperParam],
+            },
             enrichment: {
                 url: enrichment.url,
             },

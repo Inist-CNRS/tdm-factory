@@ -167,11 +167,9 @@ const ProcessingFormConfiguration = ({
                 getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
             );
 
-            const wrapperParam = matchingFlow.wrapperParameterDefault || 'value';
-
             onChange({
                 wrapper: wrapper || null,
-                wrapperParam,
+                wrapperParam: matchingFlow.wrapperParameter || null,
                 enrichment: selectedService,
                 flowId: matchingFlow.id
             });

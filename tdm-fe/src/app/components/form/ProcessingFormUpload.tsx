@@ -1,10 +1,12 @@
 import './scss/ProcessingFormUpload.scss';
 import FileUpload from '~/app/components/progress/FileUpload';
 import { getStaticConfig } from '~/app/services/config';
+import { fields as fieldsService } from '~/app/services/creation/fields';
+import { upload } from '~/app/services/creation/upload';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
@@ -29,14 +31,18 @@ type ProcessingFormUploadProps = {
     isPending: boolean;
     onChange: (value: File | null, isValid: boolean) => void;
     selectedFormat?: string | null;
+    onFieldsChange?: (fields: string[]) => void;
 };
 
-const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, selectedFormat }: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, selectedFormat, onFieldsChange }: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
     const [formatError, setFormatError] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [hasAttemptedUpload, setHasAttemptedUpload] = useState(false);
+    const [selectedField, setSelectedField] = useState<string>('');
+    const [availableFields, setAvailableFields] = useState<string[]>([]);
+    const [isLoadingFields, setIsLoadingFields] = useState(false);
 
     const { data: config } = useQuery({
         queryKey: ['static-config'],
@@ -72,19 +78,66 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
             }
 
             setHasAttemptedUpload(true);
+
+            // Si c'est un CSV, récupérer les champs disponibles
+            if (file.name.toLowerCase().endsWith('.csv')) {
+                setIsLoadingFields(true);
+                upload(file)
+                    .then(id => {
+                        if (id) {
+                            return fieldsService(id);
+                        }
+                        return null;
+                    })
+                    .then(fields => {
+                        if (fields && fields.fields) {
+                            const fieldsArray = Array.isArray(fields.fields) ? fields.fields : Object.keys(fields.fields);
+                            setAvailableFields(fieldsArray);
+                            if (fieldsArray.length > 0) {
+                                setSelectedField(fieldsArray[0]);
+                                onFieldsChange?.([fieldsArray[0]]);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des champs:', error);
+                    })
+                    .finally(() => {
+                        setIsLoadingFields(false);
+                    });
+            }
         }
 
         setIsInvalid(invalid);
         setFormatError(wrongFormat);
         onChange(file, file !== null && !invalid && !wrongFormat);
-    }, [file, mimes, onChange, selectedFormat, checkFileFormat]);
+    }, [file, mimes, onChange, selectedFormat, checkFileFormat, onFieldsChange]);
 
     const handleFileChange = useCallback((newFile: File | null) => {
         setFile(newFile);
+        setAvailableFields([]);
+        setSelectedField('');
         if (newFile === null) {
             setHasAttemptedUpload(false);
         }
     }, []);
+
+    const handleFieldChange = useCallback((event: SelectChangeEvent<string>) => {
+        const newField = event.target.value;
+        setSelectedField(newField);
+        if (onFieldsChange) {
+            onFieldsChange([newField]);
+        }
+    }, [onFieldsChange]);
+
+    useEffect(() => {
+        if (availableFields.length > 0 && !selectedField) {
+            setSelectedField(availableFields[0]);
+            if (onFieldsChange) {
+                onFieldsChange([availableFields[0]]);
+            }
+        }
+    }, [availableFields, selectedField, onFieldsChange]);
 
     const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -174,6 +227,23 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                         </div>
                     )}
                 </div>
+                {file?.name.toLowerCase().endsWith('.csv') && (
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                        <InputLabel>Nom du champ à exploiter</InputLabel>
+                        <Select
+                            value={selectedField}
+                            onChange={handleFieldChange}
+                            label="Nom du champ à exploiter"
+                            disabled={isLoadingFields || availableFields.length === 0}
+                        >
+                            {availableFields.map((field) => (
+                                <MenuItem key={field} value={field}>
+                                    {field}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
                 {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
                         {isInvalid ? (
