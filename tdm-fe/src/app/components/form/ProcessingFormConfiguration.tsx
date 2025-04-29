@@ -22,6 +22,7 @@ export type ProcessingFormConfigurationValueType = {
     enrichment: Enrichment | null;
     inputFormat?: string | null;
     flowId?: string | null;
+    fields?: string[] | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -41,6 +42,8 @@ type ServiceInfo = {
     description: string;
     descriptionLink?: string;
     url: string;
+    wrapperParameterDefault?: string;
+    wrapperParameter?: string;
 };
 
 const getServicePath = (url: string): string => {
@@ -87,13 +90,15 @@ const ProcessingFormConfiguration = ({
                         summary: flow.summary,
                         description: flow.description,
                         descriptionLink: flow.descriptionLink,
-                        url: matchingService.url
+                        url: matchingService.url,
+                        wrapperParameterDefault: flow.wrapperParameterDefault,
+                        wrapperParameter: flow.wrapperParameter
                     });
                 }
                 return services;
             }, [])
             .filter(service => service.inputFormat === value.inputFormat);
-    }, [config, enrichmentList, type]);
+    }, [config, enrichmentList, type, value.inputFormat]);
 
     // Determine which categories have services
     const hasFeaturedServices = useMemo(() =>
@@ -153,7 +158,8 @@ const ProcessingFormConfiguration = ({
         if (!selectedService || !config) return;
 
         const matchingFlow = config.flows.find(flow =>
-            getServicePath(flow.enricher) === getServicePath(selectedService.url)
+            getServicePath(flow.enricher) === getServicePath(selectedService.url) &&
+            flow.inputFormat === value.inputFormat
         );
 
         if (matchingFlow) {
@@ -161,14 +167,16 @@ const ProcessingFormConfiguration = ({
                 getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
             );
 
+            const wrapperParam = matchingFlow.wrapperParameterDefault || 'value';
+
             onChange({
                 wrapper: wrapper || null,
-                wrapperParam: matchingFlow.wrapperParameterDefault || null,
+                wrapperParam,
                 enrichment: selectedService,
                 flowId: matchingFlow.id
             });
         }
-    }, [selectedService, config, wrapperList, onChange]);
+    }, [selectedService, config, wrapperList, onChange, value.inputFormat]);
 
     useEffect(() => {
         const isValid = !!selectedService && !!config && config.flows.some(flow =>

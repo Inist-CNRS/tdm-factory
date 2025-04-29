@@ -34,7 +34,7 @@ const ProcessingCreationForm = () => {
     const navigate = useNavigate();
 
     const handleHomeReturn = () => {
-        navigate('/');
+        window.location.href = '/';
     };
 
     /**
@@ -372,7 +372,7 @@ const ProcessingCreationForm = () => {
                 className="back-button"
                 sx={{ color: '#4a4a4a' }}
             >
-                RETOUR
+                RETOUR A L'ACCUEIL
             </Button>
             <h1>Traiter un {type === 'corpus' ? 'corpus' : 'article'}</h1>
             <h2>Traitement</h2>
@@ -387,14 +387,14 @@ const ProcessingCreationForm = () => {
                 <div id="processing-form-content">
                     <div className="form-content">
                         {/* Back button */}
-                        {step > PROCESSING_FORMAT_STEP && step !== PROCESSING_CONFIRMATION_STEP ? (
+                        {step > PROCESSING_FORMAT_STEP ? (
                             <Button
                                 startIcon={<ArrowBackIcon />}
                                 onClick={handleBack}
                                 className="back-button"
                                 sx={{ alignSelf: 'flex-start', marginBottom: 2 }}
                             >
-                                Retour
+                                RETOUR
                             </Button>
                         ) : null}
 
