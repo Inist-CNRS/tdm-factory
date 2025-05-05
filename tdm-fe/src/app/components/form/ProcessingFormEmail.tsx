@@ -7,13 +7,35 @@ import type { ChangeEvent } from 'react';
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Cookie helper functions
+const saveEmailToCookie = (email: string) => {
+    const expirationDate = new Date();
+    expirationDate.setMonth(expirationDate.getMonth() + 6); // Cookie expires in 6 month
+    document.cookie = `userEmail=${encodeURIComponent(email)}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Lax`;
+};
+
+const getEmailFromCookie = (): string | null => {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'userEmail') {
+            return decodeURIComponent(value);
+        }
+    }
+    return null;
+};
+
 type ProcessingFormEmailProps = {
     value: string | null;
     onChange: (value: string | null) => void;
 };
 
 const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
-    const [email, setEmail] = useState<string>(value ?? '');
+    // Initialize with cookie value or passed value
+    const [email, setEmail] = useState<string>(() => {
+        const cookieEmail = getEmailFromCookie();
+        return value ?? cookieEmail ?? '';
+    });
     const [isInvalid, setIsInvalid] = useState(false);
     const [hasAttemptedInput, setHasAttemptedInput] = useState(false);
 
@@ -26,6 +48,11 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
 
         setIsInvalid(invalid);
         onChange(invalid ? null : email);
+        
+        // Save valid email to cookie
+        if (!invalid && email) {
+            saveEmailToCookie(email);
+        }
     }, [email, onChange]);
 
     const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

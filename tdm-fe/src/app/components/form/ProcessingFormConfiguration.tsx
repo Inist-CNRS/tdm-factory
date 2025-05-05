@@ -184,11 +184,12 @@ const ProcessingFormConfiguration = ({
                     wrapperParam: wrapperParam,
                     enrichment: selectedService,
                     flowId: matchingFlow.id,
-                    inputFormat: matchingFlow.inputFormat
+                    inputFormat: matchingFlow.inputFormat,
+                    fields: value.fields
                 });
             }
         }
-    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type]);
+    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type, value.fields]);
 
     useEffect(() => {
         const isValid = !!selectedService && !!config && config.flows.some(flow =>

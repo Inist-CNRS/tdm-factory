@@ -72,14 +72,14 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
             if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
                 invalid = true;
             }
-            
+
             if (selectedFormat && !checkFileFormat(file, selectedFormat)) {
                 wrongFormat = true;
             }
 
             setHasAttemptedUpload(true);
 
-            // Si c'est un CSV, récupérer les champs disponibles
+            // Get fields for CSV
             if (file.name.toLowerCase().endsWith('.csv')) {
                 setIsLoadingFields(true);
                 upload(file)
@@ -94,13 +94,13 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                             const fieldsArray = Array.isArray(fields.fields) ? fields.fields : Object.keys(fields.fields);
                             setAvailableFields(fieldsArray);
                             if (fieldsArray.length > 0) {
-                                setSelectedField(fieldsArray[0]);
-                                onFieldsChange?.([fieldsArray[0]]);
+                                setSelectedField('abstract');
+                                onFieldsChange?.(['abstract']);
                             }
                         }
                     })
                     .catch(error => {
-                        console.error('Erreur lors de la récupération des champs:', error);
+                        console.error('Error while retrieving fields:', error);
                     })
                     .finally(() => {
                         setIsLoadingFields(false);
@@ -235,6 +235,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                             onChange={handleFieldChange}
                             label="Nom du champ à exploiter"
                             disabled={isLoadingFields || availableFields.length === 0}
+                            defaultValue="abstract"
                         >
                             {availableFields.map((field) => (
                                 <MenuItem key={field} value={field}>
