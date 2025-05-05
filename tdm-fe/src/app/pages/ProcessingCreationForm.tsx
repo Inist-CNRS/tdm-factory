@@ -430,7 +430,7 @@ const ProcessingCreationForm = () => {
                 <div id="processing-form-content">
                     <div className="form-content">
                         {/* Back button */}
-                        {step > PROCESSING_FORMAT_STEP ? (
+                        {step > PROCESSING_FORMAT_STEP && step !== PROCESSING_CONFIRMATION_STEP ? (
                             <Button
                                 startIcon={<ArrowBackIcon />}
                                 onClick={handleBack}
