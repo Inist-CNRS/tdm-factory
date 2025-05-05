@@ -22,6 +22,7 @@ export type ProcessingFormConfigurationValueType = {
     enrichment: Enrichment | null;
     inputFormat?: string | null;
     flowId?: string | null;
+    fields?: string[] | null;
 };
 
 type ProcessingFormConfigurationProps = {
@@ -41,6 +42,9 @@ type ServiceInfo = {
     description: string;
     descriptionLink?: string;
     url: string;
+    wrapperParameterDefault?: string;
+    wrapperParameter?: string;
+    flowId?: string;
 };
 
 const getServicePath = (url: string): string => {
@@ -87,13 +91,16 @@ const ProcessingFormConfiguration = ({
                         summary: flow.summary,
                         description: flow.description,
                         descriptionLink: flow.descriptionLink,
-                        url: matchingService.url
+                        url: matchingService.url,
+                        flowId: flow.id,
+                        wrapperParameter: flow.wrapperParameter,
+                        wrapperParameterDefault: flow.wrapperParameterDefault
                     });
                 }
                 return services;
             }, [])
-            .filter(service => service.inputFormat === value.inputFormat);
-    }, [config, enrichmentList, type]);
+            .filter(service => service.inputFormat === value.inputFormat || service.inputFormat === "*");
+    }, [config, enrichmentList, type, value.inputFormat]);
 
     // Determine which categories have services
     const hasFeaturedServices = useMemo(() =>
@@ -151,24 +158,37 @@ const ProcessingFormConfiguration = ({
 
     useEffect(() => {
         if (!selectedService || !config) return;
+        const matchingFlow = config.flows.find(flow => {
+            const matchesService = getServicePath(flow.enricher) === getServicePath(selectedService.url);
+            const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === "*";
+            const matchesType = flow.input === type;
 
-        const matchingFlow = config.flows.find(flow =>
-            getServicePath(flow.enricher) === getServicePath(selectedService.url)
-        );
+            return matchesService && matchesFormat && matchesType;
+        });
 
         if (matchingFlow) {
-            const wrapper = wrapperList.find(w =>
-                getServicePath(w.url) === getServicePath(matchingFlow.wrapper)
-            );
-
-            onChange({
-                wrapper: wrapper || null,
-                wrapperParam: matchingFlow.wrapperParameterDefault || null,
-                enrichment: selectedService,
-                flowId: matchingFlow.id
+            const wrapper = wrapperList.find(w => {
+                const wrapperPath = getServicePath(w.url);
+                const flowWrapperPath = getServicePath(matchingFlow.wrapper);
+                const matches = wrapperPath === flowWrapperPath;
+                return matches;
             });
+
+            if (wrapper) {
+                const wrapperParam = matchingFlow.wrapperParameterDefault ||
+                                   matchingFlow.wrapperParameter ||
+                                   '';
+
+                onChange({
+                    wrapper: wrapper,
+                    wrapperParam: wrapperParam,
+                    enrichment: selectedService,
+                    flowId: matchingFlow.id,
+                    inputFormat: matchingFlow.inputFormat
+                });
+            }
         }
-    }, [selectedService, config, wrapperList, onChange]);
+    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type]);
 
     useEffect(() => {
         const isValid = !!selectedService && !!config && config.flows.some(flow =>

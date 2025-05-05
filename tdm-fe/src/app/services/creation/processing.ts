@@ -19,28 +19,28 @@ export const start = async ({
     id,
     flowId,
 }: ProcessingStartParams): Promise<202 | 400 | 409 | 428 | 500> => {
+    const wrapperConfig = {
+        url: wrapper.url,
+        parameters: [wrapperParam || 'abstract']
+    };
+
+    const body = {
+        wrapper: wrapperConfig,
+        enrichment: {
+            url: enrichment.url,
+        },
+        mail,
+        file: id,
+        flowId,
+    };
+
     const response = await fetch(createQuery(environment.post.processing.start), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            wrapper: wrapperParam
-                ? {
-                      url: wrapper.url,
-                      parameters: [wrapperParam],
-                  }
-                : {
-                      url: wrapper.url,
-                  },
-            enrichment: {
-                url: enrichment.url,
-            },
-            mail,
-            file: id,
-            flowId,
-        }),
+        body: JSON.stringify(body),
     });
 
     switch (response.status) {

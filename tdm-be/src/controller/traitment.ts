@@ -107,7 +107,7 @@ router.post(
         // --- Get processing params
         // Set default params as undefined
         let wrapperUrl: string | undefined = undefined;
-        let wrapperParam = 'value';
+        let wrapperParam: string | undefined = undefined;
         let urlEnrichment: string | undefined = undefined;
         let email: string | undefined = undefined;
         let flowId: string | undefined = undefined;
