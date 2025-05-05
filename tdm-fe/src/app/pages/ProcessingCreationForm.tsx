@@ -347,36 +347,6 @@ const ProcessingCreationForm = () => {
             previousStep = PROCESSING_UPLOAD_STEP;
         }
 
-        // Réinitialiser pour un nouveau traitement
-        if (step === PROCESSING_CONFIRMATION_STEP) {
-            setWrapper(null);
-            setWrapperParam(null);
-            setEnrichment(null);
-            setFlowId(null);
-            setStartingStatus(null);
-            if (file) {
-                setIsPending(true);
-                upload(file)
-                    .then(newProcessingId => {
-                        if (!newProcessingId) return;
-                        setProcessingId(newProcessingId);
-                        // Récupérer les champs disponibles
-                        return fieldsService(newProcessingId);
-                    })
-                    .then(fields => {
-                        if (fields && fields.fields.length > 0) {
-                            setWrapperParam(fields.fields[0]);
-                        }
-                        setStep(PROCESSING_CONFIGURATION_STEP);
-                    })
-                    .finally(() => {
-                        setIsPending(false);
-                    });
-                return;
-            }
-            previousStep = PROCESSING_CONFIGURATION_STEP;
-        }
-
         // Update isWaitingInput and isInvalid based on the previous step
         if (previousStep === PROCESSING_FORMAT_STEP) {
             setIsWaitingInput(!selectedFormat);
