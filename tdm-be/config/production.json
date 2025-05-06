@@ -44,7 +44,7 @@
             "summary": "PDF",
             "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image.",
             "extensions": [
-                "csv"
+                "pdf"
             ]
         },
         "tei-persee.tar.gz": {
@@ -140,6 +140,19 @@
             "retrieveExtension": "csv",
             "summary": "**Teeft** - Extrait 5 termes de textes en français",
             "description": "Extrait les 5 termes les plus spécifiques de chacun des *abstract*s en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "id": "txt-teeft-fr",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "wrapper": "/v1/txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait 5 termes d'un texte en français",
+            "description": "Extrait les 5 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
