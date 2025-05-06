@@ -25,11 +25,11 @@
         "deleteFileOlderThan": 7
     },
     "inputFormat2labels": {
-        "pdf": {
-            "summary": "PDF",
-            "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image.",
+        "csv": {
+            "summary": "Tableur `.csv`",
+            "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8.",
             "extensions": [
-                "pdf"
+                "csv"
             ]
         },
         "istex.tar.gz": {
@@ -40,9 +40,9 @@
                 "tgz"
             ]
         },
-        "csv": {
-            "summary": "Tableur `.csv`",
-            "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8.",
+        "pdf": {
+            "summary": "PDF",
+            "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image.",
             "extensions": [
                 "csv"
             ]
