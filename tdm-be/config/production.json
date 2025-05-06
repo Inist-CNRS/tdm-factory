@@ -54,6 +54,20 @@
                 "tar.gz",
                 "tgz"
             ]
+        },
+        "txt": {
+            "summary": "Texte `.txt`",
+            "description": "Un fichier texte brut, encodé en UTF-8.",
+            "extensions": [
+                "txt"
+            ]
+        },
+        "*": {
+            "summary": "Peu importe",
+            "description": "N'importe quel format.",
+            "extensions": [
+                "*"
+            ]
         }
     },
     "flows": [
