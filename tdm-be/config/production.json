@@ -47,9 +47,9 @@
                 "csv"
             ]
         },
-        "tei.tar.gz": {
-            "summary": "Corpus TEI `.tar.gz`",
-            "description": "Un corpus contenant des fichiers XML-TEI dans un répertoire `data`, au format `.tar.gz`.",
+        "tei-persee.tar.gz": {
+            "summary": "Corpus TEI Persée `.tar.gz`",
+            "description": "Un corpus contenant des fichiers XML-TEI Persée dans un répertoire `data`, au format `.tar.gz`.",
             "extensions": [
                 "tar.gz",
                 "tgz"
@@ -162,7 +162,7 @@
             "id": "tei-rapido-algorithme",
             "featured": false,
             "input": "corpus",
-            "inputFormat": "tei.tar.gz",
+            "inputFormat": "tei-persee.tar.gz",
             "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-algorithme",
             "retrieve": "/v1/retrieve-json",
@@ -174,7 +174,7 @@
             "id": "tei-rapido-apprentissage",
             "featured": false,
             "input": "corpus",
-            "inputFormat": "tei.tar.gz",
+            "inputFormat": "tei-persee.tar.gz",
             "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-apprentissage",
             "retrieve": "/v1/retrieve-json",
