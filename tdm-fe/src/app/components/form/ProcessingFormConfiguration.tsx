@@ -118,16 +118,28 @@ const ProcessingFormConfiguration = ({
         const tabs = [];
         if (hasFeaturedServices) tabs.push({ id: 'featured', label: 'Services à la une' });
         if (hasAdvancedServices) tabs.push({ id: 'advanced', label: 'Services avancés' });
-        tabs.push({ id: 'all', label: 'Tous les services' });
+
+        if (hasFeaturedServices || hasAdvancedServices) {
+            tabs.push({ id: 'all', label: 'Tous les services' });
+        }
+
         return tabs;
     }, [hasFeaturedServices, hasAdvancedServices]);
 
-    // Update activeTab if current tab has no services
     useEffect(() => {
-        if (activeTab === 'featured' && !hasFeaturedServices) {
+        if (!hasAdvancedServices && hasFeaturedServices) {
+            setActiveTab('featured');
+        }
+        else if (!hasFeaturedServices && hasAdvancedServices) {
+            setActiveTab('advanced');
+        }
+        else if (activeTab === 'featured' && !hasFeaturedServices) {
             setActiveTab(hasAdvancedServices ? 'advanced' : 'all');
         } else if (activeTab === 'advanced' && !hasAdvancedServices) {
             setActiveTab(hasFeaturedServices ? 'featured' : 'all');
+        }
+        else if (!hasFeaturedServices && !hasAdvancedServices) {
+            setActiveTab('all');
         }
     }, [activeTab, hasFeaturedServices, hasAdvancedServices]);
 
@@ -204,7 +216,7 @@ const ProcessingFormConfiguration = ({
     return (
         <div className="processing-form-configuration">
             <h3>Choisir un service</h3>
-            {availableTabs.length > 1 && (
+            {hasFeaturedServices && hasAdvancedServices ? (
                 <div className="service-tabs">
                     {availableTabs.map(tab => (
                         <div
@@ -216,7 +228,7 @@ const ProcessingFormConfiguration = ({
                         </div>
                     ))}
                 </div>
-            )}
+            ) : null}
 
             <FormControl component="fieldset" fullWidth>
                 <RadioGroup

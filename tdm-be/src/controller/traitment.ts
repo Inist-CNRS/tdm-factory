@@ -174,10 +174,11 @@ router.post(
         }
 
         // --- Send a message to the user about the processing starting
-        // Create the status url return to the client
-        const statusPanelUrl = `${
+        // Create the confirmation page URL to return to the client
+        // We use the process/:type route with a special query parameter to redirect to the confirmation step
+        const confirmationUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
-        }://${environment.hosts.external.host}/status/${updatedProcessing.id}`;
+        }://${environment.hosts.external.host}/process/${req.body.flowId?.split('-')[0] || 'article'}?id=${updatedProcessing.id}&step=5`;
         // Wait for the notification email to be sent before starting the processing
         await sendStartedMail({
             email: req.body.mail,
@@ -187,7 +188,7 @@ router.post(
                 wrapper: updatedProcessing.wrapper as string,
                 wrapperParam: updatedProcessing.wrapperParam as string,
                 enrichment: updatedProcessing.enrichment as string,
-                statusPage: statusPanelUrl,
+                statusPage: confirmationUrl,
             },
         });
 
@@ -428,6 +429,80 @@ router.get('/result-info', (req, res) => {
     res.send({
         resultUrl,
         extension,
+    });
+});
+
+/**
+ * @swagger
+ * /traitment/info:
+ *   get:
+ *     summary: get processing information
+ *     description: get processing information including original file name
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID parameter
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 originalName:
+ *                   type: string
+ *                 status:
+ *                   type: number
+ *                 wrapper:
+ *                   type: string
+ *                 wrapperParam:
+ *                   type: string
+ *                 enrichment:
+ *                   type: string
+ *       '404':
+ *         description: Processing not found
+ */
+//Route to retrieve processing information
+router.get('/info', (req, res) => {
+    const { id } = req.query;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    const processing = findProcessing(id);
+
+    // Check if the processing exists
+    if (!processing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    // Déterminer le type de traitement (article ou corpus) à partir du flowId
+    let type = 'article'; // Par défaut, c'est un article
+    if (processing.flowId && processing.flowId.startsWith('corpus-')) {
+        type = 'corpus';
+    }
+
+    res.send({
+        id: processing.id,
+        originalName: processing.originalName,
+        status: processing.status,
+        wrapper: processing.wrapper,
+        wrapperParam: processing.wrapperParam,
+        enrichment: processing.enrichment,
+        type: type,
     });
 });
 

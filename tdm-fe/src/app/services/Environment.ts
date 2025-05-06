@@ -9,6 +9,7 @@ export const environment = {
             status: '/api/traitment/status',
             fields: '/api/traitment/fields',
             resultInfo: '/api/traitment/result-info',
+            info: '/api/traitment/info',
         },
         config: {
             static: '/config-static',

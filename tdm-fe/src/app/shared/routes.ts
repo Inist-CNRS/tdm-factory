@@ -1,7 +1,7 @@
 const Routes = {
     root: '/',
     processing: '/process/:type',
-    processingStatus: '/status',
+    processingStatus: '/status/:id',
 } as const;
 
 export const RouteRoot = Routes.root;

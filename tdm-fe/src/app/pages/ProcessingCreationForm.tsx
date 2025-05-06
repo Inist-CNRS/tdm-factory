@@ -9,6 +9,7 @@ import { fields as fieldsService } from '~/app/services/creation/fields';
 import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
+import { getProcessingInfo } from '~/app/services/processing/processing-info';
 import ProcessingExample from '~/app/components/layout/ProcessingExample';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -17,7 +18,7 @@ import { Button } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import type { ProcessingFormConfigurationValueType } from '~/app/components/form/ProcessingFormConfiguration';
 import type { Enrichment, Wrapper } from '~/app/shared/data.types';
@@ -32,6 +33,12 @@ export const PROCESSING_CONFIRMATION_STEP = 5;
 const ProcessingCreationForm = () => {
     const { type } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Récupérer les paramètres de l'URL
+    const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const idFromUrl = queryParams.get('id');
+    const stepFromUrl = queryParams.get('step');
 
     const handleHomeReturn = () => {
         window.location.href = '/';
@@ -244,6 +251,34 @@ const ProcessingCreationForm = () => {
             setIsOnError(true);
         }
     }, [uploadFailed]);
+
+    // État pour stocker le nom du fichier récupéré de l'API
+    const [fileNameFromApi, setFileNameFromApi] = useState<string | null>(null);
+
+    /**
+     * Initialize the form with URL parameters if they exist
+     */
+    useEffect(() => {
+        if (idFromUrl && stepFromUrl === '5') {
+            setProcessingId(idFromUrl);
+            setStep(PROCESSING_CONFIRMATION_STEP);
+
+            // Récupérer uniquement le nom du fichier
+            const fetchFileName = async () => {
+                try {
+                    const processingInfo = await getProcessingInfo(idFromUrl);
+                    if (processingInfo) {
+                        // Stocker le nom du fichier dans un état dédié
+                        setFileNameFromApi(processingInfo.originalName);
+                    }
+                } catch (error) {
+                    console.error('Error fetching processing info:', error);
+                }
+            };
+
+            fetchFileName();
+        }
+    }, [idFromUrl, stepFromUrl]);
 
     /**
      * Update button state when step changes
@@ -461,7 +496,7 @@ const ProcessingCreationForm = () => {
                         {step === PROCESSING_CONFIRMATION_STEP ? (
                             <ProcessingFormConfirmation
                                 processingId={processingId}
-                                fileName={file?.name}
+                                fileName={fileNameFromApi || file?.name || ''}
                                 status={startingStatus}
                                 isPending={uploading}
                             />
