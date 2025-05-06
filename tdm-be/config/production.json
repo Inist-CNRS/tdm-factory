@@ -62,6 +62,14 @@
                 "txt"
             ]
         },
+        "txt.tar.gz": {
+            "summary": "Corpus de textes `.tar.gz`",
+            "description": "Un corpus contenant des fichiers texte, encodés en UTF-8, dans un répertoire `data`, au format `.tar.gz`.",
+            "extensions": [
+                "tar.gz",
+                "tgz"
+            ]
+        },
         "*": {
             "summary": "Peu importe",
             "description": "N'importe quel format.",
@@ -72,7 +80,7 @@
     },
     "flows": [
         {
-            "id": "bibcheck",
+            "id": "pdf-bibcheck",
             "featured": true,
             "input": "article",
             "inputFormat": "pdf",
@@ -85,7 +93,7 @@
             "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
         },
         {
-            "id": "textextract",
+            "id": "pdf-text-extract",
             "featured": true,
             "input": "article",
             "inputFormat": "pdf",
@@ -243,7 +251,7 @@
             "id": "txt-termsuite-en",
             "featured": true,
             "input": "corpus",
-            "inputFormat": "txt",
+            "inputFormat": "txt.tar.gz",
             "wrapper": "/v1/tar-txt2json",
             "enricher": "https://data-termsuite.services.istex.fr/v1/en",
             "retrieve": "/v1/retrieve-csv",
@@ -256,7 +264,7 @@
             "id": "txt-termsuite-fr",
             "featured": false,
             "input": "corpus",
-            "inputFormat": "txt",
+            "inputFormat": "txt.tar.gz",
             "wrapper": "/v1/tar-txt2json",
             "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
             "retrieve": "/v1/retrieve-csv",
