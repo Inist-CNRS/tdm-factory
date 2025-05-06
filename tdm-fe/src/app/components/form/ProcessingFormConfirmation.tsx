@@ -1,7 +1,9 @@
+import { getResultInfo } from '~/app/services/result/result';
 import { status } from '~/app/services/status/status';
 import Status from '~/app/shared/Status';
 
 import CheckIcon from '@mui/icons-material/Check';
+import DownloadIcon from '@mui/icons-material/Download';
 import ErrorIcon from '@mui/icons-material/Error';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -27,6 +29,8 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
         return Status.STARTING;
     });
 
+    const [resultUrl, setResultUrl] = useState<string | null>(null);
+
     useEffect(() => {
         if (!processingId || isPending) {
             return;
@@ -44,6 +48,18 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                 const result = await status(processingId);
                 if (result !== undefined && isMounted) {
                     setCurrentStatus(result);
+
+                    // If the processing is successfully completed, retrieve the result URL
+                    if (result === Status.FINISHED) {
+                        try {
+                            const resultInfo = await getResultInfo(processingId);
+                            if (resultInfo && isMounted) {
+                                setResultUrl(resultInfo.resultUrl);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching result info:', error);
+                        }
+                    }
 
                     if (isTerminalStatus(result)) {
                         if (intervalId) {
@@ -106,9 +122,9 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
         }
 
         switch (step) {
-            case 1: // Initialisé
+            case 1: // Initialized
                 return currentStatus >= Status.STARTING ? 'completed' : '';
-            case 2: // Démarrage
+            case 2: // Starting
                 if (currentStatus === Status.STARTING) {
                     return 'current';
                 }
@@ -118,12 +134,12 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                     return 'current';
                 }
                 return currentStatus > Status.WRAPPER_RUNNING ? 'completed' : '';
-            case 4: // Traitement en cours
+            case 4: // Processing
                 if ([Status.ENRICHMENT_RUNNING, Status.WAITING_WEBHOOK, Status.PROCESSING_WEBHOOK].includes(currentStatus)) {
                     return 'current';
                 }
                 return currentStatus > Status.PROCESSING_WEBHOOK ? 'completed' : '';
-            case 5: // Traitement terminé
+            case 5: // Processing completed
                 return currentStatus === Status.FINISHED ? 'completed' : '';
             default:
                 return '';
@@ -132,14 +148,15 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
 
     const getStatusMessage = () => {
         const messages: Record<number, string> = {
-            [Status.WRAPPER_ERROR]: 'Erreur lors de la conversion du fichier. Veuillez vérifier le format de votre fichier.',
-            [Status.ENRICHMENT_ERROR]: "L'enrichissement a échoué.",
-            [Status.FINISHED_ERROR]: 'Erreur lors de la finalisation du traitement.',
+            [Status.WRAPPER_ERROR]: 'Error during file conversion. Please check your file format.',
+            [Status.ENRICHMENT_ERROR]: 'Enrichment failed.',
+            [Status.FINISHED_ERROR]: 'Error during processing finalization.',
         };
 
         return messages[currentStatus] || '';
     };
 
+    // Check if the status is an error
     const isErrorStatus = (status: number): boolean => {
         return [Status.WRAPPER_ERROR, Status.ENRICHMENT_ERROR, Status.FINISHED_ERROR].includes(status);
     };
@@ -199,6 +216,18 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                     <span>{getStepStatus(5) === 'error' ? getStatusMessage() : 'Traitement terminé'}</span>
                 </div>
             </div>
+
+            {currentStatus === Status.FINISHED && resultUrl && (
+                <Button
+                    variant="contained"
+                    className="download-result-button"
+                    startIcon={<DownloadIcon />}
+                    href={resultUrl}
+                    target="_blank"
+                >
+                    Télécharger le résultat
+                </Button>
+            )}
 
             <Button variant="contained" className="new-processing-button" onClick={() => (window.location.href = '/')}>
                 Nouveau traitement

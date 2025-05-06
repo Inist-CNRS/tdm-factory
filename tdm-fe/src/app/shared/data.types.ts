@@ -24,3 +24,8 @@ export type ProcessingStatus = {
 export type ProcessingFields = {
     fields?: string[];
 };
+
+export type ResultInfo = {
+    resultUrl: string;
+    extension: string;
+};

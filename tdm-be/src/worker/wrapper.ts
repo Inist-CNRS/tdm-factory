@@ -5,7 +5,7 @@ import {
     ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR,
 } from '~/lib/codes';
 import crash from '~/lib/crash';
-import { randomFileName, tmpFile, uploadFile } from '~/lib/files';
+import { tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
@@ -102,7 +102,7 @@ const wrapper = async (processingId: string) => {
     }
 
     // Get tmp file name
-    const dumpFile = tmpFile(`${randomFileName()}.tar.gz`);
+    const dumpFile = tmpFile(`${processingId}.tar.gz`);
 
     // Save the tmp file
     try {

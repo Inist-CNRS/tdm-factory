@@ -17,6 +17,7 @@ import basicAuth from 'express-basic-auth';
 import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 
+import fs from 'node:fs/promises';
 import path from 'path';
 
 const app = express();
@@ -64,6 +65,28 @@ app.use('/swagger-config', auth, swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api/admin', auth, adminRoute);
 
 const dirname = process.cwd();
+
+// Route spécifique pour les téléchargements avec Content-Disposition
+app.get('/downloads/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(dirname, 'public', 'downloads', filename);
+
+    // Vérifier si le fichier existe
+    fs.access(filePath, fs.constants.F_OK)
+        .then(() => {
+            // Définir les en-têtes pour le téléchargement
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.setHeader('Content-Type', 'application/octet-stream');
+
+            // Envoyer le fichier
+            res.sendFile(filePath);
+        })
+        .catch(() => {
+            res.status(404).send(
+                "Désolé, le fichier est introuvable, il n'a peut être pas encore été généré ou il a expiré (créé il y a plus d'une semaine)"
+            );
+        });
+});
 
 app.use(express.static(path.join(dirname, 'public')));
 

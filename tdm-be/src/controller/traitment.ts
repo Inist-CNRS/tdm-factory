@@ -359,4 +359,76 @@ router.get('/status', (req, res) => {
     });
 });
 
+/**
+ * @swagger
+ * /traitment/result-info:
+ *   get:
+ *     summary: get result file information
+ *     description: get result file information including extension
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID parameter
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 resultUrl:
+ *                   type: string
+ *                 extension:
+ *                   type: string
+ *       '404':
+ *         description: Processing not found or result not available
+ */
+//Route to retrieve result file information
+router.get('/result-info', (req, res) => {
+    const { id } = req.query;
+
+    if (!id || typeof id !== 'string') {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    const processing = findProcessing(id);
+
+    // Check if the processing exists
+    if (!processing) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+        });
+        return;
+    }
+
+    // Check if the processing is finished and has a result file
+    if (processing.status !== Status.FINISHED || !processing.resultFile) {
+        res.status(HTTP_NOT_FOUND).send({
+            status: HTTP_NOT_FOUND,
+            message: 'Result file not available',
+        });
+        return;
+    }
+
+    // Extract the extension from the result file path
+    const resultFileName = processing.resultFile.split('/').pop() || '';
+    const extension = resultFileName.split('.').pop() || '';
+
+    const resultUrl = `${
+        environment.hosts.external.isHttps ? 'https' : 'http'
+    }://${environment.hosts.external.host}/downloads/${id}.${extension}`;
+
+    res.send({
+        resultUrl,
+        extension,
+    });
+});
+
 export default router;

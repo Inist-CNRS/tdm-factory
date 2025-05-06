@@ -8,6 +8,7 @@ export const environment = {
         processing: {
             status: '/api/traitment/status',
             fields: '/api/traitment/fields',
+            resultInfo: '/api/traitment/result-info',
         },
         config: {
             static: '/config-static',
@@ -21,10 +22,10 @@ export const environment = {
     },
 } as const;
 
-const internalHost = environment.host === '' ? window.location.origin : environment.host;
+export const host = environment.host || window.location.origin;
 
 export const createQuery = (uri: string, param?: Record<string, string> | undefined): URL => {
-    const url = new URL(internalHost + uri);
+    const url = new URL(host + uri);
     if (param !== undefined) {
         const query = new URLSearchParams(param);
         url.search = query.toString();
