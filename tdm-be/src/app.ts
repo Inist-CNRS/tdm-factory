@@ -69,13 +69,20 @@ const dirname = process.cwd();
 // Route spécifique pour les téléchargements avec Content-Disposition
 app.get('/downloads/:filename', (req, res) => {
     const filename = req.params.filename;
-    const filePath = path.join(dirname, 'public', 'downloads', filename);
+    const rootDir = path.join(dirname, 'public', 'downloads');
+    const filePath = path.resolve(rootDir, filename);
+
+    // Vérifier si le chemin est dans le répertoire racine
+    if (!filePath.startsWith(rootDir)) {
+        res.status(403).send("Accès interdit.");
+        return;
+    }
 
     // Vérifier si le fichier existe
     fs.access(filePath, fs.constants.F_OK)
         .then(() => {
             // Définir les en-têtes pour le téléchargement
-            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filePath)}"`);
             res.setHeader('Content-Type', 'application/octet-stream');
 
             // Envoyer le fichier
