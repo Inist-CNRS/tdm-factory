@@ -13,7 +13,7 @@ const navigations = [
     { name: 'ISTEX TDM', url: 'https://services.istex.fr/' },
     {
         name: 'TM Tools Explorer',
-        url: 'https://tmtoolsfr-explorerfr.tdm.inist.fr/',
+        url: 'https://data.istex.fr/instance/tm-tools-explorer',
     },
     { name: 'Hébergement corpus', url: 'https://lodex.istex.fr/' },
 ];
