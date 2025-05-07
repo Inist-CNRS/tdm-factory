@@ -41,12 +41,6 @@ const ServiceDescription = () => {
                         <p>Remplissez votre adresse mail pour recevoir le lien de téléchargement du résultat.</p>
                     </div>
                 </div>
-
-                <div className="start-button">
-                    <Button variant="contained" onClick={handleStartClick}>
-                        Commencer un traitement
-                    </Button>
-                </div>
             </Container>
         </div>
     );
