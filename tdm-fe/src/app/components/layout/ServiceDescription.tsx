@@ -31,13 +31,13 @@ const ServiceDescription = () => {
 
                     <div className="step">
                         <CheckIcon className="icon" />
-                        <h3>Choisir un service</h3>
+                        <h3>Choisissez un service</h3>
                         <p>Choisissez le service web pour la fouille de textes ou TDM que vous voulez exécuter.</p>
                     </div>
 
                     <div className="step">
                         <EmailIcon className="icon" />
-                        <h3>Informations</h3>
+                        <h3>Recevez le résultat</h3>
                         <p>Remplissez votre adresse mail pour recevoir le lien de téléchargement du résultat.</p>
                     </div>
                 </div>

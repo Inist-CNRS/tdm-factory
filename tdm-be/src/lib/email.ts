@@ -46,7 +46,7 @@ export const sendStartedMail = async (options: StartedMailOptions) => {
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
             to: options.email,
-            subject: `IA Factory - Notification de creation - Traitement ${options.data.processingId}`,
+            subject: `IA Factory - Notification de création - Traitement ${options.data.processingId}`,
             html,
             text,
         });
