@@ -178,7 +178,7 @@ router.post(
         // We use the process/:type route with a special query parameter to redirect to the confirmation step
         const confirmationUrl = `${
             environment.hosts.external.isHttps ? 'https' : 'http'
-        }://${environment.hosts.external.host}/process/${req.body.flowId?.split('-')[0] || 'article'}?id=${updatedProcessing.id}&step=5`;
+        }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=5`;
         // Wait for the notification email to be sent before starting the processing
         await sendStartedMail({
             email: req.body.mail,

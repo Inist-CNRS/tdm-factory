@@ -148,9 +148,9 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
 
     const getStatusMessage = () => {
         const messages: Record<number, string> = {
-            [Status.WRAPPER_ERROR]: 'Error during file conversion. Please check your file format.',
-            [Status.ENRICHMENT_ERROR]: 'Enrichment failed.',
-            [Status.FINISHED_ERROR]: 'Error during processing finalization.',
+            [Status.WRAPPER_ERROR]: 'Erreur pendant la conversion du fichier.',
+            [Status.ENRICHMENT_ERROR]: 'Erreur pendant l\'enrichissement du fichier.',
+            [Status.FINISHED_ERROR]: 'Erreur durant la finalisation du traitement.',
         };
 
         return messages[currentStatus] || '';

@@ -20,30 +20,17 @@ const ProcessingStatus = () => {
         return null;
     }, [params.id]);
 
-    // État pour stocker le type de traitement (article ou corpus)
-    const [processingType, setProcessingType] = useState<'article' | 'corpus'>('article');
-
     // Récupérer les informations du traitement, y compris le type
     useEffect(() => {
         if (id) {
             const fetchProcessingInfo = async () => {
                 try {
-                    const info = await getProcessingInfo(id);
-                    if (info) {
-                        setProcessingType(info.type);
-                        // Rediriger vers la page de traitement avec l'étape 5
-                        navigate(`/process/${info.type}?id=${id}&step=5`);
-                    } else {
-                        // Si les informations ne sont pas disponibles, utiliser "article" par défaut
-                        navigate(`/process/article?id=${id}&step=5`);
-                    }
+                    // Rediriger vers la page de traitement avec l'étape 5
+                    navigate(`/process/result?id=${id}&step=5`);
                 } catch (error) {
                     console.error('Error fetching processing info:', error);
-                    // En cas d'erreur, utiliser "article" par défaut
-                    navigate(`/process/article?id=${id}&step=5`);
                 }
             };
-
             fetchProcessingInfo();
         }
     }, [id, navigate]);
