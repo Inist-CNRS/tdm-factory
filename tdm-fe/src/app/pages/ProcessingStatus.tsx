@@ -1,15 +1,16 @@
-import '~/app/pages/scss/ProcessingStatus.scss';
 import StatusTimeline from '~/app/components/progress/StatusTimeline';
+import { getProcessingInfo } from '~/app/services/processing/processing-info';
 import { status } from '~/app/services/status/status';
 import Status from '~/app/shared/Status';
 
 import Timeline from '@mui/lab/Timeline';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProcessingStatus = () => {
     const params = useParams();
+    const navigate = useNavigate();
 
     const id = useMemo(() => {
         // Check if not nullish, if id exist this one is a md5
@@ -18,6 +19,21 @@ const ProcessingStatus = () => {
         }
         return null;
     }, [params.id]);
+
+    // Récupérer les informations du traitement, y compris le type
+    useEffect(() => {
+        if (id) {
+            const fetchProcessingInfo = async () => {
+                try {
+                    // Rediriger vers la page de traitement avec l'étape 5
+                    navigate(`/process/result?id=${id}&step=5`);
+                } catch (error) {
+                    console.error('Error fetching processing info:', error);
+                }
+            };
+            fetchProcessingInfo();
+        }
+    }, [id, navigate]);
 
     const { data } = useQuery({
         queryKey: ['status', id],

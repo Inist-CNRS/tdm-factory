@@ -166,7 +166,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
     }
 
     // Get tmp file name
-    const finalFileName = `${randomFileName()}.${enrichmentEntry.retrieveExtension}`;
+    const finalFileName = `${processingId}.${enrichmentEntry.retrieveExtension}`;
     const finalFile = downloadFile(finalFileName);
 
     // Save the tmp file

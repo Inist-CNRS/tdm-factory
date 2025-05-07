@@ -24,3 +24,18 @@ export type ProcessingStatus = {
 export type ProcessingFields = {
     fields?: string[];
 };
+
+export type ResultInfo = {
+    resultUrl: string;
+    extension: string;
+};
+
+export type ProcessingInfo = {
+    id: string;
+    originalName: string;
+    status: number;
+    wrapper?: string;
+    wrapperParam?: string;
+    enrichment?: string;
+    type: 'article' | 'corpus';
+};

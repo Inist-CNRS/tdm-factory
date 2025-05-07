@@ -36,6 +36,14 @@ const App = () => {
                         </Container>
                     }
                 />
+                <Route
+                    path="/status/:id"
+                    element={
+                        <Container id="app-container">
+                            <ProcessingStatus />
+                        </Container>
+                    }
+                />
             </Routes>
             <WebServicesFooter />
             <Footer />

@@ -187,8 +187,29 @@
   color: #8f8f8f;
 }
 
+.download-result-button {
+  align-self: center;
+  width: 250px;
+  max-width: 100%;
+  padding: 10px 20px !important;
+  padding-top: 12px;
+  overflow: hidden;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+  text-overflow: ellipsis;
+  text-transform: none !important;
+  white-space: nowrap;
+  background-color: #4caf50 !important;
+  border-radius: 4px !important;
+  &:hover {
+    background-color: darken(#4caf50, 10%) !important;
+  }
+}
+
 .new-processing-button {
   align-self: center;
+  width: 250px;
   max-width: 100%;
   padding: 10px 20px !important;
   padding-top: 12px;

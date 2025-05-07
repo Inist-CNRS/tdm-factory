@@ -79,7 +79,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
 
             setHasAttemptedUpload(true);
 
-            // Si c'est un CSV, récupérer les champs disponibles
+            // Get fields for CSV
             if (file.name.toLowerCase().endsWith('.csv')) {
                 setIsLoadingFields(true);
                 upload(file)
@@ -93,9 +93,13 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                         if (fields && fields.fields) {
                             const fieldsArray = Array.isArray(fields.fields) ? fields.fields : Object.keys(fields.fields);
                             setAvailableFields(fieldsArray);
+                            
+                            // Select "abstract" if available, otherwise select the first field
+                            const defaultField = fieldsArray.includes('abstract') ? 'abstract' : fieldsArray[0];
+                            
                             if (fieldsArray.length > 0) {
-                                setSelectedField(fieldsArray[0]);
-                                onFieldsChange?.([fieldsArray[0]]);
+                                setSelectedField(defaultField);
+                                onFieldsChange?.([defaultField]);
                             }
                         }
                     })
