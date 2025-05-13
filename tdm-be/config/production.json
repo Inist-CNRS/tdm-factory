@@ -296,8 +296,22 @@
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**TopRefExtract** - Extraction des références phares",
-            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus."
+            "summary": "**TopRefExtract** - Extraction des références phares (CSV)",
+            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références phares du corpus."
+        },
+        {
+            "id": "istex-topcitation-graphe",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "doi.0",
+            "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
+            "retrieve": "/v1/retrieve-gexf",
+            "retrieveExtension": "gexf",
+            "summary": "**TopRefExtract** - Extraction des références phares (GEXF)",
+            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf."
         },
         {
             "id": "istex-clustering-en",
