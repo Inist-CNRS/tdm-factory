@@ -5,7 +5,14 @@ import { mailLogger } from '~/lib/logger';
 import nodemailer from 'nodemailer';
 import nunjucks from 'nunjucks';
 
-nunjucks.configure(templatesFiles());
+// To get the number of days before expiration for processing-finished.njk
+const nunjucksEnv = nunjucks.configure(templatesFiles(), {
+    autoescape: true,
+    noCache: true,
+    watch: false
+});
+
+nunjucksEnv.addGlobal('config', environment);
 
 const transporter = nodemailer.createTransport(environment.smtp);
 
@@ -18,9 +25,9 @@ transporter
     .then(() => {
         mailLogger.info('Connected to smtp server!');
     })
-    .catch((reason) => {
+    .catch((error) => {
         mailLogger.error("Can't connect to smtp server!");
-        mailLogger.error(reason);
+        mailLogger.error(error);
     });
 
 export type DefaultMailData = {
