@@ -28,37 +28,54 @@
         "csv": {
             "summary": "Tableur `.csv`",
             "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8.",
-            "extensions": ["csv"]
+            "extensions": [
+                "csv"
+            ]
         },
         "istex.tar.gz": {
             "summary": "Corpus Istex `.tar.gz`",
             "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON.\n\nIl est préférable qu'il contienne les `abstract`s.",
-            "extensions": ["tar.gz", "tgz"]
+            "extensions": [
+                "tar.gz",
+                "tgz"
+            ]
         },
         "pdf": {
             "summary": "PDF",
             "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image.",
-            "extensions": ["pdf"]
+            "extensions": [
+                "pdf"
+            ]
         },
         "tei-persee.tar.gz": {
             "summary": "Corpus TEI Persée `.tar.gz`",
             "description": "Un corpus contenant des fichiers XML-TEI Persée dans un répertoire `data`, au format `.tar.gz`.",
-            "extensions": ["tar.gz", "tgz"]
+            "extensions": [
+                "tar.gz",
+                "tgz"
+            ]
         },
         "txt": {
             "summary": "Texte `.txt`",
             "description": "Un fichier texte brut, encodé en UTF-8.",
-            "extensions": ["txt"]
+            "extensions": [
+                "txt"
+            ]
         },
         "txt.tar.gz": {
             "summary": "Corpus de textes `.tar.gz`",
             "description": "Un corpus contenant des fichiers texte, encodés en UTF-8, dans un répertoire `data`, au format `.tar.gz`.",
-            "extensions": ["tar.gz", "tgz"]
+            "extensions": [
+                "tar.gz",
+                "tgz"
+            ]
         },
         "*": {
             "summary": "Peu importe",
             "description": "N'importe quel format.",
-            "extensions": ["*"]
+            "extensions": [
+                "*"
+            ]
         }
     },
     "flows": [
@@ -297,7 +314,8 @@
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
             "summary": "**TopRefExtract** - Extraction des références phares (CSV)",
-            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références phares du corpus."
+            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références phares du corpus.",
+            "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
         },
         {
             "id": "istex-topcitation-graphe",
@@ -311,7 +329,8 @@
             "retrieve": "/v1/retrieve-gexf",
             "retrieveExtension": "gexf",
             "summary": "**TopRefExtract** - Extraction des références phares (GEXF)",
-            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf."
+            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf.",
+            "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
         },
         {
             "id": "istex-clustering-en",
