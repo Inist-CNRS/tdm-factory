@@ -106,6 +106,45 @@
             "descriptionLink": "https://services.istex.fr/extraction-du-texte-epure-de-pdf/"
         },
         {
+            "id": "pdf-text-summarize",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize-pdf",
+            "retrieve": "/v1/retrieve-txt",
+            "retrieveExtension": "txt",
+            "summary": "**textSummarize** - Résumé automatique d'un article scientifique",
+            "description": "Génère par IA un résumé d'un article scientifique au format PDF et écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
+        },
+        {
+            "id": "txt-text-summarize",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "wrapper": "/v1/txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize",
+            "retrieve": "/v1/retrieve-txt",
+            "retrieveExtension": "txt",
+            "summary": "**textSummarize** - Résumé automatique d'un article scientifique",
+            "description": "Génère par IA un résumé d'un article scientifique au format PDF et écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
+        },
+        {
+            "id": "txt-aiabstract-check",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "wrapper": "/v1/txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**aiAbstractCheck** - Détection d'abstract généré par IA",
+            "description": "Indique si un résumé scientifique en anglais a été généré par IA ou non, ainsi que son score associée.",
+            "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
+        },
+        {
             "id": "istex-teeft-en",
             "featured": false,
             "input": "corpus",
