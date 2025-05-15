@@ -160,7 +160,7 @@ const ProcessingFormConfiguration = ({
     useEffect(() => {
         if (!selectedService || !config) return;
         const matchingFlow = config.flows.find(flow => {
-            const matchesService = getServicePath(flow.enricher) === getServicePath(selectedService.url);
+            const matchesService = getServicePath(flow.enricher) === getServicePath(selectedService.enricher);
             const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === "*";
             const matchesType = flow.input === type;
 
@@ -183,7 +183,7 @@ const ProcessingFormConfiguration = ({
                 onChange({
                     wrapper: wrapper,
                     wrapperParam: wrapperParam,
-                    enrichment: selectedService,
+                    enrichment: { ...selectedService, url: selectedService.enricher, label: selectedService.summary }, // FIXME: convert to Enrichment
                     flowId: matchingFlow.id,
                     inputFormat: matchingFlow.inputFormat
                 });
@@ -193,7 +193,7 @@ const ProcessingFormConfiguration = ({
 
     useEffect(() => {
         const isValid = !!selectedService && !!config && config.flows.some(flow =>
-            getServicePath(flow.enricher) === getServicePath(selectedService.url)
+            getServicePath(flow.enricher) === getServicePath(selectedService.enricher)
         );
         onValidityChange(isValid);
     }, [selectedService, config, onValidityChange]);
