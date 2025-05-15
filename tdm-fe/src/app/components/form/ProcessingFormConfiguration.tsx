@@ -16,12 +16,13 @@ import { useParams } from 'react-router-dom';
 
 import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
+// Pour le traitement dans la base
 export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
     wrapperParam: string | null;
     enrichment: Enrichment | null;
     inputFormat?: string | null;
-    flowId?: string | null;
+    flowId: string | null;
     fields?: string[] | null;
 };
 
@@ -35,6 +36,7 @@ type ProcessingFormConfigurationProps = {
     onValidityChange: (isValid: boolean) => void;
 };
 
+// Pour l'affichage de la liste
 type ServiceInfo = {
     inputFormat: string;
     featured: boolean;
@@ -44,7 +46,7 @@ type ServiceInfo = {
     url: string;
     wrapperParameterDefault?: string;
     wrapperParameter?: string;
-    flowId?: string;
+    flowId: string;
 };
 
 const getServicePath = (url: string): string => {
@@ -155,16 +157,20 @@ const ProcessingFormConfiguration = ({
     }, [activeTab, availableServices]);
 
     const handleServiceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        const newService = enrichmentList.find((service) => service.url === event.target.value);
+        const newService = enrichmentList.find((service) => service.flowId === event.target.value);
+        console.log(enrichmentList.map(service => service.flowId));
+        console.log(event.target.value);
+        console.log('newService', newService);
         if (newService && newService !== selectedService) {
             setSelectedService(newService);
+            console.log('selectedService', selectedService);
         }
     }, [enrichmentList, selectedService]);
 
-    const handleServiceClick = useCallback((serviceUrl: string, event: React.MouseEvent<HTMLDivElement>) => {
+    const handleServiceClick = useCallback((serviceFlowId: string, event: React.MouseEvent<HTMLDivElement>) => {
         const isInteractive = (event.target as HTMLElement).closest('.MuiRadio-root, a');
         if (!isInteractive) {
-            setExpandedService(prev => prev === serviceUrl ? null : serviceUrl);
+            setExpandedService(prev => prev === serviceFlowId ? null : serviceFlowId);
         }
     }, []);
 
@@ -235,23 +241,23 @@ const ProcessingFormConfiguration = ({
                     aria-label="service"
                     name="service"
                     onChange={handleServiceChange}
-                    value={selectedService?.url || ''}
+                    value={selectedService?.flowId || ''}
                 >
                     {filteredServices.map((service, index) => (
                         <div
-                            key={`${service.url}-${index}`}
-                            className={`service-container ${expandedService === service.url ? 'expanded' : ''}`}
-                            onClick={(e) => handleServiceClick(service.url, e)}
+                            key={`${service.flowId}-${index}`}
+                            className={`service-container ${expandedService === service.flowId ? 'expanded' : ''}`}
+                            onClick={(e) => handleServiceClick(service.flowId, e)}
                         >
                             <div className="service-label-container">
                                 <FormControlLabel
-                                    value={service.url}
+                                    value={service.flowId}
                                     control={<Radio />}
                                     label={<Markdown text={service.summary} />}
                                 />
                                 <ExpandMoreIcon className="arrow-icon" />
                             </div>
-                            <Collapse in={expandedService === service.url}>
+                            <Collapse in={expandedService === service.flowId}>
                                 <div className="service-details">
                                     <Markdown text={service.description} />
                                     {service.descriptionLink && (
