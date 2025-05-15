@@ -12,6 +12,7 @@ export type WrapperList = Wrapper[];
 
 export type Enrichment = Operation & {
     parameters: string[];
+    flowId: string;
 };
 
 export type EnrichmentList = Enrichment[];
