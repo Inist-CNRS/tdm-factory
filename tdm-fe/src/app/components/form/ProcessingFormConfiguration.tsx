@@ -43,7 +43,7 @@ type ServiceInfo = {
     summary: string;
     description: string;
     descriptionLink?: string;
-    url: string;
+    enricher: string;
     wrapperParameterDefault?: string;
     wrapperParameter?: string;
     flowId: string;
@@ -68,39 +68,22 @@ const ProcessingFormConfiguration = ({
     const { type } = useParams();
     const [activeTab, setActiveTab] = useState('featured');
     const [expandedService, setExpandedService] = useState<string | null>(null);
-    const [selectedService, setSelectedService] = useState<Enrichment | null>(value.enrichment);
+    const [selectedService, setSelectedService] = useState<ServiceInfo | null>(null);
 
     const { data: config, isLoading: isConfigLoading } = useQuery({
         queryKey: ['static-config'],
         queryFn: getStaticConfig,
     });
 
-    const availableServices = useMemo(() => {
-        if (!config || !enrichmentList) return [];
+    const availableServices: ServiceInfo[] = useMemo(() => {
+        if (!config) return [];
 
         return config.flows
             .filter(flow => flow.input === type)
-            .reduce<ServiceInfo[]>((services, flow) => {
-                const flowPath = getServicePath(flow.enricher);
-                const matchingService = enrichmentList.find(service =>
-                    getServicePath(service.url) === flowPath
-                );
-
-                if (matchingService) {
-                    services.push({
-                        inputFormat: flow.inputFormat,
-                        featured: flow.featured,
-                        summary: flow.summary,
-                        description: flow.description,
-                        descriptionLink: flow.descriptionLink,
-                        url: matchingService.url,
-                        flowId: flow.id,
-                        wrapperParameter: flow.wrapperParameter,
-                        wrapperParameterDefault: flow.wrapperParameterDefault
-                    });
-                }
-                return services;
-            }, [])
+            .map(flow => ({
+                ...flow,
+                flowId: flow.id
+            }))
             .filter(service => service.inputFormat === value.inputFormat || service.inputFormat === "*");
     }, [config, enrichmentList, type, value.inputFormat]);
 
@@ -157,15 +140,15 @@ const ProcessingFormConfiguration = ({
     }, [activeTab, availableServices]);
 
     const handleServiceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        const newService = enrichmentList.find((service) => service.flowId === event.target.value);
-        console.log(enrichmentList.map(service => service.flowId));
+        const newService = availableServices.find((service) => service.flowId === event.target.value);
+        console.log(availableServices.map(service => service.flowId));
         console.log(event.target.value);
         console.log('newService', newService);
-        if (newService && newService !== selectedService) {
-            setSelectedService(newService);
+        if (newService !== selectedService) {
+            setSelectedService(newService ?? null);
             console.log('selectedService', selectedService);
         }
-    }, [enrichmentList, selectedService]);
+    }, [availableServices, selectedService]);
 
     const handleServiceClick = useCallback((serviceFlowId: string, event: React.MouseEvent<HTMLDivElement>) => {
         const isInteractive = (event.target as HTMLElement).closest('.MuiRadio-root, a');
@@ -194,8 +177,8 @@ const ProcessingFormConfiguration = ({
 
             if (wrapper) {
                 const wrapperParam = matchingFlow.wrapperParameterDefault ||
-                                   matchingFlow.wrapperParameter ||
-                                   '';
+                    matchingFlow.wrapperParameter ||
+                    '';
 
                 onChange({
                     wrapper: wrapper,
@@ -244,6 +227,7 @@ const ProcessingFormConfiguration = ({
                     value={selectedService?.flowId || ''}
                 >
                     {filteredServices.map((service, index) => (
+                        // Service card
                         <div
                             key={`${service.flowId}-${index}`}
                             className={`service-container ${expandedService === service.flowId ? 'expanded' : ''}`}
