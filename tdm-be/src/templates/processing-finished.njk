@@ -74,6 +74,8 @@
             Votre traitement est terminé avec succès !
         </div>
 
+        <p><strong>Note :</strong> Le fichier sera disponible pendant {{ config.cron.deleteFileOlderThan }} jours à compter de sa création. Veuillez le télécharger avant son expiration.</p>
+
         <a href="{{ resultFile }}" class="button">Télécharger le résultat</a>
 
         <div class="info-list">
