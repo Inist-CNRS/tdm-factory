@@ -115,7 +115,7 @@
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
             "summary": "**textSummarize** - Résumé automatique d'un article scientifique",
-            "description": "Génère par IA un résumé d'un article scientifique au format PDF et écrit en anglais.",
+            "description": "Génère par IA un résumé d'un article scientifique en anglais au format PDF.",
             "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
         },
         {
