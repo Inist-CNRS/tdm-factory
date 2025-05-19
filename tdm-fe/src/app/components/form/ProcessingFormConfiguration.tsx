@@ -183,7 +183,7 @@ const ProcessingFormConfiguration = ({
                 onChange({
                     wrapper: wrapper,
                     wrapperParam: wrapperParam,
-                    enrichment: { ...selectedService, url: selectedService.enricher, label: selectedService.summary }, // FIXME: convert to Enrichment
+                    enrichment: { ...selectedService, url: selectedService.enricher, label: selectedService.summary, parameters: [] },
                     flowId: matchingFlow.id,
                     inputFormat: matchingFlow.inputFormat
                 });
