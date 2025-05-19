@@ -485,7 +485,7 @@ const ProcessingCreationForm = () => {
                                 isPending={isPending}
                                 onValidityChange={(isValid) => {
                                     setIsWaitingInput(!isValid);
-                                } }                            />
+                                }} />
                         ) : null}
 
                         {/* Validation step */}
@@ -500,6 +500,7 @@ const ProcessingCreationForm = () => {
                                 fileName={fileNameFromApi || file?.name || ''}
                                 status={startingStatus}
                                 isPending={uploading}
+                                flowId={flowId}
                             />
                         ) : null}
                     </div>
