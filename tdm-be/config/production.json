@@ -107,7 +107,7 @@
         },
         {
             "id": "pdf-text-summarize",
-            "featured": false,
+            "featured": true,
             "input": "article",
             "inputFormat": "pdf",
             "wrapper": "/v1/pdf",
