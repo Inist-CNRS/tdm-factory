@@ -73,6 +73,9 @@ const ProcessingFormConfiguration = ({
     const { data: config, isLoading: isConfigLoading } = useQuery({
         queryKey: ['static-config'],
         queryFn: getStaticConfig,
+        staleTime: 0, // Considérer les données comme obsolètes immédiatement
+        refetchOnMount: true, // Recharger à chaque montage du composant
+        refetchOnWindowFocus: true, // Recharger quand la fenêtre reprend le focus
     });
 
     const availableServices: ServiceInfo[] = useMemo(() => {
