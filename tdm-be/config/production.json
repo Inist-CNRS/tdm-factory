@@ -453,12 +453,12 @@
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "value",
-            "wrapperParameterDefault": "abstract",
+            "wrapperParameterDefault": "title",
             "enricher": "https://data-computer.services.istex.fr/v1/corpus-similarity",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
             "summary": "**Corpus Similarity** - Similarité entre documents",
-            "description": "Calcule la similarité entre documents à partir des abstracts d'un corpus ISTEX."
+            "description": "Calcule la similarité entre documents à partir des titres d'un corpus ISTEX."
         }
     ]
 }
