@@ -27,14 +27,14 @@
     "inputFormat2labels": {
         "csv": {
             "summary": "Tableur `.csv`",
-            "description": "Un fichier `.csv` contenant une colonne de texte. Généralement obtenu par un export de tableur. L'encodage doit être UTF-8.",
+            "description": "Un fichier tableur au format `.csv` contenant des colonnes avec une entête. L'encodage doit être UTF-8. Le délimiteur est détecté automatiquement.",
             "extensions": [
                 "csv"
             ]
         },
         "istex.tar.gz": {
             "summary": "Corpus Istex `.tar.gz`",
-            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON.\n\nIl est préférable qu'il contienne les `abstract`s.",
+            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON (par exemple en sélectionnant l'usage LODEX).\n\nIl est préférable qu'il contienne les `abstract`s.",
             "extensions": [
                 "tar.gz",
                 "tgz"
@@ -94,7 +94,7 @@
         },
         {
             "id": "pdf-text-extract",
-            "featured": true,
+            "featured": false,
             "input": "article",
             "inputFormat": "pdf",
             "wrapper": "/v1/pdf",
@@ -142,7 +142,7 @@
             "retrieveExtension": "csv",
             "summary": "**aiAbstractCheck** - Détection d'abstract généré par IA",
             "description": "Indique si un résumé scientifique en anglais a été généré par IA ou non, ainsi que son score associée.",
-            "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
+            "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
         {
             "id": "istex-teeft-en",
@@ -161,7 +161,7 @@
         },
         {
             "id": "csv-teeft-en",
-            "featured": false,
+            "featured": true,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
@@ -185,21 +185,8 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait 5 termes de textes en français",
+            "summary": "**Teeft** - Extrait des termes de textes en français",
             "description": "Extrait les 5 termes les plus spécifiques de chacun des *abstract*s en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
-            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
-        },
-        {
-            "id": "txt-teeft-fr",
-            "featured": false,
-            "input": "article",
-            "inputFormat": "txt",
-            "wrapper": "/v1/txt",
-            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait 5 termes d'un texte en français",
-            "description": "Extrait les 5 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
@@ -213,7 +200,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait 5 termes de textes en français",
+            "summary": "**Teeft** - Extrait des termes de textes en français",
             "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
@@ -228,13 +215,13 @@
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**LDA** - Extrait des thématique d'un corpus",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
             "description": "Extrait des thématiques d’un corpus de textes écrits en anglais : une thématique (ou topic) est caractérisée par dix mots. Une fois les thématiques extraites, chaque document se voit attribuer une ou plusieurs thématique(s).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
         {
             "id": "istex-lda-en",
-            "featured": true,
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -243,7 +230,7 @@
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**LDA** - Extrait des thématique d'un corpus",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
             "description": "Extrait des thématiques d’un corpus de textes écrits en anglais : une thématique (ou topic) est caractérisée par dix mots. Une fois les thématiques extraites, chaque document se voit attribuer une ou plusieurs thématique(s).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
@@ -302,7 +289,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
-            "id": "txt-termsuite-en",
+            "id": "txttar-termsuite-en",
             "featured": true,
             "input": "corpus",
             "inputFormat": "txt.tar.gz",
@@ -315,7 +302,7 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
-            "id": "txt-termsuite-fr",
+            "id": "txttar-termsuite-fr",
             "featured": false,
             "input": "corpus",
             "inputFormat": "txt.tar.gz",
@@ -328,20 +315,6 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
-            "id": "csv-thesesul",
-            "featured": false,
-            "input": "corpus",
-            "inputFormat": "csv",
-            "wrapper": "/v1/csv",
-            "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
-            "enricher": "https://data-thesesul.services.istex.fr/v1/sudoc",
-            "retrieve": "/v1/retrieve",
-            "retrieveExtension": "tar.gz",
-            "summary": "**ThesesUL** - Récupère les métadonnées du Sudoc et les PDF",
-            "description": "Récupère les métadonnées du Sudoc à partir d'une liste d'identifiants et les xml-ise au format Hal-TEI. Récupère les PDFs associés."
-        },
-        {
             "id": "istex-topcitation",
             "featured": false,
             "input": "corpus",
@@ -352,23 +325,8 @@
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**TopRefExtract** - Extraction des références phares (CSV)",
-            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références phares du corpus.",
-            "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
-        },
-        {
-            "id": "istex-topcitation-graphe",
-            "featured": false,
-            "input": "corpus",
-            "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
-            "wrapperParameter": "value",
-            "wrapperParameterDefault": "doi.0",
-            "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
-            "retrieve": "/v1/retrieve-gexf",
-            "retrieveExtension": "gexf",
-            "summary": "**TopRefExtract** - Extraction des références phares (GEXF)",
-            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf.",
+            "summary": "**topRefExtract** - Extraction des références phares",
+            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références les plus citées du corpus.",
             "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
         },
         {
@@ -382,7 +340,7 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Clustering** - Classification de textes",
+            "summary": "**textClustering** - Classification de textes",
             "description": "Crée plusieurs groupes afin d'y classifier les différents textes en fonction de leur similarité. Les textes doivent être en anglais.",
             "descriptionLink": "https://services.istex.fr/extraction-de-cluster-dun-corpus/"
         },
@@ -402,8 +360,23 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-cluster-dun-corpus/"
         },
         {
+            "id": "csv-bibcheck",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "doi",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**bibCheck** - Contrôle de références bibliographiques",
+            "description": "Contrôle des références bibliographiques ou des DOI, en vérifiant leur présence dans Crossref tout en s'assurant que l'article associé n'est pas rétracté.",
+            "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
+        },
+        {
             "id": "istex-noise-en",
-            "featured": true,
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -412,13 +385,13 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Noise Detection** - Détection du bruit",
-            "description": "Utilise l'algorithme de *clustering* sur des résumés écrits en anglais et retourne uniquement la liste des identifiants considérés comme du bruit par [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html).",
+            "summary": "**noiseDetect** - Détection du bruit",
+            "description": "Identifie les documents non pertinents dans un corpus thématique.\n\nUtilise un algorithme de *clustering* sur des résumés écrits en anglais et retourne uniquement la liste des identifiants considérés comme du bruit.",
             "descriptionLink": "https://services.istex.fr/detection-de-bruit-dun-corpus/"
         },
         {
             "id": "csv-noise-en",
-            "featured": true,
+            "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
@@ -427,13 +400,28 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Noise Detection** - Détection du bruit",
-            "description": "Utilise l'algorithme de *clustering* sur des résumés écrits en anglais et retourne uniquement la liste des identifiants considérés comme du bruit par [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html). Le fichier `.csv` devra comporter une colonne `id` permettant d'identifier les données.",
+            "summary": "**noiseDetect** - Détection du bruit",
+            "description": "Identifie les documents non pertinents dans un corpus thématique.\n\nUtilise un algorithme de *clustering* sur des résumés écrits en anglais et retourne uniquement la liste des identifiants considérés comme du bruit.\n\nLe fichier `.csv` devra comporter une colonne `id` permettant d'identifier les données.",
             "descriptionLink": "https://services.istex.fr/detection-de-bruit-dun-corpus/"
         },
         {
-            "id": "istex-corpus-similarity",
+            "id": "csv-toprefextract",
             "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**topRefExtract** - Extraction des références phares",
+            "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références les plus citées du corpus.",
+            "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
+        },
+        {
+            "id": "istex-corpus-similarity",
+            "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapper": "/v1/istex-tar-gz",
@@ -442,8 +430,9 @@
             "enricher": "https://data-computer.services.istex.fr/v1/corpus-similarity",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
-            "summary": "**Corpus Similarity** - Similarité entre documents",
-            "description": "Calcule la similarité entre documents à partir des titres d'un corpus ISTEX."
+            "summary": "**textSimilarity** - Similarité entre documents",
+            "description": "Calcule la similarité entre documents à partir de leur titre, dans un corpus ISTEX.",
+            "descriptionLink": "https://services.istex.fr/calcul-de-similarite-entre-les-documents-dun-corpus/"
         }
     ]
 }
