@@ -443,7 +443,7 @@
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
             "summary": "**Teeft** - Extrait des termes d'un texte en français",
-            "descriptio10": "Extrait les 10 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
+            "description": "Extrait les 10 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
