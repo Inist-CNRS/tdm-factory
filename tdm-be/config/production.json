@@ -205,7 +205,7 @@
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
-            "id": "csv-teeft-en",
+            "id": "csv-tag-cloud-en",
             "featured": true,
             "input": "corpus",
             "inputFormat": "csv",
@@ -215,12 +215,12 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais",
-            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en anglais. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter.",
+            "summary": "**tagCloud** - Extrait des termes pertinents de textes en anglais",
+            "description": "Extrait les termes les plus spécifiques de chacun des textes en anglais (avec l'algorithme Teeft). Associe chaque terme au nombre de documents dans lequel il apparaît.\n\nPermet de créer des nuages de mots.\n\nL'entrée est un fichier CSV avec une colonne de texte en anglais. On peut saisir le nom de la colonne à traiter.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
-            "id": "csv-teeft-fr",
+            "id": "csv-tag-cloud-fr",
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
@@ -230,12 +230,12 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents de textes en français",
-            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. Par défaut c'est la colonne `value` qui est prise. On peut saisir le nom de la colonne à traiter.",
+            "summary": "**tagCloud** - Extrait des termes pertinents de textes en français",
+            "description": "Extrait les termes les plus spécifiques de chacun des textes en français (avec l'algorithme Teeft). Associe chaque terme au nombre de documents dans lequel il apparaît.\n\nPermet de créer des nuages de mots.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. On peut saisir le nom de la colonne à traiter.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
-            "id": "istex-teeft-en",
+            "id": "istex-tag-cloud-en",
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
@@ -245,12 +245,12 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais",
-            "description": "Extrait les 5 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "summary": "**tagCloud** - Extrait des termes pertinents de textes en anglais",
+            "description": "Extrait les termes les plus spécifiques de chacun des textes en anglais (avec l'algorithme Teeft). Associe chaque terme au nombre de documents dans lequel il apparaît.\n\nPermet de créer des nuages de mots.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
-            "id": "istex-teeft-fr",
+            "id": "istex-tag-cloud-fr",
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
@@ -260,8 +260,8 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents de textes en français",
-            "description": "Extrait les 5 termes les plus spécifiques de chacun des *abstract*s en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "summary": "**tagCloud** - Extrait des termes pertinents de textes en français",
+            "description": "Extrait les termes les plus spécifiques de chacun des *abstract*s en français (avec l'algorithme Teeft). Associe chaque terme au nombre de documents dans lequel il apparaît.\n\nPermet de créer des nuages de mots.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {

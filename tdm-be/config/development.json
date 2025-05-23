@@ -439,11 +439,11 @@
             "input": "article",
             "inputFormat": "txt",
             "wrapper": "/v1/txt",
-            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
             "summary": "**Teeft** - Extrait des termes d'un texte en français",
-            "description": "Extrait les 5 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
+            "descriptio10": "Extrait les 10 termes les plus spécifiques d'un texte en français. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
@@ -453,11 +453,11 @@
             "input": "article",
             "inputFormat": "txt",
             "wrapper": "/v1/txt",
-            "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
             "summary": "**Teeft** - Extrait des termes d'un texte en anglais",
-            "description": "Extrait les 5 termes les plus spécifiques d'un texte en anglais. Permet d'avoir une idée de ce dont il est question dans le texte.",
+            "description": "Extrait les 10 termes les plus spécifiques d'un texte en anglais. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
