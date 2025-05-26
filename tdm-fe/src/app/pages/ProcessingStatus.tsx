@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+// TODO: remove this page (not used any more)
 const ProcessingStatus = () => {
     const params = useParams();
     const navigate = useNavigate();

@@ -15,9 +15,10 @@ export type ProcessingFormConfirmationProps = {
     fileName?: string;
     status?: 202 | 400 | 409 | 428 | 500 | null;
     isPending?: boolean;
+    flowId?: string | null;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending, flowId }: ProcessingFormConfirmationProps) => {
     const [currentStatus, setCurrentStatus] = useState<number>(() => {
         if (initialStatus === 400 || initialStatus === 409) {
             return Status.WRAPPER_ERROR;

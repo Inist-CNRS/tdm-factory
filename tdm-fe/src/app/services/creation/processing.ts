@@ -9,6 +9,8 @@ export type ProcessingStartParams = {
     mail: string;
     id: string;
     flowId?: string;
+    retrieve?: string;
+    retrieveExtension?: string;
 };
 
 export const start = async ({
@@ -18,6 +20,8 @@ export const start = async ({
     mail,
     id,
     flowId,
+    retrieve,
+    retrieveExtension,
 }: ProcessingStartParams): Promise<202 | 400 | 409 | 428 | 500> => {
     const wrapperConfig = {
         url: wrapper.url,
@@ -32,6 +36,8 @@ export const start = async ({
         mail,
         file: id,
         flowId,
+        retrieve,
+        retrieveExtension,
     };
 
     const response = await fetch(createQuery(environment.post.processing.start), {
