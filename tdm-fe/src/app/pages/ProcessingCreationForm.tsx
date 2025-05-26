@@ -11,6 +11,7 @@ import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 import { getProcessingInfo } from '~/app/services/processing/processing-info';
 import ProcessingExample from '~/app/components/layout/ProcessingExample';
+import { getStaticConfig } from '~/app/services/config';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -34,6 +35,14 @@ const ProcessingCreationForm = () => {
     const { type } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Récupérer la configuration statique
+    const { data: staticConfig } = useQuery({
+        queryKey: ['staticConfig'],
+        queryFn: getStaticConfig,
+        staleTime: 3600000, // 1 heure de cache
+        gcTime: 3600000,
+    });
 
     // Récupérer les paramètres de l'URL
     const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -158,13 +167,22 @@ const ProcessingCreationForm = () => {
                 return null;
             }
 
+            // Récupérer la configuration statique pour obtenir les paramètres du flow
+            const flowConfig = staticConfig?.flows.find(flow => flow.id === flowId);
+            if (!flowConfig) {
+                console.error('Flow configuration not found for ID:', flowId);
+                return null;
+            }
+
             return start({
                 id: processingId,
                 wrapper: wrapper,
                 wrapperParam: wrapperParam ?? undefined,
                 enrichment: enrichment,
                 mail: email,
-                flowId: flowId ?? undefined,
+                flowId: flowConfig.id,
+                retrieve: flowConfig.retrieve,
+                retrieveExtension: flowConfig.retrieveExtension
             });
         },
         staleTime: 3600000,

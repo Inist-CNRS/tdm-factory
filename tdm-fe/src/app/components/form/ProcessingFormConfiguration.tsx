@@ -141,14 +141,11 @@ const ProcessingFormConfiguration = ({
 
     const handleServiceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const newService = availableServices.find((service) => service.flowId === event.target.value);
-        console.log(availableServices.map(service => service.flowId));
-        console.log(event.target.value);
-        console.log('newService', newService);
-        if (newService !== selectedService) {
-            setSelectedService(newService ?? null);
-            console.log('selectedService', selectedService);
+        if (newService) {
+            setSelectedService(newService);
+            console.log('Service sélectionné:', newService);
         }
-    }, [availableServices, selectedService]);
+    }, [availableServices]);
 
     const handleServiceClick = useCallback((serviceFlowId: string, event: React.MouseEvent<HTMLDivElement>) => {
         const isInteractive = (event.target as HTMLElement).closest('.MuiRadio-root, a');
@@ -184,7 +181,7 @@ const ProcessingFormConfiguration = ({
                     wrapper: wrapper,
                     wrapperParam: wrapperParam,
                     enrichment: { ...selectedService, url: selectedService.enricher, label: selectedService.summary, parameters: [] },
-                    flowId: matchingFlow.id,
+                    flowId: selectedService.flowId,
                     inputFormat: matchingFlow.inputFormat
                 });
             }
