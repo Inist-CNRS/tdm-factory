@@ -34,7 +34,7 @@
         },
         "istex.tar.gz": {
             "summary": "Corpus Istex `.tar.gz`",
-            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz`, avec les métadonnées JSON (par exemple en sélectionnant l'usage LODEX).\n\nIl est préférable qu'il contienne les `abstract`s.",
+            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz` (à choisir dans *Format de l'archive*). Il doit contenir **des métadonnées JSON** (par exemple en sélectionnant l'usage LODEX).\n\nIl est préférable qu'il contienne les `abstract`s.",
             "extensions": [
                 "tar.gz",
                 "tgz"
