@@ -207,7 +207,7 @@ const ProcessingFormConfiguration = ({
 
     return (
         <div className="processing-form-configuration">
-            <h3>Choisir un service</h3>
+            <h3>Choisir un service*</h3>
             {hasFeaturedServices && hasAdvancedServices ? (
                 <div className="service-tabs">
                     {availableTabs.map(tab => (
@@ -263,6 +263,10 @@ const ProcessingFormConfiguration = ({
                     ))}
                 </RadioGroup>
             </FormControl>
+
+            <p>
+                * Tous les services sont décrits dans <a href="https://services.istex.fr/">ISTEX TDM</a>.
+            </p>
         </div>
     );
 };
