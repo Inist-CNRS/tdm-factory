@@ -14,12 +14,10 @@ const HomePage = () => {
     return (
         <Container className="home-page">
             <h1>
-                Chargez vos corpus et découvrez les résultats
+                Chargez vos données et découvrez les résultats
                 <br />
                 des services TDM
             </h1>
-
-            <h2>Commencer un traitement</h2>
 
             <div className="choices-container">
                 <div
