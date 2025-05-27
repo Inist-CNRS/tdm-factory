@@ -321,6 +321,36 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "id": "csv-teeft-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais",
+            "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en anglais. Par défaut c'est la colonne `abstract` qui est prise. On peut sélectionner le nom de la colonne à traiter.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "id": "csv-teeft-fr",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "value",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en français",
+            "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier CSV avec une colonne de texte en français. Par défaut c'est la colonne `abstract` qui est prise. On peut sélectionner le nom de la colonne à traiter.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
             "id": "istex-termsuite-en",
             "featured": true,
             "input": "corpus",
