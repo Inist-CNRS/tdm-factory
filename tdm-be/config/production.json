@@ -291,6 +291,36 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
         {
+            "id": "istex-teeft-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en anglais",
+            "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en anglais. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "id": "istex-teeft-fr",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "value",
+            "wrapperParameterDefault": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes pertinents de textes en français",
+            "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en français. Permet d'avoir une idée de ce dont il est question dans chaque texte.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
             "id": "istex-termsuite-en",
             "featured": true,
             "input": "corpus",
