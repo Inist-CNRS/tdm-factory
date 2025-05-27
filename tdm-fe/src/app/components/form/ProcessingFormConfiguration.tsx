@@ -105,12 +105,7 @@ const ProcessingFormConfiguration = ({
     const availableTabs = useMemo(() => {
         const tabs = [];
         if (hasFeaturedServices) tabs.push({ id: 'featured', label: 'Services à la une' });
-        if (hasAdvancedServices) tabs.push({ id: 'advanced', label: 'Services avancés' });
-
-        if (hasFeaturedServices || hasAdvancedServices) {
-            tabs.push({ id: 'all', label: 'Tous les services' });
-        }
-
+        if (hasAdvancedServices) tabs.push({ id: 'advanced', label: 'Autres services' });
         return tabs;
     }, [hasFeaturedServices, hasAdvancedServices]);
 
@@ -144,21 +139,37 @@ const ProcessingFormConfiguration = ({
 
     const handleServiceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const newService = availableServices.find((service) => service.flowId === event.target.value);
-        console.log(availableServices.map(service => service.flowId));
-        console.log(event.target.value);
-        console.log('newService', newService);
-        if (newService !== selectedService) {
-            setSelectedService(newService ?? null);
-            console.log('selectedService', selectedService);
+        if (newService) {
+            setSelectedService(newService);
+            setExpandedService(newService.flowId);
+            onChange({
+                ...value,
+                flowId: newService.flowId
+            });
         }
-    }, [availableServices, selectedService]);
+    }, [availableServices, value, onChange]);
 
-    const handleServiceClick = useCallback((serviceFlowId: string, event: React.MouseEvent<HTMLDivElement>) => {
-        const isInteractive = (event.target as HTMLElement).closest('.MuiRadio-root, a');
-        if (!isInteractive) {
-            setExpandedService(prev => prev === serviceFlowId ? null : serviceFlowId);
+    const handleServiceClick = useCallback((serviceId: string, event: React.MouseEvent<HTMLDivElement>) => {
+        const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
+        
+        if (isArrowClick) {
+            // Si on clique sur la flèche, on change uniquement l'état expanded
+            setExpandedService(prev => prev === serviceId ? null : serviceId);
+        } else {
+            // Si on clique ailleurs sur la carte, on change l'état expanded et on sélectionne le service
+            setExpandedService(prev => prev === serviceId ? null : serviceId);
+            if (selectedService?.flowId !== serviceId) {
+                const newService = availableServices.find((service) => service.flowId === serviceId);
+                if (newService) {
+                    setSelectedService(newService);
+                    onChange({
+                        ...value,
+                        flowId: serviceId
+                    });
+                }
+            }
         }
-    }, []);
+    }, [availableServices, selectedService, value, onChange]);
 
     useEffect(() => {
         if (!selectedService || !config) return;
@@ -201,6 +212,27 @@ const ProcessingFormConfiguration = ({
         onValidityChange(isValid);
     }, [selectedService, config, onValidityChange]);
 
+    // Sélectionner le premier service par défaut
+    useEffect(() => {
+        if (config && !value.flowId && value.inputFormat) {
+            const availableServices = config.flows
+                .filter(flow => flow.input === type && flow.inputFormat === value.inputFormat)
+                .map(flow => flow.id);
+            
+            if (availableServices.length > 0) {
+                const firstService = availableServices[0];
+                onChange({
+                    wrapper: null,
+                    wrapperParam: null,
+                    enrichment: null,
+                    flowId: firstService,
+                    inputFormat: value.inputFormat
+                });
+                setExpandedService(firstService);
+            }
+        }
+    }, [config, type, value.inputFormat, value.flowId, onChange]);
+
     if (isPending || isConfigLoading) {
         return <CircularWaiting />;
     }
@@ -241,6 +273,7 @@ const ProcessingFormConfiguration = ({
                                     value={service.flowId}
                                     control={<Radio />}
                                     label={<Markdown text={service.summary} />}
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                                 <ExpandMoreIcon className="arrow-icon" />
                             </div>
@@ -264,7 +297,7 @@ const ProcessingFormConfiguration = ({
                 </RadioGroup>
             </FormControl>
 
-            <p>
+            <p className="service-description-link">
                 * Tous les services sont décrits dans <a href="https://services.istex.fr/">ISTEX TDM</a>.
             </p>
         </div>

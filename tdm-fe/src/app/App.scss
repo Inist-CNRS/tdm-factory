@@ -20,6 +20,16 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+a {
+  color: var(--dark-blue);
+  text-decoration: none;
+  transition: color .2s ease;
+
+  &:hover {
+    color: var(--very-dark-blue);
+  }
+}
+
 #app-container {
   flex: 1;
 }

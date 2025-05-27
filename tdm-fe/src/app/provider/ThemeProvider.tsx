@@ -25,6 +25,8 @@ const injectCssVariable = () => {
     style.setProperty('--very-light-black', colors.veryLightBlack);
     style.setProperty('--red', colors.red);
     style.setProperty('--white', colors.white);
+    style.setProperty('--dark-blue', colors.darkBlue);
+    style.setProperty('--very-dark-blue', colors.veryDarkBlue);
 
     style.setProperty('--text-primary', colors.lightBlack);
 };
