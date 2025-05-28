@@ -106,6 +106,19 @@
             "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
         {
+            "id": "pdf-astro-tag",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag-pdf",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**astroTag** - Extraction d'entités astronomiques",
+            "description": "Extrait les entités astronomiques d'un article en PDF.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
+        },
+        {
             "id": "csv-bibcheck",
             "featured": false,
             "input": "corpus",
