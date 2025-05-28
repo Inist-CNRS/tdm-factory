@@ -423,7 +423,6 @@ const ProcessingCreationForm = () => {
                 RETOUR A L'ACCUEIL
             </Button>
             <h1>Traiter un {type === 'corpus' ? 'corpus' : 'article'}</h1>
-            <h2>Traitement</h2>
 
             <div className="processing-form-layout">
                 {/* Visual stepper use to indicate the current step of the form */}

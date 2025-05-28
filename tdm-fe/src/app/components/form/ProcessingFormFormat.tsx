@@ -1,6 +1,6 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Collapse } from '@mui/material';
-import { useCallback, memo, useState } from 'react';
+import { useCallback, memo, useState, useEffect } from 'react';
 
 import type React from 'react';
 import './scss/ProcessingFormFormat.scss';
@@ -29,31 +29,51 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
 
     const handleFormatChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
-            onChange(event.target.value);
+            const format = event.target.value;
+            onChange(format);
+            setExpandedFormat(format);
         },
         [onChange],
     );
 
     const handleFormatClick = useCallback(
-        (format: string, event: React.MouseEvent) => {
-            const label = (event.currentTarget as HTMLElement).querySelector('.MuiFormControlLabel-root');
-            if (!label) {
-                return;
-            }
-
-            const rect = label.getBoundingClientRect();
-            const rightEdge = rect.right - 40;
-
-            if (event.clientX > rightEdge) {
-                event.preventDefault();
-                event.stopPropagation();
+        (format: string, event: React.MouseEvent<HTMLDivElement>) => {
+            const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
+            const isRadioClick = (event.target as HTMLElement).closest('.MuiRadio-root');
+            
+            if (isArrowClick) {
+                // Si on clique sur la flèche, on change uniquement l'état expanded
                 setExpandedFormat(expandedFormat === format ? null : format);
+            } else if (!isRadioClick) {
+                // Si on clique ailleurs que sur la flèche, on change l'état expanded et on sélectionne le format
+                setExpandedFormat(expandedFormat === format ? null : format);
+                if (value !== format) {
+                    onChange(format);
+                }
             }
-            // Stocker format selectionné dans inputFormat qu'on recupere dans "processingFormConfiguration"
-            onChange(format);
         },
-        [expandedFormat, onChange],
+        [expandedFormat, onChange, value],
     );
+
+    // Sélectionner le premier format par défaut
+    useEffect(() => {
+        if (config && !value) {
+            const availableFlows = config.flows.filter(flow => flow.input === type);
+            const inputFormats = availableFlows
+                .map(flow => flow.inputFormat)
+                .reduce(
+                    (deduplicated: Array<string>, format) => deduplicated.includes(format)
+                        ? deduplicated : [...deduplicated, format],
+                    [] as Array<string>
+                );
+            
+            if (inputFormats.length > 0) {
+                const firstFormat = inputFormats[0];
+                onChange(firstFormat);
+                setExpandedFormat(firstFormat);
+            }
+        }
+    }, [config, type, value, onChange]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -72,11 +92,12 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     const availableFlows = config.flows.filter(flow => flow.input === type);
     const inputFormats: Array<string> = availableFlows
         .map(flow => flow.inputFormat)
-        .reduce( // Dédoublonne les formats
+        .reduce(
             (deduplicated: Array<string>, format) => deduplicated.includes(format)
                 ? deduplicated : [...deduplicated, format],
             [] as Array<string>
         );
+
     type FormatLabels = { summary: string; description: string };
 
     const availableFormats: Array<[string, FormatLabels]> = inputFormats

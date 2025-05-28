@@ -76,6 +76,7 @@
   .service-container {
     position: relative;
     width: 100%;
+    cursor: pointer;
     background-color: #fff;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -100,18 +101,25 @@
     align-items: center;
     justify-content: flex-start;
     padding: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .04);
+    }
 
     /* stylelint-disable-next-line selector-class-pattern */
     .MuiFormControlLabel-root {
       width: 100%;
       padding-right: 40px;
       margin: 0;
+      cursor: pointer;
 
       /* stylelint-disable-next-line selector-class-pattern */
       .MuiRadio-root {
         padding: 6px;
         margin-right: 12px;
         color: #bdbdbd;
+        cursor: pointer;
 
         /* stylelint-disable-next-line selector-class-pattern */
         &.Mui-checked {
@@ -127,6 +135,7 @@
         font-weight: 500;
         line-height: 1.4;
         color: #333;
+        cursor: pointer;
 
         @media (max-width: 768px) {
           font-size: 14px;
@@ -140,7 +149,8 @@
       right: 16px;
       width: 24px;
       height: 24px;
-      color: #666;
+      color: $blue;
+      cursor: pointer;
       transition: transform .2s ease;
       transform: translateY(-50%);
     }
@@ -161,10 +171,28 @@
       display: inline-block;
       margin-top: 12px;
       font-weight: 500;
-      color: $blue;
+      color: var(--dark-blue);
       text-decoration: none;
 
       &:hover {
+        color: var(--very-dark-blue);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .service-description-link {
+    margin-top: 24px;
+    font-size: 14px;
+    color: $light-black;
+
+    a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      transition: color .2s ease;
+
+      &:hover {
+        color: var(--very-dark-blue);
         text-decoration: underline;
       }
     }
