@@ -93,6 +93,19 @@
             "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
         {
+            "id": "istex-aiabstract-check",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**aiAbstractCheck** - Détection d'abstracts générés par IA",
+            "description": "Indique si les résumés scientifiques en anglais ont été générés par IA ou non, ainsi que leurs scores associés.",
+            "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
+        },
+        {
             "id": "csv-bibcheck",
             "featured": false,
             "input": "corpus",
