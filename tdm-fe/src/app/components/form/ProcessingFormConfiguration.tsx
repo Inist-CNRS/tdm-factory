@@ -78,6 +78,27 @@ const ProcessingFormConfiguration = ({
         refetchOnWindowFocus: true, // Recharger quand la fenêtre reprend le focus
     });
 
+    // Initialiser le service sélectionné en fonction de la valeur initiale
+    useEffect(() => {
+        if (config && value.flowId) {
+            const service = config.flows.find(flow => flow.id === value.flowId);
+            if (service) {
+                setSelectedService({
+                    ...service,
+                    flowId: service.id
+                });
+                setExpandedService(service.id);
+                
+                // Définir l'onglet actif en fonction du service
+                if (service.featured) {
+                    setActiveTab('featured');
+                } else {
+                    setActiveTab('advanced');
+                }
+            }
+        }
+    }, [config, value.flowId]);
+
     const availableServices: ServiceInfo[] = useMemo(() => {
         if (!config) return [];
 
@@ -142,6 +163,14 @@ const ProcessingFormConfiguration = ({
         if (newService) {
             setSelectedService(newService);
             setExpandedService(newService.flowId);
+            
+            // Mettre à jour l'onglet actif en fonction du service
+            if (newService.featured) {
+                setActiveTab('featured');
+            } else {
+                setActiveTab('advanced');
+            }
+            
             onChange({
                 ...value,
                 flowId: newService.flowId
@@ -215,8 +244,17 @@ const ProcessingFormConfiguration = ({
     // Sélectionner le premier service par défaut
     useEffect(() => {
         if (config && !value.flowId && value.inputFormat) {
+            // Déterminer quel onglet est actif par défaut
+            const defaultTab = hasFeaturedServices ? 'featured' : 'advanced';
+            
+            // Filtrer les services selon l'onglet par défaut
             const availableServices = config.flows
-                .filter(flow => flow.input === type && flow.inputFormat === value.inputFormat)
+                .filter(flow => {
+                    const matchesType = flow.input === type;
+                    const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === "*";
+                    const matchesTab = defaultTab === 'featured' ? flow.featured : !flow.featured;
+                    return matchesType && matchesFormat && matchesTab;
+                })
                 .map(flow => flow.id);
             
             if (availableServices.length > 0) {
@@ -229,9 +267,10 @@ const ProcessingFormConfiguration = ({
                     inputFormat: value.inputFormat
                 });
                 setExpandedService(firstService);
+                setActiveTab(defaultTab);
             }
         }
-    }, [config, type, value.inputFormat, value.flowId, onChange]);
+    }, [config, type, value.inputFormat, value.flowId, onChange, hasFeaturedServices]);
 
     if (isPending || isConfigLoading) {
         return <CircularWaiting />;
