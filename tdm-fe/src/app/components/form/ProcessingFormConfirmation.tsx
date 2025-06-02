@@ -1,6 +1,7 @@
 import { getResultInfo } from '~/app/services/result/result';
 import { status } from '~/app/services/status/status';
 import Status from '~/app/shared/Status';
+import { getStaticConfig } from '~/app/services/config';
 
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -8,6 +9,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { memo, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import './scss/ProcessingFormConfirmation.scss';
 
 export type ProcessingFormConfirmationProps = {
@@ -15,9 +17,10 @@ export type ProcessingFormConfirmationProps = {
     fileName?: string;
     status?: 202 | 400 | 409 | 428 | 500 | null;
     isPending?: boolean;
+    flowId?: string | null;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending, flowId }: ProcessingFormConfirmationProps) => {
     const [currentStatus, setCurrentStatus] = useState<number>(() => {
         if (initialStatus === 400 || initialStatus === 409) {
             return Status.WRAPPER_ERROR;
@@ -30,6 +33,22 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
     });
 
     const [resultUrl, setResultUrl] = useState<string | null>(null);
+
+    const { data: config } = useQuery({
+        queryKey: ['static-config'],
+        queryFn: getStaticConfig,
+        staleTime: 0,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+    });
+
+    const getServiceName = () => {
+        if (!flowId || !config) return '';
+        const flow = config.flows.find(f => f.id === flowId);
+        if (!flow) return '';
+        const match = flow.summary.match(/\*\*(.*?)\*\*/);
+        return match ? match[1] : flow.summary;
+    };
 
     useEffect(() => {
         if (!processingId || isPending) {
@@ -183,8 +202,8 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                     <span className="value">{fileName}</span>
                 </div>
                 <div className="detail-item">
-                    <span className="label">N° de traitement :</span>
-                    <span className="value">{processingId}</span>
+                    <span className="label">Service :</span>
+                    <span className="value">{getServiceName()}</span>
                 </div>
             </div>
 

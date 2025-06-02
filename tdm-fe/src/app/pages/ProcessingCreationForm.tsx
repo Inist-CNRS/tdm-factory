@@ -499,6 +499,7 @@ const ProcessingCreationForm = () => {
                                 fileName={fileNameFromApi || file?.name || ''}
                                 status={startingStatus}
                                 isPending={uploading}
+                                flowId={flowId}
                             />
                         ) : null}
                     </div>
