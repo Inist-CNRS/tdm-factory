@@ -180,17 +180,15 @@ router.post(
             environment.hosts.external.isHttps ? 'https' : 'http'
         }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=5`;
         // Wait for the notification email to be sent before starting the processing
-        await sendStartedMail({
-            email: req.body.mail,
-            data: {
-                processingId: updatedProcessing.id,
-                originalName: updatedProcessing.originalName,
-                wrapper: updatedProcessing.wrapper as string,
-                wrapperParam: updatedProcessing.wrapperParam as string,
-                enrichment: updatedProcessing.enrichment as string,
-                statusPage: confirmationUrl,
-            },
-        });
+        await sendStartedMail(
+            updatedProcessing.id,
+            updatedProcessing.originalName,
+            updatedProcessing.wrapper as string,
+            updatedProcessing.wrapperParam as string,
+            updatedProcessing.enrichment as string,
+            req.body.mail,
+            updatedProcessing.flowId
+        );
 
         // Start the processing only after sending the email
         wrapper(updatedProcessing.id);
@@ -503,6 +501,7 @@ router.get('/info', (req, res) => {
         wrapperParam: processing.wrapperParam,
         enrichment: processing.enrichment,
         type: type,
+        flowId: processing.flowId,
     });
 });
 

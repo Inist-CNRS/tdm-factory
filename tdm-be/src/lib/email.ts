@@ -36,6 +36,7 @@ export type DefaultMailData = {
     wrapper: string;
     wrapperParam: string;
     enrichment: string;
+    serviceName?: string;
 };
 
 export type StartedMailOptions = {
@@ -45,21 +46,38 @@ export type StartedMailOptions = {
     };
 };
 
-export const sendStartedMail = async (options: StartedMailOptions) => {
+const getServiceName = (flowId: string | null): string => {
+    if (!flowId) return '';
+    const flow = environment.flows.find(f => f.id === flowId);
+    if (!flow) return '';
+    const match = flow.summary.match(/\*\*(.*?)\*\*/);
+    return match ? match[1] : flow.summary;
+};
+
+export const sendStartedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+    const serviceName = getServiceName(flowId);
+    const mailData: DefaultMailData = {
+        processingId,
+        originalName,
+        wrapper,
+        wrapperParam,
+        enrichment,
+        serviceName
+    };
     try {
-        const html = nunjucks.render('processing-started.njk', options.data);
-        const text = nunjucks.render('processing-started-text.njk', options.data);
+        const html = nunjucks.render('processing-started.njk', mailData);
+        const text = nunjucks.render('processing-started-text.njk', mailData);
 
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
-            to: options.email,
-            subject: `IA Factory - Notification de création - Traitement ${options.data.processingId}`,
+            to: email,
+            subject: `IA Factory - Notification de création - Traitement ${processingId}`,
             html,
             text,
         });
-        mailLogger.info(`Notification email for processing '${options.data.processingId}' send`);
+        mailLogger.info(`Notification email for processing '${processingId}' send`);
     } catch (e) {
-        mailLogger.error(`Can't send notification email for processing '${options.data.processingId}'`);
+        mailLogger.error(`Can't send notification email for processing '${processingId}'`);
     }
 };
 
@@ -70,21 +88,30 @@ export type FinishedMailOptions = {
     };
 };
 
-export const sendFinishedMail = async (options: FinishedMailOptions) => {
+export const sendFinishedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+    const serviceName = getServiceName(flowId);
+    const mailData: DefaultMailData = {
+        processingId,
+        originalName,
+        wrapper,
+        wrapperParam,
+        enrichment,
+        serviceName
+    };
     try {
-        const html = nunjucks.render('processing-finished.njk', options.data);
-        const text = nunjucks.render('processing-finished-text.njk', options.data);
+        const html = nunjucks.render('processing-finished.njk', mailData);
+        const text = nunjucks.render('processing-finished-text.njk', mailData);
 
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
-            to: options.email,
-            subject: `IA Factory - Résultat - Traitement ${options.data.processingId}`,
+            to: email,
+            subject: `IA Factory - Résultat - Traitement ${processingId}`,
             html,
             text,
         });
-        mailLogger.info(`Result email for processing '${options.data.processingId}' send`);
+        mailLogger.info(`Result email for processing '${processingId}' send`);
     } catch (e) {
-        mailLogger.error(`Can't send result email for processing '${options.data.processingId}'`);
+        mailLogger.error(`Can't send result email for processing '${processingId}'`);
     }
 };
 
@@ -95,20 +122,29 @@ export type ErrorMailOptions = {
     };
 };
 
-export const sendErrorMail = async (options: ErrorMailOptions) => {
+export const sendErrorMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+    const serviceName = getServiceName(flowId);
+    const mailData: DefaultMailData = {
+        processingId,
+        originalName,
+        wrapper,
+        wrapperParam,
+        enrichment,
+        serviceName
+    };
     try {
-        const html = nunjucks.render('processing-error.njk', options.data);
-        const text = nunjucks.render('processing-error-text.njk', options.data);
+        const html = nunjucks.render('processing-error.njk', mailData);
+        const text = nunjucks.render('processing-error-text.njk', mailData);
 
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
-            to: options.email,
-            subject: `IA Factory - Rapport d'erreur - Traitement ${options.data.processingId}`,
+            to: email,
+            subject: `IA Factory - Rapport d'erreur - Traitement ${processingId}`,
             html,
             text,
         });
-        mailLogger.info(`Error email for processing '${options.data.processingId}' send`);
+        mailLogger.info(`Error email for processing '${processingId}' send`);
     } catch (e) {
-        mailLogger.error(`Can't send error email for processing '${options.data.processingId}'`);
+        mailLogger.error(`Can't send error email for processing '${processingId}'`);
     }
 };

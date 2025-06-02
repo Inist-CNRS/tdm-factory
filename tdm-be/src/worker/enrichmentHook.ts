@@ -122,17 +122,15 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = `Impossible to contact enrichment-hook api (${fullUrl})`;
         error(processingId, message);
-        sendErrorMail({
+        sendErrorMail(
+            initialProcessing.id,
+            initialProcessing.originalName,
+            initialProcessing.wrapper as string,
+            initialProcessing.wrapperParam as string,
+            initialProcessing.enrichment as string,
             email,
-            data: {
-                processingId: initialProcessing.id,
-                originalName: initialProcessing.originalName,
-                wrapper: initialProcessing.wrapper as string,
-                wrapperParam: initialProcessing.wrapperParam as string,
-                enrichment: initialProcessing.enrichment as string,
-                errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_UNREACHABLE_ERROR,
-            },
-        }).then(undefined);
+            flowId
+        ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -147,17 +145,15 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // Check if we receive a non 200 status code
     if (response.status !== 200) {
         error(processingId, 'Enrichment-hook api return an non 200 status');
-        sendErrorMail({
+        sendErrorMail(
+            initialProcessing.id,
+            initialProcessing.originalName,
+            initialProcessing.wrapper as string,
+            initialProcessing.wrapperParam as string,
+            initialProcessing.enrichment as string,
             email,
-            data: {
-                processingId: initialProcessing.id,
-                originalName: initialProcessing.originalName,
-                wrapper: initialProcessing.wrapper as string,
-                wrapperParam: initialProcessing.wrapperParam as string,
-                enrichment: initialProcessing.enrichment as string,
-                errorMessage: ERROR_MESSAGE_ENRICHMENT_HOOK_PAYLOAD_NOT_ACCEPTED_ERROR,
-            },
-        }).then(undefined);
+            flowId
+        ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -176,17 +172,15 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = "Can't write tmp file";
         error(processingId, message);
-        sendErrorMail({
+        sendErrorMail(
+            initialProcessing.id,
+            initialProcessing.originalName,
+            initialProcessing.wrapper as string,
+            initialProcessing.wrapperParam as string,
+            initialProcessing.enrichment as string,
             email,
-            data: {
-                processingId: initialProcessing.id,
-                originalName: initialProcessing.originalName,
-                wrapper: initialProcessing.wrapper as string,
-                wrapperParam: initialProcessing.wrapperParam as string,
-                enrichment: initialProcessing.enrichment as string,
-                errorMessage: ERROR_MESSAGE_FILE_SYSTEM_ERROR,
-            },
-        }).then(undefined);
+            flowId
+        ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -199,17 +193,15 @@ const enrichmentHookSuccess = async (processingId: string) => {
         environment.hosts.external.isHttps ? 'https' : 'http'
     }://${environment.hosts.external.host}/downloads/${finalFileName}`;
 
-    sendFinishedMail({
+    sendFinishedMail(
+        initialProcessing.id,
+        initialProcessing.originalName,
+        initialProcessing.wrapper as string,
+        initialProcessing.wrapperParam as string,
+        initialProcessing.enrichment as string,
         email,
-        data: {
-            processingId: initialProcessing.id,
-            originalName: initialProcessing.originalName,
-            wrapper: initialProcessing.wrapper as string,
-            wrapperParam: initialProcessing.wrapperParam as string,
-            enrichment: initialProcessing.enrichment as string,
-            resultFile: resultUrl,
-        },
-    }).then(undefined);
+        flowId
+    ).then(undefined);
 
     // Update processing information
     updateProcessing(processingId, {
@@ -252,17 +244,15 @@ const enrichmentHookFailure = async (processingId: string) => {
     // --- Save enrichment-hook result
     debug(processingId, 'Saving enrichment-hook result');
 
-    sendErrorMail({
+    sendErrorMail(
+        initialProcessing.id,
+        initialProcessing.originalName,
+        initialProcessing.wrapper as string,
+        initialProcessing.wrapperParam as string,
+        initialProcessing.enrichment as string,
         email,
-        data: {
-            processingId: initialProcessing.id,
-            originalName: initialProcessing.originalName,
-            wrapper: initialProcessing.wrapper as string,
-            wrapperParam: initialProcessing.wrapperParam as string,
-            enrichment: initialProcessing.enrichment as string,
-            errorMessage: "Une erreur s'est produite lors de l'enrichissement",
-        },
-    }).then(undefined);
+        initialProcessing.flowId
+    ).then(undefined);
 
     // Update processing information
     updateProcessing(processingId, {
