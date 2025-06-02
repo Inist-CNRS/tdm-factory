@@ -147,6 +147,32 @@
             "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
         },
         {
+            "id": "pdf-chem-tag",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag-pdf",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "description": "Extrait les entités chimiques d'un article en PDF.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
+        },
+        {
+            "id": "pdf-datatable-extract",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "wrapper": "/v1/pdf",
+            "enricher": "https://data-table.services.istex.fr/v1/table-extraction",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**datatableExtract** - Extraction de tableaux",
+            "description": "Extrait les tableaux d'un article en PDF (de préférence en anglais).",
+            "descriptionLink": "https://services.istex.fr/detection-et-extraction-de-tableaux-dans-un-article-scientifique"
+        },
+        {
             "id": "csv-lda-en",
             "featured": false,
             "input": "corpus",
