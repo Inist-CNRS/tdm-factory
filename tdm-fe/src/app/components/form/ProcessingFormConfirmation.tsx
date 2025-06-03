@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { memo, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import './scss/ProcessingFormConfirmation.scss';
 
 export type ProcessingFormConfirmationProps = {
@@ -20,7 +21,11 @@ export type ProcessingFormConfirmationProps = {
     flowId?: string | null;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending, flowId }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending, flowId: propFlowId }: ProcessingFormConfirmationProps) => {
+    const [searchParams] = useSearchParams();
+    const urlFlowId = searchParams.get('flowId');
+    const effectiveFlowId = propFlowId || urlFlowId;
+
     const [currentStatus, setCurrentStatus] = useState<number>(() => {
         if (initialStatus === 400 || initialStatus === 409) {
             return Status.WRAPPER_ERROR;
@@ -43,8 +48,8 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
     });
 
     const getServiceName = () => {
-        if (!flowId || !config) return '';
-        const flow = config.flows.find(f => f.id === flowId);
+        if (!effectiveFlowId || !config) return '';
+        const flow = config.flows.find(f => f.id === effectiveFlowId);
         if (!flow) return '';
         const match = flow.summary.match(/\*\*(.*?)\*\*/);
         return match ? match[1] : flow.summary;
