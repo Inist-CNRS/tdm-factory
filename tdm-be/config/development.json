@@ -215,6 +215,36 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
+            "id": "istex-chem-tag",
+            "featured": false,
+            "bugged": true,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "description": "Extrait les entités chimiques d'un corpus istex.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
+        },
+        {
+            "id": "csv-chem-tag",
+            "featured": false,
+            "bugged": true,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "abstract",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "description": "Extrait les entités chimiques d'un corpus csv.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
+        },
+        {
             "id": "pdf-datatable-extract",
             "featured": false,
             "input": "article",
