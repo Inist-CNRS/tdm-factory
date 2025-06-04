@@ -56,13 +56,14 @@ const getServiceName = (flowId: string | null): string => {
 
 export const sendStartedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
     const serviceName = getServiceName(flowId);
-    const mailData: DefaultMailData = {
+    const mailData: DefaultMailData & { statusPage: string } = {
         processingId,
         originalName,
         wrapper,
         wrapperParam,
         enrichment,
-        serviceName
+        serviceName,
+        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/process/result?id=${processingId}&step=5${flowId ? `&flowId=${flowId}` : ''}`
     };
     try {
         const html = nunjucks.render('processing-started.njk', mailData);
@@ -90,13 +91,16 @@ export type FinishedMailOptions = {
 
 export const sendFinishedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
     const serviceName = getServiceName(flowId);
-    const mailData: DefaultMailData = {
+    const flow = environment.flows.find(f => f.id === flowId);
+    const extension = flow?.retrieveExtension || '';
+    const mailData: DefaultMailData & { resultFile: string } = {
         processingId,
         originalName,
         wrapper,
         wrapperParam,
         enrichment,
-        serviceName
+        serviceName,
+        resultFile: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${processingId}${extension ? '.' + extension : ''}`
     };
     try {
         const html = nunjucks.render('processing-finished.njk', mailData);
