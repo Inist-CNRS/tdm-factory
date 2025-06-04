@@ -145,6 +145,22 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
         },
         {
+            "id": "csv-astro-tag",
+            "featured": false,
+            "bugged": true,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "wrapperParameter": "abstract",
+            "wrapperParameterComplete": "/v1/fields/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**astroTag** - Extraction d'entités astronomiques",
+            "description": "Extrait les entités astronomiques des *abstracts* d'un corpus csv.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
+        },
+        {
             "id": "csv-bibcheck",
             "featured": false,
             "input": "corpus",
