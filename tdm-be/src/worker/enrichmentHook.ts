@@ -129,7 +129,8 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.wrapperParam as string,
             initialProcessing.enrichment as string,
             email,
-            flowId
+            flowId,
+            message
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -152,7 +153,8 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.wrapperParam as string,
             initialProcessing.enrichment as string,
             email,
-            flowId
+            flowId,
+            'Enrichment-hook api return an non 200 status'
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -167,7 +169,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
 
     // Save the tmp file
     try {
-        const resultBuffer = Buffer.from(response.data, 'binary');
+        const resultBuffer = new Uint8Array(Buffer.from(response.data, 'binary'));
         await writeFile(finalFile, resultBuffer);
     } catch (e) {
         const message = "Can't write tmp file";
@@ -179,7 +181,8 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.wrapperParam as string,
             initialProcessing.enrichment as string,
             email,
-            flowId
+            flowId,
+            message
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -251,7 +254,8 @@ const enrichmentHookFailure = async (processingId: string) => {
         initialProcessing.wrapperParam as string,
         initialProcessing.enrichment as string,
         email,
-        initialProcessing.flowId
+        initialProcessing.flowId,
+        'Enrichment-Hook failure'
     ).then(undefined);
 
     // Update processing information

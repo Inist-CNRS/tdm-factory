@@ -88,6 +88,9 @@ const wrapper = async (processingId: string) => {
         error(processingId, message);
         crash(e, message, initialProcessing);
         errorEmail(initialProcessing, ERROR_MESSAGE_WRAPPER_UNREACHABLE_ERROR);
+        updateProcessing(processingId, {
+            status: Status.WRAPPER_ERROR,
+        });
         return;
     }
 
@@ -98,6 +101,9 @@ const wrapper = async (processingId: string) => {
     if (response.status !== 200) {
         error(processingId, 'Wrapper api return an non 200 status');
         errorEmail(initialProcessing, ERROR_MESSAGE_WRAPPER_BAD_USER_INPUT);
+        updateProcessing(processingId, {
+            status: Status.WRAPPER_ERROR,
+        });
         return;
     }
 
@@ -106,7 +112,7 @@ const wrapper = async (processingId: string) => {
 
     // Save the tmp file
     try {
-        const resultBuffer = Buffer.from(response.data, 'binary');
+        const resultBuffer = new Uint8Array(Buffer.from(response.data, 'binary'));
         await writeFile(dumpFile, resultBuffer);
     } catch (e) {
         const message = "Can't write tmp file";
@@ -137,6 +143,9 @@ const catchWrapper = (processingId: string) => {
                 return;
             }
             errorEmail(processing, ERROR_MESSAGE_WRAPPER_UNEXPECTED_ERROR);
+            updateProcessing(processingId, {
+                status: Status.WRAPPER_ERROR,
+            });
         } catch (ignored) {
             /* empty */
         }
