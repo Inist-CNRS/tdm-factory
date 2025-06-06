@@ -27,6 +27,7 @@ export const errorEmail = (processing: Processing, errorMessage: string) => {
         processing.wrapperParam as string,
         processing.enrichment as string,
         processing.email as string,
-        processing.flowId
+        processing.flowId,
+        errorMessage
     ).then(undefined);
 };

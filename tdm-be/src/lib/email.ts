@@ -126,15 +126,16 @@ export type ErrorMailOptions = {
     };
 };
 
-export const sendErrorMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+export const sendErrorMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null, errorMessage: string) => {
     const serviceName = getServiceName(flowId);
-    const mailData: DefaultMailData = {
+    const mailData: DefaultMailData & { errorMessage: string } = {
         processingId,
         originalName,
         wrapper,
         wrapperParam,
         enrichment,
-        serviceName
+        serviceName,
+        errorMessage
     };
     try {
         const html = nunjucks.render('processing-error.njk', mailData);
