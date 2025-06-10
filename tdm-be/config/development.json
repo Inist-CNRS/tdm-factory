@@ -11,7 +11,7 @@
             "isHttps": false
         }
     },
-    "mailFrom": "\"ISTEX IA Factory\" <dev@local>",
+    "mailFrom": "\"ISTEX TDM Factory\" <dev@local>",
     "smtp": {
         "host": "tdm-factory-dev-maildev",
         "port": 1025,

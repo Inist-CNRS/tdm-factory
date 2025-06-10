@@ -15,10 +15,10 @@ const ServiceDescription = () => {
     return (
         <div className="service-description">
             <Container>
-                <h2>IA Factory – Transformez vos données en connaissances grâce à une interface simple dédiée à la fouille de textes</h2>
+                <h2>TDM Factory – Transformez vos données en connaissances grâce à une interface simple dédiée à la fouille de textes</h2>
 
                 <p className="description-text">
-                    IA Factory est une interface intuitive qui vous permet de charger vos propres données et d’y appliquer facilement des traitements de fouille de textes  (ou TDM pour <em>text and data mining</em>).
+                    TDM Factory est une interface intuitive qui vous permet de charger vos propres données et d’y appliquer facilement des traitements de fouille de textes  (ou TDM pour <em>text and data mining</em>).
                     <br />
                     Ils sont disponibles sous forme de web services sur notre site <a href="https://services.istex.fr/">Istex TDM qui répertorie et détaille chaque web service et ses usages</a>.
                     <br />
