@@ -5,12 +5,11 @@ import ServiceDescription from '~/app/components/layout/ServiceDescription';
 import WebServicesFooter from '~/app/components/layout/WebServicesFooter';
 import HomePage from '~/app/pages/HomePage';
 import ProcessingCreationForm from '~/app/pages/ProcessingCreationForm';
+import ProcessingStatus from '~/app/pages/ProcessingStatus';
 import { RouteProcessingStatus, RouteRoot } from '~/app/shared/routes';
 
 import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
-
-import ProcessingStatus from '~/app/pages/ProcessingStatus';
 
 const App = () => {
     return (

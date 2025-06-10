@@ -48,7 +48,7 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
 
         setIsInvalid(invalid);
         onChange(invalid ? null : email);
-        
+
         // Save valid email to cookie
         if (!invalid && email) {
             saveEmailToCookie(email);

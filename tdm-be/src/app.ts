@@ -74,7 +74,7 @@ app.get('/downloads/:filename', (req, res) => {
 
     // Vérifier si le chemin est dans le répertoire racine
     if (!filePath.startsWith(rootDir)) {
-        res.status(403).send("Accès interdit.");
+        res.status(403).send('Accès interdit.');
         return;
     }
 
@@ -90,7 +90,7 @@ app.get('/downloads/:filename', (req, res) => {
         })
         .catch(() => {
             res.status(404).send(
-                "Désolé, le fichier est introuvable, il n'a peut être pas encore été généré ou il a expiré (créé il y a plus d'une semaine)"
+                "Désolé, le fichier est introuvable, il n'a peut être pas encore été généré ou il a expiré (créé il y a plus d'une semaine)",
             );
         });
 });

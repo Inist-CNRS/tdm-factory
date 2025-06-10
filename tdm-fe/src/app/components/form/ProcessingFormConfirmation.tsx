@@ -1,15 +1,15 @@
+import { getStaticConfig } from '~/app/services/config';
 import { getResultInfo } from '~/app/services/result/result';
 import { status } from '~/app/services/status/status';
 import Status from '~/app/shared/Status';
-import { getStaticConfig } from '~/app/services/config';
 
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import ErrorIcon from '@mui/icons-material/Error';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import { memo, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { memo, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './scss/ProcessingFormConfirmation.scss';
 
@@ -21,7 +21,13 @@ export type ProcessingFormConfirmationProps = {
     flowId?: string | null;
 };
 
-const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initialStatus, isPending, flowId: propFlowId }: ProcessingFormConfirmationProps) => {
+const ProcessingFormConfirmation = ({
+    processingId,
+    fileName = '',
+    status: initialStatus,
+    isPending,
+    flowId: propFlowId,
+}: ProcessingFormConfirmationProps) => {
     const [searchParams] = useSearchParams();
     const urlFlowId = searchParams.get('flowId');
     const effectiveFlowId = propFlowId || urlFlowId;
@@ -48,10 +54,14 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
     });
 
     const getServiceName = () => {
-        if (!effectiveFlowId || !config) return '';
-        const flow = config.flows.find(f => f.id === effectiveFlowId);
-        if (!flow) return '';
-        const match = flow.summary.match(/\*\*(.*?)\*\*/);
+        if (!effectiveFlowId || !config) {
+            return '';
+        }
+        const flow = config.flows.find((f) => f.id === effectiveFlowId);
+        if (!flow) {
+            return '';
+        }
+        const match = /\*\*(.*?)\*\*/.exec(flow.summary);
         return match ? match[1] : flow.summary;
     };
 
@@ -159,7 +169,11 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                 }
                 return currentStatus > Status.WRAPPER_RUNNING ? 'completed' : '';
             case 4: // Processing
-                if ([Status.ENRICHMENT_RUNNING, Status.WAITING_WEBHOOK, Status.PROCESSING_WEBHOOK].includes(currentStatus)) {
+                if (
+                    [Status.ENRICHMENT_RUNNING, Status.WAITING_WEBHOOK, Status.PROCESSING_WEBHOOK].includes(
+                        currentStatus,
+                    )
+                ) {
                     return 'current';
                 }
                 return currentStatus > Status.PROCESSING_WEBHOOK ? 'completed' : '';
@@ -173,7 +187,7 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
     const getStatusMessage = () => {
         const messages: Record<number, string> = {
             [Status.WRAPPER_ERROR]: 'Erreur pendant la conversion du fichier.',
-            [Status.ENRICHMENT_ERROR]: 'Erreur pendant l\'enrichissement du fichier.',
+            [Status.ENRICHMENT_ERROR]: "Erreur pendant l'enrichissement du fichier.",
             [Status.FINISHED_ERROR]: 'Erreur durant la finalisation du traitement.',
         };
 
@@ -186,12 +200,7 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
     };
 
     const isTerminalStatus = (status: number): boolean => {
-        return [
-            Status.WRAPPER_ERROR,
-            Status.ENRICHMENT_ERROR,
-            Status.FINISHED_ERROR,
-            Status.FINISHED
-        ].includes(status);
+        return [Status.WRAPPER_ERROR, Status.ENRICHMENT_ERROR, Status.FINISHED_ERROR, Status.FINISHED].includes(status);
     };
 
     return (
@@ -241,7 +250,7 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                 </div>
             </div>
 
-            {currentStatus === Status.FINISHED && resultUrl && (
+            {currentStatus === Status.FINISHED && resultUrl ? (
                 <Button
                     variant="contained"
                     className="download-result-button"
@@ -251,7 +260,7 @@ const ProcessingFormConfirmation = ({ processingId, fileName = '', status: initi
                 >
                     Télécharger le résultat
                 </Button>
-            )}
+            ) : null}
 
             <Button variant="contained" className="new-processing-button" onClick={() => (window.location.href = '/')}>
                 Nouveau traitement

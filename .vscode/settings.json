@@ -1,16 +1,62 @@
 {
+    "cSpell.language": "en,fr-FR",
     "cSpell.words": [
         "Backoffice",
         "bibcheck",
+        "Bigramme",
+        "BUILDKIT",
+        "cnrs",
+        "cnrsinist",
+        "concat",
         "Crossref",
+        "Décommenter",
         "dockerized",
+        "foaf",
+        "inist",
         "lodex",
+        "Lodex",
+        "loterre",
+        "Loterre",
         "maildev",
+        "openalex",
+        "openapi",
+        "prometheus",
         "rapido",
+        "rnsr",
         "sciencemetrix",
+        "skos",
+        "stopwords",
+        "stylesheet",
         "sudoc",
         "teeft",
         "termsuite",
-        "topcitation"
-    ]
+        "topcitation",
+        "ungroup",
+        "uuid",
+        "webdav",
+        "webdavs"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "explicit"
+    },
+    "editor.formatOnSave": false,
+    "eslint.format.enable": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "eslint.workingDirectories": [
+        "./tdm-be",
+        "./tdm-fe",
+        "./tdm-admin"
+    ],
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
+    }
 }

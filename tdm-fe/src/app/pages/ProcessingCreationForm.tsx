@@ -5,12 +5,12 @@ import ProcessingFormEmail, { EMAIL_REGEX } from '~/app/components/form/Processi
 import ProcessingFormFormat from '~/app/components/form/ProcessingFormFormat';
 import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
+import ProcessingExample from '~/app/components/layout/ProcessingExample';
 import { fields as fieldsService } from '~/app/services/creation/fields';
 import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 import { getProcessingInfo } from '~/app/services/processing/processing-info';
-import ProcessingExample from '~/app/components/layout/ProcessingExample';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -222,7 +222,7 @@ const ProcessingCreationForm = () => {
             return null;
         }
         return {
-            fields: fieldsData.fields
+            fields: fieldsData.fields,
         };
     }, [fieldsData]);
 
@@ -354,15 +354,18 @@ const ProcessingCreationForm = () => {
      * Handle configuration change
      * @param value newly selected wrapper, wrapperParam and enrichment
      */
-    const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
-        setWrapper(value.wrapper);
-        if (!wrapperParam) {
-            setWrapperParam(value.wrapperParam);
-        }
-        setEnrichment(value.enrichment);
-        setFlowId(value.flowId || null);
-        setIsWaitingInput(false);
-    }, [wrapperParam]);
+    const handleConfigurationChange = useCallback(
+        (value: ProcessingFormConfigurationValueType) => {
+            setWrapper(value.wrapper);
+            if (!wrapperParam) {
+                setWrapperParam(value.wrapperParam);
+            }
+            setEnrichment(value.enrichment);
+            setFlowId(value.flowId || null);
+            setIsWaitingInput(false);
+        },
+        [wrapperParam],
+    );
 
     /**
      * Handle email change
@@ -484,7 +487,8 @@ const ProcessingCreationForm = () => {
                                 isPending={isPending}
                                 onValidityChange={(isValid) => {
                                     setIsWaitingInput(!isValid);
-                                } }                            />
+                                }}
+                            />
                         ) : null}
 
                         {/* Validation step */}

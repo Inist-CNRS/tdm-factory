@@ -187,7 +187,7 @@ router.post(
             updatedProcessing.wrapperParam as string,
             updatedProcessing.enrichment as string,
             req.body.mail,
-            updatedProcessing.flowId
+            updatedProcessing.flowId,
         );
 
         // Start the processing only after sending the email
