@@ -72,7 +72,7 @@ export const sendStartedMail = async (processingId: string, originalName: string
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
             to: email,
-            subject: `IA Factory - Notification de création - Traitement ${processingId}`,
+            subject: `TDM Factory - Notification de création - Traitement ${processingId}`,
             html,
             text,
         });
@@ -109,7 +109,7 @@ export const sendFinishedMail = async (processingId: string, originalName: strin
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
             to: email,
-            subject: `IA Factory - Résultat - Traitement ${processingId}`,
+            subject: `TDM Factory - Résultat - Traitement ${processingId}`,
             html,
             text,
         });
@@ -144,7 +144,7 @@ export const sendErrorMail = async (processingId: string, originalName: string, 
         await transporter.sendMail({
             from: environment.mailFrom ?? 'dev@local',
             to: email,
-            subject: `IA Factory - Rapport d'erreur - Traitement ${processingId}`,
+            subject: `TDM Factory - Rapport d'erreur - Traitement ${processingId}`,
             html,
             text,
         });
