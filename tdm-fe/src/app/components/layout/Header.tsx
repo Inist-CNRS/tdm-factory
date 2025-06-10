@@ -58,7 +58,7 @@ const Header = () => {
                 <Container id="header-container">
                     <Link href="/" id="home-link">
                         <img src={istexLogo} alt="Logo istex" />
-                        <h1 id="header-title">IA Factory</h1>
+                        <h1 id="header-title">TDM Factory</h1>
                     </Link>
                     <h2 id="header-subtitle">
                         <b>L&lsquo;IA appliquée à vos corpus</b>
