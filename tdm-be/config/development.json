@@ -280,7 +280,7 @@
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
             "summary": "**diseasesTag** - Extraction d'entités de maladies",
-            "description": "Extrait les entités de maladies d'un article en PDF.",
+            "description": "Extrait les entités de maladies d'un article en texte brut.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
@@ -294,7 +294,7 @@
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
             "summary": "**diseasesTag** - Extraction d'entités de maladies",
-            "description": "Extrait les entités de maladies d'un article en PDF.",
+            "description": "Extrait les entités de maladies d'un corpus Istex.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
@@ -310,7 +310,7 @@
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
             "summary": "**diseasesTag** - Extraction d'entités de maladies",
-            "description": "Extrait les entités de maladies d'un article en PDF.",
+            "description": "Extrait les entités de maladies d'un corpus csv.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
