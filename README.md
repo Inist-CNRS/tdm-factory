@@ -1,4 +1,4 @@
-# IA Factory (previously TDM Factory)
+# TDM Factory
 
 This project is a web application to have an easy access to
 It is a full-stack application containing an Express.js backend and a React.js frontend, dockerized using a single
