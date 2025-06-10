@@ -10,7 +10,7 @@
             "isHttps": true
         }
     },
-    "mailFrom": "\"ISTEX IA Factory\" <no-reply@inist.fr>",
+    "mailFrom": "\"ISTEX TDM Factory\" <no-reply@inist.fr>",
     "smtp": {
         "host": "{mail services host}",
         "port": 1025,
