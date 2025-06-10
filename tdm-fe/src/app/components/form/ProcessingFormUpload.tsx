@@ -6,12 +6,13 @@ import { upload } from '~/app/services/creation/upload';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
+import type { SelectChangeEvent } from '@mui/material';
 import type React from 'react';
 
 const formatFileSize = (bytes: number): string => {
@@ -34,7 +35,15 @@ type ProcessingFormUploadProps = {
     onFieldsChange?: (fields: string[]) => void;
 };
 
-const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, selectedFormat, onFieldsChange }: ProcessingFormUploadProps) => {
+const ProcessingFormUpload = ({
+    mimes,
+    value,
+    isOnError,
+    isPending,
+    onChange,
+    selectedFormat,
+    onFieldsChange,
+}: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
     const [formatError, setFormatError] = useState(false);
@@ -53,16 +62,23 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
         return mimes.join(', ');
     }, [mimes]);
 
-    const checkFileFormat = useCallback((file: File | null, format: string | null | undefined): boolean => {
-        if (!file || !format || !config) return true;
+    const checkFileFormat = useCallback(
+        (file: File | null, format: string | null | undefined): boolean => {
+            if (!file || !format || !config) {
+                return true;
+            }
 
-        const fileName = file.name.toLowerCase();
-        const extensions = config.inputFormat2labels[format]?.extensions;
+            const fileName = file.name.toLowerCase();
+            const extensions = config.inputFormat2labels[format]?.extensions;
 
-        if (!extensions) return true;
+            if (!extensions) {
+                return true;
+            }
 
-        return extensions.some(ext => fileName.endsWith(`.${ext}`));
-    }, [config]);
+            return extensions.some((ext) => fileName.endsWith(`.${ext}`));
+        },
+        [config],
+    );
 
     useEffect(() => {
         let invalid = false;
@@ -72,7 +88,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
             if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
                 invalid = true;
             }
-            
+
             if (selectedFormat && !checkFileFormat(file, selectedFormat)) {
                 wrongFormat = true;
             }
@@ -83,27 +99,29 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
             if (file.name.toLowerCase().endsWith('.csv')) {
                 setIsLoadingFields(true);
                 upload(file)
-                    .then(id => {
+                    .then((id) => {
                         if (id) {
                             return fieldsService(id);
                         }
                         return null;
                     })
-                    .then(fields => {
+                    .then((fields) => {
                         if (fields && fields.fields) {
-                            const fieldsArray = Array.isArray(fields.fields) ? fields.fields : Object.keys(fields.fields);
+                            const fieldsArray = Array.isArray(fields.fields)
+                                ? fields.fields
+                                : Object.keys(fields.fields);
                             setAvailableFields(fieldsArray);
-                            
+
                             // Select "abstract" if available, otherwise select the first field
                             const defaultField = fieldsArray.includes('abstract') ? 'abstract' : fieldsArray[0];
-                            
+
                             if (fieldsArray.length > 0) {
                                 setSelectedField(defaultField);
                                 onFieldsChange?.([defaultField]);
                             }
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error('Erreur lors de la récupération des champs:', error);
                     })
                     .finally(() => {
@@ -126,13 +144,16 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
         }
     }, []);
 
-    const handleFieldChange = useCallback((event: SelectChangeEvent<string>) => {
-        const newField = event.target.value;
-        setSelectedField(newField);
-        if (onFieldsChange) {
-            onFieldsChange([newField]);
-        }
-    }, [onFieldsChange]);
+    const handleFieldChange = useCallback(
+        (event: SelectChangeEvent) => {
+            const newField = event.target.value;
+            setSelectedField(newField);
+            if (onFieldsChange) {
+                onFieldsChange([newField]);
+            }
+        },
+        [onFieldsChange],
+    );
 
     useEffect(() => {
         if (availableFields.length > 0 && !selectedField) {
@@ -231,7 +252,7 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                         </div>
                     )}
                 </div>
-                {file?.name.toLowerCase().endsWith('.csv') && (
+                {file?.name.toLowerCase().endsWith('.csv') ? (
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel>Nom du champ à exploiter</InputLabel>
                         <Select
@@ -247,16 +268,25 @@ const ProcessingFormUpload = ({ mimes, value, isOnError, isPending, onChange, se
                             ))}
                         </Select>
                     </FormControl>
-                )}
+                ) : null}
                 {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
                         {isInvalid ? (
-                            <p>Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats : {stringifiedMimeTypes}.</p>
+                            <p>
+                                Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
+                                {stringifiedMimeTypes}.
+                            </p>
                         ) : null}
                         {formatError && selectedFormat && config ? (
                             <p>
                                 Le fichier ne correspond pas au format sélectionné.
-                                <span> Les formats acceptés sont : {config.inputFormat2labels[selectedFormat]?.extensions?.map((ext: string) => `.${ext}`).join(', ')}</span>
+                                <span>
+                                    {' '}
+                                    Les formats acceptés sont :{' '}
+                                    {config.inputFormat2labels[selectedFormat]?.extensions
+                                        ?.map((ext: string) => `.${ext}`)
+                                        .join(', ')}
+                                </span>
                             </p>
                         ) : null}
                     </div>

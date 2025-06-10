@@ -28,6 +28,6 @@ export const errorEmail = (processing: Processing, errorMessage: string) => {
         processing.enrichment as string,
         processing.email as string,
         processing.flowId,
-        errorMessage
+        errorMessage,
     ).then(undefined);
 };

@@ -21,7 +21,7 @@ export const start = async ({
 }: ProcessingStartParams): Promise<202 | 400 | 409 | 428 | 500> => {
     const wrapperConfig = {
         url: wrapper.url,
-        parameters: [wrapperParam || 'abstract']
+        parameters: [wrapperParam || 'abstract'],
     };
 
     const body = {

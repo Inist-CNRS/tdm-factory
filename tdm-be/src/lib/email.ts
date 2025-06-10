@@ -9,7 +9,7 @@ import nunjucks from 'nunjucks';
 const nunjucksEnv = nunjucks.configure(templatesFiles(), {
     autoescape: true,
     noCache: true,
-    watch: false
+    watch: false,
 });
 
 nunjucksEnv.addGlobal('config', environment);
@@ -47,14 +47,26 @@ export type StartedMailOptions = {
 };
 
 const getServiceName = (flowId: string | null): string => {
-    if (!flowId) return '';
-    const flow = environment.flows.find(f => f.id === flowId);
-    if (!flow) return '';
-    const match = flow.summary.match(/\*\*(.*?)\*\*/);
+    if (!flowId) {
+        return '';
+    }
+    const flow = environment.flows.find((f) => f.id === flowId);
+    if (!flow) {
+        return '';
+    }
+    const match = /\*\*(.*?)\*\*/.exec(flow.summary);
     return match ? match[1] : flow.summary;
 };
 
-export const sendStartedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+export const sendStartedMail = async (
+    processingId: string,
+    originalName: string,
+    wrapper: string,
+    wrapperParam: string,
+    enrichment: string,
+    email: string,
+    flowId: string | null,
+) => {
     const serviceName = getServiceName(flowId);
     const mailData: DefaultMailData & { statusPage: string } = {
         processingId,
@@ -63,7 +75,7 @@ export const sendStartedMail = async (processingId: string, originalName: string
         wrapperParam,
         enrichment,
         serviceName,
-        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/process/result?id=${processingId}&step=5${flowId ? `&flowId=${flowId}` : ''}`
+        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/process/result?id=${processingId}&step=5${flowId ? `&flowId=${flowId}` : ''}`,
     };
     try {
         const html = nunjucks.render('processing-started.njk', mailData);
@@ -89,9 +101,17 @@ export type FinishedMailOptions = {
     };
 };
 
-export const sendFinishedMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null) => {
+export const sendFinishedMail = async (
+    processingId: string,
+    originalName: string,
+    wrapper: string,
+    wrapperParam: string,
+    enrichment: string,
+    email: string,
+    flowId: string | null,
+) => {
     const serviceName = getServiceName(flowId);
-    const flow = environment.flows.find(f => f.id === flowId);
+    const flow = environment.flows.find((f) => f.id === flowId);
     const extension = flow?.retrieveExtension || '';
     const mailData: DefaultMailData & { resultFile: string } = {
         processingId,
@@ -100,7 +120,7 @@ export const sendFinishedMail = async (processingId: string, originalName: strin
         wrapperParam,
         enrichment,
         serviceName,
-        resultFile: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${processingId}${extension ? '.' + extension : ''}`
+        resultFile: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${processingId}${extension ? '.' + extension : ''}`,
     };
     try {
         const html = nunjucks.render('processing-finished.njk', mailData);
@@ -126,7 +146,16 @@ export type ErrorMailOptions = {
     };
 };
 
-export const sendErrorMail = async (processingId: string, originalName: string, wrapper: string, wrapperParam: string, enrichment: string, email: string, flowId: string | null, errorMessage: string) => {
+export const sendErrorMail = async (
+    processingId: string,
+    originalName: string,
+    wrapper: string,
+    wrapperParam: string,
+    enrichment: string,
+    email: string,
+    flowId: string | null,
+    errorMessage: string,
+) => {
     const serviceName = getServiceName(flowId);
     const mailData: DefaultMailData & { errorMessage: string } = {
         processingId,
@@ -135,7 +164,7 @@ export const sendErrorMail = async (processingId: string, originalName: string, 
         wrapperParam,
         enrichment,
         serviceName,
-        errorMessage
+        errorMessage,
     };
     try {
         const html = nunjucks.render('processing-error.njk', mailData);

@@ -111,13 +111,9 @@ const enrichmentHookSuccess = async (processingId: string) => {
     debug(processingId, `Calling URL: ${fullUrl}`);
 
     try {
-        response = await axios.post(
-            fullUrl,
-            [{ value: enrichmentHook }],
-            {
-                responseType: 'arraybuffer',
-            },
-        );
+        response = await axios.post(fullUrl, [{ value: enrichmentHook }], {
+            responseType: 'arraybuffer',
+        });
         debug(processingId, `Enrichment-Hook api call successful`);
     } catch (e) {
         const message = `Impossible to contact enrichment-hook api (${fullUrl})`;
@@ -130,7 +126,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.enrichment as string,
             email,
             flowId,
-            message
+            message,
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -154,7 +150,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.enrichment as string,
             email,
             flowId,
-            'Enrichment-hook api return an non 200 status'
+            'Enrichment-hook api return an non 200 status',
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -182,7 +178,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
             initialProcessing.enrichment as string,
             email,
             flowId,
-            message
+            message,
         ).then(undefined);
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
@@ -203,7 +199,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         initialProcessing.wrapperParam as string,
         initialProcessing.enrichment as string,
         email,
-        flowId
+        flowId,
     ).then(undefined);
 
     // Update processing information
@@ -255,7 +251,7 @@ const enrichmentHookFailure = async (processingId: string) => {
         initialProcessing.enrichment as string,
         email,
         initialProcessing.flowId,
-        'Enrichment-Hook failure'
+        'Enrichment-Hook failure',
     ).then(undefined);
 
     // Update processing information

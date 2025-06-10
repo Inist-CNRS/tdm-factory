@@ -7,6 +7,7 @@ import './scss/ProcessingFormFormat.scss';
 
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+
 import { getStaticConfig } from '~/app/services/config';
 import Markdown from '~/app/components/text/Markdown';
 
@@ -22,7 +23,11 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     const type = propType || paramType;
     const [expandedFormat, setExpandedFormat] = useState<string | null>(null);
 
-    const { data: config, isLoading, error } = useQuery({
+    const {
+        data: config,
+        isLoading,
+        error,
+    } = useQuery({
         queryKey: ['static-config'],
         queryFn: getStaticConfig,
     });
@@ -40,7 +45,7 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
         (format: string, event: React.MouseEvent<HTMLDivElement>) => {
             const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
             const isRadioClick = (event.target as HTMLElement).closest('.MuiRadio-root');
-            
+
             if (isArrowClick) {
                 // Si on clique sur la flèche, on change uniquement l'état expanded
                 setExpandedFormat(expandedFormat === format ? null : format);
@@ -58,15 +63,15 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     // Sélectionner le premier format par défaut
     useEffect(() => {
         if (config && !value) {
-            const availableFlows = config.flows.filter(flow => flow.input === type);
+            const availableFlows = config.flows.filter((flow) => flow.input === type);
             const inputFormats = availableFlows
-                .map(flow => flow.inputFormat)
+                .map((flow) => flow.inputFormat)
                 .reduce(
-                    (deduplicated: Array<string>, format) => deduplicated.includes(format)
-                        ? deduplicated : [...deduplicated, format],
-                    [] as Array<string>
+                    (deduplicated: string[], format) =>
+                        deduplicated.includes(format) ? deduplicated : [...deduplicated, format],
+                    [] as string[],
                 );
-            
+
             if (inputFormats.length > 0) {
                 const firstFormat = inputFormats[0];
                 onChange(firstFormat);
@@ -89,19 +94,19 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     }
 
     // Filtrer les formats disponibles en fonction du type (corpus ou article)
-    const availableFlows = config.flows.filter(flow => flow.input === type);
-    const inputFormats: Array<string> = availableFlows
-        .map(flow => flow.inputFormat)
+    const availableFlows = config.flows.filter((flow) => flow.input === type);
+    const inputFormats: string[] = availableFlows
+        .map((flow) => flow.inputFormat)
         .reduce(
-            (deduplicated: Array<string>, format) => deduplicated.includes(format)
-                ? deduplicated : [...deduplicated, format],
-            [] as Array<string>
+            (deduplicated: string[], format) =>
+                deduplicated.includes(format) ? deduplicated : [...deduplicated, format],
+            [] as string[],
         );
 
     type FormatLabels = { summary: string; description: string };
 
     const availableFormats: Array<[string, FormatLabels]> = inputFormats
-        .map(formatId => [formatId, config.inputFormat2labels[formatId]])
+        .map((formatId) => [formatId, config.inputFormat2labels[formatId]])
         .filter(([, format]) => format !== undefined) as Array<[string, FormatLabels]>;
 
     return (
@@ -113,12 +118,16 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
                 <FormControl component="fieldset" fullWidth>
                     <RadioGroup aria-label="format" name="format" onChange={handleFormatChange} value={value || ''}>
                         {availableFormats.map(([format, labels]) => {
-                            if (!labels) return null;
+                            if (!labels) {
+                                return null;
+                            }
                             return (
                                 <div
                                     key={format}
                                     className={`format-container ${expandedFormat === format ? 'expanded' : ''}`}
-                                    onClick={(e) => handleFormatClick(format, e)}
+                                    onClick={(e) => {
+                                        handleFormatClick(format, e);
+                                    }}
                                 >
                                     <div className="format-label-container">
                                         <FormControlLabel

@@ -15,9 +15,12 @@ export type StaticConfig = {
         description: string;
         descriptionLink?: string;
     }>;
-    inputFormat2labels: Record<string, { 
-        summary: string; 
-        description: string;
-        extensions: string[];
-    }>;
+    inputFormat2labels: Record<
+        string,
+        {
+            summary: string;
+            description: string;
+            extensions: string[];
+        }
+    >;
 };
