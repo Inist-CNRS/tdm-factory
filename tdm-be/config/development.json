@@ -162,6 +162,7 @@
         },
         {
             "id": "csv-bibcheck",
+            "bugged": true,
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",

@@ -119,21 +119,6 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
         },
         {
-            "id": "csv-bibcheck",
-            "featured": false,
-            "input": "corpus",
-            "inputFormat": "csv",
-            "wrapper": "/v1/csv",
-            "wrapperParameter": "doi",
-            "wrapperParameterComplete": "/v1/fields/csv",
-            "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
-            "summary": "**bibCheck** - Contrôle de références bibliographiques",
-            "description": "Contrôle des références bibliographiques ou des DOI, en vérifiant leur présence dans Crossref tout en s'assurant que l'article associé n'est pas rétracté.",
-            "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
-        },
-        {
             "id": "pdf-bibcheck",
             "featured": true,
             "input": "article",
