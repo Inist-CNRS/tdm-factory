@@ -5,7 +5,6 @@ import Dashboard from '~/app/page/Dashboard';
 import Database from '~/app/page/Database';
 import File from '~/app/page/File';
 import Log from '~/app/page/Log';
-import Setting from '~/app/page/Setting';
 import { getPageTitle } from '~/app/util/utils';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -68,7 +67,6 @@ const App = () => {
                 {page === 'database' ? <Database /> : null}
                 {page === 'file' ? <File /> : null}
                 {page === 'log' ? <Log /> : null}
-                {page === 'setting' ? <Setting /> : null}
             </Container>
         </Box>
     );

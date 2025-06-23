@@ -12,8 +12,6 @@ export const getPageTitle = (page: Page) => {
             return 'Fichiers';
         case 'log':
             return 'Journaux';
-        case 'setting':
-            return 'Paramètres';
         default:
             return 'Erreur 404';
     }

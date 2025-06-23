@@ -3,7 +3,6 @@ import { getPageTitle } from '~/app/util/utils';
 import FolderIcon from '@mui/icons-material/Folder';
 import HomeIcon from '@mui/icons-material/Home';
 import ScienceIcon from '@mui/icons-material/Science';
-import SettingsIcon from '@mui/icons-material/Settings';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -59,15 +58,6 @@ const Menu = ({ onChange }: MenuProps) => {
                             <TerminalIcon />
                         </ListItemIcon>
                         <ListItemText primary={getPageTitle('log')} />
-                    </ListItemButton>
-                </ListItem>
-
-                <ListItem disablePadding>
-                    <ListItemButton onClick={handleClick('setting')}>
-                        <ListItemIcon>
-                            <SettingsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={getPageTitle('setting')} />
                     </ListItemButton>
                 </ListItem>
             </List>
