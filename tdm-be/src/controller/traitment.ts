@@ -416,17 +416,13 @@ router.get('/result-info', (req, res) => {
         return;
     }
 
-    // Extract the extension from the result file path
+    // Extract the result file name from the stored path
     const resultFileName = processing.resultFile.split('/').pop() || '';
-    const extension = resultFileName.split('.').pop() || '';
-
-    const resultUrl = `${
-        environment.hosts.external.isHttps ? 'https' : 'http'
-    }://${environment.hosts.external.host}/downloads/${id}.${extension}`;
+    const resultUrl = `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${resultFileName}`;
 
     res.send({
         resultUrl,
-        extension,
+        extension: resultFileName.split('.').pop() || '',
     });
 });
 
