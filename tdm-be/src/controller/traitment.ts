@@ -419,10 +419,11 @@ router.get('/result-info', (req, res) => {
     // Extract the result file name from the stored path
     const resultFileName = processing.resultFile.split('/').pop() || '';
     const resultUrl = `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${resultFileName}`;
+    const extension = resultFileName.split('.').pop() || '';
 
     res.send({
         resultUrl,
-        extension: resultFileName.split('.').pop() || '',
+        extension,
     });
 });
 
