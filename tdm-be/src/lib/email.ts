@@ -75,7 +75,7 @@ export const sendStartedMail = async (
         wrapperParam,
         enrichment,
         serviceName,
-        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/process/result?id=${processingId}&step=5${flowId ? `&flowId=${flowId}` : ''}`,
+        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/status/${processingId}${flowId ? `?flowId=${flowId}` : ''}`,
     };
     try {
         const html = nunjucks.render('processing-started.njk', mailData);
