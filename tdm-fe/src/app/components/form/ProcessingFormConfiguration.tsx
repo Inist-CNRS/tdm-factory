@@ -230,7 +230,7 @@ const ProcessingFormConfiguration = ({
             });
 
             if (wrapper) {
-                const wrapperParam = matchingFlow.wrapperParameterDefault || matchingFlow.wrapperParameter || '';
+                const wrapperParam = matchingFlow.wrapperParameter || '';
 
                 onChange({
                     wrapper: wrapper,
