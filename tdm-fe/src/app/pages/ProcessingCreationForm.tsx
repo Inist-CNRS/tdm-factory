@@ -357,9 +357,7 @@ const ProcessingCreationForm = () => {
     const handleConfigurationChange = useCallback(
         (value: ProcessingFormConfigurationValueType) => {
             setWrapper(value.wrapper);
-            if (!wrapperParam) {
-                setWrapperParam(value.wrapperParam);
-            }
+            setWrapperParam(value.wrapperParam);
             setEnrichment(value.enrichment);
             setFlowId(value.flowId || null);
             setIsWaitingInput(false);
