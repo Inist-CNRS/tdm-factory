@@ -95,7 +95,13 @@ const ProcessingFormConfiguration = ({
                 } else {
                     setActiveTab('advanced');
                 }
+            } else {
+                setSelectedService(null);
+                setExpandedService(null);
             }
+        } else {
+            setSelectedService(null);
+            setExpandedService(null);
         }
     }, [config, value.flowId]);
 
@@ -213,20 +219,13 @@ const ProcessingFormConfiguration = ({
         if (!selectedService || !config) {
             return;
         }
-        const matchingFlow = config.flows.find((flow) => {
-            const matchesService = getServicePath(flow.enricher) === getServicePath(selectedService.enricher);
-            const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === '*';
-            const matchesType = flow.input === type;
-
-            return matchesService && matchesFormat && matchesType;
-        });
-
+        // Recherche du flow par id
+        const matchingFlow = config.flows.find((flow) => flow.id === selectedService.flowId);
         if (matchingFlow) {
             const wrapper = wrapperList.find((w) => {
                 const wrapperPath = getServicePath(w.url);
                 const flowWrapperPath = getServicePath(matchingFlow.wrapper);
-                const matches = wrapperPath === flowWrapperPath;
-                return matches;
+                return wrapperPath === flowWrapperPath;
             });
 
             if (wrapper) {
@@ -250,9 +249,7 @@ const ProcessingFormConfiguration = ({
 
     useEffect(() => {
         const isValid =
-            !!selectedService &&
-            !!config &&
-            config.flows.some((flow) => getServicePath(flow.enricher) === getServicePath(selectedService.enricher));
+            !!selectedService && !!config && config.flows.some((flow) => flow.id === selectedService.flowId);
         onValidityChange(isValid);
     }, [selectedService, config, onValidityChange]);
 
@@ -300,8 +297,16 @@ const ProcessingFormConfiguration = ({
                         <div
                             key={tab.id}
                             className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+                            role="tab"
+                            tabIndex={0}
+                            aria-selected={activeTab === tab.id}
                             onClick={() => {
                                 setActiveTab(tab.id);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    setActiveTab(tab.id);
+                                }
                             }}
                         >
                             {tab.label}
@@ -317,13 +322,19 @@ const ProcessingFormConfiguration = ({
                     onChange={handleServiceChange}
                     value={selectedService?.flowId || ''}
                 >
-                    {filteredServices.map((service, index) => (
-                        // Service card
+                    {filteredServices.map((service) => (
                         <div
-                            key={`${service.flowId}-${index}`}
+                            key={service.flowId}
                             className={`service-container ${expandedService === service.flowId ? 'expanded' : ''}`}
                             onClick={(e) => {
                                 handleServiceClick(service.flowId, e);
+                            }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    handleServiceClick(service.flowId, e as any);
+                                }
                             }}
                         >
                             <div className="service-label-container">
