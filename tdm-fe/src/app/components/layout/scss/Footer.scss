@@ -44,16 +44,15 @@
       }
     }
 
-    #footer-financing {
-      padding: 24px;
+    #footer-opere-par-inist {
+      padding: 0;
       text-align: center;
 
-      p {
-        margin: 0;
-        font-size: .875rem;
-        font-weight: 400;
-        line-height: 1.43;
-        color: $grey;
+      img {
+        display: inline-block;
+        width: 120px;
+        height: auto;
+        object-fit: contain;
       }
     }
   }
