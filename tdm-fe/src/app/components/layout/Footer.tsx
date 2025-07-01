@@ -7,7 +7,7 @@ import abesLogo from '/logo/abes.svg';
 import cnrsLogo from '/logo/cnrs.svg';
 import couperinLogo from '/logo/couperin.svg';
 import franceUniversitesLogo from '/logo/france_universites.svg';
-import investissementLogo from '/logo/investissement.png';
+import opereParInistLogo from '/logo/opere_par_inist.svg';
 import mesrLogo from '/logo/mesr.svg';
 import ulLogo from '/logo/ul.svg';
 
@@ -69,11 +69,10 @@ const Footer = () => {
                     ))}
                 </Grid>
 
-                <div id="footer-financing">
-                    <a href="https://anr.fr/ProjetIA-10-IDEX-0004" target="_blank" rel="noreferrer">
-                        <img src={investissementLogo} alt="Programme Investissement d'Avenir" />
+                <div id="footer-opere-par-inist">
+                    <a href="https://www.inist.fr/" target="_blank" rel="noreferrer">
+                        <img src={opereParInistLogo} alt="Logo Opéré par l’Inist " />
                     </a>
-                    <p>Financement : ANR-10-IDEX-0004-02</p>
                 </div>
             </Container>
         </footer>
