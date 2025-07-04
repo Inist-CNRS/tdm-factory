@@ -2,6 +2,8 @@ import '~/app/components/layout/scss/Footer.scss';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 import abesLogo from '/logo/abes.svg';
 import cnrsLogo from '/logo/cnrs.svg';
@@ -48,6 +50,17 @@ const partners = [
 const MAX_ITEMS_PER_LINE = 12;
 
 const Footer = () => {
+    const navigate = useNavigate();
+
+    const handlePrivacyPolicyClick = () => {
+        navigate('/privacy-policy');
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
+
     return (
         <footer id="footer">
             <Container id="footer-container">
@@ -69,10 +82,35 @@ const Footer = () => {
                     ))}
                 </Grid>
 
-                <div id="footer-opere-par-inist">
-                    <a href="https://www.inist.fr/" target="_blank" rel="noreferrer">
-                        <img src={opereParInistLogo} alt="Logo Opéré par l’Inist " />
-                    </a>
+                <div className="footer-bottom-row">
+                    <div id="footer-privacy-policy">
+                        <Button
+                            onClick={handlePrivacyPolicyClick}
+                            variant="outlined"
+                            size="medium"
+                            aria-label="Accéder à la politique de confidentialité"
+                            sx={{
+                                color: '#2a7392',
+                                borderColor: '#2a7392',
+                                '&:hover': {
+                                    borderColor: '#1a3d4a',
+                                    backgroundColor: 'rgba(42, 115, 146, 0.08)',
+                                },
+                                padding: '8px 16px',
+                            }}
+                        >
+                            Politique de confidentialité
+                        </Button>
+                    </div>
+
+                    <div id="footer-opere-par-inist">
+                        <a href="https://www.inist.fr/" target="_blank" rel="noreferrer">
+                            <img src={opereParInistLogo} alt="Logo Opéré par l'Inist " />
+                        </a>
+                    </div>
+
+                    {/* Élément vide pour maintenir l'espacement à trois colonnes */}
+                    <div className="footer-spacer"></div>
                 </div>
             </Container>
         </footer>

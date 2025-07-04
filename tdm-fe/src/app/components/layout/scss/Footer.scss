@@ -44,7 +44,15 @@
       }
     }
 
+    .footer-bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      margin-top: 20px;
+    }
+
     #footer-opere-par-inist {
+      grid-column: 2;
       padding: 0;
       text-align: center;
 
@@ -55,5 +63,35 @@
         object-fit: contain;
       }
     }
+  }
+}
+
+#footer-privacy-policy {
+  display: flex;
+  grid-column: 1;
+  justify-content: flex-start;
+}
+
+.footer-spacer {
+  grid-column: 3;
+}
+
+@media (max-width: 768px) {
+  .footer-bottom-row {
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  #footer-privacy-policy {
+    grid-row: 2;
+    grid-column: 1;
+    justify-content: center;
+  }
+  #footer-opere-par-inist {
+    grid-row: 1;
+    grid-column: 1 !important;
+  }
+  .footer-spacer {
+    display: none;
   }
 }

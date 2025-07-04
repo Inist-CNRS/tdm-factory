@@ -1,4 +1,7 @@
 import '~/app/App.scss';
+import CookieConsent from './components/CookieConsent';
+import PrivacyPolicy from './components/PrivacyPolicy';
+
 import Footer from '~/app/components/layout/Footer';
 import Header from '~/app/components/layout/Header';
 import ServiceDescription from '~/app/components/layout/ServiceDescription';
@@ -45,9 +48,11 @@ const App = () => {
                         </Container>
                     }
                 />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             </Routes>
             <WebServicesFooter />
             <Footer />
+            <CookieConsent />
         </>
     );
 };
