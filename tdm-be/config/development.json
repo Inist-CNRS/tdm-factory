@@ -68,6 +68,20 @@
                 "tgz"
             ]
         },
+        "json": {
+            "summary": "JSON",
+            "description": "Un fichier JSON.",
+            "extensions": [
+                "json"
+            ]
+        },
+        "jsonl": {
+            "summary": "JSONL",
+            "description": "Un fichier JSONL (JSON Lines).",
+            "extensions": [
+                "jsonl"
+            ]
+        },
         "*": {
             "summary": "Peu importe",
             "description": "N'importe quel format.",
@@ -717,6 +731,21 @@
             "summary": "**topRefExtract** - Extraction du graphe des références phares",
             "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf.",
             "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
+        },
+        {
+            "id": "jsonl-teeft-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "jsonl",
+            "wrapper": "/v1/jsonl",
+            "wrapperParameter": "abstract",
+            "wrapperParameterComplete": "/v1/fields/jsonl",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes d'un texte en anglais d'un JSONL",
+            "description": "Extrait les 10 termes les plus spécifiques d'un JSONL contenant un texte en anglais. Permet d'avoir une idée de ce dont il est question dans le texte.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         }
     ]
 }
