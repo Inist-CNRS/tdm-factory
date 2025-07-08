@@ -1,15 +1,14 @@
+import Markdown from '~/app/components/text/Markdown';
+import { getStaticConfig } from '~/app/services/config';
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Collapse } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, memo, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import type React from 'react';
 import './scss/ProcessingFormFormat.scss';
-
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-
-import { getStaticConfig } from '~/app/services/config';
-import Markdown from '~/app/components/text/Markdown';
 
 type ProcessingFormFormatProps = {
     onChange: (format: string) => void;
@@ -85,7 +84,6 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     }
 
     if (error) {
-        console.error('Error loading configuration:', error);
         return <div>Error loading configuration</div>;
     }
 

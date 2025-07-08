@@ -85,7 +85,13 @@ const ProcessingFormUpload = ({
         let wrongFormat = false;
 
         if (file) {
-            if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
+            const ext = file.name.toLowerCase().split('.').pop();
+            const detectedMime = mimeTypes.getType(file.name) ?? '';
+            let isMimeValid = mimes.includes(detectedMime);
+            if (ext === 'jsonl') {
+                isMimeValid = mimes.includes('application/jsonl');
+            }
+            if (!isMimeValid) {
                 invalid = true;
             }
 
@@ -95,8 +101,9 @@ const ProcessingFormUpload = ({
 
             setHasAttemptedUpload(true);
 
-            // Get fields for CSV
-            if (file.name.toLowerCase().endsWith('.csv')) {
+            // Get fields for CSV, JSON, JSONL
+            const lowerName = file.name.toLowerCase();
+            if (lowerName.endsWith('.csv') || lowerName.endsWith('.json') || lowerName.endsWith('.jsonl')) {
                 setIsLoadingFields(true);
                 upload(file)
                     .then((id) => {
@@ -252,7 +259,10 @@ const ProcessingFormUpload = ({
                         </div>
                     )}
                 </div>
-                {file?.name.toLowerCase().endsWith('.csv') ? (
+                {file &&
+                (file.name.toLowerCase().endsWith('.csv') ||
+                    file.name.toLowerCase().endsWith('.json') ||
+                    file.name.toLowerCase().endsWith('.jsonl')) ? (
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel>Nom du champ à exploiter</InputLabel>
                         <Select
