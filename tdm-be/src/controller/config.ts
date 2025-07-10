@@ -11,44 +11,7 @@ const router = Router();
  *   schemas:
  *     Config:
  *       type: object
- *       properties:
- *         wrappers:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/SwaggerApi'
- *           example: [{'url':'https://data-wrapper.services.istex.fr', 'tags':[{'name':'data-wrapper','excluded':[]}]}]
- *
- *     SwaggerApi:
- *       type: object
- *       properties:
- *         url:
- *           type: string
- *           example: 'https://data-wrapper.services.istex.fr'
- *         retrieveUrl:
- *           type: object
- *           properties:
- *             url:
- *               type: string
- *               example: /v1/retrieve-csv
- *             fileExtension:
- *               type: string
- *               example: csv
- *         tags:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Tag'
- *     Tag:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           example: 'data-wrapper'
- *         excluded:
- *           type: array
- *           items:
- *             type: string
- *           example: ['csv']
- *
+ *       properties: {}
  */
 
 /**
@@ -83,8 +46,8 @@ const router = Router();
  */
 router.post(
     '/set',
-    (req, res) => {
-        dynamicConfig.setConfig(req.body);
+    (_req, res) => {
+        dynamicConfig.setConfig();
         res.status(200).json({ message: 'Config data updated successfully', config: dynamicConfig.getConfig() });
     },
     (error) => {
@@ -106,7 +69,7 @@ router.post(
  *               $ref: '#/components/schemas/Config'
  */
 //Route to get config the current config
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
     res.json(dynamicConfig.getConfig());
 });
 

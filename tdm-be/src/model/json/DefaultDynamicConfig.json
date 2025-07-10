@@ -1,13 +1,1 @@
-{
-    "wrappers": [
-        {
-            "url": "https://data-wrapper.services.istex.fr",
-            "tags": [
-                {
-                    "name": "data-wrapper",
-                    "excluded": ["v1/fields/csv", "/v1/retrieve-csv"]
-                }
-            ]
-        }
-    ]
-}
+{}
