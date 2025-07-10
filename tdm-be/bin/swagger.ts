@@ -19,7 +19,7 @@ const swaggerOptions = {
         ],
     },
     // Specify the file containing your routes
-    apis: ['./src/controller/data-enrichment.ts', './src/controller/data-wrapper.ts', './src/controller/traitment.ts'],
+    apis: ['./src/controller/data-wrapper.ts', './src/controller/traitment.ts'],
 };
 
 const swaggerOptionsConfig = {

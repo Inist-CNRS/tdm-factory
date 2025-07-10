@@ -10,13 +10,6 @@ export type Wrapper = Operation & {
 
 export type WrapperList = Wrapper[];
 
-export type Enrichment = Operation & {
-    parameters: string[];
-    flowId: string;
-};
-
-export type EnrichmentList = Enrichment[];
-
 export type ProcessingStatus = {
     message: string;
     errorType: string;
@@ -37,6 +30,5 @@ export type ProcessingInfo = {
     status: number;
     wrapper?: string;
     wrapperParam?: string;
-    enrichment?: string;
     type: 'article' | 'corpus';
 };

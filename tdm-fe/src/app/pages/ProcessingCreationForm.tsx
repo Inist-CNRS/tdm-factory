@@ -7,7 +7,7 @@ import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
 import ProcessingExample from '~/app/components/layout/ProcessingExample';
 import { fields as fieldsService } from '~/app/services/creation/fields';
-import { wrapper as wrapperService, enrichment as enrichmentService } from '~/app/services/creation/operations';
+import { wrapper as wrapperService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
 import { upload } from '~/app/services/creation/upload';
 import { getProcessingInfo } from '~/app/services/processing/processing-info';
@@ -18,10 +18,10 @@ import { Button } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import type { ProcessingFormConfigurationValueType } from '~/app/components/form/ProcessingFormConfiguration';
-import type { Enrichment, Wrapper } from '~/app/shared/data.types';
+import type { Wrapper } from '~/app/shared/data.types';
 
 export const PROCESSING_FORMAT_STEP = 0;
 export const PROCESSING_UPLOAD_STEP = 1;
@@ -32,7 +32,6 @@ export const PROCESSING_CONFIRMATION_STEP = 5;
 
 const ProcessingCreationForm = () => {
     const { type } = useParams();
-    const navigate = useNavigate();
     const location = useLocation();
 
     // Récupérer les paramètres de l'URL
@@ -65,7 +64,6 @@ const ProcessingCreationForm = () => {
      */
     const [wrapper, setWrapper] = useState<Wrapper | null>(null);
     const [wrapperParam, setWrapperParam] = useState<string | null>(null);
-    const [enrichment, setEnrichment] = useState<Enrichment | null>(null);
     const [flowId, setFlowId] = useState<string | null>(null);
 
     /**
@@ -79,7 +77,7 @@ const ProcessingCreationForm = () => {
     const [startingStatus, setStartingStatus] = useState<202 | 400 | 409 | 428 | 500 | null>(null);
 
     /**
-     * Get wrapper and enrichment available
+     * Get wrapper available
      */
     const operations = useQueries({
         queries: [
@@ -89,16 +87,10 @@ const ProcessingCreationForm = () => {
                 staleTime: 3600000, // 1 hour of cache
                 gcTime: 3600000, // 1000 * 60 * 60
             },
-            {
-                queryKey: ['enrichment'],
-                queryFn: enrichmentService,
-                staleTime: 3600000,
-                gcTime: 3600000,
-            },
         ],
         combine: (results) => {
             return {
-                data: { wrapper: results[0].data, enrichment: results[1].data },
+                data: { wrapper: results[0].data },
                 pending: results.some((result) => result.isPending),
             };
         },
@@ -147,14 +139,14 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, enrichment, email, wrapperParam, flowId],
+        queryKey: ['start', step, processingId, wrapper, email, wrapperParam],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
             }
 
             // We can't have this state due to previous check (I hate ts some time)
-            if (!processingId || !wrapper || !enrichment || !email) {
+            if (!processingId || !wrapper || !email) {
                 return null;
             }
 
@@ -162,7 +154,6 @@ const ProcessingCreationForm = () => {
                 id: processingId,
                 wrapper: wrapper,
                 wrapperParam: wrapperParam ?? undefined,
-                enrichment: enrichment,
                 mail: email,
                 flowId: flowId ?? undefined,
             });
@@ -206,16 +197,7 @@ const ProcessingCreationForm = () => {
         return list;
     }, [file, operations.data.wrapper]);
 
-    /**
-     * Clean up enrichment list
-     */
-    const enrichmentList = useMemo(() => {
-        if (!operations.data.enrichment) {
-            return [];
-        }
 
-        return operations.data.enrichment;
-    }, [operations.data.enrichment]);
 
     const fields = useMemo(() => {
         if (!fieldsData || !fieldsData.fields) {
@@ -289,11 +271,11 @@ const ProcessingCreationForm = () => {
         } else if (step === PROCESSING_UPLOAD_STEP) {
             setIsWaitingInput(!file);
         } else if (step === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!(wrapper && enrichment));
+            setIsWaitingInput(!wrapper);
         } else if (step === PROCESSING_VALIDATION_STEP) {
             setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
         }
-    }, [step, selectedFormat, file, wrapper, enrichment, email]);
+    }, [step, selectedFormat, file, wrapper, email]);
 
     /**
      * Listen for start response
@@ -328,7 +310,7 @@ const ProcessingCreationForm = () => {
             setFile(null);
             setWrapper(null);
             setWrapperParam(null);
-            setEnrichment(null);
+            setFlowId(null);
             setSelectedFormat(null);
             setIsWaitingInput(true);
             nextStep = PROCESSING_FORMAT_STEP;
@@ -358,8 +340,7 @@ const ProcessingCreationForm = () => {
         (value: ProcessingFormConfigurationValueType) => {
             setWrapper(value.wrapper);
             setWrapperParam(value.wrapperParam);
-            setEnrichment(value.enrichment);
-            setFlowId(value.flowId || null);
+            setFlowId(value.flowId);
             setIsWaitingInput(false);
         },
         [wrapperParam],
@@ -391,7 +372,7 @@ const ProcessingCreationForm = () => {
             const fileIsValid = file !== null && !isInvalid;
             setIsWaitingInput(!fileIsValid);
         } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!(wrapper && enrichment));
+            setIsWaitingInput(!wrapper);
             setIsInvalid(false);
         } else if (previousStep === PROCESSING_VALIDATION_STEP) {
             const isEmailValid = email && EMAIL_REGEX.test(email || '');
@@ -400,7 +381,7 @@ const ProcessingCreationForm = () => {
         }
 
         setStep(previousStep);
-    }, [step, selectedFormat, file, wrapper, enrichment, email, isInvalid]);
+    }, [step, selectedFormat, file, wrapper, email, isInvalid]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
@@ -472,12 +453,10 @@ const ProcessingCreationForm = () => {
                         {step === PROCESSING_CONFIGURATION_STEP ? (
                             <ProcessingFormConfiguration
                                 wrapperList={wrapperList}
-                                enrichmentList={enrichmentList}
                                 fields={fields}
                                 value={{
                                     wrapper,
                                     wrapperParam,
-                                    enrichment,
                                     inputFormat: selectedFormat,
                                     flowId,
                                 }}

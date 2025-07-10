@@ -14,13 +14,12 @@ import { useQuery } from '@tanstack/react-query';
 import { memo, useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import type { Enrichment, ProcessingFields, Wrapper } from '~/app/shared/data.types';
+import type { ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 // Pour le traitement dans la base
 export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
     wrapperParam: string | null;
-    enrichment: Enrichment | null;
     inputFormat?: string | null;
     flowId: string | null;
     fields?: string[] | null;
@@ -28,7 +27,6 @@ export type ProcessingFormConfigurationValueType = {
 
 type ProcessingFormConfigurationProps = {
     wrapperList: Wrapper[];
-    enrichmentList: Enrichment[];
     fields: ProcessingFields | null;
     isPending: boolean;
     value: ProcessingFormConfigurationValueType;
@@ -59,7 +57,6 @@ const getServicePath = (url: string): string => {
 
 const ProcessingFormConfiguration = ({
     wrapperList,
-    enrichmentList,
     isPending,
     value,
     onChange,
@@ -117,7 +114,7 @@ const ProcessingFormConfiguration = ({
                 flowId: flow.id,
             }))
             .filter((service) => service.inputFormat === value.inputFormat || service.inputFormat === '*');
-    }, [config, enrichmentList, type, value.inputFormat]);
+    }, [config, type, value.inputFormat]);
 
     // Determine which categories have services
     const hasFeaturedServices = useMemo(
@@ -234,12 +231,6 @@ const ProcessingFormConfiguration = ({
                 onChange({
                     wrapper: wrapper,
                     wrapperParam: wrapperParam,
-                    enrichment: {
-                        ...selectedService,
-                        url: selectedService.enricher,
-                        label: selectedService.summary,
-                        parameters: [],
-                    },
                     flowId: matchingFlow.id,
                     inputFormat: matchingFlow.inputFormat,
                 });
@@ -274,7 +265,6 @@ const ProcessingFormConfiguration = ({
                 onChange({
                     wrapper: null,
                     wrapperParam: null,
-                    enrichment: null,
                     flowId: firstService,
                     inputFormat: value.inputFormat,
                 });

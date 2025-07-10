@@ -1,16 +1,10 @@
-import {
-    ERROR_MESSAGE_ENRICHMENT_HOOK_PAYLOAD_NOT_ACCEPTED_ERROR,
-    ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR,
-    ERROR_MESSAGE_ENRICHMENT_HOOK_UNREACHABLE_ERROR,
-    ERROR_MESSAGE_FILE_SYSTEM_ERROR,
-} from '~/lib/codes';
+import { ERROR_MESSAGE_ENRICHMENT_HOOK_UNEXPECTED_ERROR } from '~/lib/codes';
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { sendErrorMail, sendFinishedMail } from '~/lib/email';
-import { downloadFile, randomFileName } from '~/lib/files';
+import { downloadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
 import { errorEmail } from '~/lib/utils';
-import dynamicConfig from '~/model/DynamicConfig';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
@@ -187,10 +181,6 @@ const enrichmentHookSuccess = async (processingId: string) => {
         crash(e, message, initialProcessing);
         return;
     }
-
-    const resultUrl = `${
-        environment.hosts.external.isHttps ? 'https' : 'http'
-    }://${environment.hosts.external.host}/downloads/${finalFileName}`;
 
     sendFinishedMail(
         initialProcessing.id,

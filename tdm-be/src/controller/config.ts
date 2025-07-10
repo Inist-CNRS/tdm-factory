@@ -17,11 +17,6 @@ const router = Router();
  *           items:
  *             $ref: '#/components/schemas/SwaggerApi'
  *           example: [{'url':'https://data-wrapper.services.istex.fr', 'tags':[{'name':'data-wrapper','excluded':[]}]}]
- *         enrichments:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/SwaggerApi'
- *           example: [{'url':'https://data-computer.services.istex.fr', 'retrieveUrl':{url: '/v1/retrieve-csv', fileExtension: 'csv'}, 'tags':[{'name':'data-computer','excluded':['/v1/collect','/v1/retrieve','/v1/mock-error-async','/v1/mock-error-sync']}]}]
  *
  *     SwaggerApi:
  *       type: object

@@ -34,11 +34,11 @@ const router = express.Router();
  *       properties:
  *         wrapper:
  *           $ref: '#/components/schemas/Request'
- *         enrichment:
- *           $ref: '#/components/schemas/Request'
  *         mail:
  *           type: string
  *         file:
+ *           type: string
+ *         flowId:
  *           type: string
  *
  */
@@ -124,9 +124,12 @@ router.post(
             }
         }
 
-        // Get enrichment url
-        if (traitement.enrichment && traitement.enrichment.url) {
-            urlEnrichment = traitement.enrichment.url;
+        // Get enrichment url from flowId
+        if (traitement.flowId) {
+            const flow = environment.flows.find((f) => f.id === traitement.flowId);
+            if (flow) {
+                urlEnrichment = flow.enricher;
+            }
         }
 
         if (traitement.mail) {
@@ -142,7 +145,7 @@ router.post(
         }
 
         // Check if default params is pressent
-        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email) {
+        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email || !flowId) {
             res.status(HTTP_BAD_REQUEST).send({
                 status: HTTP_BAD_REQUEST,
                 message: 'Bad Request - Required parameter cannot be null',

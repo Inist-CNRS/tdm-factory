@@ -20,7 +20,6 @@ export class SwaggerApi {
 
 type ConfigType = {
     wrappers: SwaggerApi[];
-    enrichments: SwaggerApi[];
 };
 
 export class DynamicConfig {
@@ -37,7 +36,6 @@ export class DynamicConfig {
 
         this.config = {
             wrappers: localConfig.wrappers ?? defaultConfig.wrappers,
-            enrichments: localConfig.enrichments ?? defaultConfig.enrichments,
         };
         logger.info('Dynamic config loaded');
         this.saveConfig();
@@ -52,11 +50,6 @@ export class DynamicConfig {
         if (data.wrappers) {
             hasChange = true;
             this.config.wrappers = data.wrappers;
-        }
-
-        if (data.enrichments) {
-            hasChange = true;
-            this.config.enrichments = data.enrichments;
         }
 
         if (hasChange) {
