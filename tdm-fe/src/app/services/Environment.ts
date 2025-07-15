@@ -3,7 +3,6 @@ export const environment = {
     get: {
         list: {
             wrapper: '/api/data-wrappers/list',
-            enrichment: '/api/data-enrichments/list',
         },
         processing: {
             status: '/api/traitment/status',

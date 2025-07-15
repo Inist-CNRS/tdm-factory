@@ -1,7 +1,6 @@
 import adminRoute from '~/controller/admin';
 import configRoute from '~/controller/config';
 import configStaticRoute from '~/controller/config-static';
-import dataEnrichmentRoute from '~/controller/data-enrichment';
 import dataWrapperRoute from '~/controller/data-wrapper';
 import traitmentRoute from '~/controller/traitment';
 import webhookRoute from '~/controller/webhook';
@@ -54,7 +53,6 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 app.use('/api/data-wrappers', dataWrapperRoute);
-app.use('/api/data-enrichments', dataEnrichmentRoute);
 app.use('/api/traitment', traitmentRoute);
 app.use('/webhook', webhookRoute);
 app.use('/config-static', configStaticRoute);

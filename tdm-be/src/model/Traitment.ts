@@ -4,7 +4,6 @@ import type { Request } from '~/model/Request';
 
 export class Traitment {
     wrapper: Request = { url: '' };
-    enrichment: Request = { url: '' };
     mail = '';
     file = '';
     flowId?: string;

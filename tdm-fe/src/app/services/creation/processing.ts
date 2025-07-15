@@ -5,7 +5,6 @@ import type { Operation } from '~/app/shared/data.types';
 export type ProcessingStartParams = {
     wrapper: Operation;
     wrapperParam?: string;
-    enrichment: Operation;
     mail: string;
     id: string;
     flowId?: string;
@@ -14,7 +13,6 @@ export type ProcessingStartParams = {
 export const start = async ({
     wrapper,
     wrapperParam,
-    enrichment,
     mail,
     id,
     flowId,
@@ -26,9 +24,6 @@ export const start = async ({
 
     const body = {
         wrapper: wrapperConfig,
-        enrichment: {
-            url: enrichment.url,
-        },
         mail,
         file: id,
         flowId,
