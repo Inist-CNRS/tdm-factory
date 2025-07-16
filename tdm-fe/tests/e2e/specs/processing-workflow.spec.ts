@@ -277,4 +277,94 @@ test.describe('Processing Workflow', () => {
       test.skip(true, 'Submit button not found');
     }
   });
+
+    test('flow txt-teeft-fr', async ({ page }) => {
+    // Sur http://localhost:5173/
+    await page.goto('http://localhost:5173/');
+    await page.getByRole('button', { name: 'Traiter un article' }).click();
+    await page.getByRole('button', { name: 'Suivant' }).click();
+    const fileInput = page.locator('input[type="file"]').first();
+    await fileInput.setInputFiles('./tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt');
+    await page.getByRole('button', { name: 'Suivant' }).click();
+    await page
+      .getByRole('radio', {
+          name: 'Teeft - Extrait des termes d’un texte en français',
+      })
+      .check();
+    await page.getByRole('button', { name: 'Suivant' }).click();
+    await page
+      .getByRole('textbox', { name: 'Adresse électronique' })
+      .click();
+    await page
+      .getByRole('textbox', { name: 'Adresse électronique' })
+      .fill('peu.importe@cnrs.fr');
+    await page.getByRole('button', { name: 'Suivant' }).click();
+
+    // Wait for the processing to complete by waiting for the status text
+    await expect(
+      page.getByRole('heading', {
+        name: 'Statut du traitement de votre fichier',
+        level: 3,
+      }),
+    ).toBeVisible();
+    await expect(page.locator('text=Traitement terminé')).toBeVisible();
+    await expect(
+      page
+        .locator('div')
+        .filter({ hasText: /^Traitement terminé$/ })
+        .getByTestId('CheckIcon'),
+    ).toBeVisible({ timeout: 60_000 });
+
+    await expect(
+      page.getByRole('link', { name: 'Télécharger le résultat' }),
+    ).toBeVisible();
+    let resultURL = await page
+      .getByRole('link', { name: 'Télécharger le résultat' })
+      .getAttribute('href');
+
+    resultURL = resultURL?.replace('5173', '3000') ?? '';
+
+    expect(resultURL).not.toBe('');
+
+    // Download file at resultURL and check if it's a CSV
+    const response = await fetch(resultURL);
+    const text = await response.text();
+    expect(text).toContain('"id","term","frequency","specificity"');
+    expect(text).toContain('"text","servist","40","1"');
+    expect(text).toContain('"text","inist","15","0.375"');
+    expect(text).toContain('"text","service veille","9","0.225"');
+    expect(text).toContain('"text","bibliométrie","9","0.225"');
+    expect(text).toContain('"text","données multimédias","5","0.125"');
+    expect(text).toContain('"text","notices bibliographiques","5","0.125"');
+    expect(text).toContain('"text","interface web","4","0.1"');
+    expect(text).toContain('"text","aujourd hui","4","0.1"');
+    expect(text).toContain('"text","analyse statistique","4","0.1"');
+    expect(text).toContain('"text","première partie","3","0.075"');
+
+    // Check maildev on port 1080
+    await page.goto('http://localhost:1080');
+
+    await expect(
+        page.locator('text=francois.parmentier@inist.fr').first(),
+    ).toBeVisible();
+    await expect(
+        page.locator('text=Notification de création').first(),
+    ).toBeVisible();
+    await expect(
+        page.locator('text=Résultat - Traitement').first(),
+    ).toBeVisible();
+    await page
+      .getByRole('link', {
+        name: /TDM Factory - Résultat - Traitement/,
+      })
+      .first()
+      .click();
+
+    const iframe = await page.locator('iframe').first().contentFrame();
+    const mailHref = await iframe
+      ?.getByRole('link', { name: 'Télécharger le résultat' })
+      .getAttribute('href');
+    expect(mailHref).toBe(resultURL.replace('3000', '5173'));
+  });
+
 });
