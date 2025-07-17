@@ -63,7 +63,7 @@ const ProcessingCreationForm = () => {
      * Form configuration step
      */
     const [wrapper, setWrapper] = useState<Wrapper | null>(null);
-    const [wrapperParam, setWrapperParam] = useState<string | null>(null);
+    const [wrapperParameter, setWrapperParameter] = useState<string | null>(null);
     const [flowId, setFlowId] = useState<string | null>(null);
 
     /**
@@ -139,7 +139,7 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, email, wrapperParam],
+        queryKey: ['start', step, processingId, wrapper, email, wrapperParameter],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
@@ -153,7 +153,7 @@ const ProcessingCreationForm = () => {
             return start({
                 id: processingId,
                 wrapper: wrapper,
-                wrapperParam: wrapperParam ?? undefined,
+                wrapperParam: wrapperParameter ?? undefined,
                 mail: email,
                 flowId: flowId ?? undefined,
             });
@@ -268,14 +268,19 @@ const ProcessingCreationForm = () => {
     useEffect(() => {
         if (step === PROCESSING_FORMAT_STEP) {
             setIsWaitingInput(!selectedFormat);
+            setIsInvalid(false);
         } else if (step === PROCESSING_UPLOAD_STEP) {
-            setIsWaitingInput(!file);
+            const fileIsValid = file !== null && !isInvalid;
+            setIsWaitingInput(!fileIsValid);
         } else if (step === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!wrapper);
+            setIsWaitingInput(!wrapper || (selectedFormat === 'csv' && !wrapperParameter));
+            setIsInvalid(false);
         } else if (step === PROCESSING_VALIDATION_STEP) {
-            setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
+            const isEmailValid = email && EMAIL_REGEX.test(email || '');
+            setIsWaitingInput(!isEmailValid);
+            setIsInvalid(!isEmailValid);
         }
-    }, [step, selectedFormat, file, wrapper, email]);
+    }, [step, selectedFormat, file, wrapper, email, isInvalid, wrapperParameter]);
 
     /**
      * Listen for start response
@@ -309,7 +314,7 @@ const ProcessingCreationForm = () => {
         if (step === PROCESSING_CONFIRMATION_STEP) {
             setFile(null);
             setWrapper(null);
-            setWrapperParam(null);
+            setWrapperParameter(null);
             setFlowId(null);
             setSelectedFormat(null);
             setIsWaitingInput(true);
@@ -339,11 +344,16 @@ const ProcessingCreationForm = () => {
     const handleConfigurationChange = useCallback(
         (value: ProcessingFormConfigurationValueType) => {
             setWrapper(value.wrapper);
-            setWrapperParam(value.wrapperParam);
+            setWrapperParameter((prev) => {
+                if (value.wrapperParameter && value.wrapperParameter !== prev) {
+                    return value.wrapperParameter;
+                }
+                return prev;
+            });
             setFlowId(value.flowId);
             setIsWaitingInput(false);
         },
-        [wrapperParam],
+        [],
     );
 
     /**
@@ -371,7 +381,7 @@ const ProcessingCreationForm = () => {
         } else if (previousStep === PROCESSING_UPLOAD_STEP) {
             const fileIsValid = file !== null && !isInvalid;
             setIsWaitingInput(!fileIsValid);
-        } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
+            } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
             setIsWaitingInput(!wrapper);
             setIsInvalid(false);
         } else if (previousStep === PROCESSING_VALIDATION_STEP) {
@@ -388,11 +398,17 @@ const ProcessingCreationForm = () => {
         setIsWaitingInput(false);
     }, []);
 
+    /**
+     * Handle fields change (CSV column selection)
+     */
     const handleFieldsChange = useCallback((fields: string[]) => {
         if (fields && fields.length > 0) {
-            setWrapperParam(fields[0]);
+            setWrapperParameter(fields[0]);
+            if (step === PROCESSING_CONFIGURATION_STEP) {
+                setIsWaitingInput(false);
+            }
         }
-    }, []);
+    }, [step]);
 
     return (
         <div id="processing-form">
@@ -456,7 +472,7 @@ const ProcessingCreationForm = () => {
                                 fields={fields}
                                 value={{
                                     wrapper,
-                                    wrapperParam,
+                                    wrapperParameter,
                                     inputFormat: selectedFormat,
                                     flowId,
                                 }}
