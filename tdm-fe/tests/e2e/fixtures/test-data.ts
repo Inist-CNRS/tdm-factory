@@ -12,7 +12,7 @@ export const testFiles = {
 "Test Article 3","Bob Johnson",2022`,
     mimeType: 'text/csv'
   },
-  
+
   // Fichier XML de test
   xmlSample: {
     name: 'test-sample.xml',
@@ -41,9 +41,9 @@ export const testFlows = {
 
 export const testUrls = {
   home: '/',
-  processArticle: '/process/article',
-  processCorpus: '/process/corpus',
-  privacyPolicy: '/privacy-policy'
+  processArticle: 'http://localhost:5173/process/article',
+  processCorpus: 'http://localhost:5173/process/corpus',
+  privacyPolicy: 'http://localhost:5173/privacy-policy'
 };
 
 export const selectors = {
@@ -55,17 +55,17 @@ export const selectors = {
   statusMessage: '[data-testid="status-message"]',
   errorMessage: '[data-testid="error-message"]',
   successMessage: '[data-testid="success-message"]',
-  
+
   // Navigation
   homeLink: '[data-testid="home-link"]',
   articleProcessLink: '[data-testid="article-process-link"]',
   corpusProcessLink: '[data-testid="corpus-process-link"]',
-  
+
   // Formulaires
   flowSelect: '[data-testid="flow-select"]',
   wrapperSelect: '[data-testid="wrapper-select"]',
   enrichmentSelect: '[data-testid="enrichment-select"]',
-  
+
   // Résultats
   resultContainer: '[data-testid="result-container"]',
   downloadLink: '[data-testid="download-link"]',
