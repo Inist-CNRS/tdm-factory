@@ -130,6 +130,7 @@ Accédez au rapport avec : `npm run test:e2e:report`
 ## 🔄 Intégration continue
 
 Les tests sont configurés pour :
+
 - Retry automatique en cas d'échec (CI uniquement)
 - Exécution séquentielle en CI
 - Génération de rapports HTML

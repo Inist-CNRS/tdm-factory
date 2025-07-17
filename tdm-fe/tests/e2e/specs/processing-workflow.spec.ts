@@ -102,15 +102,15 @@ test.describe('Processing Workflow', () => {
 
         // Chercher un indicateur de complétion
         await expect(
-        page
-            .locator('div')
-            .filter({ hasText: /^Traitement terminé$/ })
-            .getByTestId('CheckIcon'),
+            page
+                .locator('div')
+                .filter({ hasText: /^Traitement terminé$/ })
+                .getByTestId('CheckIcon'),
         ).toBeVisible();
 
         await expect(page
-        .getByRole('link', { name: 'Télécharger le résultat' })
-        .getAttribute('href')).toBeTruthy();
+            .getByRole('link', { name: 'Télécharger le résultat' })
+            .getAttribute('href')).toBeTruthy();
     });
 
     test('should handle processing errors', async ({ page }) => {
@@ -118,8 +118,8 @@ test.describe('Processing Workflow', () => {
 
         // Mock de la réponse API pour un traitement en erreur
         await apiHelpers.mockAPIResponse(
-        `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
-        {"message":`Status du traitement ${mockProcessingId} : Terminé `,"errorType":9}
+            `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
+            {"message":`Status du traitement ${mockProcessingId} : Terminé `,"errorType":9}
         );
 
         await page.goto(`/status/${mockProcessingId}`);
@@ -145,10 +145,10 @@ test.describe('Processing Workflow', () => {
 
         // Étape 2: Choisir le traitement
         await page
-        .getByRole('radio', {
-            name: 'Termsuite EN - Extraction terminologique en anglais',
-        })
-        .check();
+            .getByRole('radio', {
+                name: 'Termsuite EN - Extraction terminologique en anglais',
+            })
+            .check();
         await page.getByRole('button', { name: 'Suivant' }).click();
 
         // Étape 3: Remplir l'email
@@ -160,10 +160,10 @@ test.describe('Processing Workflow', () => {
 
         // Vérifier que la page de statut s'affiche
         await expect(
-        page.getByRole('heading', {
-            name: 'Statut du traitement de votre fichier',
-            level: 3,
-        }),
+            page.getByRole('heading', {
+                name: 'Statut du traitement de votre fichier',
+                level: 3,
+            }),
         ).toBeVisible();
     });
 
@@ -207,40 +207,40 @@ test.describe('Processing Workflow', () => {
         await fileInput.setInputFiles('./tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt');
         await page.getByRole('button', { name: 'Suivant' }).click();
         await page
-        .getByRole('radio', {
-            name: 'Teeft - Extrait des termes d’un texte en français',
-        })
-        .check();
+            .getByRole('radio', {
+                name: 'Teeft - Extrait des termes d’un texte en français',
+            })
+            .check();
         await page.getByRole('button', { name: 'Suivant' }).click();
         await page
-        .getByRole('textbox', { name: 'Adresse électronique' })
-        .click();
+            .getByRole('textbox', { name: 'Adresse électronique' })
+            .click();
         await page
-        .getByRole('textbox', { name: 'Adresse électronique' })
-        .fill('peu.importe@cnrs.fr');
+            .getByRole('textbox', { name: 'Adresse électronique' })
+            .fill('peu.importe@cnrs.fr');
         await page.getByRole('button', { name: 'Suivant' }).click();
 
         // Wait for the processing to complete by waiting for the status text
         await expect(
-        page.getByRole('heading', {
-            name: 'Statut du traitement de votre fichier',
-            level: 3,
-        }),
+            page.getByRole('heading', {
+                name: 'Statut du traitement de votre fichier',
+                level: 3,
+            }),
         ).toBeVisible();
         await expect(page.locator('text=Traitement terminé')).toBeVisible();
         await expect(
-        page
-            .locator('div')
-            .filter({ hasText: /^Traitement terminé$/ })
-            .getByTestId('CheckIcon'),
+            page
+                .locator('div')
+                .filter({ hasText: /^Traitement terminé$/ })
+                .getByTestId('CheckIcon'),
         ).toBeVisible({ timeout: 60_000 });
 
         await expect(
-        page.getByRole('link', { name: 'Télécharger le résultat' }),
+            page.getByRole('link', { name: 'Télécharger le résultat' }),
         ).toBeVisible();
         let resultURL = await page
-        .getByRole('link', { name: 'Télécharger le résultat' })
-        .getAttribute('href');
+            .getByRole('link', { name: 'Télécharger le résultat' })
+            .getAttribute('href');
 
         resultURL = resultURL?.replace('5173', '3000') ?? '';
 
@@ -274,11 +274,11 @@ test.describe('Processing Workflow', () => {
             page.locator('text=Résultat - Traitement').first(),
         ).toBeVisible();
         await page
-        .getByRole('link', {
-            name: /TDM Factory - Résultat - Traitement/,
-        })
-        .first()
-        .click();
+            .getByRole('link', {
+                name: /TDM Factory - Résultat - Traitement/,
+            })
+            .first()
+            .click();
 
         const iframe = await page.locator('iframe').first().contentFrame();
         const mailHref = await iframe
