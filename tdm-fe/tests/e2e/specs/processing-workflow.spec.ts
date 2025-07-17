@@ -5,19 +5,19 @@ import { APIHelpers } from '../helpers/api-helpers';
 import { testEmails } from '../fixtures/test-data';
 
 test.describe('Processing Workflow', () => {
-  let uiHelpers: UIHelpers;
-  let fileHelpers: FileHelpers;
-  let apiHelpers: APIHelpers;
+    let uiHelpers: UIHelpers;
+    let fileHelpers: FileHelpers;
+    let apiHelpers: APIHelpers;
 
-  test.beforeEach(async ({ page }) => {
-    uiHelpers = new UIHelpers(page);
-    fileHelpers = new FileHelpers();
-    apiHelpers = new APIHelpers(page);
-  });
+    test.beforeEach(async ({ page }) => {
+        uiHelpers = new UIHelpers(page);
+        fileHelpers = new FileHelpers();
+        apiHelpers = new APIHelpers(page);
+    });
 
-  test.afterEach(async () => {
-    fileHelpers.cleanup();
-  });
+    test.afterEach(async () => {
+        fileHelpers.cleanup();
+    });
 
     test('should complete article processing workflow', async ({ page }) => {
         await uiHelpers.goToArticleProcess();
@@ -26,14 +26,14 @@ test.describe('Processing Workflow', () => {
         await page.getByRole('radio', { name: 'Texte .txt' }).check();
         await page.getByRole('button', { name: 'Suivant' }).click()
 
-        const txtFile = './tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt';
 
         // Étape 2: Upload du fichier
+        const txtFile = './tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt';
         const fileInput = page.locator('input[type="file"]').first();
         await fileInput.setInputFiles(txtFile);
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
         // Étape 3: Choisir le traitement
-        await page.getByRole('button', { name: 'Suivant' }).click();
         await page
           .getByRole('radio', {
               name: 'Teeft - Extrait des termes d’un texte en français',
@@ -63,39 +63,20 @@ test.describe('Processing Workflow', () => {
 
         // Mock de la réponse API pour le statut
         await apiHelpers.mockAPIResponse(
-        `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
-        {
-            id: mockProcessingId,
-            status: 1, // En cours
-            originalName: 'test-file.csv',
-            wrapper: 'test-wrapper',
-            enrichment: 'test-enrichment'
-        }
+            `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
+            {"message":`Status du traitement ${mockProcessingId} : Terminé `,"errorType":1}
         );
 
         await page.goto(`http://localhost:5173/status/${mockProcessingId}`);
 
-        // Vérifier que la page de statut s'affiche
-        const statusIndicators = [
-        'text=/statut/i',
-        'text=/status/i',
-        'text=/traitement/i',
-        '[data-testid="status-indicator"]',
-        '.status-indicator'
-        ];
-
-        let statusFound = false;
-        for (const selector of statusIndicators) {
-        if (await page.locator(selector).first().isVisible({ timeout: 5000 })) {
-            statusFound = true;
-            break;
-        }
-        }
-
-        if (!statusFound) {
         // Vérifier au moins que la page se charge sans erreur
         await expect(page.locator('body')).toBeVisible();
-        }
+
+        // Vérifier que le statut s'affiche
+        await expect(page.locator('text=/initialisé/i')).toBeVisible();
+
+        // Vérifier que l'indicateur de démarrage tourne
+        await expect(page.locator('div').filter({ hasText: /^Démarrage$/ }).locator('svg')).toBeVisible();
     });
 
     test('should handle processing completion', async ({ page }) => {
@@ -103,18 +84,18 @@ test.describe('Processing Workflow', () => {
 
         // Mock des réponses API pour un traitement terminé
         await apiHelpers.mockAPIResponse(
-        `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
-        {"message":`Status du traitement ${mockProcessingId} : Terminé `,"errorType":8}
+            `http://localhost:3000/api/traitment/status?id=${mockProcessingId}`,
+            {"message":`Status du traitement ${mockProcessingId} : Terminé `,"errorType":8}
         );
 
         await apiHelpers.mockAPIResponse(
-        `http://localhost:3000/api/traitment/result-info?id=${mockProcessingId}`,
-        {"resultUrl":`http://localhost:5173/downloads/${mockProcessingId}.csv`,"extension":"csv"}
+            `http://localhost:3000/api/traitment/result-info?id=${mockProcessingId}`,
+            {"resultUrl":`http://localhost:5173/downloads/${mockProcessingId}.csv`,"extension":"csv"}
         );
 
         await apiHelpers.mockAPIResponse(
-        `http://localhost:3000/api/traitment/info?id=${mockProcessingId}`,
-        {"id":mockProcessingId,"originalName":"test-file.csv","status":8,"wrapper":"https://data-wrapper.services.istex.fr/v1/csv","wrapperParam":"abstract","enrichment":"https://data-workflow.services.istex.fr/v1/tag-cloud-en","type":"article","flowId":"csv-teeft-en"}
+            `http://localhost:3000/api/traitment/info?id=${mockProcessingId}`,
+            {"id":mockProcessingId,"originalName":"test-file.csv","status":8,"wrapper":"https://data-wrapper.services.istex.fr/v1/csv","wrapperParam":"abstract","enrichment":"https://data-workflow.services.istex.fr/v1/tag-cloud-en","type":"article","flowId":"csv-teeft-en"}
         );
 
         await page.goto(`http://localhost:5173/status/${mockProcessingId}`);
@@ -147,167 +128,163 @@ test.describe('Processing Workflow', () => {
         await expect(page.locator('text=/erreur/i')).toBeVisible();
     });
 
-  test('should handle corpus processing', async ({ page }) => {
-    await uiHelpers.goToCorpusProcess();
+    test('should handle corpus processing', async ({ page }) => {
+        await uiHelpers.goToCorpusProcess();
 
-    // Créer un fichier de test pour corpus
-    const csvFile = fileHelpers.createTestCsvFile();
+        // Créer un fichier de test pour corpus (tar.gz)
+        const istexTarGzFile = './tdm-fe/tests/e2e/fixtures/istex.tar.gz';
 
-    const fileInput = page.locator('input[type="file"]').first();
-    const emailInput = page.locator('input[type="email"], [data-testid="email-input"]').first();
+        // Étape 1: Choisir le format corpus
+        await page.getByRole('radio', { name: 'Corpus Istex .tar.gz' }).check();
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-    if (await fileInput.isVisible() && await emailInput.isVisible()) {
-      await fileInput.setInputFiles(csvFile);
-      await emailInput.fill(testEmails.valid);
+        // Étape 1: Upload du fichier
+        const fileInput = page.locator('input[type="file"]').first();
+        await fileInput.setInputFiles(istexTarGzFile);
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-      // Vérifier que l'interface corpus est différente de l'interface article
-      const corpusIndicators = [
-        'text=/corpus/i',
-        'text=/collection/i',
-        '[data-testid="corpus-options"]'
-      ];
+        // Étape 2: Choisir le traitement
+        await page
+        .getByRole('radio', {
+            name: 'Termsuite EN - Extraction terminologique en anglais',
+        })
+        .check();
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-      let corpusFound = false;
-      for (const selector of corpusIndicators) {
-        if (await page.locator(selector).first().isVisible({ timeout: 3000 })) {
-          corpusFound = true;
-          break;
-        }
-      }
+        // Étape 3: Remplir l'email
+        const emailInput = page.locator('input[type="text"]').first();
+        await emailInput.fill(testEmails.valid);
 
-      // Si pas d'indicateur spécifique corpus, vérifier au moins que la page fonctionne
-      const submitButton = page.locator('button[type="submit"], [data-testid="submit-button"]').first();
-      if (await submitButton.isVisible()) {
-        await expect(submitButton).toBeEnabled();
-      }
-    } else {
-      test.skip(true, 'Corpus processing form not found');
-    }
-  });
+        // Soumettre le formulaire
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-  test('should validate required fields', async ({ page }) => {
-    await uiHelpers.goToArticleProcess();
+        // Vérifier que la page de statut s'affiche
+        await expect(
+        page.getByRole('heading', {
+            name: 'Statut du traitement de votre fichier',
+            level: 3,
+        }),
+        ).toBeVisible();
+    });
 
-    // Essayer de soumettre sans remplir les champs requis
-    const submitButton = page.locator('button[type="submit"], [data-testid="submit-button"]').first();
+    test('should validate required fields', async ({ page }) => {
+        await uiHelpers.goToArticleProcess();
 
-    if (await submitButton.isVisible()) {
-      await submitButton.click();
+        // Étape 1: Choisir le format de l'article
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-      // Chercher des messages de validation
-      const validationSelectors = [
-        '[data-testid="validation-error"]',
-        '.validation-error',
-        '.field-error',
-        'text=/requis/i',
-        'text=/required/i'
-      ];
+        // Étape 2: Upload du fichier
+        const txtFile = './tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt';
+        const fileInput = page.locator('input[type="file"]').first();
+        await fileInput.setInputFiles(txtFile);
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-      let validationFound = false;
-      for (const selector of validationSelectors) {
-        if (await page.locator(selector).first().isVisible({ timeout: 3000 })) {
-          validationFound = true;
-          break;
-        }
-      }
+        // Étape 3: Choisir le traitement
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-      // Si pas de message de validation, vérifier que le bouton reste désactivé
-      if (!validationFound) {
-        const isDisabled = await submitButton.isDisabled();
-        expect(isDisabled).toBe(true);
-      }
-    } else {
-      test.skip(true, 'Submit button not found');
-    }
-  });
+        // Essayer de soumettre sans remplir les champs requis
+        const submitButton = page.getByRole('button', { name: 'Suivant' });
+
+        expect(submitButton).toBeVisible();
+        expect(submitButton).toBeDisabled();
+
+        const emailInput = page.locator('input[type="text"]').first();
+        await emailInput.fill(testEmails.invalid);
+        expect(submitButton).toBeDisabled();
+        const errorMessage = page.locator("text=/n'est pas valide/i");
+        expect(errorMessage).toBeVisible();
+        const label = page.locator('text="Adresse électronique"').first();
+        await expect(label).toBeVisible();
+        expect(label).toHaveCSS('color', 'rgb(211, 67, 21)')
+    });
 
     test('flow txt-teeft-fr', async ({ page }) => {
-    // Sur http://localhost:5173/
-    await page.goto('http://localhost:5173/');
-    await page.getByRole('button', { name: 'Traiter un article' }).click();
-    await page.getByRole('button', { name: 'Suivant' }).click();
-    const fileInput = page.locator('input[type="file"]').first();
-    await fileInput.setInputFiles('./tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt');
-    await page.getByRole('button', { name: 'Suivant' }).click();
-    await page
-      .getByRole('radio', {
-          name: 'Teeft - Extrait des termes d’un texte en français',
-      })
-      .check();
-    await page.getByRole('button', { name: 'Suivant' }).click();
-    await page
-      .getByRole('textbox', { name: 'Adresse électronique' })
-      .click();
-    await page
-      .getByRole('textbox', { name: 'Adresse électronique' })
-      .fill('peu.importe@cnrs.fr');
-    await page.getByRole('button', { name: 'Suivant' }).click();
+        // Sur http://localhost:5173/
+        await page.goto('http://localhost:5173/');
+        await page.getByRole('button', { name: 'Traiter un article' }).click();
+        await page.getByRole('button', { name: 'Suivant' }).click();
+        const fileInput = page.locator('input[type="file"]').first();
+        await fileInput.setInputFiles('./tdm-fe/tests/e2e/fixtures/txt-teeft-fr.txt');
+        await page.getByRole('button', { name: 'Suivant' }).click();
+        await page
+        .getByRole('radio', {
+            name: 'Teeft - Extrait des termes d’un texte en français',
+        })
+        .check();
+        await page.getByRole('button', { name: 'Suivant' }).click();
+        await page
+        .getByRole('textbox', { name: 'Adresse électronique' })
+        .click();
+        await page
+        .getByRole('textbox', { name: 'Adresse électronique' })
+        .fill('peu.importe@cnrs.fr');
+        await page.getByRole('button', { name: 'Suivant' }).click();
 
-    // Wait for the processing to complete by waiting for the status text
-    await expect(
-      page.getByRole('heading', {
-        name: 'Statut du traitement de votre fichier',
-        level: 3,
-      }),
-    ).toBeVisible();
-    await expect(page.locator('text=Traitement terminé')).toBeVisible();
-    await expect(
-      page
-        .locator('div')
-        .filter({ hasText: /^Traitement terminé$/ })
-        .getByTestId('CheckIcon'),
-    ).toBeVisible({ timeout: 60_000 });
+        // Wait for the processing to complete by waiting for the status text
+        await expect(
+        page.getByRole('heading', {
+            name: 'Statut du traitement de votre fichier',
+            level: 3,
+        }),
+        ).toBeVisible();
+        await expect(page.locator('text=Traitement terminé')).toBeVisible();
+        await expect(
+        page
+            .locator('div')
+            .filter({ hasText: /^Traitement terminé$/ })
+            .getByTestId('CheckIcon'),
+        ).toBeVisible({ timeout: 60_000 });
 
-    await expect(
-      page.getByRole('link', { name: 'Télécharger le résultat' }),
-    ).toBeVisible();
-    let resultURL = await page
-      .getByRole('link', { name: 'Télécharger le résultat' })
-      .getAttribute('href');
+        await expect(
+        page.getByRole('link', { name: 'Télécharger le résultat' }),
+        ).toBeVisible();
+        let resultURL = await page
+        .getByRole('link', { name: 'Télécharger le résultat' })
+        .getAttribute('href');
 
-    resultURL = resultURL?.replace('5173', '3000') ?? '';
+        resultURL = resultURL?.replace('5173', '3000') ?? '';
 
-    expect(resultURL).not.toBe('');
+        expect(resultURL).not.toBe('');
 
-    // Download file at resultURL and check if it's a CSV
-    const response = await fetch(resultURL);
-    const text = await response.text();
-    expect(text).toContain('"id","term","frequency","specificity"');
-    expect(text).toContain('"text","servist","40","1"');
-    expect(text).toContain('"text","inist","15","0.375"');
-    expect(text).toContain('"text","service veille","9","0.225"');
-    expect(text).toContain('"text","bibliométrie","9","0.225"');
-    expect(text).toContain('"text","données multimédias","5","0.125"');
-    expect(text).toContain('"text","notices bibliographiques","5","0.125"');
-    expect(text).toContain('"text","interface web","4","0.1"');
-    expect(text).toContain('"text","aujourd hui","4","0.1"');
-    expect(text).toContain('"text","analyse statistique","4","0.1"');
-    expect(text).toContain('"text","première partie","3","0.075"');
+        // Download file at resultURL and check if it's a CSV
+        const response = await fetch(resultURL);
+        const text = await response.text();
+        expect(text).toContain('"id","term","frequency","specificity"');
+        expect(text).toContain('"text","servist","40","1"');
+        expect(text).toContain('"text","inist","15","0.375"');
+        expect(text).toContain('"text","service veille","9","0.225"');
+        expect(text).toContain('"text","bibliométrie","9","0.225"');
+        expect(text).toContain('"text","données multimédias","5","0.125"');
+        expect(text).toContain('"text","notices bibliographiques","5","0.125"');
+        expect(text).toContain('"text","interface web","4","0.1"');
+        expect(text).toContain('"text","aujourd hui","4","0.1"');
+        expect(text).toContain('"text","analyse statistique","4","0.1"');
+        expect(text).toContain('"text","première partie","3","0.075"');
 
-    // Check maildev on port 1080
-    await page.goto('http://localhost:1080');
+        // Check maildev on port 1080
+        await page.goto('http://localhost:1080');
 
-    await expect(
-        page.locator('text=francois.parmentier@inist.fr').first(),
-    ).toBeVisible();
-    await expect(
-        page.locator('text=Notification de création').first(),
-    ).toBeVisible();
-    await expect(
-        page.locator('text=Résultat - Traitement').first(),
-    ).toBeVisible();
-    await page
-      .getByRole('link', {
-        name: /TDM Factory - Résultat - Traitement/,
-      })
-      .first()
-      .click();
+        await expect(
+            page.locator('text=francois.parmentier@inist.fr').first(),
+        ).toBeVisible();
+        await expect(
+            page.locator('text=Notification de création').first(),
+        ).toBeVisible();
+        await expect(
+            page.locator('text=Résultat - Traitement').first(),
+        ).toBeVisible();
+        await page
+        .getByRole('link', {
+            name: /TDM Factory - Résultat - Traitement/,
+        })
+        .first()
+        .click();
 
-    const iframe = await page.locator('iframe').first().contentFrame();
-    const mailHref = await iframe
-      ?.getByRole('link', { name: 'Télécharger le résultat' })
-      .getAttribute('href');
-    expect(mailHref).toBe(resultURL.replace('3000', '5173'));
-  });
+        const iframe = await page.locator('iframe').first().contentFrame();
+        const mailHref = await iframe
+        ?.getByRole('link', { name: 'Télécharger le résultat' })
+        .getAttribute('href');
+        expect(mailHref).toBe(resultURL.replace('3000', '5173'));
+    });
 
 });
