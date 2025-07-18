@@ -1,0 +1,11 @@
+# Fichiers temporaires de test
+temp/
+*.tmp
+
+# Captures d'écran de test
+screenshots/
+*.png
+*.jpg
+
+# Logs de test
+*.log

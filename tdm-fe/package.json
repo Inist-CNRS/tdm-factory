@@ -19,7 +19,14 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\" --fix",
     "lint:test": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\"",
     "stylelint": "stylelint \"{src,public}/**/*.scss\" --fix",
-    "stylelint:test": "stylelint \"{src,public}/**/*.scss\""
+    "stylelint:test": "stylelint \"{src,public}/**/*.scss\"",
+    "test:e2e": "playwright test --project=chromium --project=firefox",
+    "test:e2e:all": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:chromium": "playwright test --project=chromium",
+    "test:e2e:firefox": "playwright test --project=firefox"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
