@@ -63,8 +63,9 @@ npm run test:e2e:report
 
 ### Ports utilisés
 
-- **Frontend** : http://localhost:5173 (Vite dev server)
-- **Backend** : http://localhost:3000 (Express server)
+- **Frontend** : <http://localhost:5173> (Vite dev server)
+- **Backend** : <http://localhost:3000> (Express server)
+- **Maildev** : <http://localhost:1080> (Service de messagerie pour les tests)
 
 ## 🐛 Résolution des problèmes
 
