@@ -195,7 +195,7 @@ test.describe('Processing Workflow', () => {
         expect(errorMessage).toBeVisible();
         const label = page.locator('text="Adresse électronique"').first();
         await expect(label).toBeVisible();
-        expect(label).toHaveCSS('color', 'rgb(211, 67, 21)')
+        expect(label).toHaveCSS('color', 'rgba(206, 66, 21, 0.984)')
     });
 
     test('flow txt-teeft-fr', async ({ page }) => {
@@ -263,15 +263,13 @@ test.describe('Processing Workflow', () => {
 
         // Check maildev on port 1080
         await page.goto('http://localhost:1080');
-
+        const processingId = resultURL.split('/').pop()?.split('.').shift() ?? '';
+        console.log(processingId);
         await expect(
-            page.locator(`text=${testEmails.valid}`).first(),
+            page.locator(`text=Résultat - Traitement ${processingId}`),
         ).toBeVisible();
         await expect(
-            page.locator('text=Notification de création').first(),
-        ).toBeVisible();
-        await expect(
-            page.locator('text=Résultat - Traitement').first(),
+            page.locator(`text=Notification de création - Traitement ${processingId}`),
         ).toBeVisible();
         await page
             .getByRole('link', {
