@@ -217,7 +217,7 @@ test.describe('Processing Workflow', () => {
             .click();
         await page
             .getByRole('textbox', { name: 'Adresse électronique' })
-            .fill('peu.importe@cnrs.fr');
+            .fill(testEmails.valid);
         await page.getByRole('button', { name: 'Suivant' }).click();
 
         // Wait for the processing to complete by waiting for the status text
@@ -265,7 +265,7 @@ test.describe('Processing Workflow', () => {
         await page.goto('http://localhost:1080');
 
         await expect(
-            page.locator('text=francois.parmentier@inist.fr').first(),
+            page.locator(`text=${testEmails.valid}`).first(),
         ).toBeVisible();
         await expect(
             page.locator('text=Notification de création').first(),
