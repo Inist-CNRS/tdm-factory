@@ -10,15 +10,10 @@ import cnrsLogo from '/logo/cnrs.svg';
 import couperinLogo from '/logo/couperin.svg';
 import franceUniversitesLogo from '/logo/france_universites.svg';
 import opereParInistLogo from '/logo/opere_par_inist.svg';
-import mesrLogo from '/logo/mesr.svg';
+import inriaLogo from '/logo/inr_logo_noir.svg';
 import ulLogo from '/logo/ul.svg';
 
 const partners = [
-    {
-        logo: mesrLogo,
-        alt: "Ministère de l'Enseignement Supérieur et de la Recherche",
-        url: 'https://www.enseignementsup-recherche.gouv.fr/',
-    },
     {
         logo: cnrsLogo,
         alt: 'Centre National de la Recherche Scientifique',
@@ -44,6 +39,11 @@ const partners = [
         logo: ulLogo,
         alt: 'Université de Lorraine',
         url: 'https://www.univ-lorraine.fr/',
+    },
+    {
+        logo: inriaLogo,
+        alt: "Institut national de recherche en sciences et technologies du numérique",
+        url: 'https://www.inria.fr/fr',
     },
 ];
 
