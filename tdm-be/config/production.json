@@ -545,6 +545,20 @@
             "summary": "**topRefExtract** - Extraction des références phares",
             "description": "À partir d'une liste de DOI, renvoie sous format csv les 10 références les plus citées du corpus.",
             "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
+        },
+        {
+            "id": "istex-toprefextract-graphe",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapper": "/v1/istex-tar-gz",
+            "wrapperParameter": "doi.0",
+            "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
+            "retrieve": "/v1/retrieve-gexf",
+            "retrieveExtension": "gexf",
+            "summary": "**topRefExtract** - Extraction du *graphe* des références phares",
+            "description": "À partir d'une liste de DOI, renvoie les 10 références phares du corpus sous la forme d'un graphe au format gexf.",
+            "descriptionLink": "https://services.istex.fr/extraction-des-references-phares-dun-corpus/"
         }
     ]
 }
