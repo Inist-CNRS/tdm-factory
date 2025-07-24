@@ -705,7 +705,6 @@
         },
         {
             "id": "istex-toprefextract-graphe",
-            "bugged": true,
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
