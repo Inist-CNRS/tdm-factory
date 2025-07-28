@@ -14,12 +14,13 @@ import { useQuery } from '@tanstack/react-query';
 import { memo, useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import type React from 'react';
 import type { ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 // Pour le traitement dans la base
 export type ProcessingFormConfigurationValueType = {
     wrapper: Wrapper | null;
-    wrapperParam: string | null;
+    wrapperParameter: string | null;
     inputFormat?: string | null;
     flowId: string | null;
     fields?: string[] | null;
@@ -41,8 +42,8 @@ type ServiceInfo = {
     summary: string;
     description: string;
     descriptionLink?: string;
-    enricher: string;
-    wrapperParameterDefault?: string;
+    enricher?: string;
+    wrapper?: string;
     wrapperParameter?: string;
     flowId: string;
 };
@@ -70,9 +71,6 @@ const ProcessingFormConfiguration = ({
     const { data: config, isLoading: isConfigLoading } = useQuery({
         queryKey: ['static-config'],
         queryFn: getStaticConfig,
-        staleTime: 0, // Considérer les données comme obsolètes immédiatement
-        refetchOnMount: true, // Recharger à chaque montage du composant
-        refetchOnWindowFocus: true, // Recharger quand la fenêtre reprend le focus
     });
 
     // Initialiser le service sélectionné en fonction de la valeur initiale
@@ -188,7 +186,7 @@ const ProcessingFormConfiguration = ({
     );
 
     const handleServiceClick = useCallback(
-        (serviceId: string, event: React.MouseEvent<HTMLDivElement>) => {
+        (serviceId: string, event: React.MouseEvent<HTMLElement>) => {
             const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
 
             if (isArrowClick) {
@@ -219,24 +217,31 @@ const ProcessingFormConfiguration = ({
         // Recherche du flow par id
         const matchingFlow = config.flows.find((flow) => flow.id === selectedService.flowId);
         if (matchingFlow) {
+            const inputFormatLabel = config.inputFormat2labels?.[matchingFlow.inputFormat] || {};
+            const wrapperPath = (inputFormatLabel as any).wrapper || matchingFlow.wrapper || '';
             const wrapper = wrapperList.find((w) => {
-                const wrapperPath = getServicePath(w.url);
-                const flowWrapperPath = getServicePath(matchingFlow.wrapper);
-                return wrapperPath === flowWrapperPath;
-            });
+                const wPath = getServicePath(w.url ?? '');
+                return wPath === getServicePath(wrapperPath);
+            }) ?? null;
 
-            if (wrapper) {
-                const wrapperParam = matchingFlow.wrapperParameter || '';
-
+            if (value.wrapperParameter) {
                 onChange({
                     wrapper: wrapper,
-                    wrapperParam: wrapperParam,
+                    wrapperParameter: value.wrapperParameter,
+                    flowId: matchingFlow.id,
+                    inputFormat: matchingFlow.inputFormat,
+                });
+            } else {
+                const wrapperParameter = (inputFormatLabel as any).wrapperParameter ?? (matchingFlow as any).wrapperParameter ?? null;
+                onChange({
+                    wrapper: wrapper,
+                    wrapperParameter: wrapperParameter,
                     flowId: matchingFlow.id,
                     inputFormat: matchingFlow.inputFormat,
                 });
             }
         }
-    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type]);
+    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type, value.wrapperParameter]);
 
     useEffect(() => {
         const isValid =
@@ -251,7 +256,7 @@ const ProcessingFormConfiguration = ({
             const defaultTab = hasFeaturedServices ? 'featured' : 'advanced';
 
             // Filtrer les services selon l'onglet par défaut
-            const availableServices = config.flows
+            const filteredServiceIds = config.flows
                 .filter((flow) => {
                     const matchesType = flow.input === type;
                     const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === '*';
@@ -260,11 +265,11 @@ const ProcessingFormConfiguration = ({
                 })
                 .map((flow) => flow.id);
 
-            if (availableServices.length > 0) {
-                const firstService = availableServices[0];
+            if (filteredServiceIds.length > 0) {
+                const firstService = filteredServiceIds[0];
                 onChange({
                     wrapper: null,
-                    wrapperParam: null,
+                    wrapperParameter: null,
                     flowId: firstService,
                     inputFormat: value.inputFormat,
                 });
@@ -323,7 +328,9 @@ const ProcessingFormConfiguration = ({
                             tabIndex={0}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
-                                    handleServiceClick(service.flowId, e as any);
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleServiceClick(service.flowId, e as unknown as React.MouseEvent<HTMLElement>);
                                 }
                             }}
                         >
