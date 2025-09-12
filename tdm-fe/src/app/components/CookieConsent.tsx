@@ -1,47 +1,25 @@
-import Button from '@mui/material/Button';
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const NODE_ENV = import.meta.env.MODE;
-
-// Déclare _paq sur window pour TypeScript
-declare global {
-    type WindowWithPaq = typeof window & { _paq?: unknown[] };
-}
-
-
-const CookieConsent = () => {
+export default function CookieConsent({ onAccept }: { onAccept: () => void }) {
     const [show, setShow] = useState(false);
-    const theme = useTheme();
 
     useEffect(() => {
-        if (NODE_ENV === 'production') {
-            const hasConsent = localStorage.getItem('cookieConsent');
-            if (!hasConsent) {
-                setShow(true);
-            }
-        } else {
-            // Uncomment the next line to show the consent dialog in dev for testing
-            // setShow(true);
-        }
+        const consent = localStorage.getItem('cookieConsent');
+        if (consent !== 'true') setShow(true);
     }, []);
 
     const handleAccept = () => {
-        if ((window as Window & { _paq?: unknown[] })._paq) {
-            (window as Window & { _paq?: unknown[] })._paq!.push(['setConsentGiven']);
-        }
         localStorage.setItem('cookieConsent', 'true');
         setShow(false);
+        onAccept();
     };
 
     const handleDecline = () => {
-        if ((window as Window & { _paq?: unknown[] })._paq) {
-            (window as Window & { _paq?: unknown[] })._paq!.push(['forgetConsentGiven']);
-        }
         localStorage.setItem('cookieConsent', 'false');
         setShow(false);
     };
@@ -58,9 +36,7 @@ const CookieConsent = () => {
                 bottom: 0,
                 zIndex: 1400,
                 borderRadius: 0,
-                bgcolor: theme.palette.background.paper,
-                boxShadow: theme.shadows[8],
-                p: { xs: 2, sm: 3 },
+                p: 2,
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center',
@@ -73,11 +49,15 @@ const CookieConsent = () => {
                     Consentement aux cookies
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5 }}>
-                    Ce site utilise Matomo pour analyser la navigation et améliorer son contenu. Nous recueillons des données anonymisées sur votre navigation.
+                    Ce site utilise Matomo pour analyser la navigation et améliorer son contenu. Nous recueillons des
+                    données anonymisées sur votre navigation.
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1 }}>
                     Pour en savoir plus, consultez notre{' '}
-                    <Link to="/privacy-policy" style={{ textDecoration: 'underline' }}>politique de confidentialité</Link>.
+                    <Link to="/privacy-policy" style={{ textDecoration: 'underline' }}>
+                        politique de confidentialité
+                    </Link>
+                    .
                 </Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: 1, mt: { xs: 2, sm: 0 } }}>
@@ -90,6 +70,4 @@ const CookieConsent = () => {
             </Box>
         </Paper>
     );
-};
-
-export default CookieConsent;
+}

@@ -12,6 +12,8 @@ import { RouteRoot } from '~/app/shared/routes';
 
 import Container from '@mui/material/Container';
 import { Navigate, Route, Routes, useParams, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Matomo from './components/Matomo';
 
 const StatusRedirect = () => {
     const { id } = useParams();
@@ -24,6 +26,14 @@ const StatusRedirect = () => {
 };
 
 const App = () => {
+    const [matomoEnabled, setMatomoEnabled] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.getItem('cookieConsent') === 'true') {
+            setMatomoEnabled(true);
+        }
+    }, []);
+
     return (
         <>
             <Header />
@@ -52,7 +62,8 @@ const App = () => {
             </Routes>
             <WebServicesFooter />
             <Footer />
-            <CookieConsent />
+            <CookieConsent onAccept={() => setMatomoEnabled(true)} />
+            {matomoEnabled && <Matomo />}
         </>
     );
 };
