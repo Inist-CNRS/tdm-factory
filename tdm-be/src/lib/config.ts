@@ -33,16 +33,22 @@ type Config = {
         deleteFileOlderThan: number;
     };
     verbose: string;
-    inputFormat2labels: Record<string, { summary: string; description: string }>;
+    inputFormat2labels: Record<
+        string,
+        {
+            summary: string;
+            description: string;
+            wrapperParameter?: string;
+            wrapperParameterComplete?: string;
+            extensions: string[];
+        }
+    >;
     flows: Array<{
         id: string;
         featured: boolean;
         input: string;
         inputFormat: string;
         wrapper: string;
-        wrapperParameter?: string;
-        wrapperParameterDefault?: string;
-        wrapperParameterComplete?: string;
         enricher: string;
         retrieve: string;
         retrieveExtension: string;
