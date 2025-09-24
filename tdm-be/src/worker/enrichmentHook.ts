@@ -59,8 +59,8 @@ const enrichmentHookSuccess = async (processingId: string) => {
         flowId,
     });
 
-    // Check if the variable exist
-    if (!enrichmentUrl || !enrichmentHook || !email) {
+    // Check if the variable exist (email is optional)
+    if (!enrichmentUrl || !enrichmentHook) {
         error(processingId, 'Enrichment-Hook value are undefined or null');
         // Send error the global catcher because this is normally impossible
         throw new Error('This is normally impossible - Enrichment-Hook value are undefined or null');
@@ -112,16 +112,18 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = `Impossible to contact enrichment-hook api (${fullUrl})`;
         error(processingId, message);
-        sendErrorMail(
-            initialProcessing.id,
-            initialProcessing.originalName,
-            initialProcessing.wrapper as string,
-            initialProcessing.wrapperParam as string,
-            initialProcessing.enrichment as string,
-            email,
-            flowId,
-            message,
-        ).then(undefined);
+        if (email) {
+            sendErrorMail(
+                initialProcessing.id,
+                initialProcessing.originalName,
+                initialProcessing.wrapper as string,
+                initialProcessing.wrapperParam as string,
+                initialProcessing.enrichment as string,
+                email,
+                flowId,
+                message,
+            ).then(undefined);
+        }
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -136,16 +138,18 @@ const enrichmentHookSuccess = async (processingId: string) => {
     // Check if we receive a non 200 status code
     if (response.status !== 200) {
         error(processingId, 'Enrichment-hook api return an non 200 status');
-        sendErrorMail(
-            initialProcessing.id,
-            initialProcessing.originalName,
-            initialProcessing.wrapper as string,
-            initialProcessing.wrapperParam as string,
-            initialProcessing.enrichment as string,
-            email,
-            flowId,
-            'Enrichment-hook api return an non 200 status',
-        ).then(undefined);
+        if (email) {
+            sendErrorMail(
+                initialProcessing.id,
+                initialProcessing.originalName,
+                initialProcessing.wrapper as string,
+                initialProcessing.wrapperParam as string,
+                initialProcessing.enrichment as string,
+                email,
+                flowId,
+                'Enrichment-hook api return an non 200 status',
+            ).then(undefined);
+        }
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -164,16 +168,18 @@ const enrichmentHookSuccess = async (processingId: string) => {
     } catch (e) {
         const message = "Can't write tmp file";
         error(processingId, message);
-        sendErrorMail(
-            initialProcessing.id,
-            initialProcessing.originalName,
-            initialProcessing.wrapper as string,
-            initialProcessing.wrapperParam as string,
-            initialProcessing.enrichment as string,
-            email,
-            flowId,
-            message,
-        ).then(undefined);
+        if (email) {
+            sendErrorMail(
+                initialProcessing.id,
+                initialProcessing.originalName,
+                initialProcessing.wrapper as string,
+                initialProcessing.wrapperParam as string,
+                initialProcessing.enrichment as string,
+                email,
+                flowId,
+                message,
+            ).then(undefined);
+        }
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
@@ -182,15 +188,17 @@ const enrichmentHookSuccess = async (processingId: string) => {
         return;
     }
 
-    sendFinishedMail(
-        initialProcessing.id,
-        initialProcessing.originalName,
-        initialProcessing.wrapper as string,
-        initialProcessing.wrapperParam as string,
-        initialProcessing.enrichment as string,
-        email,
-        flowId,
-    ).then(undefined);
+    if (email) {
+        sendFinishedMail(
+            initialProcessing.id,
+            initialProcessing.originalName,
+            initialProcessing.wrapper as string,
+            initialProcessing.wrapperParam as string,
+            initialProcessing.enrichment as string,
+            email,
+            flowId,
+        ).then(undefined);
+    }
 
     // Update processing information
     updateProcessing(processingId, {
@@ -223,26 +231,21 @@ const enrichmentHookFailure = async (processingId: string) => {
     // Get email from the processing
     const { email } = initialProcessing;
 
-    // Check if the variable exist
-    if (!email) {
-        error(processingId, 'Enrichment-Hook email is undefined or null');
-        // Send error the global catcher because this is normally impossible
-        throw new Error('This is normally impossible - Enrichment-Hook email is undefined or null');
-    }
-
     // --- Save enrichment-hook result
     debug(processingId, 'Saving enrichment-hook result');
 
-    sendErrorMail(
-        initialProcessing.id,
-        initialProcessing.originalName,
-        initialProcessing.wrapper as string,
-        initialProcessing.wrapperParam as string,
-        initialProcessing.enrichment as string,
-        email,
-        initialProcessing.flowId,
-        'Enrichment-Hook failure',
-    ).then(undefined);
+    if (email) {
+        sendErrorMail(
+            initialProcessing.id,
+            initialProcessing.originalName,
+            initialProcessing.wrapper as string,
+            initialProcessing.wrapperParam as string,
+            initialProcessing.enrichment as string,
+            email,
+            initialProcessing.flowId,
+            'Enrichment-Hook failure',
+        ).then(undefined);
+    }
 
     // Update processing information
     updateProcessing(processingId, {

@@ -20,14 +20,16 @@ export const defaultNull = <T>(first: T | null | undefined, second: T | null | u
 };
 
 export const errorEmail = (processing: Processing, errorMessage: string) => {
-    sendErrorMail(
-        processing.id,
-        processing.originalName,
-        processing.wrapper as string,
-        processing.wrapperParam as string,
-        processing.enrichment as string,
-        processing.email as string,
-        processing.flowId,
-        errorMessage,
-    ).then(undefined);
+    if (processing.email) {
+        sendErrorMail(
+            processing.id,
+            processing.originalName,
+            processing.wrapper as string,
+            processing.wrapperParam as string,
+            processing.enrichment as string,
+            processing.email,
+            processing.flowId,
+            errorMessage,
+        ).then(undefined);
+    }
 };

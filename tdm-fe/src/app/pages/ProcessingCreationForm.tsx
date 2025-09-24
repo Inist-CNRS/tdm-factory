@@ -1,7 +1,7 @@
 import '~/app/pages/scss/ProcessingCreationForm.scss';
 import ProcessingFormConfiguration from '~/app/components/form/ProcessingFormConfiguration';
 import ProcessingFormConfirmation from '~/app/components/form/ProcessingFormConfirmation';
-import ProcessingFormEmail, { EMAIL_REGEX } from '~/app/components/form/ProcessingFormEmail';
+import ProcessingFormEmail from '~/app/components/form/ProcessingFormEmail';
 import ProcessingFormFormat from '~/app/components/form/ProcessingFormFormat';
 import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
@@ -139,21 +139,21 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, email, wrapperParam],
+        queryKey: ['start', step, processingId, wrapper, email, wrapperParameter, flowId],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
             }
 
             // We can't have this state due to previous check (I hate ts some time)
-            if (!processingId || !wrapper || !email) {
+            if (!processingId || !wrapper) {
                 return null;
             }
 
             return start({
                 id: processingId,
                 wrapper: wrapper,
-                wrapperParam: wrapperParam ?? undefined,
+                wrapperParam: wrapperParameter ?? undefined,
                 mail: email,
                 flowId: flowId ?? undefined,
             });
@@ -196,8 +196,6 @@ const ProcessingCreationForm = () => {
 
         return list;
     }, [file, operations.data.wrapper]);
-
-
 
     const fields = useMemo(() => {
         if (!fieldsData || !fieldsData.fields) {
@@ -268,14 +266,19 @@ const ProcessingCreationForm = () => {
     useEffect(() => {
         if (step === PROCESSING_FORMAT_STEP) {
             setIsWaitingInput(!selectedFormat);
+            setIsInvalid(false);
         } else if (step === PROCESSING_UPLOAD_STEP) {
-            setIsWaitingInput(!file);
+            const fileIsValid = file !== null && !isInvalid;
+            setIsWaitingInput(!fileIsValid);
         } else if (step === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!wrapper);
+            setIsWaitingInput(!wrapper || (selectedFormat === 'csv' && !wrapperParameter));
+            setIsInvalid(false);
         } else if (step === PROCESSING_VALIDATION_STEP) {
-            setIsWaitingInput(!(email && EMAIL_REGEX.test(email)));
+            // L'email est optionnel
+            setIsWaitingInput(false);
+            setIsInvalid(false); // Pas d'invalidation car géré par le composant ProcessingFormEmail
         }
-    }, [step, selectedFormat, file, wrapper, email]);
+    }, [step, selectedFormat, file, wrapper, email, isInvalid, wrapperParameter]);
 
     /**
      * Listen for start response
@@ -293,13 +296,9 @@ const ProcessingCreationForm = () => {
         let nextStep = step + 1;
 
         if (nextStep === PROCESSING_VALIDATION_STEP) {
-            if (email && EMAIL_REGEX.test(email)) {
-                waiting = false;
-            }
-
-            if (email && !EMAIL_REGEX.test(email)) {
-                invalid = true;
-            }
+            // L'email est optionnel
+            waiting = false;
+            invalid = false;
         }
 
         if (nextStep === PROCESSING_CONFIRMATION_STEP) {
@@ -309,7 +308,7 @@ const ProcessingCreationForm = () => {
         if (step === PROCESSING_CONFIRMATION_STEP) {
             setFile(null);
             setWrapper(null);
-            setWrapperParam(null);
+            setWrapperParameter(null);
             setFlowId(null);
             setSelectedFormat(null);
             setIsWaitingInput(true);
@@ -319,7 +318,7 @@ const ProcessingCreationForm = () => {
         setIsInvalid(invalid);
         setIsWaitingInput(waiting);
         setStep(nextStep);
-    }, [email, step]);
+    }, [step]);
 
     /**
      * Handle file change
@@ -336,15 +335,17 @@ const ProcessingCreationForm = () => {
      * Handle configuration change
      * @param value newly selected wrapper, wrapperParam and enrichment
      */
-    const handleConfigurationChange = useCallback(
-        (value: ProcessingFormConfigurationValueType) => {
-            setWrapper(value.wrapper);
-            setWrapperParam(value.wrapperParam);
-            setFlowId(value.flowId);
-            setIsWaitingInput(false);
-        },
-        [wrapperParam],
-    );
+    const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
+        setWrapper(value.wrapper);
+        setWrapperParameter((prev) => {
+            if (value.wrapperParam && value.wrapperParam !== prev) {
+                return value.wrapperParam;
+            }
+            return prev;
+        });
+        setFlowId(value.flowId);
+        setIsWaitingInput(false);
+    }, []);
 
     /**
      * Handle email change
@@ -352,8 +353,9 @@ const ProcessingCreationForm = () => {
      */
     const handleEmailChange = useCallback((value: string | null) => {
         setEmail(value);
-        setIsWaitingInput(!value || !EMAIL_REGEX.test(value));
-        setIsInvalid(!value || !EMAIL_REGEX.test(value));
+        // L'email est optionnel et la validation est gérée par ProcessingFormEmail
+        setIsWaitingInput(false);
+        setIsInvalid(false);
     }, []);
 
     const handleBack = useCallback(() => {
@@ -375,24 +377,33 @@ const ProcessingCreationForm = () => {
             setIsWaitingInput(!wrapper);
             setIsInvalid(false);
         } else if (previousStep === PROCESSING_VALIDATION_STEP) {
-            const isEmailValid = email && EMAIL_REGEX.test(email || '');
-            setIsWaitingInput(!isEmailValid);
-            setIsInvalid(!isEmailValid);
+            // L'email est optionnel
+            setIsWaitingInput(false);
+            setIsInvalid(false);
         }
 
         setStep(previousStep);
-    }, [step, selectedFormat, file, wrapper, email, isInvalid]);
+    }, [step, selectedFormat, file, wrapper, isInvalid]);
 
     const handleFormatChange = useCallback((format: string) => {
         setSelectedFormat(format);
         setIsWaitingInput(false);
     }, []);
 
-    const handleFieldsChange = useCallback((fields: string[]) => {
-        if (fields && fields.length > 0) {
-            setWrapperParam(fields[0]);
-        }
-    }, []);
+    /**
+     * Handle fields change (CSV column selection)
+     */
+    const handleFieldsChange = useCallback(
+        (selectedFields: string[]) => {
+            if (selectedFields && selectedFields.length > 0) {
+                setWrapperParameter(selectedFields[0]);
+                if (step === PROCESSING_CONFIGURATION_STEP) {
+                    setIsWaitingInput(false);
+                }
+            }
+        },
+        [step],
+    );
 
     return (
         <div id="processing-form">
@@ -402,7 +413,7 @@ const ProcessingCreationForm = () => {
                 className="back-button"
                 sx={{ color: '#4a4a4a' }}
             >
-                RETOUR A L'ACCUEIL
+                RETOUR A L&#39;ACCUEIL
             </Button>
             <h1>Traiter un {type === 'corpus' ? 'corpus' : 'article'}</h1>
 
@@ -456,7 +467,7 @@ const ProcessingCreationForm = () => {
                                 fields={fields}
                                 value={{
                                     wrapper,
-                                    wrapperParam,
+                                    wrapperParam: wrapperParameter,
                                     inputFormat: selectedFormat,
                                     flowId,
                                 }}
