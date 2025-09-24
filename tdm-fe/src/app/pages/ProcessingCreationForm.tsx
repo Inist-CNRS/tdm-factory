@@ -63,7 +63,7 @@ const ProcessingCreationForm = () => {
      * Form configuration step
      */
     const [wrapper, setWrapper] = useState<Wrapper | null>(null);
-    const [wrapperParam, setWrapperParam] = useState<string | null>(null);
+    const [wrapperParameter, setWrapperParameter] = useState<string | null>(null);
     const [flowId, setFlowId] = useState<string | null>(null);
 
     /**
