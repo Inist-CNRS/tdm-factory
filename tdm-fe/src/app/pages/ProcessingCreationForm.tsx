@@ -373,7 +373,7 @@ const ProcessingCreationForm = () => {
         } else if (previousStep === PROCESSING_UPLOAD_STEP) {
             const fileIsValid = file !== null && !isInvalid;
             setIsWaitingInput(!fileIsValid);
-        } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
+            } else if (previousStep === PROCESSING_CONFIGURATION_STEP) {
             setIsWaitingInput(!wrapper);
             setIsInvalid(false);
         } else if (previousStep === PROCESSING_VALIDATION_STEP) {

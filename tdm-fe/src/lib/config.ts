@@ -5,9 +5,6 @@ export type StaticConfig = {
         input: string;
         inputFormat: string;
         wrapper: string;
-        wrapperParameter?: string;
-        wrapperParameterDefault?: string;
-        wrapperParameterComplete?: string;
         enricher: string;
         retrieve: string;
         retrieveExtension: string;
@@ -21,6 +18,8 @@ export type StaticConfig = {
             summary: string;
             description: string;
             extensions: string[];
+            wrapperParameter?: string;
+            wrapperParameterComplete?: string;
         }
     >;
 };

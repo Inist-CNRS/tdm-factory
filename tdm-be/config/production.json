@@ -30,7 +30,9 @@
             "description": "Un fichier tableur au format `.csv` contenant des colonnes avec une entête. L'encodage doit être UTF-8. Le délimiteur est détecté automatiquement.",
             "extensions": [
                 "csv"
-            ]
+            ],
+            "wrapper": "/v1/csv",
+            "wrapperParameterComplete": "/v1/fields/csv"
         },
         "istex.tar.gz": {
             "summary": "Corpus Istex `.tar.gz`",
@@ -38,14 +40,16 @@
             "extensions": [
                 "tar.gz",
                 "tgz"
-            ]
+            ],
+            "wrapper": "/v1/istex-tar-gz"
         },
         "pdf": {
             "summary": "PDF",
             "description": "Fichier PDF texte. Le PDF ne doit pas être un PDF image.",
             "extensions": [
                 "pdf"
-            ]
+            ],
+            "wrapper": "/v1/pdf"
         },
         "tei-persee.tar.gz": {
             "summary": "Corpus TEI Persée `.tar.gz`",
@@ -53,14 +57,16 @@
             "extensions": [
                 "tar.gz",
                 "tgz"
-            ]
+            ],
+            "wrapper": "/v1/tei-persee-tar-gz"
         },
         "txt": {
             "summary": "Texte `.txt`",
             "description": "Un fichier texte brut, encodé en UTF-8.",
             "extensions": [
                 "txt"
-            ]
+            ],
+            "wrapper": "/v1/txt"
         },
         "txt.tar.gz": {
             "summary": "Corpus de textes `.tar.gz`",
@@ -68,7 +74,26 @@
             "extensions": [
                 "tar.gz",
                 "tgz"
-            ]
+            ],
+            "wrapper": "/v1/tar-txt2json"
+        },
+        "json": {
+            "summary": "JSON",
+            "description": "Un fichier JSON.",
+            "extensions": [
+                "json"
+            ],
+            "wrapper": "/v1/json",
+            "wrapperParameterComplete": "/v1/fields/json"
+        },
+        "jsonl": {
+            "summary": "JSONL",
+            "description": "Un fichier JSONL (JSON Lines).",
+            "extensions": [
+                "jsonl"
+            ],
+            "wrapper": "/v1/jsonl",
+            "wrapperParameterComplete": "/v1/fields/jsonl"
         },
         "*": {
             "summary": "Peu importe",
@@ -84,12 +109,11 @@
             "featured": false,
             "input": "article",
             "inputFormat": "txt",
-            "wrapper": "/v1/txt",
             "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
             "summary": "**aiAbstractCheck** - Détection d'abstract généré par IA",
-            "description": "Indique si un résumé scientifique en anglais a été généré par IA ou non, ainsi que son score associée.",
+            "description": "Indique si un résumé scientifique en anglais a été généré par IA ou non, ainsi que son score associé.",
             "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
         {
@@ -97,7 +121,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -110,7 +133,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag-pdf",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -123,7 +145,6 @@
             "featured": true,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck-pdf",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -136,7 +157,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag-pdf",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -149,7 +169,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-table.services.istex.fr/v1/table-extraction",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -162,9 +181,7 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -177,7 +194,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-csv",
@@ -192,8 +208,6 @@
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
-            "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -206,7 +220,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
@@ -220,7 +233,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "tei-persee.tar.gz",
-            "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-algorithme",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
@@ -232,7 +244,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "tei-persee.tar.gz",
-            "wrapper": "/v1/no-convert",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-apprentissage",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
@@ -244,9 +255,7 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -259,9 +268,7 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -274,7 +281,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-en",
             "retrieve": "/v1/retrieve-csv",
@@ -288,7 +294,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-workflow.services.istex.fr/v1/tag-cloud-fr",
             "retrieve": "/v1/retrieve-csv",
@@ -302,7 +307,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "txt",
-            "wrapper": "/v1/txt",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
@@ -315,7 +319,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "txt",
-            "wrapper": "/v1/txt",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
@@ -328,7 +331,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
             "retrieve": "/v1/retrieve-lines-csv",
@@ -342,7 +344,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
             "retrieve": "/v1/retrieve-lines-csv",
@@ -356,9 +357,7 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
@@ -371,9 +370,7 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
@@ -386,7 +383,6 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-termsuite.services.istex.fr/v1/en",
             "retrieve": "/v1/retrieve-csv",
@@ -400,7 +396,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
             "retrieve": "/v1/retrieve-csv",
@@ -414,7 +409,6 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "txt.tar.gz",
-            "wrapper": "/v1/tar-txt2json",
             "enricher": "https://data-termsuite.services.istex.fr/v1/en",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -427,7 +421,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "txt.tar.gz",
-            "wrapper": "/v1/tar-txt2json",
             "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -440,9 +433,7 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -455,7 +446,6 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "abstract",
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
@@ -469,7 +459,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-workflow.services.istex.fr/v1/pdf-text",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
@@ -482,7 +471,6 @@
             "featured": true,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "title",
             "enricher": "https://data-computer.services.istex.fr/v1/corpus-similarity",
             "retrieve": "/v1/retrieve-json",
@@ -496,7 +484,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "pdf",
-            "wrapper": "/v1/pdf",
             "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize-pdf",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
@@ -509,7 +496,6 @@
             "featured": false,
             "input": "article",
             "inputFormat": "txt",
-            "wrapper": "/v1/txt",
             "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
@@ -522,9 +508,7 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapper": "/v1/csv",
             "wrapperParameter": "value",
-            "wrapperParameterComplete": "/v1/fields/csv",
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
@@ -537,7 +521,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "doi.0",
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-csv",
@@ -551,7 +534,6 @@
             "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
-            "wrapper": "/v1/istex-tar-gz",
             "wrapperParameter": "doi.0",
             "enricher": "https://data-topcitation.services.istex.fr/v1/topcitation",
             "retrieve": "/v1/retrieve-gexf",
