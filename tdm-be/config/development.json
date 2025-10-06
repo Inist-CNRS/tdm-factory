@@ -547,6 +547,32 @@
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {
+            "id": "csv-termsuite-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite EN** - Extraction terminologique en anglais",
+            "description": "Extraction de termes à partir d'un CSV (en anglais).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "id": "csv-termsuite-fr",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite FR** - Extraction terminologique en français",
+            "description": "Extraction de termes à partir d'un CSV (en français).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
             "id": "txttar-termsuite-en",
             "featured": true,
             "input": "corpus",
