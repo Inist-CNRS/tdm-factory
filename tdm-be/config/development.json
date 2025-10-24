@@ -180,11 +180,10 @@
         },
         {
             "id": "csv-bibcheck",
-            "bugged": true,
             "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
-            "wrapperParameter": "doi",
+            "wrapper": "/v1/csv",
             "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
