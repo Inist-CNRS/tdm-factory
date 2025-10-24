@@ -180,7 +180,7 @@
         },
         {
             "id": "csv-bibcheck",
-            "featured": false,
+            "featured": true,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapper": "/v1/csv",
