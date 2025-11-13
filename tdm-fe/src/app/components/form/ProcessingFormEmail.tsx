@@ -36,46 +36,49 @@ const ProcessingFormEmail = ({ value, onChange }: ProcessingFormEmailProps) => {
         const cookieEmail = getEmailFromCookie();
         return value ?? cookieEmail ?? '';
     });
-    const [isInvalid, setIsInvalid] = useState(false);
+
     const [hasAttemptedInput, setHasAttemptedInput] = useState(false);
 
+    const isInvalid = email.trim() !== '' && !EMAIL_REGEX.test(email);
+
     useEffect(() => {
-        let invalid = false;
+        // Toujours retourner l'email
+        onChange(email || null);
 
-        if (!email || !EMAIL_REGEX.test(email)) {
-            invalid = true;
-        }
-
-        setIsInvalid(invalid);
-        onChange(invalid ? null : email);
-
-        // Save valid email to cookie
-        if (!invalid && email) {
+        // Sauvegarder en cookie seulement si valide et non-vide
+        if (!isInvalid && email.trim() !== '') {
             saveEmailToCookie(email);
         }
-    }, [email, onChange]);
+    }, [email, onChange, isInvalid]);
 
     const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEmail(event.target.value);
         setHasAttemptedInput(true);
     }, []);
 
+    // Message d'aide dynamique
+    const getHelperText = () => {
+        if (isInvalid && hasAttemptedInput) {
+            return "L'adresse électronique n'est pas valide";
+        }
+        if (!email.trim()) {
+            return 'Sans e-mail, vous devrez rester sur cette page pour suivre le traitement. Sinon, vous recevrez une notification une fois terminé.';
+        }
+        return 'Vous recevrez une notification une fois le traitement terminé.';
+    };
+
     return (
         <div className="processing-form-field-group processing-form-field-with-label">
-            <h3> Adresse e-mail </h3>
+            <h3>Adresse e-mail (optionnel)</h3>
             <TextField
                 value={email}
                 onChange={handleEmailChange}
                 error={isInvalid ? hasAttemptedInput : false}
                 className="processing-form-field"
-                label="Adresse électronique"
+                label="Adresse électronique (optionnel)"
                 fullWidth
+                helperText={getHelperText()}
             />
-            {isInvalid && hasAttemptedInput ? (
-                <div className="text processing-form-field-label error">
-                    L&apos;adresse électronique n&apos;est pas valide
-                </div>
-            ) : null}
         </div>
     );
 };

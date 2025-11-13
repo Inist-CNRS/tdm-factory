@@ -5,7 +5,7 @@ import type { Operation } from '~/app/shared/data.types';
 export type ProcessingStartParams = {
     wrapper: Operation;
     wrapperParam?: string;
-    mail: string;
+    mail?: string | null;
     id: string;
     flowId?: string;
 };

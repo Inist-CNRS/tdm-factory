@@ -141,6 +141,19 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
         },
         {
+            "id": "csv-bibcheck",
+            "featured": true,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/bibcheck",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**bibCheck** - Contrôle de références bibliographiques",
+            "description": "Contrôle des références bibliographiques ou des DOI, en vérifiant leur présence dans Crossref tout en s'assurant que l'article associé n'est pas rétracté.",
+            "descriptionLink": "https://services.istex.fr/validation-de-reference-bibliographique/"
+        },
+        {
             "id": "pdf-bibcheck",
             "featured": true,
             "input": "article",
@@ -165,6 +178,19 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
+            "id": "istex-chem-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "description": "Extrait les entités chimiques d'un corpus.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
+        },
+        {
             "id": "pdf-datatable-extract",
             "featured": false,
             "input": "article",
@@ -175,6 +201,31 @@
             "summary": "**datatableExtract** - Extraction de tableaux",
             "description": "Extrait les tableaux d'un article en PDF (de préférence en anglais).",
             "descriptionLink": "https://services.istex.fr/detection-et-extraction-de-tableaux-dans-un-article-scientifique"
+        },
+        {
+            "id": "istex-diseases-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**diseasesTag** - Extraction d'entités de maladies",
+            "description": "Extrait les entités de maladies d'un corpus d'articles écrits en anglais.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
+        },
+        {
+            "id": "pdf-diseases-tag",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag-pdf",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**diseasesTag** - Extraction d'entités de maladies",
+            "description": "Extrait les entités de maladies d'un article en PDF (écrit en anglais).",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
             "id": "csv-lda-en",
@@ -249,6 +300,30 @@
             "retrieveExtension": "json",
             "summary": "**Rapido phase 2** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
+        },
+        {
+            "id": "pdf-tabbr-mine",
+            "featured": true,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine-pdf",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**tabbrMine** - Détection d'abréviations torturées",
+            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
+        },
+        {
+            "id": "txt-tabbr-mine",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**tabbrMine** - Détection d'abréviations torturées",
+            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
         },
         {
             "id": "csv-tag-cloud-en",
@@ -402,6 +477,32 @@
             "retrieveExtension": "csv",
             "summary": "**TermSuite FR** - Extraction terminologique en français",
             "description": "Extraction de termes à partir d'un corpus ISTEX (en français).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "id": "csv-termsuite-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/en",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite EN** - Extraction terminologique en anglais",
+            "description": "Extraction de termes à partir d'un CSV (en anglais).",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
+        },
+        {
+            "id": "csv-termsuite-fr",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-termsuite.services.istex.fr/v1/fr",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TermSuite FR** - Extraction terminologique en français",
+            "description": "Extraction de termes à partir d'un CSV (en français).",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-dun-corpus/"
         },
         {

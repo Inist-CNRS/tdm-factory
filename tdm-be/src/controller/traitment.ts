@@ -76,9 +76,8 @@ const router = express.Router();
  *         description: Internal server error
  */
 //Route to start traitment wrapping and then enrichment
-router.post(
-    '/start',
-    async (req: Request<unknown, unknown, Traitment>, res) => {
+router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
+    const handleRequest = async () => {
         const traitement: Traitment = req.body;
 
         // --- Find the processing associated with the uploaded file
@@ -142,8 +141,8 @@ router.post(
             logger.debug('No flowId received in request');
         }
 
-        // Check if default params is pressent
-        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !email || !flowId) {
+        // Check if default params is pressent (email is optional)
+        if (!wrapperUrl || !urlEnrichment || !wrapperParam || !flowId) {
             res.status(HTTP_BAD_REQUEST).send({
                 status: HTTP_BAD_REQUEST,
                 message: 'Bad Request - Required parameter cannot be null',
@@ -180,16 +179,18 @@ router.post(
         // const confirmationUrl = `${
         //     environment.hosts.external.isHttps ? 'https' : 'http'
         // }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=5`;
-        // Wait for the notification email to be sent before starting the processing
-        await sendStartedMail(
-            updatedProcessing.id,
-            updatedProcessing.originalName,
-            updatedProcessing.wrapper as string,
-            updatedProcessing.wrapperParam as string,
-            updatedProcessing.enrichment as string,
-            req.body.mail,
-            updatedProcessing.flowId,
-        );
+        // Wait for the notification email to be sent before starting the processing (only if email is provided)
+        if (email) {
+            await sendStartedMail(
+                updatedProcessing.id,
+                updatedProcessing.originalName,
+                updatedProcessing.wrapper as string,
+                updatedProcessing.wrapperParam as string,
+                updatedProcessing.enrichment as string,
+                email,
+                updatedProcessing.flowId,
+            );
+        }
 
         // Start the processing only after sending the email
         wrapper(updatedProcessing.id);
@@ -198,11 +199,17 @@ router.post(
         res.status(HTTP_ACCEPTED).send({
             status: HTTP_ACCEPTED,
         });
-    },
-    (error) => {
-        logger.error(error);
-    },
-);
+    };
+
+    // Execute async handler and catch any errors
+    handleRequest().catch((error) => {
+        logger.error('Error in /traitment/start:', error);
+        res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+            status: HTTP_INTERNAL_SERVER_ERROR,
+            message: 'Internal Server Error',
+        });
+    });
+});
 
 //Function to store file
 const storage = multer.diskStorage({
