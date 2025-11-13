@@ -1,4 +1,4 @@
-@import "../../../scss/colors";
+@use "../../../scss/colors";
 
 #ws-footer {
   height: 350px;
@@ -37,7 +37,7 @@
 
   p {
     font-family: "Open Sans", sans-serif;
-    color: $white;
+    color: colors.$white;
     text-align: left;
   }
 

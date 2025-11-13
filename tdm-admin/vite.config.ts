@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react';
 import md5 from 'md5';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
-import stylelint from 'vite-plugin-stylelint';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 const regex = /(.*node_modules\/)([^\/]+)(.*)/;
@@ -14,7 +13,6 @@ const linter =
               eslint({
                   failOnError: false,
               }),
-              stylelint(),
           ];
 
 export default defineConfig({
@@ -25,6 +23,12 @@ export default defineConfig({
     plugins: [react(), tsconfigPaths(), ...linter],
     css: {
         devSourcemap: true,
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler',
+                silenceDeprecations: ['legacy-js-api'],
+            },
+        },
     },
     build: {
         sourcemap: true,

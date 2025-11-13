@@ -1,4 +1,4 @@
-@import "./scss/colors";
+@use "./scss/colors";
 
 /*
   Note: The app can't render properly under 500px
@@ -7,7 +7,7 @@
 body {
   min-height: 100vh;
   margin: 0;
-  background-color: $white;
+  background-color: colors.$white;
 }
 
 #root {
@@ -35,11 +35,11 @@ a {
 }
 
 .text {
-  color: $light-black;
+  color: colors.$light-black;
 }
 
 .error {
-  color: $red;
+  color: colors.$red;
 }
 
 h1,
@@ -49,5 +49,5 @@ h4,
 h5,
 h6 {
   font-family: Montserrat, sans-serif;
-  color: $light-black;
+  color: colors.$light-black;
 }
