@@ -10,7 +10,11 @@
         },
         "import/resolver": {
             "typescript": {
-                "project": "tsconfig.eslint.json"
+                "project": "./tsconfig.eslint.json",
+                "alwaysTryTypes": true
+            },
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         }
     },

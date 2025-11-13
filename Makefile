@@ -38,6 +38,15 @@ lint:
 	@echo "Admin :"
 	@cd tdm-admin && npm run lint || true
 
+lint-fix:
+	@echo "Running linting on all projects..."
+	@echo "Backend :"
+	@cd tdm-be && npm run lint --fix || true
+	@echo "Frontend :"
+	@cd tdm-fe && npm run lint --fix || true
+	@echo "Admin :"
+	@cd tdm-admin && npm run lint --fix || true
+
 stylelint:
 	@echo "Running Stylelint on frontend projects..."
 	@echo "Frontend (tdm-fe):"

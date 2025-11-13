@@ -108,7 +108,7 @@ const enrichment = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.WAITING_WEBHOOK,
         enrichmentHook: response.data[0].value,
-        flowId: flowId,
+        flowId,
     });
 };
 

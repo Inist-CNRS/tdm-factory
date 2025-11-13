@@ -208,11 +208,11 @@ router.post(
 
 //Function to store file
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination (req, file, cb) {
         // Set your desired destination folder
         cb(null, filesLocation.upload);
     },
-    filename: function (req, file, cb) {
+    filename (req, file, cb) {
         const uniqueName = randomFileName();
         req.body.processingId = uniqueName;
         req.body.originalName = file.originalname;
@@ -221,7 +221,7 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -500,7 +500,7 @@ router.get('/info', (req, res) => {
         wrapper: processing.wrapper,
         wrapperParam: processing.wrapperParam,
         enrichment: processing.enrichment,
-        type: type,
+        type,
         flowId: processing.flowId,
     });
 });
