@@ -45,8 +45,8 @@ module.exports = {
     'import/no-cycle': 'warn',
     'import/no-useless-path-segments': 'error',
     'import/export': 'error',
-    'import/no-named-as-default': 'warn',
-    'import/no-named-as-default-member': 'warn',
+    'import/no-named-as-default': 'off',
+    'import/no-named-as-default-member': 'off',
     'import/no-duplicates': 'error',
     
     // Règles TypeScript

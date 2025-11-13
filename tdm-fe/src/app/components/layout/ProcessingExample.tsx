@@ -1,6 +1,5 @@
 import { Container } from '@mui/material';
 import './ProcessingExample.scss';
-import { useParams } from 'react-router-dom';
 
 import {
     PROCESSING_FORMAT_STEP,
@@ -16,7 +15,6 @@ type ProcessingExampleProps = {
 };
 
 const ProcessingExample = ({ currentStep = 0 }: ProcessingExampleProps) => {
-    const { type } = useParams();
 
     if (currentStep === PROCESSING_CONFIRMATION_STEP) {
         return null;
@@ -47,7 +45,7 @@ const ProcessingExample = ({ currentStep = 0 }: ProcessingExampleProps) => {
                     <div className={`step-card ${getActiveClass(0)}`}>
                         <div className="step-number">ÉTAPE 1</div>
                         <h3>Choisissez le format</h3>
-                        <p>Vous choisissez le format de l'article que vous voulez traiter.</p>
+                        <p>Vous choisissez le format de l&apos;article que vous voulez traiter.</p>
                     </div>
 
                     <div className={`step-card ${getActiveClass(1)}`}>
@@ -60,8 +58,8 @@ const ProcessingExample = ({ currentStep = 0 }: ProcessingExampleProps) => {
                         <div className="step-number">ÉTAPE 3</div>
                         <h3>Choix du service</h3>
                         <p>
-                            Choisissez le service qui répond à votre besoin. Par exemple choisissez l'option&nbsp;:
-                            «&nbsp;Extraction d'entités nommées (Personnes, Localisations, Organismes et autres)&nbsp;».
+                            Choisissez le service qui répond à votre besoin. Par exemple choisissez l&apos;option&nbsp;:
+                            «&nbsp;Extraction d&apos;entités nommées (Personnes, Localisations, Organismes et autres)&nbsp;».
                         </p>
                     </div>
 

@@ -122,16 +122,13 @@ const ProcessingCreationForm = () => {
 
     const { data: fieldsData } = useQuery({
         queryKey: ['fields', step, processingId],
-        queryFn: () => {
-            if (step !== PROCESSING_CONFIGURATION_STEP) {
-                return null;
+        queryFn: async () => {
+            if (step !== PROCESSING_CONFIGURATION_STEP || !processingId) {
+                return { fields: [] };
             }
 
-            if (!processingId) {
-                return null;
-            }
-
-            return fieldsService(processingId);
+            const result = await fieldsService(processingId);
+            return result ?? { fields: [] };
         },
     });
 
@@ -139,7 +136,7 @@ const ProcessingCreationForm = () => {
      * Start the processing
      */
     const { data: startResponse, isPending: startPending } = useQuery({
-        queryKey: ['start', step, processingId, wrapper, email, wrapperParameter],
+        queryKey: ['start', step, processingId, wrapper, email, wrapperParameter, flowId],
         queryFn: () => {
             if (step !== PROCESSING_CONFIRMATION_STEP) {
                 return null;
@@ -418,7 +415,7 @@ const ProcessingCreationForm = () => {
                 className="back-button"
                 sx={{ color: '#4a4a4a' }}
             >
-                RETOUR A L'ACCUEIL
+                RETOUR À L&apos;ACCUEIL
             </Button>
             <h1>Traiter un {type === 'corpus' ? 'corpus' : 'article'}</h1>
 

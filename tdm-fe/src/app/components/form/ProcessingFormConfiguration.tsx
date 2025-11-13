@@ -216,7 +216,7 @@ const ProcessingFormConfiguration = ({
         const matchingFlow = config.flows.find((flow) => flow.id === selectedService.flowId);
         if (matchingFlow) {
             const inputFormatLabel = config.inputFormat2labels?.[matchingFlow.inputFormat] || {};
-            const wrapperPath = (inputFormatLabel as any).wrapper || matchingFlow.wrapper || '';
+            const wrapperPath = (inputFormatLabel as Record<string, unknown>).wrapper as string || matchingFlow.wrapper || '';
             const wrapper = wrapperList.find((w) => {
                 const wPath = getServicePath(w.url ?? '');
                 return wPath === getServicePath(wrapperPath);
@@ -230,7 +230,7 @@ const ProcessingFormConfiguration = ({
                     inputFormat: matchingFlow.inputFormat,
                 });
             } else {
-                const wrapperParameter = (inputFormatLabel as any).wrapperParameter ?? (matchingFlow as any).wrapperParameter ?? null;
+                const wrapperParameter = (inputFormatLabel as Record<string, unknown>).wrapperParameter as string ?? (matchingFlow as Record<string, unknown>).wrapperParameter as string ?? null;
                 onChange({
                     wrapper: wrapper,
                     wrapperParameter: wrapperParameter,
