@@ -2,7 +2,7 @@
   "name": "tdm-admin",
   "private": true,
   "engines": {
-    "node": "18"
+    "node": "20.19.5"
   },
   "contributors": [
     {
@@ -16,17 +16,17 @@
     "build": "tsc && vite build",
     "build:dev": "VITE_TDM_FACTORY_HOST=http://localhost:3000 npm run build",
     "preview": "vite preview",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\" --fix",
-    "lint:test": "eslint \"{src,apps,libs,test}/**/*.{tsx,ts}\"",
+    "lint": "eslint \"src/**/*.{tsx,ts}\" --fix",
+    "lint:test": "eslint \"src/**/*.{tsx,ts}\"",
     "stylelint": "stylelint \"{src,public}/**/*.scss\" --fix",
     "stylelint:test": "stylelint \"{src,public}/**/*.scss\""
   },
   "dependencies": {
     "@draconides/format": "^1.0.3",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.16.1",
-    "@mui/material": "^5.16.1",
+    "@emotion/react": "11.11.4",
+    "@emotion/styled": "11.11.5",
+    "@mui/icons-material": "5.15.21",
+    "@mui/material": "5.15.21",
     "@tanstack/eslint-plugin-query": "^5.51.1",
     "@tanstack/react-query": "^5.51.1",
     "lodash": "^4.17.21",
@@ -35,18 +35,31 @@
     "react-dom": "^18.3.1",
     "recharts": "^2.12.7"
   },
+  "overrides": {
+    "glob": "^10.3.10",
+    "rimraf": "^5.0.5",
+    "inflight": "npm:@isaacs/inflight@^1.0.6",
+    "@humanwhocodes/config-array": "npm:@eslint/config-array@^0.18.0",
+    "@humanwhocodes/object-schema": "npm:@eslint/object-schema@^2.1.4",
+    "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0"
+  },
   "devDependencies": {
-    "@draconides/eslint-config-react": "^1.2.0",
-    "@draconides/eslint-config-ts": "^1.4.1",
     "@tanstack/react-query-devtools": "^5.51.1",
     "@types/lodash": "^4.17.7",
     "@types/markdown-it": "^14.1.1",
     "@types/md5": "^2.3.5",
-    "@types/node": "^18.19.39",
+    "@types/node": "^20.19.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
     "md5": "^2.3.0",
     "sass": "^1.77.8",
     "stylelint": "^16.7.0",
@@ -54,10 +67,10 @@
     "stylelint-config-twbs-bootstrap": "^14.2.0",
     "terser": "^5.31.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.3.3",
+    "typescript": "~5.3.3",
+    "vite": "^7.2.2",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-stylelint": "^5.3.1",
+    "vite-plugin-stylelint": "^6.0.2",
     "vite-tsconfig-paths": "^4.3.2"
   }
 }

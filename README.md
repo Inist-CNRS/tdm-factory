@@ -19,7 +19,7 @@ Each part is encapsulated within a Docker container using a single Dockerfile fo
 Make sure you have the following prerequisites installed:
 
 - Docker: [Install Docker](https://docs.docker.com/get-docker/)
-- Node.js 18, we highly recommend using [nvm](https://github.com/nvm-sh/nvm)
+- Node.js 20.19.5 (LTS), we highly recommend using [nvm](https://github.com/nvm-sh/nvm)
 
 ## Getting Started
 

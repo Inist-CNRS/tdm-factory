@@ -2,7 +2,7 @@
     "hosts": {
         "internal": {
             "comment": "don't put https://",
-            "host": "{ngrok host}",
+            "host": "b65b2152fa0f.ngrok-free.app",
             "hostExample": "363f-88-123-62-113.ngrok-free.app",
             "isHttps": true
         },

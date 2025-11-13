@@ -10,7 +10,7 @@ To get started with this project, follow these steps:
 
 Make sure you have the following installed on your machine:
 
-- Node.js (v18 or higher)
+- Node.js (v20 or higher)
 - npm (Node Package Manager)
 
 ### Installation

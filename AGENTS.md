@@ -14,7 +14,7 @@ The entire application is containerized using Docker for streamlined deployment.
 
 ### Development
 
-To run the application in development mode, you need to have Node.js 18 and Docker installed.
+To run the application in development mode, you need to have Node.js 20.19.5 (LTS) and Docker installed.
 
 1. **Install dependencies:**
 
