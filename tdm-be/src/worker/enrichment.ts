@@ -11,11 +11,9 @@ import { errorEmail } from '~/lib/utils';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 import { readFile } from 'node:fs/promises';
-
-import type { AxiosResponse } from 'axios';
 
 const info = (id: string, message: string) => {
     workerLogger.info(`[enrichment/${id}] ${message}`);
@@ -124,7 +122,7 @@ const catchEnrichment = (processingId: string) => {
                 return;
             }
             errorEmail(processing, ERROR_MESSAGE_ENRICHMENT_UNEXPECTED_ERROR);
-        } catch (ignored) {
+        } catch {
             /* empty */
         }
     });

@@ -89,7 +89,7 @@ export const sendStartedMail = async (
             text,
         });
         mailLogger.info(`Notification email for processing '${processingId}' send`);
-    } catch (e) {
+    } catch {
         mailLogger.error(`Can't send notification email for processing '${processingId}'`);
     }
 };
@@ -134,7 +134,7 @@ export const sendFinishedMail = async (
             text,
         });
         mailLogger.info(`Result email for processing '${processingId}' send`);
-    } catch (e) {
+    } catch {
         mailLogger.error(`Can't send result email for processing '${processingId}'`);
     }
 };
@@ -178,7 +178,7 @@ export const sendErrorMail = async (
             text,
         });
         mailLogger.info(`Error email for processing '${processingId}' send`);
-    } catch (e) {
+    } catch {
         mailLogger.error(`Can't send error email for processing '${processingId}'`);
     }
 };

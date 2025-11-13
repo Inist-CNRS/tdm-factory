@@ -11,10 +11,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useQuery } from '@tanstack/react-query';
-import { memo, useCallback, useState, useMemo, useEffect } from 'react';
+import { memo, useCallback, useState, useMemo, useEffect, type ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-
-import type React from 'react';
 import type { ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 // Pour le traitement dans la base
@@ -163,7 +161,7 @@ const ProcessingFormConfiguration = ({
     }, [activeTab, availableServices]);
 
     const handleServiceChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        (event: ChangeEvent<HTMLInputElement>) => {
             const newService = availableServices.find((service) => service.flowId === event.target.value);
             if (newService) {
                 setSelectedService(newService);

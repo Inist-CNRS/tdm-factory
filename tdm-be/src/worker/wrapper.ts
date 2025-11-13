@@ -12,11 +12,9 @@ import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import enrichment from '~/worker/enrichment';
 
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 import { readFile, writeFile } from 'node:fs/promises';
-
-import type { AxiosResponse } from 'axios';
 
 const info = (id: string, message: string) => {
     workerLogger.info(`[wrapper/${id}] ${message}`);
@@ -146,7 +144,7 @@ const catchWrapper = (processingId: string) => {
             updateProcessing(processingId, {
                 status: Status.WRAPPER_ERROR,
             });
-        } catch (ignored) {
+        } catch {
             /* empty */
         }
     });

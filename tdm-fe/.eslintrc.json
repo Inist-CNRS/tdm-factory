@@ -40,6 +40,9 @@
         "plugin:@tanstack/eslint-plugin-query/recommended"
     ],
     "rules": {
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "import/no-unresolved": ["error", {
+            "ignore": ["^/"]
+        }]
     }
 }

@@ -10,10 +10,9 @@ import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material
 import { useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
 import { MuiFileInput } from 'mui-file-input';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState, type DragEvent } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import type React from 'react';
 
 const formatFileSize = (bytes: number): string => {
     if (bytes === 0) {
@@ -164,20 +163,20 @@ const ProcessingFormUpload = ({
         }
     }, [availableFields, selectedField, onFieldsChange]);
 
-    const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    const handleDragEnter = useCallback((e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(true);
     }, []);
 
-    const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    const handleDragLeave = useCallback((e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
     }, []);
 
     const handleDrop = useCallback(
-        (e: React.DragEvent<HTMLDivElement>) => {
+        (e: DragEvent<HTMLDivElement>) => {
             e.preventDefault();
             e.stopPropagation();
             setIsDragging(false);
