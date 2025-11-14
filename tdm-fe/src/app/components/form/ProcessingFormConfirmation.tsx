@@ -194,10 +194,7 @@ const ProcessingFormConfirmation = ({
         return messages[currentStatus] || '';
     };
 
-    // Check if the status is an error
-    const isErrorStatus = (status: number): boolean => {
-        return [Status.WRAPPER_ERROR, Status.ENRICHMENT_ERROR, Status.FINISHED_ERROR].includes(status);
-    };
+
 
     const isTerminalStatus = (status: number): boolean => {
         return [Status.WRAPPER_ERROR, Status.ENRICHMENT_ERROR, Status.FINISHED_ERROR, Status.FINISHED].includes(status);

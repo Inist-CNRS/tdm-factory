@@ -1,7 +1,7 @@
-@import "../../../scss/colors";
+@use "../../../scss/colors";
 
 #nav-bar {
-  background-color: $white;
+  background-color: colors.$white;
 
   #nav-bar-container {
     display: flex;
@@ -10,7 +10,7 @@
   #nav-bar-istex-link {
     gap: 8px;
     font-size: .625rem;
-    color: $text-primary;
+    color: colors.$text-primary;
     text-decoration: none;
     text-transform: uppercase;
     border-radius: 0;
@@ -28,7 +28,7 @@
     .nav-bar-navigation-button {
       height: 100%;
       font-size: .625rem;
-      color: $text-primary;
+      color: colors.$text-primary;
       border-radius: 0;
     }
   }
@@ -50,7 +50,7 @@
     font-size: 3.25rem;
     font-weight: 400;
     line-height: 38px;
-    color: $white;
+    color: colors.$white;
   }
 
   #header-subtitle {
@@ -58,6 +58,6 @@
     font-size: .875rem;
     font-weight: 400;
     line-height: 1.25;
-    color: $white;
+    color: colors.$white;
   }
 }

@@ -1,8 +1,6 @@
 import config from '~/lib/config';
 
-import { createLogger, format, transports } from 'winston';
-
-import type { Logger } from 'winston';
+import { createLogger, format, transports, type Logger } from 'winston';
 
 export const loggerName: string[] = [];
 

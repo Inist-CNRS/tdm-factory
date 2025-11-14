@@ -11,6 +11,7 @@
                 "ignore": "local"
             }
         ],
+        "scss/at-function-named-arguments": null,
         "selector-max-class": null,
         "selector-max-type": null,
         "selector-no-qualifying-type": null,

@@ -1,5 +1,5 @@
 # Stage 1 - Building Stage: Build the front-end application
-FROM node:18.19-bullseye-slim AS front-end-build
+FROM node:20.19.5-bullseye-slim AS front-end-build
 
 # Switch to the main working directory
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN VITE_TDM_FACTORY_HOST="" npm run build
 #######################################################
 
 # Stage 1 - Building Stage: Build the back-office application
-FROM node:18.19-bullseye-slim AS back-office-build
+FROM node:20.19.5-bullseye-slim AS back-office-build
 
 # Switch to the main working directory
 WORKDIR /app
@@ -39,7 +39,7 @@ RUN VITE_TDM_FACTORY_HOST="" npm run build
 #######################################################
 
 # Stage 1 - Building Stage: Build back-end application
-FROM node:18.19-bullseye-slim AS express-build
+FROM node:20.19.5-bullseye-slim AS express-build
 
 # Switch to the main working directory
 WORKDIR /app
@@ -56,7 +56,7 @@ COPY tdm-be /app/
 #######################################################
 
 # Stage 2 - Application Stage: Build the application image
-FROM node:18.19-bullseye-slim AS application
+FROM node:20.19.5-bullseye-slim AS application
 
 # Add ezmaster config file
 RUN echo '{ \

@@ -1,4 +1,4 @@
-@import "../../../scss/colors";
+@use "../../../scss/colors";
 
 .service-description {
   padding: 3rem 0;
@@ -58,7 +58,7 @@
       h3 {
         margin-bottom: 12px;
         font-size: 18px;
-        color: $blue;
+        color: colors.$blue;
       }
 
       p {
@@ -88,7 +88,7 @@
       padding: 12px 24px;
       color: #fff;
       text-transform: none;
-      background-color: $blue;
+      background-color: colors.$blue;
       border-radius: 5px;
 
       &:hover {

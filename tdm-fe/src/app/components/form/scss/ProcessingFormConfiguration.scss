@@ -1,4 +1,4 @@
-@import "../../../scss/colors";
+@use "../../../scss/colors";
 
 .processing-form-configuration {
   max-width: 1200px;
@@ -34,12 +34,12 @@
       transition: color .2s ease;
 
       &:hover {
-        color: $blue;
+        color: colors.$blue;
       }
 
       &.active {
         font-weight: 700;
-        color: $blue;
+        color: colors.$blue;
         &::after {
           position: absolute;
           right: 0;
@@ -47,7 +47,7 @@
           left: 0;
           height: 4px;
           content: "";
-          background-color: $blue;
+          background-color: colors.$blue;
         }
       }
     }
@@ -83,7 +83,7 @@
     transition: all .2s ease;
 
     &:hover {
-      border-color: $blue;
+      border-color: colors.$blue;
       box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
     }
 
@@ -123,7 +123,7 @@
 
         /* stylelint-disable-next-line selector-class-pattern */
         &.Mui-checked {
-          color: $blue;
+          color: colors.$blue;
         }
       }
 
@@ -149,7 +149,7 @@
       right: 16px;
       width: 24px;
       height: 24px;
-      color: $blue;
+      color: colors.$blue;
       cursor: pointer;
       transition: transform .2s ease;
       transform: translateY(-50%);
@@ -184,7 +184,7 @@
   .service-description-link {
     margin-top: 24px;
     font-size: 14px;
-    color: $light-black;
+    color: colors.$light-black;
 
     a {
       color: var(--dark-blue);
@@ -225,9 +225,9 @@
   }
 
   &.dragging {
-    background-color: rgba($blue, .05);
-    border-color: $blue;
-    box-shadow: 0 0 10px rgba($blue, .2);
+    background-color: rgba(colors.$blue, .05);
+    border-color: colors.$blue;
+    box-shadow: 0 0 10px rgba(colors.$blue, .2);
     transform: scale(1.01);
     animation: pulse 1.2s infinite;
   }
@@ -235,13 +235,13 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba($blue, .4);
+    box-shadow: 0 0 0 0 rgba(colors.$blue, .4);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba($blue, 0);
+    box-shadow: 0 0 0 10px rgba(colors.$blue, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba($blue, 0);
+    box-shadow: 0 0 0 0 rgba(colors.$blue, 0);
   }
 }
 

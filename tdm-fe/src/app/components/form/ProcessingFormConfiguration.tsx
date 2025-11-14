@@ -11,10 +11,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useQuery } from '@tanstack/react-query';
-import { memo, useCallback, useState, useMemo, useEffect } from 'react';
+import { memo, useCallback, useState, useMemo, useEffect, type ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-
-import type React from 'react';
 import type { ProcessingFields, Wrapper } from '~/app/shared/data.types';
 
 // Pour le traitement dans la base
@@ -163,7 +161,7 @@ const ProcessingFormConfiguration = ({
     }, [activeTab, availableServices]);
 
     const handleServiceChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        (event: ChangeEvent<HTMLInputElement>) => {
             const newService = availableServices.find((service) => service.flowId === event.target.value);
             if (newService) {
                 setSelectedService(newService);
@@ -218,7 +216,7 @@ const ProcessingFormConfiguration = ({
         const matchingFlow = config.flows.find((flow) => flow.id === selectedService.flowId);
         if (matchingFlow) {
             const inputFormatLabel = config.inputFormat2labels?.[matchingFlow.inputFormat] || {};
-            const wrapperPath = (inputFormatLabel as any).wrapper || matchingFlow.wrapper || '';
+            const wrapperPath = (inputFormatLabel as Record<string, unknown>).wrapper as string || matchingFlow.wrapper || '';
             const wrapper = wrapperList.find((w) => {
                 const wPath = getServicePath(w.url ?? '');
                 return wPath === getServicePath(wrapperPath);
@@ -232,7 +230,7 @@ const ProcessingFormConfiguration = ({
                     inputFormat: matchingFlow.inputFormat,
                 });
             } else {
-                const wrapperParameter = (inputFormatLabel as any).wrapperParameter ?? (matchingFlow as any).wrapperParameter ?? null;
+                const wrapperParameter = (inputFormatLabel as Record<string, unknown>).wrapperParameter as string ?? (matchingFlow as Record<string, unknown>).wrapperParameter as string ?? null;
                 onChange({
                     wrapper: wrapper,
                     wrapperParameter: wrapperParameter,

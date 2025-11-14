@@ -1,19 +1,18 @@
 import '~/app/App.scss';
-import CookieConsent from './components/CookieConsent';
-import PrivacyPolicy from './components/PrivacyPolicy';
-
+import CookieConsent from '~/app/components/CookieConsent';
 import Footer from '~/app/components/layout/Footer';
 import Header from '~/app/components/layout/Header';
 import ServiceDescription from '~/app/components/layout/ServiceDescription';
 import WebServicesFooter from '~/app/components/layout/WebServicesFooter';
+import Matomo from '~/app/components/Matomo';
+import PrivacyPolicy from '~/app/components/PrivacyPolicy';
 import HomePage from '~/app/pages/HomePage';
 import ProcessingCreationForm from '~/app/pages/ProcessingCreationForm';
 import { RouteRoot } from '~/app/shared/routes';
 
 import Container from '@mui/material/Container';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useParams, useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Matomo from './components/Matomo';
 
 const StatusRedirect = () => {
     const { id } = useParams();

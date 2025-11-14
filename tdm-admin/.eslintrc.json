@@ -10,7 +10,11 @@
         },
         "import/resolver": {
             "typescript": {
-                "project": "tsconfig.eslint.json"
+                "project": "./tsconfig.eslint.json",
+                "alwaysTryTypes": true
+            },
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         }
     },
@@ -21,11 +25,24 @@
         "browser": true
     },
     "plugins": [
-        "@tanstack/query"
+        "@tanstack/query",
+        "react",
+        "react-hooks",
+        "import"
     ],
     "extends": [
-        "@draconides/eslint-config-ts",
-        "@draconides/eslint-config-react",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
         "plugin:@tanstack/eslint-plugin-query/recommended"
-    ]
+    ],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        "import/no-unresolved": ["error", {
+            "ignore": ["^/"]
+        }]
+    }
 }

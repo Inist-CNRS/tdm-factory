@@ -34,7 +34,7 @@ const crashHandler = (error: Error | unknown, message: string, data: unknown) =>
             .catch(() => {
                 logger.warn("Can't create crash dump!");
             });
-    } catch (ignore) {
+    } catch {
         logger.warn("Can't create crash dump!");
     }
 };

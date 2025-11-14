@@ -11,16 +11,14 @@ import {
     HTTP_PRECONDITION_REQUIRED,
 } from '~/lib/http';
 import logger from '~/lib/logger';
-import { createProcessing, findProcessing, updateProcessing } from '~/model/ProcessingModel';
+import { createProcessing, findProcessing, updateProcessing, type Processing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import csvFields from '~/worker/fields/csvFields';
 import wrapper from '~/worker/wrapper';
 
-import express from 'express';
+import express, { type Request, type Response } from 'express';
 import multer from 'multer';
 
-import type { Request, Response } from 'express';
-import type { Processing } from '~/model/ProcessingModel';
 import type { Traitment } from '~/model/Traitment';
 
 const router = express.Router();
@@ -215,11 +213,11 @@ router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
 
 //Function to store file
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination (req, file, cb) {
         // Set your desired destination folder
         cb(null, filesLocation.upload);
     },
-    filename: function (req, file, cb) {
+    filename (req, file, cb) {
         const uniqueName = randomFileName();
         req.body.processingId = uniqueName;
         req.body.originalName = file.originalname;
@@ -228,7 +226,7 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -507,7 +505,7 @@ router.get('/info', (req, res) => {
         wrapper: processing.wrapper,
         wrapperParam: processing.wrapperParam,
         enrichment: processing.enrichment,
-        type: type,
+        type,
         flowId: processing.flowId,
     });
 });

@@ -2,15 +2,9 @@ import './scss/ServiceDescription.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import EmailIcon from '@mui/icons-material/Email';
-import { Button, Container } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
 
 const ServiceDescription = () => {
-    const navigate = useNavigate();
-
-    const handleStartClick = () => {
-        navigate('/');
-    };
 
     return (
         <div className="service-description">

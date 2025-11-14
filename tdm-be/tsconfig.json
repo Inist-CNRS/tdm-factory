@@ -16,6 +16,7 @@
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
         "allowJs": true,
+        "baseUrl": ".",
         "paths": {
             "~/*": [
                 "./src/*"

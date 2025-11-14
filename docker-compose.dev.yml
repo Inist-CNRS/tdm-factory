@@ -1,7 +1,7 @@
 services:
   tdm-factory-backend:
     container_name: tdm-factory-dev-backend
-    image: node:18.19-bullseye-slim
+    image: node:20.19.5-bullseye-slim
     environment:
       NODE_ENV: development
     ports:
@@ -15,7 +15,7 @@ services:
 
   tdm-factory-frontend:
     container_name: tdm-factory-dev-frontend
-    image: node:18.19-bullseye-slim
+    image: node:20.19.5-bullseye-slim
     environment:
       NODE_ENV: development
     ports:
@@ -29,7 +29,7 @@ services:
 
   tdm-factory-admin:
     container_name: tdm-factory-dev-admin
-    image: node:18.19-bullseye-slim
+    image: node:20.19.5-bullseye-slim
     environment:
       NODE_ENV: development
     ports:

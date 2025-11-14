@@ -1,8 +1,7 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Collapse } from '@mui/material';
-import { useCallback, memo, useState, useEffect } from 'react';
+import { useCallback, memo, useState, useEffect, type ChangeEvent, type MouseEvent } from 'react';
 
-import type React from 'react';
 import './scss/ProcessingFormFormat.scss';
 
 import { useParams } from 'react-router-dom';
@@ -33,7 +32,7 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     });
 
     const handleFormatChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        (event: ChangeEvent<HTMLInputElement>) => {
             const format = event.target.value;
             onChange(format);
             setExpandedFormat(format);
@@ -42,7 +41,7 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
     );
 
     const handleFormatClick = useCallback(
-        (format: string, event: React.MouseEvent<HTMLDivElement>) => {
+        (format: string, event: MouseEvent<HTMLDivElement>) => {
             const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
             const isRadioClick = (event.target as HTMLElement).closest('.MuiRadio-root');
 

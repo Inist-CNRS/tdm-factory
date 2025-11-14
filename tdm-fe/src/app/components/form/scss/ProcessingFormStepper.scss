@@ -1,4 +1,4 @@
-@import "../../../scss/colors";
+@use "../../../scss/colors";
 
 .processing-form-stepper-icon {
   display: flex;
@@ -7,23 +7,23 @@
   width: 32px;
   height: 32px;
   margin-left: 8px;
-  border: solid $grey 2px;
+  border: solid colors.$grey 2px;
   border-radius: 50%;
 
   p {
     margin: 0;
     font-size: 14px;
     font-weight: 700;
-    color: $grey;
+    color: colors.$grey;
   }
 
   &.processing-form-stepper-icon-active {
-    color: $white;
-    background-color: $blue;
-    border-color: $blue;
+    color: colors.$white;
+    background-color: colors.$blue;
+    border-color: colors.$blue;
 
     p {
-      color: $white;
+      color: colors.$white;
     }
   }
 }
@@ -62,13 +62,13 @@
   margin-left: 24px;
 
   .MuiStepConnector-line {
-    border-color: $grey;
+    border-color: colors.$grey;
   }
 
   &.Mui-active,
   &.Mui-completed {
     .MuiStepConnector-line {
-      border-color: $blue;
+      border-color: colors.$blue;
     }
   }
 }

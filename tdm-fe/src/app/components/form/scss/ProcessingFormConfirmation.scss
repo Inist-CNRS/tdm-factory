@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /* Remove background for confirmation page
 .processing-form-layout {
   #processing-form-content:has(.confirmation-container) {
@@ -203,7 +205,7 @@
   background-color: #4caf50 !important;
   border-radius: 4px !important;
   &:hover {
-    background-color: darken(#4caf50, 10%) !important;
+    background-color: color.adjust(#4caf50, $lightness: -10%) !important;
   }
 }
 
@@ -223,7 +225,7 @@
   background-color: #458ca5 !important;
   border-radius: 4px !important;
   &:hover {
-    background-color: darken(#458ca5, 10%) !important;
+    background-color: color.adjust(#458ca5, $lightness: -10%) !important;
   }
 }
 
