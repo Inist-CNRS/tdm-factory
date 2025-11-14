@@ -38,7 +38,7 @@ const FileTable = ({ currentTable, tableIndex, rows }: FileTableProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {rows.sort((a: File, b: File) => (b.stats.ctime < a.stats.ctime ? -1 : 1)).map((row) => (
                                 <TableRow key={row.file}>
                                     <TableCell component="th" scope="row">
                                         {row.file}

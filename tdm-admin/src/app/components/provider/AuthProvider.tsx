@@ -12,12 +12,12 @@ import { useState } from 'react';
 import type { PropsWithChildren, ChangeEvent, FormEvent } from 'react';
 
 const text = {
-    title: 'Connecté vous',
+    title: 'Connectez vous',
     label: {
         username: 'Username',
         password: 'Password',
     },
-    button: 'Connection',
+    button: 'Connexion',
 };
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
