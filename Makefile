@@ -2,7 +2,7 @@
 # TDM Factory - Development Commands
 # =============================================================================
 
-.PHONY: help install lint stylelint run-dev run-docker clean clean-install
+.PHONY: help install lint lint-fix stylelint run-dev run-docker clean clean-install
 
 # Default target
 help:
@@ -10,6 +10,7 @@ help:
 	@echo "  install           - Install dependencies for all projects (quiet mode)"
 	@echo "  clean             - Remove node_modules and package-lock.json from all projects"
 	@echo "  lint              - Run ESLint on all projects"
+	@echo "  lint-fix          - Run ESLint with the fix option on all projects"
 	@echo "  stylelint         - Run Stylelint on frontend projects"
 	@echo "  run-dev           - Start development environment with Docker"
 	@echo "  run-docker        - Build and run production Docker container"
