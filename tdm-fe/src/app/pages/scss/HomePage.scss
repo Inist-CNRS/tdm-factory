@@ -20,6 +20,31 @@
     color: colors.$light-black;
   }
 
+  .ai-disclaimer {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    border-radius: 4px;
+
+    .disclaimer-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 24px;
+      color: #1976d2;
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1565c0;
+    }
+  }
+
   .choices-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -97,6 +122,19 @@
 
     h1 {
       font-size: 24px;
+    }
+
+    .ai-disclaimer {
+      padding: 12px 16px;
+      margin-bottom: 24px;
+
+      .disclaimer-icon {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
     }
 
     .choices-container {

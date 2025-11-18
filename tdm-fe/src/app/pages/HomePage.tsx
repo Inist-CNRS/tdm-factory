@@ -1,5 +1,6 @@
 import DescriptionIcon from '@mui/icons-material/Description';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import InfoIcon from '@mui/icons-material/Info';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './scss/HomePage.scss';
@@ -18,6 +19,15 @@ const HomePage = () => {
                 <br />
                 des services TDM
             </h1>
+
+            <div className="ai-disclaimer">
+                <InfoIcon className="disclaimer-icon" />
+                <p>
+                    Malgré les contrôles qualité que nous effectuons avant de mettre nos web services en production,
+                    les outils d&apos;IA peuvent commettre des erreurs. Nous vous recommandons de vérifier les
+                    informations importantes.
+                </p>
+            </div>
 
             <div className="choices-container">
                 <button
