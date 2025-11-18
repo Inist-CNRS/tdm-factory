@@ -330,13 +330,13 @@ const ProcessingCreationForm = () => {
 
     /**
      * Handle configuration change
-     * @param value newly selected wrapper, wrapperParam and enrichment
+     * @param value newly selected wrapper, wrapperParameter and enrichment
      */
     const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
         setWrapper(value.wrapper);
         setWrapperParameter((prev) => {
-            if (value.wrapperParam && value.wrapperParam !== prev) {
-                return value.wrapperParam;
+            if (value.wrapperParameter && value.wrapperParameter !== prev) {
+                return value.wrapperParameter;
             }
             return prev;
         });
@@ -464,7 +464,7 @@ const ProcessingCreationForm = () => {
                                 fields={fields}
                                 value={{
                                     wrapper,
-                                    wrapperParam: wrapperParameter,
+                                    wrapperParameter: wrapperParameter,
                                     inputFormat: selectedFormat,
                                     flowId,
                                 }}
