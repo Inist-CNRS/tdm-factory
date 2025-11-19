@@ -57,8 +57,22 @@ const ProcessingFormUpload = ({
         queryFn: getStaticConfig,
     });
 
-    const stringifiedMimeTypes = useMemo(() => {
-        return mimes.join(', ');
+    // Build accept string with both MIME types and file extensions
+    const acceptString = useMemo(() => {
+        const acceptParts = [...mimes];
+        
+        // Add file extensions for formats without standard MIME types
+        if (mimes.includes('application/jsonl')) {
+            acceptParts.push('.jsonl');
+        }
+        if (mimes.includes('application/json')) {
+            acceptParts.push('.json');
+        }
+        if (mimes.includes('text/csv')) {
+            acceptParts.push('.csv');
+        }
+        
+        return acceptParts.join(',');
     }, [mimes]);
 
     const checkFileFormat = useCallback(
@@ -84,18 +98,29 @@ const ProcessingFormUpload = ({
         let wrongFormat = false;
 
         if (file) {
-            if (!mimes.includes(mimeTypes.getType(file.name) ?? '')) {
+            const fileName = file.name.toLowerCase();
+            const detectedMimeType = mimeTypes.getType(file.name) ?? '';
+            
+            // Special handling for JSONL files (no standard MIME type)
+            const isJsonl = fileName.endsWith('.jsonl');
+            const effectiveMimeType = isJsonl ? 'application/jsonl' : detectedMimeType;
+            
+            // Check MIME type compatibility
+            if (!mimes.includes(effectiveMimeType)) {
                 invalid = true;
             }
 
+            // Check if file extension matches selected format
             if (selectedFormat && !checkFileFormat(file, selectedFormat)) {
                 wrongFormat = true;
             }
 
             setHasAttemptedUpload(true);
 
-            // Get fields for CSV
-            if (file.name.toLowerCase().endsWith('.csv')) {
+            // Get fields for CSV, JSON, and JSONL files
+            const supportsFieldSelection = fileName.endsWith('.csv') || fileName.endsWith('.json') || fileName.endsWith('.jsonl');
+            
+            if (supportsFieldSelection) {
                 setIsLoadingFields(true);
                 upload(file)
                     .then((id) => {
@@ -111,8 +136,15 @@ const ProcessingFormUpload = ({
                                 : Object.keys(fields.fields);
                             setAvailableFields(fieldsArray);
 
-                            // Select "abstract" if available, otherwise select the first field
-                            const defaultField = fieldsArray.includes('abstract') ? 'abstract' : fieldsArray[0];
+                            // Select "abstract" or "Résumé" or "content" if available, otherwise select the first field
+                            let defaultField = fieldsArray[0];
+                            if (fieldsArray.includes('abstract')) {
+                                defaultField = 'abstract';
+                            } else if (fieldsArray.includes('Résumé')) {
+                                defaultField = 'Résumé';
+                            } else if (fieldsArray.includes('content')) {
+                                defaultField = 'content';
+                            }
 
                             if (fieldsArray.length > 0) {
                                 setSelectedField(defaultField);
@@ -181,8 +213,14 @@ const ProcessingFormUpload = ({
             e.stopPropagation();
             setIsDragging(false);
             const droppedFile = e.dataTransfer.files[0];
-            if (droppedFile && mimes.includes(mimeTypes.getType(droppedFile.name) ?? '')) {
-                handleFileChange(droppedFile);
+            if (droppedFile) {
+                const fileName = droppedFile.name.toLowerCase();
+                const isJsonl = fileName.endsWith('.jsonl');
+                const detectedMimeType = isJsonl ? 'application/jsonl' : (mimeTypes.getType(droppedFile.name) ?? '');
+                
+                if (mimes.includes(detectedMimeType)) {
+                    handleFileChange(droppedFile);
+                }
             }
         },
         [handleFileChange, mimes],
@@ -214,7 +252,7 @@ const ProcessingFormUpload = ({
                                 error={isInvalid ? hasAttemptedUpload : false}
                                 hideSizeText
                                 inputProps={{
-                                    accept: stringifiedMimeTypes,
+                                    accept: acceptString,
                                 }}
                                 InputProps={{
                                     sx: { display: 'none' },
@@ -251,7 +289,7 @@ const ProcessingFormUpload = ({
                         </div>
                     )}
                 </div>
-                {file?.name.toLowerCase().endsWith('.csv') ? (
+                {file && (file.name.toLowerCase().endsWith('.csv') || file.name.toLowerCase().endsWith('.json') || file.name.toLowerCase().endsWith('.jsonl')) && availableFields.length > 0 ? (
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel>Nom du champ à exploiter</InputLabel>
                         <Select
@@ -270,22 +308,20 @@ const ProcessingFormUpload = ({
                 ) : null}
                 {hasAttemptedUpload && (isInvalid || formatError) ? (
                     <div className="error-message">
-                        {isInvalid ? (
-                            <p>
-                                Le fichier ne correspond pas à un format compatible, utilisez l&apos;un de ces formats :{' '}
-                                {stringifiedMimeTypes}.
-                            </p>
-                        ) : null}
                         {formatError && selectedFormat && config ? (
                             <p>
-                                Le fichier ne correspond pas au format sélectionné.
+                                Le fichier ne correspond pas au format sélectionné ({config.inputFormat2labels[selectedFormat]?.summary || selectedFormat}).
                                 <span>
                                     {' '}
-                                    Les formats acceptés sont :{' '}
+                                    Les extensions acceptées sont :{' '}
                                     {config.inputFormat2labels[selectedFormat]?.extensions
                                         ?.map((ext: string) => `.${ext}`)
                                         .join(', ')}
                                 </span>
+                            </p>
+                        ) : isInvalid ? (
+                            <p>
+                                Le fichier ne correspond pas à un format compatible. Veuillez vérifier que vous avez sélectionné le bon format à l&apos;étape précédente.
                             </p>
                         ) : null}
                     </div>

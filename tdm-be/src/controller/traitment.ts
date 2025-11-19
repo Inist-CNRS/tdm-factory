@@ -14,6 +14,8 @@ import logger from '~/lib/logger';
 import { createProcessing, findProcessing, updateProcessing, type Processing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import csvFields from '~/worker/fields/csvFields';
+import jsonFields from '~/worker/fields/jsonFields';
+import jsonlFields from '~/worker/fields/jsonlFields';
 import wrapper from '~/worker/wrapper';
 
 import express, { type Request, type Response } from 'express';
@@ -299,15 +301,34 @@ router.get('/fields', (req, res) => {
         return;
     }
 
-    if (initialProcessing.uploadFile.endsWith('csv')) {
-        csvFields(uploadFile(initialProcessing.uploadFile)).then((fields) => {
+    const fileName = initialProcessing.uploadFile;
+    
+    if (fileName.endsWith('csv')) {
+        csvFields(uploadFile(fileName)).then((fields) => {
             res.send({
                 fields,
             });
         });
         return;
     }
-
+    
+    if (fileName.endsWith('json')) {
+        jsonFields(uploadFile(fileName)).then((fields) => {
+            res.send({
+                fields,
+            });
+        });
+        return;
+    }
+    
+    if (fileName.endsWith('jsonl')) {
+        jsonlFields(uploadFile(fileName)).then((fields) => {
+            res.send({
+                fields,
+            });
+        });
+        return;
+    }
     res.send({
         fields: [],
     });

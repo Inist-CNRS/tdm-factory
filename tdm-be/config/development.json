@@ -2,7 +2,7 @@
     "hosts": {
         "internal": {
             "comment": "don't put https://",
-            "host": "{ngrok host}",
+            "host": "b65b2152fa0f.ngrok-free.app",
             "hostExample": "363f-88-123-62-113.ngrok-free.app",
             "isHttps": true
         },
@@ -756,6 +756,19 @@
             "retrieveExtension": "csv",
             "summary": "**Teeft** - Extrait des termes d'un texte en anglais d'un JSONL",
             "description": "Extrait les 10 termes les plus spécifiques d'un JSONL contenant un texte en anglais. Permet d'avoir une idée de ce dont il est question dans le texte.",
+            "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "id": "json-teeft-en",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "json",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Teeft** - Extrait des termes d'un texte en anglais d'un JSON",
+            "description": "Extrait les 10 termes les plus spécifiques d'un JSON contenant un texte en anglais. Permet d'avoir une idée de ce dont il est question dans le texte.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         }
     ]
