@@ -22,30 +22,25 @@
   "license": "CeCILL",
   "dependencies": {
     "axios": "^1.7.4",
-    "better-sqlite3": "11.1",
+    "better-sqlite3": "^11.1.2",
     "config": "^3.3.12",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-basic-auth": "^1.2.1",
     "express-rate-limit": "^7.3.1",
+    "glob": "^12.0.0",
     "md5": "^2.3.0",
     "multer": "^2.0.0-rc.4",
     "node-cron": "^3.0.3",
     "nodemailer": "^7.0.10",
     "nunjucks": "^3.2.4",
+    "rimraf": "^6.1.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.3.3",
     "winston": "^3.13.1"
-  },
-  "overrides": {
-    "glob": "^10.3.10",
-    "rimraf": "^5.0.5",
-    "inflight": "npm:@isaacs/inflight@^1.0.6",
-    "@humanwhocodes/config-array": "npm:@eslint/config-array@^0.18.0",
-    "@humanwhocodes/object-schema": "npm:@eslint/object-schema@^2.1.4"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",

@@ -169,6 +169,10 @@ const ProcessingCreationForm = () => {
             if (mimeType.includes('application/x-gzip')) {
                 mimeType.push('application/gzip');
             }
+            // Add JSONL support (no standard MIME type, so we add it manually)
+            if (mimeType.includes('application/json')) {
+                mimeType.push('application/jsonl');
+            }
 
             return mimeType;
         }
@@ -186,8 +190,12 @@ const ProcessingCreationForm = () => {
         const list = operations.data.wrapper;
 
         if (file) {
+            const fileName = file.name.toLowerCase();
+            const isJsonl = fileName.endsWith('.jsonl');
+            const detectedMimeType = isJsonl ? 'application/jsonl' : (mimeTypes.getType(file.name) ?? '');
+            
             return list.filter((entry) => {
-                return entry.fileType.includes(mimeTypes.getType(file.name) ?? '');
+                return entry.fileType.includes(detectedMimeType);
             });
         }
 
@@ -268,7 +276,9 @@ const ProcessingCreationForm = () => {
             const fileIsValid = file !== null && !isInvalid;
             setIsWaitingInput(!fileIsValid);
         } else if (step === PROCESSING_CONFIGURATION_STEP) {
-            setIsWaitingInput(!wrapper || (selectedFormat === 'csv' && !wrapperParameter));
+            // Pour CSV, JSON et JSONL, un champ doit être sélectionné
+            const needsFieldSelection = selectedFormat === 'csv' || selectedFormat === 'json' || selectedFormat === 'jsonl';
+            setIsWaitingInput(!wrapper || (needsFieldSelection && !wrapperParameter));
             setIsInvalid(false);
         } else if (step === PROCESSING_VALIDATION_STEP) {
             // L'email est optionnel

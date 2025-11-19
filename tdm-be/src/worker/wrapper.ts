@@ -71,10 +71,38 @@ const wrapper = async (processingId: string) => {
         return;
     }
 
+    // Convert JSONL to JSON if needed
+    let actualWrapperUrl = wrapperUrl;
+    if (file.endsWith('.jsonl') && wrapperUrl.includes('/v1/jsonl')) {
+        try {
+            const jsonlContent = fileBuffer.toString('utf8');
+            const lines = jsonlContent.split('\n').filter((l) => l.trim());
+            const jsonArray = lines
+                .map((line, i) => {
+                    try {
+                        return JSON.parse(line);
+                    } catch {
+                        debug(processingId, `Skipping invalid JSON line ${i + 1}`);
+                        return null;
+                    }
+                })
+                .filter((obj) => obj !== null);
+
+            fileBuffer = Buffer.from(JSON.stringify(jsonArray), 'utf8');
+            actualWrapperUrl = wrapperUrl.replace('/v1/jsonl', '/v1/json');
+        } catch (e) {
+            const message = "Can't convert JSONL to JSON";
+            error(processingId, message);
+            crash(e, message, initialProcessing);
+            errorEmail(initialProcessing, ERROR_MESSAGE_FILE_SYSTEM_ERROR);
+            return;
+        }
+    }
+
     // Call wrapper api
     let response: AxiosResponse;
     try {
-        response = await axios.post(wrapperUrl, fileBuffer, {
+        response = await axios.post(actualWrapperUrl, fileBuffer, {
             responseType: 'arraybuffer',
             params: {
                 value: wrapperParam,
