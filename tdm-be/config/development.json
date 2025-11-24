@@ -404,30 +404,6 @@
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
-            "id": "pdf-tabbr-mine",
-            "featured": false,
-            "input": "article",
-            "inputFormat": "pdf",
-            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine-pdf",
-            "retrieve": "/v1/retrieve-lines-csv",
-            "retrieveExtension": "csv",
-            "summary": "**tabbrMine** - Détection d'abréviations torturées",
-            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
-            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
-        },
-        {
-            "id": "txt-tabbr-mine",
-            "featured": false,
-            "input": "article",
-            "inputFormat": "txt",
-            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
-            "summary": "**tabbrMine** - Détection d'abréviations torturées",
-            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
-            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
-        },
-        {
             "id": "csv-tag-cloud-en",
             "featured": true,
             "input": "corpus",
@@ -478,6 +454,30 @@
             "summary": "**tagCloud** - Extrait des termes pertinents de textes en français",
             "description": "Extrait les termes les plus spécifiques de chacun des *abstract*s en français (avec l'algorithme Teeft). Associe chaque terme au nombre de documents dans lequel il apparaît.\n\nPermet de créer des nuages de mots.\n\nL'entrée est un fichier corpus de ISTEX Search contenant les métadonnées JSON. Ce sont les *abstract*s qui seront analysés.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
+        },
+        {
+            "id": "pdf-tam",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine-pdf",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées",
+            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
+        },
+        {
+            "id": "txt-tam",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées",
+            "description": "Extrait des abréviations torturées d'un texte écrit en anglais.",
+            "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
         },
         {
             "id": "txt-teeft-fr",
