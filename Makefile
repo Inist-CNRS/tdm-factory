@@ -9,6 +9,7 @@ help:
 	@echo "Available commands:"
 	@echo "  install           - Install dependencies for all projects (quiet mode)"
 	@echo "  clean             - Remove node_modules and package-lock.json from all projects"
+	@echo "  clean-install     - Run make and install"
 	@echo "  lint              - Run ESLint on all projects"
 	@echo "  lint-fix          - Run ESLint with the fix option on all projects"
 	@echo "  stylelint         - Run Stylelint on frontend projects"
@@ -21,9 +22,9 @@ help:
 
 install:
 	@echo "Installing dependencies for all projects..."
-	@cd tdm-be && npm install --legacy-peer-deps && cd ..
-	@cd tdm-fe && npm install --legacy-peer-deps && cd ..
-	@cd tdm-admin && npm install --legacy-peer-deps
+	@cd tdm-be && npm install && cd ..
+	@cd tdm-fe && npm install && cd ..
+	@cd tdm-admin && npm install
 	@echo "✅ All dependencies installed"
 	
 # =============================================================================
