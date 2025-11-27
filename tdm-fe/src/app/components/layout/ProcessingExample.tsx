@@ -4,7 +4,6 @@ import './ProcessingExample.scss';
 import {
     PROCESSING_FORMAT_STEP,
     PROCESSING_UPLOAD_STEP,
-    PROCESSING_UPLOADING_STEP,
     PROCESSING_CONFIGURATION_STEP,
     PROCESSING_VALIDATION_STEP,
     PROCESSING_CONFIRMATION_STEP,
@@ -25,9 +24,7 @@ const ProcessingExample = ({ currentStep = 0 }: ProcessingExampleProps) => {
             case 0: // Format
                 return currentStep === PROCESSING_FORMAT_STEP ? 'active' : '';
             case 1: // Upload
-                return currentStep === PROCESSING_UPLOAD_STEP || currentStep === PROCESSING_UPLOADING_STEP
-                    ? 'active'
-                    : '';
+                return currentStep === PROCESSING_UPLOAD_STEP ? 'active' : '';
             case 2: // Configuration
                 return currentStep === PROCESSING_CONFIGURATION_STEP ? 'active' : '';
             case 3: // Validation
