@@ -19,7 +19,7 @@ const StatusRedirect = () => {
     const [searchParams] = useSearchParams();
     const flowId = searchParams.get('flowId');
 
-    const statusLink = `/process/result?id=${id}&step=5${flowId ? `&flowId=${flowId}` : ''}`;
+    const statusLink = `/process/result?id=${id}&step=4${flowId ? `&flowId=${flowId}` : ''}`;
 
     return <Navigate to={statusLink} replace />;
 };

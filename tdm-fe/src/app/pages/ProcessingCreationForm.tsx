@@ -6,11 +6,11 @@ import ProcessingFormFormat from '~/app/components/form/ProcessingFormFormat';
 import ProcessingFormStepper from '~/app/components/form/ProcessingFormStepper';
 import ProcessingFormUpload from '~/app/components/form/ProcessingFormUpload';
 import ProcessingExample from '~/app/components/layout/ProcessingExample';
-import { fields as fieldsService } from '~/app/services/creation/fields';
 import { wrapper as wrapperService } from '~/app/services/creation/operations';
 import { start } from '~/app/services/creation/processing';
-import { upload } from '~/app/services/creation/upload';
 import { getProcessingInfo } from '~/app/services/processing/processing-info';
+
+import type { UploadFileFunction } from '~/app/components/form/ProcessingFormUpload';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -25,10 +25,9 @@ import type { Wrapper } from '~/app/shared/data.types';
 
 export const PROCESSING_FORMAT_STEP = 0;
 export const PROCESSING_UPLOAD_STEP = 1;
-export const PROCESSING_UPLOADING_STEP = 2;
-export const PROCESSING_CONFIGURATION_STEP = 3;
-export const PROCESSING_VALIDATION_STEP = 4;
-export const PROCESSING_CONFIRMATION_STEP = 5;
+export const PROCESSING_CONFIGURATION_STEP = 2;
+export const PROCESSING_VALIDATION_STEP = 3;
+export const PROCESSING_CONFIRMATION_STEP = 4;
 
 const ProcessingCreationForm = () => {
     const { type } = useParams();
@@ -49,7 +48,6 @@ const ProcessingCreationForm = () => {
     const [step, setStep] = useState<number>(PROCESSING_FORMAT_STEP);
     const [isPending, setIsPending] = useState<boolean>(false);
     const [isInvalid, setIsInvalid] = useState<boolean>(false);
-    const [isOnError, setIsOnError] = useState<boolean>(false);
     const [isWaitingInput, setIsWaitingInput] = useState<boolean>(true);
     const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
 
@@ -58,6 +56,7 @@ const ProcessingCreationForm = () => {
      */
     const [file, setFile] = useState<File | null>(null);
     const [processingId, setProcessingId] = useState<string | null>(null);
+    const [uploadFileFunction, setUploadFileFunction] = useState<UploadFileFunction | null>(null);
 
     /**
      * Form configuration step
@@ -93,42 +92,6 @@ const ProcessingCreationForm = () => {
                 data: { wrapper: results[0].data },
                 pending: results.some((result) => result.isPending),
             };
-        },
-    });
-
-    /**
-     * Upload the corpus and get the associated processing id
-     */
-    const {
-        data: uploadResult,
-        isPending: uploading,
-        isError: uploadFailed,
-    } = useQuery({
-        queryKey: ['upload', step, processingId, file],
-        queryFn: () => {
-            if (step !== PROCESSING_UPLOADING_STEP) {
-                return null;
-            }
-
-            if (!file) {
-                return null;
-            }
-
-            return upload(file);
-        },
-        staleTime: 3600000,
-        gcTime: 3600000,
-    });
-
-    const { data: fieldsData } = useQuery({
-        queryKey: ['fields', step, processingId],
-        queryFn: async () => {
-            if (step !== PROCESSING_CONFIGURATION_STEP || !processingId) {
-                return { fields: [] };
-            }
-
-            const result = await fieldsService(processingId);
-            return result ?? { fields: [] };
         },
     });
 
@@ -202,40 +165,16 @@ const ProcessingCreationForm = () => {
         return list;
     }, [file, operations.data.wrapper]);
 
-    const fields = useMemo(() => {
-        if (!fieldsData || !fieldsData.fields) {
-            return null;
-        }
-        return {
-            fields: fieldsData.fields,
-        };
-    }, [fieldsData]);
+    // Fields are no longer needed here as they are managed in ProcessingFormUpload
+    const fields = null;
 
     /**
      * Listen for network call and update the state
      */
     useEffect(() => {
-        setIsPending(operations.pending || uploading || startPending);
-    }, [operations.pending, uploading, startPending]);
+        setIsPending(operations.pending || startPending);
+    }, [operations.pending, startPending]);
 
-    /**
-     * Listen for the end of the upload and update the processing id state
-     */
-    useEffect(() => {
-        if (uploadResult) {
-            setProcessingId(uploadResult);
-            setStep(PROCESSING_CONFIGURATION_STEP);
-        }
-    }, [uploadResult]);
-
-    /**
-     * Listen for the upload error and set the form on error
-     */
-    useEffect(() => {
-        if (uploadFailed) {
-            setIsOnError(true);
-        }
-    }, [uploadFailed]);
 
     // État pour stocker le nom du fichier récupéré de l'API
     const [fileNameFromApi, setFileNameFromApi] = useState<string | null>(null);
@@ -244,7 +183,7 @@ const ProcessingCreationForm = () => {
      * Initialize the form with URL parameters if they exist
      */
     useEffect(() => {
-        if (idFromUrl && stepFromUrl === '5') {
+        if (idFromUrl && stepFromUrl === '4') {
             setProcessingId(idFromUrl);
             setStep(PROCESSING_CONFIRMATION_STEP);
 
@@ -297,10 +236,39 @@ const ProcessingCreationForm = () => {
     /**
      * Handle the next button
      */
-    const handleNext = useCallback(() => {
+    const handleNext = useCallback(async () => {
         let invalid = false;
         let waiting = true;
         let nextStep = step + 1;
+
+        // For upload step, trigger the upload when user clicks "Suivant"
+        if (step === PROCESSING_UPLOAD_STEP) {
+            if (uploadFileFunction && !processingId) {
+                setIsPending(true);
+                try {
+                    const id = await uploadFileFunction();
+                    if (id) {
+                        setProcessingId(id);
+                        nextStep = PROCESSING_CONFIGURATION_STEP;
+                    } else {
+                        // Upload failed
+                        setIsPending(false);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    setIsPending(false);
+                    return;
+                } finally {
+                    setIsPending(false);
+                }
+            } else if (processingId) {
+                // Already uploaded, move to next step
+                nextStep = PROCESSING_CONFIGURATION_STEP;
+            } else {
+                return;
+            }
+        }
 
         if (nextStep === PROCESSING_VALIDATION_STEP) {
             // L'email est optionnel
@@ -314,6 +282,8 @@ const ProcessingCreationForm = () => {
 
         if (step === PROCESSING_CONFIRMATION_STEP) {
             setFile(null);
+            setProcessingId(null);
+            setUploadFileFunction(null);
             setWrapper(null);
             setWrapperParameter(null);
             setFlowId(null);
@@ -325,7 +295,7 @@ const ProcessingCreationForm = () => {
         setIsInvalid(invalid);
         setIsWaitingInput(waiting);
         setStep(nextStep);
-    }, [step]);
+    }, [step, uploadFileFunction, processingId]);
 
     /**
      * Handle file change
@@ -336,6 +306,18 @@ const ProcessingCreationForm = () => {
         setFile(value);
         setIsWaitingInput(!isValid);
         setIsInvalid(value !== null && !isValid);
+        // Reset processing ID when file changes
+        if (value === null) {
+            setProcessingId(null);
+        }
+    }, []);
+
+    /**
+     * Handle upload function ready from upload component
+     * @param uploadFn function to call to upload the file
+     */
+    const handleUploadReady = useCallback((uploadFn: UploadFileFunction) => {
+        setUploadFileFunction(() => uploadFn);
     }, []);
 
     /**
@@ -460,10 +442,11 @@ const ProcessingCreationForm = () => {
                                 mimes={mimes}
                                 value={file}
                                 onChange={handleUploadChange}
-                                isOnError={isOnError}
+                                isOnError={false}
                                 isPending={isPending}
                                 selectedFormat={selectedFormat}
                                 onFieldsChange={handleFieldsChange}
+                                onUploadReady={handleUploadReady}
                             />
                         ) : null}
 
@@ -497,7 +480,7 @@ const ProcessingCreationForm = () => {
                                 processingId={processingId}
                                 fileName={fileNameFromApi || file?.name || ''}
                                 status={startingStatus}
-                                isPending={uploading}
+                                isPending={isPending}
                                 flowId={flowId}
                             />
                         ) : null}
