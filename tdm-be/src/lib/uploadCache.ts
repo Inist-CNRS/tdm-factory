@@ -48,7 +48,7 @@ export const cleanOldUploads = (): number => {
 
     for (const [key, value] of uploadCache.entries()) {
         if (now - value.timestamp > maxAge) {
-            uploadCache.delete(key);
+            removeUploadedFile(key);
             cleaned++;
         }
     }
