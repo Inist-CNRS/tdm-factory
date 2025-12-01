@@ -1,19 +1,19 @@
-import '~/app/components/form/scss/ProcessingFormCommon.scss';
-import '~/app/components/form/scss/ProcessingFormConfiguration.scss';
-import CircularWaiting from '~/app/components/progress/CircularWaiting';
-import Markdown from '~/app/components/text/Markdown';
-import { getStaticConfig } from '~/app/services/config';
+import "~/app/components/form/scss/ProcessingFormCommon.scss";
+import "~/app/components/form/scss/ProcessingFormConfiguration.scss";
+import CircularWaiting from "~/app/components/progress/CircularWaiting";
+import Markdown from "~/app/components/text/Markdown";
+import { getStaticConfig } from "~/app/services/config";
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import { useQuery } from '@tanstack/react-query';
-import { memo, useCallback, useState, useMemo, useEffect, type ChangeEvent } from 'react';
-import { useParams } from 'react-router-dom';
-import type { ProcessingFields, Wrapper } from '~/app/shared/data.types';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import { useQuery } from "@tanstack/react-query";
+import { memo, useCallback, useState, useMemo, useEffect, type ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
+import type { ProcessingFields, Wrapper } from "~/app/shared/data.types";
 
 // Pour le traitement dans la base
 export type ProcessingFormConfigurationValueType = {
@@ -62,12 +62,12 @@ const ProcessingFormConfiguration = ({
     onValidityChange,
 }: ProcessingFormConfigurationProps) => {
     const { type } = useParams();
-    const [activeTab, setActiveTab] = useState('featured');
+    const [activeTab, setActiveTab] = useState("featured");
     const [expandedService, setExpandedService] = useState<string | null>(null);
     const [selectedService, setSelectedService] = useState<ServiceInfo | null>(null);
 
     const { data: config, isLoading: isConfigLoading } = useQuery({
-        queryKey: ['static-config'],
+        queryKey: ["static-config"],
         queryFn: getStaticConfig,
     });
 
@@ -84,9 +84,9 @@ const ProcessingFormConfiguration = ({
 
                 // Définir l'onglet actif en fonction du service
                 if (service.featured) {
-                    setActiveTab('featured');
+                    setActiveTab("featured");
                 } else {
-                    setActiveTab('advanced');
+                    setActiveTab("advanced");
                 }
             } else {
                 setSelectedService(null);
@@ -109,51 +109,51 @@ const ProcessingFormConfiguration = ({
                 ...flow,
                 flowId: flow.id,
             }))
-            .filter((service) => service.inputFormat === value.inputFormat || service.inputFormat === '*');
+            .filter((service) => service.inputFormat === value.inputFormat || service.inputFormat === "*");
     }, [config, type, value.inputFormat]);
 
     // Determine which categories have services
     const hasFeaturedServices = useMemo(
         () => availableServices.some((service) => service.featured),
-        [availableServices],
+        [availableServices]
     );
 
     const hasAdvancedServices = useMemo(
         () => availableServices.some((service) => !service.featured),
-        [availableServices],
+        [availableServices]
     );
 
     // Get available tabs based on which categories have services
     const availableTabs = useMemo(() => {
-        const tabs = [];
+        const tabs: { id: string; label: string }[] = [];
         if (hasFeaturedServices) {
-            tabs.push({ id: 'featured', label: 'Services à la une' });
+            tabs.push({ id: "featured", label: "Services à la une" });
         }
         if (hasAdvancedServices) {
-            tabs.push({ id: 'advanced', label: 'Autres services' });
+            tabs.push({ id: "advanced", label: "Autres services" });
         }
         return tabs;
     }, [hasFeaturedServices, hasAdvancedServices]);
 
     useEffect(() => {
         if (!hasAdvancedServices && hasFeaturedServices) {
-            setActiveTab('featured');
+            setActiveTab("featured");
         } else if (!hasFeaturedServices && hasAdvancedServices) {
-            setActiveTab('advanced');
-        } else if (activeTab === 'featured' && !hasFeaturedServices) {
-            setActiveTab(hasAdvancedServices ? 'advanced' : 'all');
-        } else if (activeTab === 'advanced' && !hasAdvancedServices) {
-            setActiveTab(hasFeaturedServices ? 'featured' : 'all');
+            setActiveTab("advanced");
+        } else if (activeTab === "featured" && !hasFeaturedServices) {
+            setActiveTab(hasAdvancedServices ? "advanced" : "all");
+        } else if (activeTab === "advanced" && !hasAdvancedServices) {
+            setActiveTab(hasFeaturedServices ? "featured" : "all");
         } else if (!hasFeaturedServices && !hasAdvancedServices) {
-            setActiveTab('all');
+            setActiveTab("all");
         }
     }, [activeTab, hasFeaturedServices, hasAdvancedServices]);
 
     const filteredServices = useMemo(() => {
         switch (activeTab) {
-            case 'featured':
+            case "featured":
                 return availableServices.filter((service) => service.featured);
-            case 'advanced':
+            case "advanced":
                 return availableServices.filter((service) => !service.featured);
             default:
                 return availableServices;
@@ -169,9 +169,9 @@ const ProcessingFormConfiguration = ({
 
                 // Mettre à jour l'onglet actif en fonction du service
                 if (newService.featured) {
-                    setActiveTab('featured');
+                    setActiveTab("featured");
                 } else {
-                    setActiveTab('advanced');
+                    setActiveTab("advanced");
                 }
 
                 onChange({
@@ -180,12 +180,12 @@ const ProcessingFormConfiguration = ({
                 });
             }
         },
-        [availableServices, value, onChange],
+        [availableServices, value, onChange]
     );
 
     const handleServiceClick = useCallback(
         (serviceId: string, event: React.MouseEvent<HTMLElement>) => {
-            const isArrowClick = (event.target as HTMLElement).closest('.arrow-icon');
+            const isArrowClick = (event.target as HTMLElement).closest(".arrow-icon");
 
             if (isArrowClick) {
                 // Si on clique sur la flèche, on change uniquement l'état expanded
@@ -205,41 +205,42 @@ const ProcessingFormConfiguration = ({
                 }
             }
         },
-        [availableServices, selectedService, value, onChange],
+        [availableServices, selectedService, value, onChange]
     );
 
+    // When a service is selected, update wrapper and wrapperParameter from the flow config
     useEffect(() => {
         if (!selectedService || !config) {
             return;
         }
-        // Recherche du flow par id
+
         const matchingFlow = config.flows.find((flow) => flow.id === selectedService.flowId);
-        if (matchingFlow) {
-            const inputFormatLabel = config.inputFormat2labels?.[matchingFlow.inputFormat] || {};
-            const wrapperPath = (inputFormatLabel as Record<string, unknown>).wrapper as string || matchingFlow.wrapper || '';
-            const wrapper = wrapperList.find((w) => {
-                const wPath = getServicePath(w.url ?? '');
+
+        if (!matchingFlow) {
+            return;
+        }
+
+        const inputFormatLabel = config.inputFormat2labels?.[matchingFlow.inputFormat] || {};
+        const wrapperPath =
+            ((inputFormatLabel as Record<string, unknown>).wrapper as string) || matchingFlow.wrapper || "";
+
+        const wrapper =
+            wrapperList.find((w) => {
+                const wPath = getServicePath(w.url ?? "");
                 return wPath === getServicePath(wrapperPath);
             }) ?? null;
 
-            if (value.wrapperParameter) {
-                onChange({
-                    wrapper: wrapper,
-                    wrapperParameter: value.wrapperParameter,
-                    flowId: matchingFlow.id,
-                    inputFormat: matchingFlow.inputFormat,
-                });
-            } else {
-                const wrapperParameter = (inputFormatLabel as Record<string, unknown>).wrapperParameter as string ?? (matchingFlow as Record<string, unknown>).wrapperParameter as string ?? null;
-                onChange({
-                    wrapper: wrapper,
-                    wrapperParameter: wrapperParameter,
-                    flowId: matchingFlow.id,
-                    inputFormat: matchingFlow.inputFormat,
-                });
-            }
-        }
-    }, [selectedService, config, wrapperList, onChange, value.inputFormat, type, value.wrapperParameter]);
+        const rawWrapperParameter = (matchingFlow as unknown as { wrapperParameter?: unknown }).wrapperParameter;
+
+        const wrapperParameter: string | null = typeof rawWrapperParameter === "string" ? rawWrapperParameter : null;
+
+        onChange({
+            wrapper,
+            wrapperParameter,
+            flowId: matchingFlow.id,
+            inputFormat: matchingFlow.inputFormat,
+        });
+    }, [selectedService, config, wrapperList, onChange]);
 
     useEffect(() => {
         const isValid =
@@ -251,14 +252,14 @@ const ProcessingFormConfiguration = ({
     useEffect(() => {
         if (config && !value.flowId && value.inputFormat) {
             // Déterminer quel onglet est actif par défaut
-            const defaultTab = hasFeaturedServices ? 'featured' : 'advanced';
+            const defaultTab = hasFeaturedServices ? "featured" : "advanced";
 
             // Filtrer les services selon l'onglet par défaut
             const filteredServiceIds = config.flows
                 .filter((flow) => {
                     const matchesType = flow.input === type;
-                    const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === '*';
-                    const matchesTab = defaultTab === 'featured' ? flow.featured : !flow.featured;
+                    const matchesFormat = flow.inputFormat === value.inputFormat || flow.inputFormat === "*";
+                    const matchesTab = defaultTab === "featured" ? flow.featured : !flow.featured;
                     return matchesType && matchesFormat && matchesTab;
                 })
                 .map((flow) => flow.id);
@@ -289,7 +290,7 @@ const ProcessingFormConfiguration = ({
                     {availableTabs.map((tab) => (
                         <div
                             key={tab.id}
-                            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+                            className={`tab ${activeTab === tab.id ? "active" : ""}`}
                             role="tab"
                             tabIndex={0}
                             aria-selected={activeTab === tab.id}
@@ -297,7 +298,7 @@ const ProcessingFormConfiguration = ({
                                 setActiveTab(tab.id);
                             }}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
+                                if (e.key === "Enter" || e.key === " ") {
                                     setActiveTab(tab.id);
                                 }
                             }}
@@ -313,19 +314,19 @@ const ProcessingFormConfiguration = ({
                     aria-label="service"
                     name="service"
                     onChange={handleServiceChange}
-                    value={selectedService?.flowId || ''}
+                    value={selectedService?.flowId || ""}
                 >
                     {filteredServices.map((service) => (
                         <div
                             key={service.flowId}
-                            className={`service-container ${expandedService === service.flowId ? 'expanded' : ''}`}
+                            className={`service-container ${expandedService === service.flowId ? "expanded" : ""}`}
                             onClick={(e) => {
                                 handleServiceClick(service.flowId, e);
                             }}
                             role="button"
                             tabIndex={0}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
+                                if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     handleServiceClick(service.flowId, e as unknown as React.MouseEvent<HTMLElement>);
