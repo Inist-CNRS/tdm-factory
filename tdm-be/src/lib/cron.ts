@@ -19,7 +19,7 @@ const deleteOldFiles = async (directory: string) => {
 
         if (stats.isFile() && stats.mtime < oneWeekAgo) {
             await fs.unlink(filePath);
-            cronLogger.info(`${filePath} has been delete`);
+            cronLogger.info(`${filePath} has been deleted`);
         }
     }
 };
