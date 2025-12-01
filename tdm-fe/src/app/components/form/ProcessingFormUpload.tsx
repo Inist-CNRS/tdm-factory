@@ -16,7 +16,7 @@ import type { SelectChangeEvent } from "@mui/material";
 
 const formatFileSize = (bytes: number): string => {
     if (bytes === 0) {
-        return "0 B";
+        return "0 o";
     }
     const k = 1024;
     const sizes = ["io", "Kio", "Mio", "Gio", "Tio"];
@@ -328,14 +328,15 @@ const ProcessingFormUpload = ({
                     <div className="error-message">
                         {formatError && selectedFormat && config ? (
                             <p>
-                                Le fichier ne correspond pas au format sélectionné (
-                                {config.inputFormat2labels[selectedFormat]?.summary || selectedFormat}).
+                                {`Le fichier ne correspond pas au format sélectionné (${
+                                    config.inputFormat2labels[selectedFormat]?.summary || selectedFormat
+                                }).`}
                                 <span>
-                                    {" "}
-                                    Les extensions acceptées sont :{" "}
-                                    {config.inputFormat2labels[selectedFormat]?.extensions
-                                        ?.map((ext: string) => `.${ext}`)
-                                        .join(", ")}
+                                    {` Les extensions acceptées sont: ${config.inputFormat2labels[
+                                        selectedFormat
+                                    ]?.extensions
+                                        ?.map((ext) => `.${ext}`)
+                                        .join(", ")}`}
                                 </span>
                             </p>
                         ) : isInvalid ? (

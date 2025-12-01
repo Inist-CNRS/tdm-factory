@@ -212,7 +212,7 @@ router.post("/start", (req: Request<unknown, unknown, Traitment>, res) => {
                 updatedProcessing.wrapperParam as string,
                 updatedProcessing.enrichment as string,
                 email,
-                updatedProcessing.flowId
+                updatedProcessing.flowId,
             );
         }
 
