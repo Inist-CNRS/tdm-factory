@@ -39,7 +39,6 @@ type Config = {
             summary: string;
             description: string;
             wrapperParameter?: string;
-            wrapperParameterComplete?: string;
             extensions: string[];
         }
     >;

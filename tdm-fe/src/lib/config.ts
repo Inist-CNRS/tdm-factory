@@ -19,7 +19,6 @@ export type StaticConfig = {
             description: string;
             extensions: string[];
             wrapperParameter?: string;
-            wrapperParameterComplete?: string;
         }
     >;
 };

@@ -31,8 +31,7 @@
             "extensions": [
                 "csv"
             ],
-            "wrapper": "/v1/csv",
-            "wrapperParameterComplete": "/v1/fields/csv"
+            "wrapper": "/v1/csv"
         },
         "istex.tar.gz": {
             "summary": "Corpus Istex `.tar.gz`",
@@ -83,8 +82,7 @@
             "extensions": [
                 "json"
             ],
-            "wrapper": "/v1/json",
-            "wrapperParameterComplete": "/v1/fields/json"
+            "wrapper": "/v1/json"
         },
         "jsonl": {
             "summary": "JSONL",
@@ -92,8 +90,7 @@
             "extensions": [
                 "jsonl"
             ],
-            "wrapper": "/v1/jsonl",
-            "wrapperParameterComplete": "/v1/fields/jsonl"
+            "wrapper": "/v1/jsonl"
         },
         "*": {
             "summary": "Peu importe",
