@@ -1,6 +1,6 @@
-import environment from '~/lib/config';
-import { sendStartedMail } from '~/lib/email';
-import { filesLocation, randomFileName, uploadFile } from '~/lib/files';
+import environment from "~/lib/config";
+import { sendStartedMail } from "~/lib/email";
+import { filesLocation, randomFileName } from "~/lib/files";
 import {
     HTTP_ACCEPTED,
     HTTP_BAD_REQUEST,
@@ -9,19 +9,17 @@ import {
     HTTP_INTERNAL_SERVER_ERROR,
     HTTP_NOT_FOUND,
     HTTP_PRECONDITION_REQUIRED,
-} from '~/lib/http';
-import logger from '~/lib/logger';
-import { createProcessing, findProcessing, updateProcessing, type Processing } from '~/model/ProcessingModel';
-import Status from '~/model/Status';
-import csvFields from '~/worker/fields/csvFields';
-import jsonFields from '~/worker/fields/jsonFields';
-import jsonlFields from '~/worker/fields/jsonlFields';
-import wrapper from '~/worker/wrapper';
+} from "~/lib/http";
+import logger from "~/lib/logger";
+import { storeUploadedFile, getUploadedFile, removeUploadedFile } from "~/lib/uploadCache";
+import { createProcessing, findProcessing, updateProcessing, type Processing } from "~/model/ProcessingModel";
+import Status from "~/model/Status";
+import wrapper from "~/worker/wrapper";
 
-import express, { type Request, type Response } from 'express';
-import multer from 'multer';
+import express, { type Request, type Response } from "express";
+import multer from "multer";
 
-import type { Traitment } from '~/model/Traitment';
+import type { Traitment } from "~/model/Traitment";
 
 const router = express.Router();
 
@@ -78,27 +76,51 @@ const router = express.Router();
  *         description: Internal server error
  */
 //Route to start traitment wrapping and then enrichment
-router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
+router.post("/start", (req: Request<unknown, unknown, Traitment>, res) => {
     const handleRequest = async () => {
         const traitement: Traitment = req.body;
 
-        // --- Find the processing associated with the uploaded file
-        // Get the processing the sqlite cache db
-        const processing = findProcessing(traitement.file);
+        // --- Find or create the processing associated with the uploaded file
+        let processing = findProcessing(traitement.file);
 
-        // Check if the processing exists
+        // If processing doesn't exist, create it from upload cache
         if (!processing) {
-            res.status(HTTP_PRECONDITION_REQUIRED).send({
-                status: HTTP_PRECONDITION_REQUIRED,
-                message: 'Precondition Required - No processing are available for this id',
-            });
-            return;
+            const uploadedFile = getUploadedFile(traitement.file);
+
+            if (!uploadedFile) {
+                res.status(HTTP_PRECONDITION_REQUIRED).send({
+                    status: HTTP_PRECONDITION_REQUIRED,
+                    message: "Precondition Required - No uploaded file found for this id",
+                });
+                return;
+            }
+
+            // Create the processing entry now (only when user confirms)
+            processing = createProcessing(
+                uploadedFile.processingId,
+                uploadedFile.originalName,
+                uploadedFile.uploadedFile
+            );
+
+            if (!processing) {
+                res.status(HTTP_INTERNAL_SERVER_ERROR).send({
+                    status: HTTP_INTERNAL_SERVER_ERROR,
+                    message: "Failed to create processing entry",
+                });
+                return;
+            }
+
+            // Remove from cache as it's now in database
+            removeUploadedFile(traitement.file);
+
+            logger.info(`Processing entry created: ${processing.id}`);
         }
 
+        // Check if processing has already been started
         if (processing.status !== Status.UNKNOWN) {
             res.status(HTTP_CONFLICT).send({
                 status: HTTP_CONFLICT,
-                message: 'Conflict - The processing as already been started',
+                message: "Conflict - The processing has already been started",
             });
             return;
         }
@@ -140,14 +162,14 @@ router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
             flowId = traitement.flowId;
             logger.debug(`Received flowId: ${flowId}`);
         } else {
-            logger.debug('No flowId received in request');
+            logger.debug("No flowId received in request");
         }
 
         // Check if default params is pressent (email is optional)
         if (!wrapperUrl || !urlEnrichment || !wrapperParam || !flowId) {
             res.status(HTTP_BAD_REQUEST).send({
                 status: HTTP_BAD_REQUEST,
-                message: 'Bad Request - Required parameter cannot be null',
+                message: "Bad Request - Required parameter cannot be null",
             });
             return;
         }
@@ -170,7 +192,7 @@ router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
         if (!updatedProcessing) {
             res.status(HTTP_INTERNAL_SERVER_ERROR).send({
                 status: HTTP_INTERNAL_SERVER_ERROR,
-                message: 'Internal Server Error - Something went wrong when updating the processing status',
+                message: "Internal Server Error - Something went wrong when updating the processing status",
             });
             return;
         }
@@ -180,7 +202,7 @@ router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
         // We use the process/:type route with a special query parameter to redirect to the confirmation step
         // const confirmationUrl = `${
         //     environment.hosts.external.isHttps ? 'https' : 'http'
-        // }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=5`;
+        // }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=4`;
         // Wait for the notification email to be sent before starting the processing (only if email is provided)
         if (email) {
             await sendStartedMail(
@@ -205,26 +227,26 @@ router.post('/start', (req: Request<unknown, unknown, Traitment>, res) => {
 
     // Execute async handler and catch any errors
     handleRequest().catch((error) => {
-        logger.error('Error in /traitment/start:', error);
+        logger.error("Error in /traitment/start:", error);
         res.status(HTTP_INTERNAL_SERVER_ERROR).send({
             status: HTTP_INTERNAL_SERVER_ERROR,
-            message: 'Internal Server Error',
+            message: "Internal Server Error",
         });
     });
 });
 
 //Function to store file
 const storage = multer.diskStorage({
-    destination (req, file, cb) {
+    destination(req, file, cb) {
         // Set your desired destination folder
         cb(null, filesLocation.upload);
     },
-    filename (req, file, cb) {
+    filename(req, file, cb) {
         const uniqueName = randomFileName();
         req.body.processingId = uniqueName;
         req.body.originalName = file.originalname;
         // Set the file name
-        cb(null, `${uniqueName}.${file.originalname.split('.').pop() ?? ''}`);
+        cb(null, `${uniqueName}.${file.originalname.split(".").pop() ?? ""}`);
     },
 });
 
@@ -262,75 +284,28 @@ const upload = multer({ storage });
  *         description: Internal server error
  */
 // Route to handle file upload
-router.post('/upload', upload.single('file'), (req, res: Response) => {
+// Note: This endpoint only uploads the file and stores it in cache
+// The processing entry is created later when /start is called
+router.post("/upload", upload.single("file"), (req, res: Response) => {
     if (req.body.processingId && req.body.originalName && req.file?.filename) {
         const processingId = req.body.processingId;
         const originalName = req.body.originalName;
         const uploadedFile = req.file.filename;
 
-        const result = createProcessing(processingId, originalName, uploadedFile);
-        if (result) {
-            res.status(HTTP_CREATED).send({
-                id: result.id,
-            });
-            return;
-        }
-        res.status(HTTP_INTERNAL_SERVER_ERROR).send({
-            status: HTTP_INTERNAL_SERVER_ERROR,
-        });
-    }
-});
+        // Store in cache instead of creating database entry
+        storeUploadedFile(processingId, originalName, uploadedFile);
 
-router.get('/fields', (req, res) => {
-    const { id } = req.query;
+        logger.debug(`File uploaded and cached: ${processingId} - ${originalName}`);
 
-    if (!id || typeof id !== 'string') {
-        res.status(HTTP_NOT_FOUND).send({
-            status: HTTP_NOT_FOUND,
+        res.status(HTTP_CREATED).send({
+            id: processingId,
         });
         return;
     }
 
-    const initialProcessing = findProcessing(id);
-
-    // Check if the processing existe
-    if (!initialProcessing) {
-        res.status(HTTP_NOT_FOUND).send({
-            status: HTTP_NOT_FOUND,
-        });
-        return;
-    }
-
-    const fileName = initialProcessing.uploadFile;
-    
-    if (fileName.endsWith('csv')) {
-        csvFields(uploadFile(fileName)).then((fields) => {
-            res.send({
-                fields,
-            });
-        });
-        return;
-    }
-    
-    if (fileName.endsWith('json')) {
-        jsonFields(uploadFile(fileName)).then((fields) => {
-            res.send({
-                fields,
-            });
-        });
-        return;
-    }
-    
-    if (fileName.endsWith('jsonl')) {
-        jsonlFields(uploadFile(fileName)).then((fields) => {
-            res.send({
-                fields,
-            });
-        });
-        return;
-    }
-    res.send({
-        fields: [],
+    res.status(HTTP_BAD_REQUEST).send({
+        status: HTTP_BAD_REQUEST,
+        message: "Missing required fields",
     });
 });
 
@@ -361,10 +336,10 @@ router.get('/fields', (req, res) => {
  *                   type: number
  */
 //Route to retrieve traitment status
-router.get('/status', (req, res) => {
+router.get("/status", (req, res) => {
     const { id } = req.query;
 
-    if (!id || typeof id !== 'string') {
+    if (!id || typeof id !== "string") {
         res.status(HTTP_NOT_FOUND).send({
             status: HTTP_NOT_FOUND,
         });
@@ -382,7 +357,9 @@ router.get('/status', (req, res) => {
     }
 
     res.send({
-        message: `Status du traitement ${initialProcessing.id} ${initialProcessing.status === Status.UNKNOWN ? ': Inconnu' : ''}`,
+        message: `Status du traitement ${initialProcessing.id} ${
+            initialProcessing.status === Status.UNKNOWN ? ": Inconnu" : ""
+        }`,
         errorType: initialProcessing.status,
     });
 });
@@ -416,10 +393,10 @@ router.get('/status', (req, res) => {
  *         description: Processing not found or result not available
  */
 //Route to retrieve result file information
-router.get('/result-info', (req, res) => {
+router.get("/result-info", (req, res) => {
     const { id } = req.query;
 
-    if (!id || typeof id !== 'string') {
+    if (!id || typeof id !== "string") {
         res.status(HTTP_NOT_FOUND).send({
             status: HTTP_NOT_FOUND,
         });
@@ -440,15 +417,17 @@ router.get('/result-info', (req, res) => {
     if (processing.status !== Status.FINISHED || !processing.resultFile) {
         res.status(HTTP_NOT_FOUND).send({
             status: HTTP_NOT_FOUND,
-            message: 'Result file not available',
+            message: "Result file not available",
         });
         return;
     }
 
     // Extract the result file name from the stored path
-    const resultFileName = processing.resultFile.split('/').pop() || '';
-    const resultUrl = `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${resultFileName}`;
-    const extension = resultFileName.split('.').pop() || '';
+    const resultFileName = processing.resultFile.split("/").pop() || "";
+    const resultUrl = `${environment.hosts.external.isHttps ? "https" : "http"}://${
+        environment.hosts.external.host
+    }/downloads/${resultFileName}`;
+    const extension = resultFileName.split(".").pop() || "";
 
     res.send({
         resultUrl,
@@ -493,10 +472,10 @@ router.get('/result-info', (req, res) => {
  *         description: Processing not found
  */
 //Route to retrieve processing information
-router.get('/info', (req, res) => {
+router.get("/info", (req, res) => {
     const { id } = req.query;
 
-    if (!id || typeof id !== 'string') {
+    if (!id || typeof id !== "string") {
         res.status(HTTP_NOT_FOUND).send({
             status: HTTP_NOT_FOUND,
         });
@@ -514,9 +493,9 @@ router.get('/info', (req, res) => {
     }
 
     // Déterminer le type de traitement (article ou corpus) à partir du flowId
-    let type = 'article'; // Par défaut, c'est un article
-    if (processing.flowId && processing.flowId.startsWith('corpus-')) {
-        type = 'corpus';
+    let type = "article";
+    if (processing.flowId && processing.flowId.startsWith("corpus-")) {
+        type = "corpus";
     }
 
     res.send({

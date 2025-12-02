@@ -1,28 +1,30 @@
-import './scss/ProcessingFormUpload.scss';
-import FileUpload from '~/app/components/progress/FileUpload';
-import { getStaticConfig } from '~/app/services/config';
-import { fields as fieldsService } from '~/app/services/creation/fields';
-import { upload } from '~/app/services/creation/upload';
+import "./scss/ProcessingFormUpload.scss";
+import FileUpload from "~/app/components/progress/FileUpload";
+import { getStaticConfig } from "~/app/services/config";
+import { upload } from "~/app/services/creation/upload";
+import { readFileFields } from "~/app/utils/fileFieldsReader";
 
-import CloseIcon from '@mui/icons-material/Close';
-import DescriptionIcon from '@mui/icons-material/Description';
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import mimeTypes from 'mime';
-import { MuiFileInput } from 'mui-file-input';
-import { memo, useCallback, useEffect, useMemo, useState, type DragEvent } from 'react';
+import CloseIcon from "@mui/icons-material/Close";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import mimeTypes from "mime";
+import { MuiFileInput } from "mui-file-input";
+import { memo, useCallback, useEffect, useMemo, useState, type DragEvent } from "react";
 
-import type { SelectChangeEvent } from '@mui/material';
+import type { SelectChangeEvent } from "@mui/material";
 
 const formatFileSize = (bytes: number): string => {
     if (bytes === 0) {
-        return '0 B';
+        return "0 o";
     }
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const sizes = ["io", "Kio", "Mio", "Gio", "Tio"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
 };
+
+export type UploadFileFunction = () => Promise<string | null>;
 
 type ProcessingFormUploadProps = {
     mimes: string[];
@@ -32,6 +34,7 @@ type ProcessingFormUploadProps = {
     onChange: (value: File | null, isValid: boolean) => void;
     selectedFormat?: string | null;
     onFieldsChange?: (fields: string[]) => void;
+    onUploadReady?: (uploadFn: UploadFileFunction) => void;
 };
 
 const ProcessingFormUpload = ({
@@ -42,37 +45,38 @@ const ProcessingFormUpload = ({
     onChange,
     selectedFormat,
     onFieldsChange,
+    onUploadReady,
 }: ProcessingFormUploadProps) => {
     const [file, setFile] = useState<File | null>(value);
     const [isInvalid, setIsInvalid] = useState(false);
     const [formatError, setFormatError] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [hasAttemptedUpload, setHasAttemptedUpload] = useState(false);
-    const [selectedField, setSelectedField] = useState<string>('');
+    const [selectedField, setSelectedField] = useState<string>("");
     const [availableFields, setAvailableFields] = useState<string[]>([]);
     const [isLoadingFields, setIsLoadingFields] = useState(false);
 
     const { data: config } = useQuery({
-        queryKey: ['static-config'],
+        queryKey: ["static-config"],
         queryFn: getStaticConfig,
     });
 
     // Build accept string with both MIME types and file extensions
     const acceptString = useMemo(() => {
         const acceptParts = [...mimes];
-        
+
         // Add file extensions for formats without standard MIME types
-        if (mimes.includes('application/jsonl')) {
-            acceptParts.push('.jsonl');
+        if (mimes.includes("application/jsonl")) {
+            acceptParts.push(".jsonl");
         }
-        if (mimes.includes('application/json')) {
-            acceptParts.push('.json');
+        if (mimes.includes("application/json")) {
+            acceptParts.push(".json");
         }
-        if (mimes.includes('text/csv')) {
-            acceptParts.push('.csv');
+        if (mimes.includes("text/csv")) {
+            acceptParts.push(".csv");
         }
-        
-        return acceptParts.join(',');
+
+        return acceptParts.join(",");
     }, [mimes]);
 
     const checkFileFormat = useCallback(
@@ -90,7 +94,7 @@ const ProcessingFormUpload = ({
 
             return extensions.some((ext) => fileName.endsWith(`.${ext}`));
         },
-        [config],
+        [config]
     );
 
     useEffect(() => {
@@ -99,12 +103,12 @@ const ProcessingFormUpload = ({
 
         if (file) {
             const fileName = file.name.toLowerCase();
-            const detectedMimeType = mimeTypes.getType(file.name) ?? '';
-            
+            const detectedMimeType = mimeTypes.getType(file.name) ?? "";
+
             // Special handling for JSONL files (no standard MIME type)
-            const isJsonl = fileName.endsWith('.jsonl');
-            const effectiveMimeType = isJsonl ? 'application/jsonl' : detectedMimeType;
-            
+            const isJsonl = fileName.endsWith(".jsonl");
+            const effectiveMimeType = isJsonl ? "application/jsonl" : detectedMimeType;
+
             // Check MIME type compatibility
             if (!mimes.includes(effectiveMimeType)) {
                 invalid = true;
@@ -117,43 +121,33 @@ const ProcessingFormUpload = ({
 
             setHasAttemptedUpload(true);
 
-            // Get fields for CSV, JSON, and JSONL files
-            const supportsFieldSelection = fileName.endsWith('.csv') || fileName.endsWith('.json') || fileName.endsWith('.jsonl');
-            
+            // Read fields from file client-side
+            const supportsFieldSelection =
+                fileName.endsWith(".csv") || fileName.endsWith(".json") || fileName.endsWith(".jsonl");
+
             if (supportsFieldSelection) {
                 setIsLoadingFields(true);
-                upload(file)
-                    .then((id) => {
-                        if (id) {
-                            return fieldsService(id);
+                readFileFields(file)
+                    .then((fieldsArray) => {
+                        setAvailableFields(fieldsArray);
+
+                        // Select "abstract" or "Résumé" or "content" if available, otherwise select the first field
+                        let defaultField = fieldsArray[0];
+                        if (fieldsArray.includes("abstract")) {
+                            defaultField = "abstract";
+                        } else if (fieldsArray.includes("Résumé")) {
+                            defaultField = "Résumé";
+                        } else if (fieldsArray.includes("content")) {
+                            defaultField = "content";
                         }
-                        return null;
-                    })
-                    .then((fields) => {
-                        if (fields && fields.fields) {
-                            const fieldsArray = Array.isArray(fields.fields)
-                                ? fields.fields
-                                : Object.keys(fields.fields);
-                            setAvailableFields(fieldsArray);
 
-                            // Select "abstract" or "Résumé" or "content" if available, otherwise select the first field
-                            let defaultField = fieldsArray[0];
-                            if (fieldsArray.includes('abstract')) {
-                                defaultField = 'abstract';
-                            } else if (fieldsArray.includes('Résumé')) {
-                                defaultField = 'Résumé';
-                            } else if (fieldsArray.includes('content')) {
-                                defaultField = 'content';
-                            }
-
-                            if (fieldsArray.length > 0) {
-                                setSelectedField(defaultField);
-                                onFieldsChange?.([defaultField]);
-                            }
+                        if (fieldsArray.length > 0) {
+                            setSelectedField(defaultField);
+                            onFieldsChange?.([defaultField]);
                         }
                     })
                     .catch((error) => {
-                        console.error('Erreur lors de la récupération des champs:', error);
+                        console.error("Erreur lors de la lecture des champs:", error);
                     })
                     .finally(() => {
                         setIsLoadingFields(false);
@@ -166,10 +160,30 @@ const ProcessingFormUpload = ({
         onChange(file, file !== null && !invalid && !wrongFormat);
     }, [file, mimes, onChange, selectedFormat, checkFileFormat, onFieldsChange]);
 
+    const uploadFileFunction = useCallback(async (): Promise<string | null> => {
+        if (!file) {
+            return null;
+        }
+
+        try {
+            const id = await upload(file);
+            return id;
+        } catch (error) {
+            console.error("Erreur lors de l'upload:", error);
+            throw error;
+        }
+    }, [file]);
+
+    useEffect(() => {
+        if (onUploadReady) {
+            onUploadReady(uploadFileFunction);
+        }
+    }, [onUploadReady, uploadFileFunction]);
+
     const handleFileChange = useCallback((newFile: File | null) => {
         setFile(newFile);
         setAvailableFields([]);
-        setSelectedField('');
+        setSelectedField("");
         if (newFile === null) {
             setHasAttemptedUpload(false);
         }
@@ -183,7 +197,7 @@ const ProcessingFormUpload = ({
                 onFieldsChange([newField]);
             }
         },
-        [onFieldsChange],
+        [onFieldsChange]
     );
 
     useEffect(() => {
@@ -215,15 +229,15 @@ const ProcessingFormUpload = ({
             const droppedFile = e.dataTransfer.files[0];
             if (droppedFile) {
                 const fileName = droppedFile.name.toLowerCase();
-                const isJsonl = fileName.endsWith('.jsonl');
-                const detectedMimeType = isJsonl ? 'application/jsonl' : (mimeTypes.getType(droppedFile.name) ?? '');
-                
+                const isJsonl = fileName.endsWith(".jsonl");
+                const detectedMimeType = isJsonl ? "application/jsonl" : mimeTypes.getType(droppedFile.name) ?? "";
+
                 if (mimes.includes(detectedMimeType)) {
                     handleFileChange(droppedFile);
                 }
             }
         },
-        [handleFileChange, mimes],
+        [handleFileChange, mimes]
     );
 
     if (isPending || isOnError) {
@@ -235,7 +249,7 @@ const ProcessingFormUpload = ({
             <div className="upload-container">
                 <h3>Téléverser votre fichier</h3>
                 <div
-                    className={`upload-zone ${isDragging ? 'dragging' : ''} ${file ? 'has-file' : ''}`}
+                    className={`upload-zone ${isDragging ? "dragging" : ""} ${file ? "has-file" : ""}`}
                     onDragEnter={handleDragEnter}
                     onDragOver={handleDragEnter}
                     onDragLeave={handleDragLeave}
@@ -255,17 +269,17 @@ const ProcessingFormUpload = ({
                                     accept: acceptString,
                                 }}
                                 InputProps={{
-                                    sx: { display: 'none' },
+                                    sx: { display: "none" },
                                 }}
                             />
                             <Button
                                 variant="contained"
                                 component="label"
                                 onClick={() => {
-                                    (document.querySelector('.file-input input') as HTMLInputElement)?.click();
+                                    (document.querySelector(".file-input input") as HTMLInputElement)?.click();
                                 }}
                                 sx={{
-                                    textTransform: 'none',
+                                    textTransform: "none",
                                 }}
                             >
                                 Parcourir vos fichiers
@@ -289,7 +303,11 @@ const ProcessingFormUpload = ({
                         </div>
                     )}
                 </div>
-                {file && (file.name.toLowerCase().endsWith('.csv') || file.name.toLowerCase().endsWith('.json') || file.name.toLowerCase().endsWith('.jsonl')) && availableFields.length > 0 ? (
+                {file &&
+                (file.name.toLowerCase().endsWith(".csv") ||
+                    file.name.toLowerCase().endsWith(".json") ||
+                    file.name.toLowerCase().endsWith(".jsonl")) &&
+                availableFields.length > 0 ? (
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel>Nom du champ à exploiter</InputLabel>
                         <Select
@@ -310,18 +328,21 @@ const ProcessingFormUpload = ({
                     <div className="error-message">
                         {formatError && selectedFormat && config ? (
                             <p>
-                                Le fichier ne correspond pas au format sélectionné ({config.inputFormat2labels[selectedFormat]?.summary || selectedFormat}).
+                                {`Le fichier ne correspond pas au format sélectionné (${
+                                    config.inputFormat2labels[selectedFormat]?.summary || selectedFormat
+                                }).`}
                                 <span>
-                                    {' '}
-                                    Les extensions acceptées sont :{' '}
-                                    {config.inputFormat2labels[selectedFormat]?.extensions
-                                        ?.map((ext: string) => `.${ext}`)
-                                        .join(', ')}
+                                    {` Les extensions acceptées sont: ${config.inputFormat2labels[
+                                        selectedFormat
+                                    ]?.extensions
+                                        ?.map((ext) => `.${ext}`)
+                                        .join(", ")}`}
                                 </span>
                             </p>
                         ) : isInvalid ? (
                             <p>
-                                Le fichier ne correspond pas à un format compatible. Veuillez vérifier que vous avez sélectionné le bon format à l&apos;étape précédente.
+                                Le fichier ne correspond pas à un format compatible. Veuillez vérifier que vous avez
+                                sélectionné le bon format à l&apos;étape précédente.
                             </p>
                         ) : null}
                     </div>

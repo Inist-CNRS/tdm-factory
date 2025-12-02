@@ -30,6 +30,18 @@ const init = () => {
         );
     `,
     ).run();
+
+    db.prepare(
+        `
+        create table if not exists pending_uploads
+        (
+            processingId text primary key,
+            originalName text not null,
+            uploadedFile text not null,
+            timestamp    integer not null
+        );
+    `,
+    ).run();
 };
 
 init();

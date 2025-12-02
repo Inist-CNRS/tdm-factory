@@ -4,7 +4,6 @@ import {
     PROCESSING_CONFIGURATION_STEP,
     PROCESSING_CONFIRMATION_STEP,
     PROCESSING_UPLOAD_STEP,
-    PROCESSING_UPLOADING_STEP,
     PROCESSING_VALIDATION_STEP,
 } from '~/app/pages/ProcessingCreationForm';
 
@@ -80,7 +79,6 @@ const ProcessingFormStepper = ({ step = 0 }: ProcessingFormStepperProps) => {
             case PROCESSING_FORMAT_STEP:
                 return 0;
             case PROCESSING_UPLOAD_STEP:
-            case PROCESSING_UPLOADING_STEP:
                 return 1;
             case PROCESSING_CONFIGURATION_STEP:
                 return 2;

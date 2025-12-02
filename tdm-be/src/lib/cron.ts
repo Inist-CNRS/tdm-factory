@@ -1,10 +1,11 @@
-import environment from '~/lib/config';
-import { customFile, filesLocation } from '~/lib/files';
-import { cronLogger } from '~/lib/logger';
+import environment from "~/lib/config";
+import { customFile, filesLocation } from "~/lib/files";
+import { cronLogger } from "~/lib/logger";
+import { cleanOldUploads } from "~/lib/uploadCache";
 
-import cron from 'node-cron';
+import cron from "node-cron";
 
-import fs from 'node:fs/promises';
+import fs from "node:fs/promises";
 
 const deleteOldFiles = async (directory: string) => {
     const oneWeekAgo = new Date(); // Date actuelle
@@ -18,49 +19,60 @@ const deleteOldFiles = async (directory: string) => {
 
         if (stats.isFile() && stats.mtime < oneWeekAgo) {
             await fs.unlink(filePath);
-            cronLogger.info(`${filePath} has been delete`);
+            cronLogger.info(`${filePath} has been deleted`);
         }
     }
 };
 
 const initCron = () => {
-    cronLogger.debug('Creating upload files cron');
+    cronLogger.debug("Creating upload files cron");
     cron.schedule(environment.cron.schedule, () => {
         deleteOldFiles(filesLocation.upload)
             .then(() => {
-                cronLogger.info('Upload files cron ended successfully');
+                cronLogger.info("Upload files cron ended successfully");
             })
             .catch((reason) => {
-                cronLogger.error('Upload files cron ended with a crash');
+                cronLogger.error("Upload files cron ended with a crash");
                 cronLogger.error(reason);
             });
     });
 
-    cronLogger.debug('Creating temporary files cron');
+    cronLogger.debug("Creating temporary files cron");
     cron.schedule(environment.cron.schedule, () => {
         deleteOldFiles(filesLocation.tmp)
             .then(() => {
-                cronLogger.info('Temporary files cron ended successfully');
+                cronLogger.info("Temporary files cron ended successfully");
             })
             .catch((reason) => {
-                cronLogger.error('Temporary files cron ended with a crash');
+                cronLogger.error("Temporary files cron ended with a crash");
                 cronLogger.error(reason);
             });
     });
 
-    cronLogger.debug('Creating download files cron');
+    cronLogger.debug("Creating download files cron");
     cron.schedule(environment.cron.schedule, () => {
         deleteOldFiles(filesLocation.download)
             .then(() => {
-                cronLogger.info('Download files cron ended successfully');
+                cronLogger.info("Download files cron ended successfully");
             })
             .catch((reason) => {
-                cronLogger.error('Download files cron ended with a crash');
+                cronLogger.error("Download files cron ended with a crash");
                 cronLogger.error(reason);
             });
     });
 
-    cronLogger.info('Cron initialized');
+    cronLogger.debug("Creating upload cache cleanup cron");
+    cron.schedule(environment.cron.schedule, () => {
+        try {
+            const cleaned = cleanOldUploads();
+            cronLogger.info(`Upload cache cleanup: removed ${cleaned} old entries`);
+        } catch (error) {
+            cronLogger.error("Upload cache cleanup cron ended with a crash");
+            cronLogger.error(error);
+        }
+    });
+
+    cronLogger.info("Cron initialized");
 };
 
 export default initCron;
