@@ -231,8 +231,11 @@ const ProcessingFormConfiguration = ({
             }) ?? null;
 
         const rawWrapperParameter = (matchingFlow as unknown as { wrapperParameter?: unknown }).wrapperParameter;
+        const flowWrapperParameter: string | null = typeof rawWrapperParameter === "string" ? rawWrapperParameter : null;
 
-        const wrapperParameter: string | null = typeof rawWrapperParameter === "string" ? rawWrapperParameter : null;
+        // Préserver le wrapperParameter de l'utilisateur s'il existe (CSV, JSON, JSONL)
+        // Sinon utiliser celui du flow (tar.gz)
+        const wrapperParameter = value.wrapperParameter ?? flowWrapperParameter;
 
         onChange({
             wrapper,
@@ -240,7 +243,7 @@ const ProcessingFormConfiguration = ({
             flowId: matchingFlow.id,
             inputFormat: matchingFlow.inputFormat,
         });
-    }, [selectedService, config, wrapperList, onChange]);
+    }, [selectedService, config, wrapperList, onChange, value.wrapperParameter]);
 
     useEffect(() => {
         const isValid =
