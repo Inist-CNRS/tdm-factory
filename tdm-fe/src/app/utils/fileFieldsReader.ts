@@ -2,6 +2,25 @@
  * Utility functions to read fields from files client-side without uploading
  */
 
+/**
+ * Detect the most likely CSV delimiter by counting occurrences in the first line
+ */
+const detectCsvDelimiter = (line: string): string => {
+    const delimiters = [',', ';', '\t', '|'];
+    let maxCount = 0;
+    let detectedDelimiter = ',';
+
+    for (const delimiter of delimiters) {
+        const count = line.split(delimiter).length - 1;
+        if (count > maxCount) {
+            maxCount = count;
+            detectedDelimiter = delimiter;
+        }
+    }
+
+    return detectedDelimiter;
+};
+
 /* Read fields from a CSV file */
 export const readCsvFields = async (file: File): Promise<string[]> => {
     return new Promise((resolve, reject) => {
@@ -13,8 +32,11 @@ export const readCsvFields = async (file: File): Promise<string[]> => {
                 const lines = text.split("\n");
 
                 if (lines.length > 0) {
+                    // Detect delimiter from first line
+                    const delimiter = detectCsvDelimiter(lines[0]);
+                    
                     // Get the first line (headers)
-                    const headers = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+                    const headers = lines[0].split(delimiter).map((h) => h.trim().replace(/^"|"$/g, ""));
                     resolve(headers.filter((h) => h.length > 0));
                 } else {
                     resolve([]);
