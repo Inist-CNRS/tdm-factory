@@ -51,3 +51,46 @@ h6 {
   font-family: Montserrat, sans-serif;
   color: colors.$light-black;
 }
+
+/* Wrapper : position du bouton */
+.help-button-wrapper {
+  position: fixed;
+  bottom: 25px;
+  right: 45px;
+  z-index: 20;
+  margin: 0;
+}
+
+/* Bouton principal */
+.help-button {
+  display: flex;
+  align-items: center;
+  background-color: #a9bb1e; /* vert foncé */
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 20px 12px 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover, :focus-visible {
+    background-color: #96a61a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #fff;
+  }
+}
+
+/* Icône */
+.help-button-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* Texte */
+.help-button-text {
+  white-space: nowrap;
+  font-size: 15px;
+}
