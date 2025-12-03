@@ -9,6 +9,10 @@
         "external": {
             "host": "localhost:5173",
             "isHttps": false
+        },
+        "backend": {
+            "host": "localhost:3000",
+            "isHttps": false
         }
     },
     "mailFrom": "\"ISTEX TDM Factory\" <dev@local>",

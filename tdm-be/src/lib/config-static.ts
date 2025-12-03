@@ -1,5 +1,10 @@
 import config from 'config';
 
+type Host = {
+    host: string;
+    isHttps: boolean;
+};
+
 type StaticConfig = {
     flows: Array<{
         featured: boolean;
@@ -22,6 +27,11 @@ type StaticConfig = {
             extensions: string[];
         }
     >;
+    hosts: {
+        internal: Host;
+        external: Host;
+        backend: Host;
+    };
 };
 
 export default config as unknown as StaticConfig;

@@ -21,9 +21,9 @@ const router = Router();
 router.get('/', (req, res) => {
     // Keep only flows field, as the other ones are confidential
     // (passwords, IPs, etc.), and not used by the frontend
-    const { flows, inputFormat2labels } = staticConfig;
+    const { flows, inputFormat2labels, hosts } = staticConfig;
     logger.info('Get static config');
-    res.json({ flows, inputFormat2labels });
+    res.json({ flows, inputFormat2labels, hosts });
 });
 
 /**
