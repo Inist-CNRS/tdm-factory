@@ -4,7 +4,8 @@
         "tmp/**",
         "logs/**",
         "crash/**",
-        "dynamic-config.json"
+        "dynamic-config.json",
+        "public/downloads/**"
     ],
     "ext": "ts,js,json,mjml",
     "execMap": {
