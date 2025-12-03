@@ -57,7 +57,7 @@
                 "tar.gz",
                 "tgz"
             ],
-            "wrapper": "/v1/tei-persee-tar-gz"
+            "wrapper": "/v1/no-convert"
         },
         "txt": {
             "summary": "Texte `.txt`",
