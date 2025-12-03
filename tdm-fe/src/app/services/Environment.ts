@@ -1,3 +1,7 @@
+import { getStaticConfig } from '~/app/services/config';
+
+const config = await getStaticConfig();
+
 export const environment = {
     host: import.meta.env.VITE_TDM_FACTORY_HOST,
     get: {
@@ -22,7 +26,7 @@ export const environment = {
     },
 } as const;
 
-export const host = environment.host || window.location.origin;
+export const host = config.hosts.backend.host;
 
 export const createQuery = (uri: string, param?: Record<string, string> | undefined): URL => {
     const url = new URL(host + uri);
