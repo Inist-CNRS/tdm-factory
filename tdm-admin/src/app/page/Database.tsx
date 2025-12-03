@@ -52,7 +52,7 @@ const Database = () => {
 
     const numberOfPage = useMemo(() => {
         if (data) {
-            return Math.round(data.total / 10);
+            return Math.ceil(data.total / 10);
         }
         return 0;
     }, [data]);
