@@ -17,7 +17,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { Button } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import mimeTypes from 'mime';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
 import type { ProcessingFormConfigurationValueType } from '~/app/components/form/ProcessingFormConfiguration';
@@ -394,6 +394,18 @@ const ProcessingCreationForm = () => {
         [step],
     );
 
+    const stepContentRef = useRef<HTMLDivElement>(null);
+
+    /**
+     * Focus management when step changes
+     */
+    useEffect(() => {
+        if (stepContentRef.current) {
+            stepContentRef.current.focus();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [step]);
+
     return (
         <div id="processing-form">
             <Button
@@ -414,7 +426,7 @@ const ProcessingCreationForm = () => {
 
                 {/* Content of the form */}
                 <div id="processing-form-content">
-                    <div className="form-content">
+                    <div className="form-content" ref={stepContentRef} tabIndex={-1}>
                         {/* Back button */}
                         {step > PROCESSING_FORMAT_STEP && step !== PROCESSING_CONFIRMATION_STEP ? (
                             <Button
