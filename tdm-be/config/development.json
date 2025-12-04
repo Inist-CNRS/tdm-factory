@@ -2,7 +2,7 @@
     "hosts": {
         "internal": {
             "comment": "it's been changed now we use https",
-            "host": "https://15c44c8092db.ngrok-free.app",
+            "host": "{ngrok host}",
             "hostExample": "https://363f-88-123-62-113.ngrok-free.app"
         },
         "external": {
