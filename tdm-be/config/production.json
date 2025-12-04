@@ -2,7 +2,7 @@
     "password": "{very secure password}",
     "hosts": {
         "internal": {
-            "host": "{machine ip or internal host}"
+            "host": "http://{machine ip or internal host}"
         },
         "external": {
             "host": "https://{external host / reverse proxy host}"
