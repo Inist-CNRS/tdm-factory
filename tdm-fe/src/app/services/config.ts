@@ -13,6 +13,11 @@ export const getStaticConfig = async (): Promise<StaticConfig> => {
         if (!response.ok) {
             throw new Error('Failed to fetch static configuration from localhost');
         }
+    } else {
+        response = await fetch('/config-static');
+        if (!response.ok) {
+            throw new Error('Failed to fetch static configuration');
+        }
     }
     const data = await response.json();
     return data;
