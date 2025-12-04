@@ -1,18 +1,15 @@
 {
     "hosts": {
         "internal": {
-            "comment": "don't put https://",
+            "comment": "it's been changed now we use https",
             "host": "{ngrok host}",
-            "hostExample": "363f-88-123-62-113.ngrok-free.app",
-            "isHttps": true
+            "hostExample": "https://363f-88-123-62-113.ngrok-free.app"
         },
         "external": {
-            "host": "localhost:5173",
-            "isHttps": false
+            "host": "http://localhost:5173"
         },
         "backend": {
-            "host": "http://localhost:3000",
-            "isHttps": false
+            "host": "http://localhost:3000"
         }
     },
     "mailFrom": "\"ISTEX TDM Factory\" <dev@local>",

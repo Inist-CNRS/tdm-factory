@@ -2,7 +2,6 @@ import config from 'config';
 
 type Host = {
     host: string;
-    isHttps: boolean;
 };
 
 type StaticConfig = {

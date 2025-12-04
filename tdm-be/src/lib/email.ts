@@ -75,7 +75,7 @@ export const sendStartedMail = async (
         wrapperParam,
         enrichment,
         serviceName,
-        statusPage: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/status/${processingId}${flowId ? `?flowId=${flowId}` : ''}`,
+        statusPage: `${environment.hosts.external.host}/status/${processingId}${flowId ? `?flowId=${flowId}` : ''}`,
     };
     try {
         const html = nunjucks.render('processing-started.njk', mailData);
@@ -120,7 +120,7 @@ export const sendFinishedMail = async (
         wrapperParam,
         enrichment,
         serviceName,
-        resultFile: `${environment.hosts.external.isHttps ? 'https' : 'http'}://${environment.hosts.external.host}/downloads/${processingId}${extension ? '.' + extension : ''}`,
+        resultFile: `${environment.hosts.external.host}/downloads/${processingId}${extension ? '.' + extension : ''}`,
     };
     try {
         const html = nunjucks.render('processing-finished.njk', mailData);

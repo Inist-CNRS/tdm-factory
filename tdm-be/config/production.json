@@ -2,16 +2,13 @@
     "password": "{very secure password}",
     "hosts": {
         "internal": {
-            "host": "{machine ip or internal host}",
-            "isHttps": false
+            "host": "{machine ip or internal host}"
         },
         "external": {
-            "host": "{external host / reverse proxy host}",
-            "isHttps": true
+            "host": "https://{external host / reverse proxy host}"
         },
         "backend": {
-            "host": "https://{external host / reverse proxy host}",
-            "isHttps": true
+            "host": "https://{external host / reverse proxy host}"
         }
     },
     "mailFrom": "\"ISTEX TDM Factory\" <no-reply@inist.fr>",

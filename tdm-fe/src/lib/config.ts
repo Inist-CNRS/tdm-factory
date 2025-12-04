@@ -1,6 +1,5 @@
 type Host = {
     host: string;
-    isHttps: boolean;
 };
 
 export type StaticConfig = {
