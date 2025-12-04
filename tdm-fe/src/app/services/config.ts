@@ -6,7 +6,7 @@ export const getStaticConfig = async (): Promise<StaticConfig> => {
     if (!response.ok) {
         throw new Error('Failed to fetch static configuration');
     }
-    // TODO: detect when we are in dev mode and use the localhost url
+    // detect when we are in dev mode and use the localhost url
     const content = await response.text();
     if (content.startsWith('<!DOCTYPE html>')) {
         response = await fetch('http://localhost:3000/config-static');
