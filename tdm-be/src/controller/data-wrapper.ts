@@ -68,19 +68,13 @@ const getWrappers = async () => {
 
     const ws = await axios.get<Wrapper>(WRAPPER_URL);
     const paths = ws.data.paths;
-    const servers = ws.data.servers;
 
     for (const path of Object.entries(paths)) {
         const [key, value] = path;
 
-        if (
-            value?.post?.tags &&
-            servers[0].variables &&
-            value.post.tags.includes(WRAPPER_TAG) &&
-            !EXCLUDED_PATHS.includes(key)
-        ) {
+        if (value?.post?.tags && value.post.tags.includes(WRAPPER_TAG) && !EXCLUDED_PATHS.includes(key)) {
             const label = `${value.post.summary} (${key})`;
-            const url = `${servers[0].variables.scheme.default}://${servers[0].variables.hostname.default}${key}`;
+            const url = `${WRAPPER_URL}${key}`;
             let parameters: Array<{ name: string; displayName: string }> | undefined;
             if (value.post.parameters) {
                 parameters = value.post.parameters
