@@ -1,9 +1,5 @@
 import config from "config";
 
-type InternalHost = {
-    host: string;
-};
-
 type Host = {
     host: string;
 };
@@ -26,8 +22,9 @@ type Config = {
     port: number;
     password: string;
     hosts: {
-        internal: InternalHost;
+        internal: Host;
         external: Host;
+        backend: Host;
     };
     mailFrom?: string;
     smtp: SMTP;
