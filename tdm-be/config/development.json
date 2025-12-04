@@ -2,7 +2,7 @@
     "hosts": {
         "internal": {
             "comment": "it's been changed now we use https",
-            "host": "{ngrok host}",
+            "host": "https://15c44c8092db.ngrok-free.app",
             "hostExample": "https://363f-88-123-62-113.ngrok-free.app"
         },
         "external": {
@@ -340,6 +340,7 @@
             "description": "Extrait des thématiques d’un corpus de textes en anglais : une thématique (ou topic) est caractérisée par dix mots.",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
+        {
             "id": "istex-lda-en",
             "featured": false,
             "input": "corpus",
@@ -351,6 +352,7 @@
             "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
             "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots.",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
+        },
         {
             "id": "csv-noise-en",
             "featured": false,
