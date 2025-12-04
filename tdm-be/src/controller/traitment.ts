@@ -198,11 +198,6 @@ router.post("/start", (req: Request<unknown, unknown, Traitment>, res) => {
         }
 
         // --- Send a message to the user about the processing starting
-        // Create the confirmation page URL to return to the client
-        // We use the process/:type route with a special query parameter to redirect to the confirmation step
-        // const confirmationUrl = `${
-        //     environment.hosts.external.isHttps ? 'https' : 'http'
-        // }://${environment.hosts.external.host}/process/result?id=${updatedProcessing.id}&step=4`;
         // Wait for the notification email to be sent before starting the processing (only if email is provided)
         if (email) {
             await sendStartedMail(
@@ -424,9 +419,7 @@ router.get("/result-info", (req, res) => {
 
     // Extract the result file name from the stored path
     const resultFileName = processing.resultFile.split("/").pop() || "";
-    const resultUrl = `${environment.hosts.external.isHttps ? "https" : "http"}://${
-        environment.hosts.external.host
-    }/downloads/${resultFileName}`;
+    const resultUrl = `${environment.hosts.external.host}/downloads/${resultFileName}`;
     const extension = resultFileName.split(".").pop() || "";
 
     res.send({
