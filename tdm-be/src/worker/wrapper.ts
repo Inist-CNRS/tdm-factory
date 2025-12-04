@@ -99,6 +99,19 @@ const wrapper = async (processingId: string) => {
         }
     }
 
+    // Normalize wrapper URL to avoid EZProxy proxified URLs
+    // Extract the path and prefix with the correct base URL
+    const WRAPPER_BASE_URL = 'https://data-wrapper.services.istex.fr';
+    try {
+        const urlObj = new URL(actualWrapperUrl);
+        actualWrapperUrl = `${WRAPPER_BASE_URL}${urlObj.pathname}`;
+    } catch {
+        // If URL parsing fails, assume it's already a path
+        if (!actualWrapperUrl.startsWith('http')) {
+            actualWrapperUrl = `${WRAPPER_BASE_URL}${actualWrapperUrl}`;
+        }
+    }
+
     // Call wrapper api
     let response: AxiosResponse;
     try {
