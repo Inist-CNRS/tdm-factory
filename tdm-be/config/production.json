@@ -6,7 +6,11 @@
             "isHttps": false
         },
         "external": {
-            "host": "{external host / revers proxy host}",
+            "host": "{external host / reverse proxy host}",
+            "isHttps": true
+        },
+        "backend": {
+            "host": "https://{external host / reverse proxy host}",
             "isHttps": true
         }
     },

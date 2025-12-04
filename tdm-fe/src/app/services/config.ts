@@ -1,11 +1,20 @@
-import { createQuery, json } from '~/app/services/Environment';
-
 import type { StaticConfig } from '~/lib/config';
 
 export const getStaticConfig = async (): Promise<StaticConfig> => {
-    const response = await fetch(createQuery('/config-static'));
+    let response = await fetch('/config-static');
     if (!response.ok) {
         throw new Error('Failed to fetch static configuration');
     }
-    return await json<StaticConfig>(response);
+    let data;
+    try {
+        data = await response.json();
+    } catch {
+        // when we are in dev mode, use the localhost url
+        response = await fetch('http://localhost:3000/config-static');
+        if (!response.ok) {
+            throw new Error('Failed to fetch static configuration from localhost');
+        }
+        data = await response.json();
+    }
+    return data;
 };

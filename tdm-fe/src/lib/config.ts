@@ -1,3 +1,8 @@
+type Host = {
+    host: string;
+    isHttps: boolean;
+};
+
 export type StaticConfig = {
     flows: Array<{
         id: string;
@@ -21,4 +26,9 @@ export type StaticConfig = {
             wrapperParameter?: string;
         }
     >;
+    hosts: {
+        internal: Host;
+        external: Host;
+        backend: Host;
+    };
 };
