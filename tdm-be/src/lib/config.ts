@@ -1,8 +1,7 @@
-import config from 'config';
+import config from "config";
 
 type Host = {
     host: string;
-    isHttps: boolean;
 };
 
 type SMTP = {
@@ -25,6 +24,7 @@ type Config = {
     hosts: {
         internal: Host;
         external: Host;
+        backend: Host;
     };
     mailFrom?: string;
     smtp: SMTP;

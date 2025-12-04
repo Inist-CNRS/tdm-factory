@@ -75,12 +75,8 @@ const enrichment = async (processingId: string) => {
     try {
         response = await axios.post(enrichmentUrl, fileBuffer, {
             headers: {
-                'X-Webhook-Success': `${
-                    environment.hosts.internal.isHttps ? 'https' : 'http'
-                }://${environment.hosts.internal.host}/webhook/success?id=${processingId}`,
-                'X-Webhook-Failure': `${
-                    environment.hosts.internal.isHttps ? 'https' : 'http'
-                }://${environment.hosts.internal.host}/webhook/failure?id=${processingId}`,
+                'X-Webhook-Success': `${environment.hosts.internal.host}/webhook/success?id=${processingId}`,
+                'X-Webhook-Failure': `${environment.hosts.internal.host}/webhook/failure?id=${processingId}`,
             },
             timeout: 600000,
         });
