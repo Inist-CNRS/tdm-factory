@@ -53,7 +53,7 @@ const Footer = () => {
     const navigate = useNavigate();
 
     const handlePrivacyPolicyClick = () => {
-        navigate('/privacy-policy');
+        navigate('https://services.istex.fr/politique-de-confidentialite/');
 
         window.scrollTo({
             top: 0,
