@@ -198,9 +198,13 @@ const enrichmentHookSuccess = async (processingId: string) => {
         ).then(undefined);
     }
 
+    // Remove the name part of the email
+    const emailWithoutName = email?.split('@')[1];
+
     // Update processing information
     updateProcessing(processingId, {
         status: Status.FINISHED,
+        email: emailWithoutName,
         resultFile: finalFile,
         flowId,
     });
