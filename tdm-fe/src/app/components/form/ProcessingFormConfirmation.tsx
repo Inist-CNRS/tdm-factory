@@ -116,7 +116,7 @@ const ProcessingFormConfirmation = ({
 
         checkStatus();
 
-        intervalId = setInterval(checkStatus, 5000);
+        intervalId = setInterval(checkStatus, 30_000);
 
         return () => {
             isMounted = false;
