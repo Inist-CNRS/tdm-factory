@@ -33,3 +33,9 @@ export const errorEmail = (processing: Processing, errorMessage: string) => {
         ).then(undefined);
     }
 };
+
+export const addSidToUrl = (url: string) => {
+    const urlObj = new URL(url);
+    urlObj.searchParams.append('sid', 'tdm-factory');
+    return urlObj.toString();
+};

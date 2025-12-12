@@ -4,7 +4,7 @@ import crash from '~/lib/crash';
 import { sendErrorMail, sendFinishedMail } from '~/lib/email';
 import { downloadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
-import { errorEmail } from '~/lib/utils';
+import { addSidToUrl, errorEmail } from '~/lib/utils';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
@@ -99,8 +99,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         : '/' + enrichmentEntry.retrieve;
 
     // Construct the full URL
-    const fullUrl = `${baseUrl}${retrievePath}`;
-    debug(processingId, `Calling URL: ${fullUrl}`);
+    const fullUrl = addSidToUrl(`${baseUrl}${retrievePath}`);
 
     try {
         response = await axios.post(fullUrl, [{ value: enrichmentHook }], {

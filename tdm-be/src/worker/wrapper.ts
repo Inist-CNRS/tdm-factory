@@ -7,7 +7,7 @@ import {
 import crash from '~/lib/crash';
 import { tmpFile, uploadFile } from '~/lib/files';
 import { workerLogger } from '~/lib/logger';
-import { errorEmail } from '~/lib/utils';
+import { addSidToUrl, errorEmail } from '~/lib/utils';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 import enrichment from '~/worker/enrichment';
@@ -111,6 +111,8 @@ const wrapper = async (processingId: string) => {
             actualWrapperUrl = `${WRAPPER_BASE_URL}${actualWrapperUrl}`;
         }
     }
+
+    actualWrapperUrl = addSidToUrl(actualWrapperUrl);
 
     // Call wrapper api
     let response: AxiosResponse;

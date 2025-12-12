@@ -7,7 +7,7 @@ import {
 import environment from '~/lib/config';
 import crash from '~/lib/crash';
 import { workerLogger } from '~/lib/logger';
-import { errorEmail } from '~/lib/utils';
+import { addSidToUrl, errorEmail } from '~/lib/utils';
 import { findProcessing, updateProcessing } from '~/model/ProcessingModel';
 import Status from '~/model/Status';
 
@@ -46,14 +46,16 @@ const enrichment = async (processingId: string) => {
     }
 
     // Get wrapper variable from the processing
-    const { tmpFile: file, enrichment: enrichmentUrl, flowId } = initialProcessing;
+    const { tmpFile: file, enrichment, flowId } = initialProcessing;
 
     // Check if the variable existe
-    if (!file || !enrichmentUrl) {
+    if (!file || !enrichment) {
         error(processingId, 'Enrichment value are undefined or null');
         // Send error the global catcher because this is normally impossible
         throw new Error('This is normally impossible - Enrichment value are undefined or null');
     }
+
+    const enrichmentUrl = addSidToUrl(enrichment);
 
     // --- Start enrichment process
     debug(processingId, 'Starting enrichment process');
@@ -78,7 +80,7 @@ const enrichment = async (processingId: string) => {
                 'X-Webhook-Success': `${environment.hosts.internal.host}/webhook/success?id=${processingId}`,
                 'X-Webhook-Failure': `${environment.hosts.internal.host}/webhook/failure?id=${processingId}`,
             },
-            timeout: 600000,
+            timeout: 600_000,
         });
     } catch (e) {
         const message = 'Impossible to contact enrichment api';
