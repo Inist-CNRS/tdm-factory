@@ -189,6 +189,18 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
+            "id": "istex-teeft-data-graph-tgz",
+            "featured": true,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-graph.services.istex.fr/v1/teeft-graph",
+            "retrieve": "/v1/retrieve-gexf-and-img",
+            "retrieveExtension": "tar.gz",
+            "summary": "**dataGraph** - Extraction de termes des *abstracts* et construction d'un graphe",
+            "description": "Extrait les termes les plus spécifiques de chacun des résumés en anglais et construit un graphe des termes."
+        },
+        {
             "id": "pdf-datatable-extract",
             "featured": false,
             "input": "article",
