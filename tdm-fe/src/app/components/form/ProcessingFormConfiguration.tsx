@@ -240,12 +240,6 @@ const ProcessingFormConfiguration = ({
             ? value.wrapperParameter
             : flowWrapperParameter;
 
-        console.log('[DEBUG] Flow:', matchingFlow.id, 'Format:', matchingFlow.inputFormat);
-        console.log('[DEBUG] flowWrapperParameter:', flowWrapperParameter);
-        console.log('[DEBUG] value.wrapperParameter:', value.wrapperParameter);
-        console.log('[DEBUG] isUserSelectableFormat:', isUserSelectableFormat);
-        console.log('[DEBUG] Final wrapperParameter:', wrapperParameter);
-
         onChange({
             wrapper,
             wrapperParameter,

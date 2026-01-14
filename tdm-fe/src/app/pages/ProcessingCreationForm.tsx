@@ -325,7 +325,6 @@ const ProcessingCreationForm = () => {
      * @param value newly selected wrapper, wrapperParameter and enrichment
      */
     const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
-        console.log('[DEBUG ProcessingCreationForm] handleConfigurationChange called with:', value);
         setWrapper(value.wrapper);
         setWrapperParameter(value.wrapperParameter);
         setFlowId(value.flowId);
@@ -380,9 +379,7 @@ const ProcessingCreationForm = () => {
      */
     const handleFieldsChange = useCallback(
         (selectedFields: string[]) => {
-            console.log('[DEBUG ProcessingCreationForm] handleFieldsChange called with:', selectedFields);
             if (selectedFields && selectedFields.length > 0) {
-                console.log('[DEBUG ProcessingCreationForm] Setting wrapperParameter to:', selectedFields[0]);
                 setWrapperParameter(selectedFields[0]);
                 if (step === PROCESSING_CONFIGURATION_STEP) {
                     setIsWaitingInput(false);
@@ -463,7 +460,6 @@ const ProcessingCreationForm = () => {
                         {/* Configuration step */}
                         {step === PROCESSING_CONFIGURATION_STEP ? (
                             <>
-                                {console.log('[DEBUG ProcessingCreationForm] Rendering ProcessingFormConfiguration with wrapperParameter:', wrapperParameter)}
                                 <ProcessingFormConfiguration
                                     wrapperList={wrapperList}
                                     fields={fields}
