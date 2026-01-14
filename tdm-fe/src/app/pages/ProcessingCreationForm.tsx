@@ -156,7 +156,7 @@ const ProcessingCreationForm = () => {
             const fileName = file.name.toLowerCase();
             const isJsonl = fileName.endsWith('.jsonl');
             const detectedMimeType = isJsonl ? 'application/jsonl' : (mimeTypes.getType(file.name) ?? '');
-            
+
             return list.filter((entry) => {
                 return entry.fileType.includes(detectedMimeType);
             });
@@ -326,12 +326,7 @@ const ProcessingCreationForm = () => {
      */
     const handleConfigurationChange = useCallback((value: ProcessingFormConfigurationValueType) => {
         setWrapper(value.wrapper);
-        setWrapperParameter((prev) => {
-            if (value.wrapperParameter && value.wrapperParameter !== prev) {
-                return value.wrapperParameter;
-            }
-            return prev;
-        });
+        setWrapperParameter(value.wrapperParameter);
         setFlowId(value.flowId);
         setIsWaitingInput(false);
     }, []);
