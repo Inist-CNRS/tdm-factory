@@ -459,23 +459,21 @@ const ProcessingCreationForm = () => {
 
                         {/* Configuration step */}
                         {step === PROCESSING_CONFIGURATION_STEP ? (
-                            <>
-                                <ProcessingFormConfiguration
-                                    wrapperList={wrapperList}
-                                    fields={fields}
-                                    value={{
-                                        wrapper,
-                                        wrapperParameter: wrapperParameter,
-                                        inputFormat: selectedFormat,
-                                        flowId,
-                                    }}
-                                    onChange={handleConfigurationChange}
-                                    isPending={isPending}
-                                    onValidityChange={(isValid) => {
-                                        setIsWaitingInput(!isValid);
-                                    }}
-                                />
-                            </>
+                            <ProcessingFormConfiguration
+                                wrapperList={wrapperList}
+                                fields={fields}
+                                value={{
+                                    wrapper,
+                                    wrapperParameter: wrapperParameter,
+                                    inputFormat: selectedFormat,
+                                    flowId,
+                                }}
+                                onChange={handleConfigurationChange}
+                                isPending={isPending}
+                                onValidityChange={(isValid) => {
+                                    setIsWaitingInput(!isValid);
+                                }}
+                            />
                         ) : null}
 
                         {/* Validation step */}
