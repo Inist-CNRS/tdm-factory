@@ -431,7 +431,7 @@
             "input": "article",
             "inputFormat": "txt",
             "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine",
-            "retrieve": "/v1/retrieve-csv",
+            "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
             "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées",
             "description": "Extrait des abréviations torturées d'un texte en anglais.",
