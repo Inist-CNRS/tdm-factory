@@ -233,9 +233,12 @@ const ProcessingFormConfiguration = ({
         const rawWrapperParameter = (matchingFlow as unknown as { wrapperParameter?: unknown }).wrapperParameter;
         const flowWrapperParameter: string | null = typeof rawWrapperParameter === "string" ? rawWrapperParameter : null;
 
-        // Préserver le wrapperParameter de l'utilisateur s'il existe (CSV, JSON, JSONL)
-        // Sinon utiliser celui du flow (tar.gz)
-        const wrapperParameter = value.wrapperParameter ?? flowWrapperParameter;
+        // Pour CSV/JSON/JSONL : préserver le wrapperParameter sélectionné par l'utilisateur
+        // Pour les autres formats : utiliser le wrapperParameter du flow
+        const isUserSelectableFormat = matchingFlow.inputFormat === "csv" || matchingFlow.inputFormat === "json" || matchingFlow.inputFormat === "jsonl";
+        const wrapperParameter = isUserSelectableFormat && value.wrapperParameter
+            ? value.wrapperParameter
+            : flowWrapperParameter;
 
         onChange({
             wrapper,
@@ -271,7 +274,7 @@ const ProcessingFormConfiguration = ({
                 const firstService = filteredServiceIds[0];
                 onChange({
                     wrapper: null,
-                    wrapperParameter: null,
+                    wrapperParameter: value.wrapperParameter, // Préserver le wrapperParameter existant
                     flowId: firstService,
                     inputFormat: value.inputFormat,
                 });
@@ -279,7 +282,7 @@ const ProcessingFormConfiguration = ({
                 setActiveTab(defaultTab);
             }
         }
-    }, [config, type, value.inputFormat, value.flowId, onChange, hasFeaturedServices]);
+    }, [config, type, value.inputFormat, value.flowId, onChange, hasFeaturedServices, value.wrapperParameter]);
 
     if (isPending || isConfigLoading) {
         return <CircularWaiting />;
