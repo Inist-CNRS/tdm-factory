@@ -18,23 +18,24 @@ To run the application in development mode, you need to have Node.js 20.19.5 (LT
 
 1. **Install dependencies:**
 
-    ```bash
-    make install
-    ```
+```bash
+make install
+```
 
-2.**Run the development servers:**
+2. **Run the development servers:**
 
-    You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/development.json`, to create a ngrok endpoints run `ngrok http 3000`.
+You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-be/config/development.json`, to create a ngrok endpoints run `ngrok http 3000`.
 
-    ```bash
-    make run-dev
-    ```
+```bash
+make run-dev
+```
 
-    This will start the following services:
-    *   Backend: `http://localhost:3000`
-    *   Frontend: `http://localhost:5173`
-    *   Admin: `http://localhost:5174`
-    *   MailHog (for testing emails): `http://localhost:1080`
+This will start the following services:
+
+* Backend: `http://localhost:3000`
+* Frontend: `http://localhost:5173`
+* Admin: `http://localhost:5174/admin/`
+* MailHog (for testing emails): `http://localhost:1080`
 
 ### Production (Docker)
 
