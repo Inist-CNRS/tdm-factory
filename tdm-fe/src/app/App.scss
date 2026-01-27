@@ -94,3 +94,30 @@ h6 {
   font-size: 15px;
   font-weight: 700;
 }
+
+@media only screen and (max-width: 900px) {
+  .help-button-wrapper{
+    transform: translate(55px);
+    min-width: 40px;
+
+      &:hover, 
+      :focus-visible {
+        background-color: none;
+        color: #fff;
+    }
+  }
+
+  .help-button{
+    background-color: transparent;
+
+    &:hover, 
+    :focus-visible {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  .help-button-text{
+    display: none;
+  }
+}
