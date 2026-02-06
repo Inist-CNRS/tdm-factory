@@ -238,6 +238,18 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
+            "id": "pdf-grobid",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/grobid",
+            "retrieve": "/v1/retrieve-grobid",
+            "retrieveExtension": "xml",
+            "summary": "**grobid** - Structuration de publications scientifiques",
+            "description": "Extrait et structure automatiquement les métadonnées et le contenu des publications scientifiques (au format PDF) en un format XML-TEI.",
+            "descriptionLink": "https://github.com/grobidOrg/grobid"
+        },
+        {
             "id": "csv-lda-en",
             "featured": false,
             "input": "corpus",
