@@ -313,14 +313,25 @@
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
-            "id": "tei-rapido-apprentissage",
+            "id": "tei-rapido-greece",
             "featured": false,
             "input": "corpus",
             "inputFormat": "tei-persee.tar.gz",
             "enricher": "https://data-rapido.services.istex.fr/v1/rapido-apprentissage",
             "retrieve": "/v1/retrieve-json",
             "retrieveExtension": "json",
-            "summary": "**Rapido phase 2** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
+            "summary": "**Rapido phase 2 Grèce** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
+            "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
+        },
+        {
+            "id": "tei-rapido-italy",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "tei-persee.tar.gz",
+            "enricher": "https://data-rapido.services.istex.fr/v1/rapido-italie",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**Rapido phase 2 Italie** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
         },
         {
