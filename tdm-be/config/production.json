@@ -201,6 +201,19 @@
             "description": "Extrait les termes les plus spécifiques de chacun des résumés en anglais et construit un graphe des termes."
         },
         {
+            "id": "csv-teeft-data-graph",
+            "featured": true,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-graph.services.istex.fr/v1/teeft-graph",
+            "retrieve": "/v1/retrieve-gexf-and-img",
+            "retrieveExtension": "tar.gz",
+            "summary": "**dataGraph** - Extraction de termes des *abstracts* et construction d'un graphe",
+            "description": "Extrait les termes les plus spécifiques de chacun des résumés en anglais et construit un graphe des termes.",
+            "descriptionLink": "https://services.istex.fr/graphe-de-mots-cles/"
+        },
+        {
             "id": "pdf-datatable-extract",
             "featured": false,
             "input": "article",
@@ -256,10 +269,10 @@
             "inputFormat": "csv",
             "wrapperParameter": "value",
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
+            "retrieve": "/v1/retrieve-gexf",
+            "retrieveExtension": "gexf",
             "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
-            "description": "Extrait des thématiques d’un corpus de textes en anglais : une thématique (ou topic) est caractérisée par dix mots.",
+            "description": "Extrait des thématiques d’un corpus de textes en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
         {
@@ -269,10 +282,10 @@
             "inputFormat": "istex.tar.gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
-            "retrieve": "/v1/retrieve-csv",
-            "retrieveExtension": "csv",
+            "retrieve": "/v1/retrieve-gexf",
+            "retrieveExtension": "gexf",
             "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
-            "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots.",
+            "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
         {
@@ -512,7 +525,7 @@
         },
         {
             "id": "csv-text-clustering-en",
-            "featured": true,
+            "featured": false,
             "input": "corpus",
             "inputFormat": "csv",
             "wrapperParameter": "value",
@@ -525,7 +538,7 @@
         },
         {
             "id": "istex-text-clustering-en",
-            "featured": true,
+            "featured": false,
             "input": "corpus",
             "inputFormat": "istex.tar.gz",
             "wrapperParameter": "abstract",
