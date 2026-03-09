@@ -51,6 +51,15 @@
             ],
             "wrapper": "/v1/pdf"
         },
+        "query-istex.tar.gz": {
+            "summary": "Requête et corpus Istex `.tar.gz`",
+            "description": "Un corpus déchargé d'[ISTEX Search](https://search.istex.fr) au format `.tar.gz` (à choisir dans *Format de l'archive*). Il doit contenir **des métadonnées JSON** (par exemple en sélectionnant l'usage LODEX).\n\nLa différence avec le « corpus Istex » est que le traitement exploite la requête (elle est présente dans les métadonnées du corpus).",
+            "extensions": [
+                "tar.gz",
+                "tgz"
+            ],
+            "wrapper": "/v1/query-istex-tar-gz"
+        },
         "tei-persee.tar.gz": {
             "summary": "Corpus TEI Persée `.tar.gz`",
             "description": "Un corpus contenant des fichiers XML-TEI Persée dans un répertoire `data`, au format `.tar.gz`.",
@@ -333,6 +342,18 @@
             "retrieveExtension": "json",
             "summary": "**Rapido phase 2 Italie** - Détecte des entités par apprentissage, puis aligne avec idRef, projet Rapido",
             "description": "Prend en entrée un `.tar.gz` comportant un dossier `data` incluant tous les documents xml à traiter. Il renvoie un json comportant les alignements que l'algorithme a pu faire entre le texte et le référentiel idRef."
+        },
+        {
+            "id": "istex-query-similar-keywords-tgz",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "query-istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-kwsimilarity.services.istex.fr/v1/kw",
+            "retrieve": "/v1/retrieve-json",
+            "retrieveExtension": "json",
+            "summary": "**similarKeywordsExtract** - Extraction de termes sémantiquement proches",
+            "description": "Extrait des termes sémantiquement proches des mots-clés de la requête dans le corpus"
         },
         {
             "id": "pdf-tam",
