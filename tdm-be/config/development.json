@@ -352,6 +352,18 @@
             "descriptionLink": "https://github.com/grobidOrg/grobid"
         },
         {
+            "id": "pdf-hiddentext",
+            "featured": true,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://hiddentext-detect.services.istex.fr/v1/hiddentext",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**hiddenTextDetect** - Détection de textes cachés",
+            "description": "Détecte des textes cachés (couleurs, tailles et positions) dans des PDFs.",
+            "descriptionLink": "https://services.istex.fr/detection-de-texte-cache-dans-un-pdf"
+        },
+        {
             "id": "csv-lda-en",
             "featured": false,
             "input": "corpus",
