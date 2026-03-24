@@ -276,7 +276,7 @@
             "featured": true,
             "input": "article",
             "inputFormat": "pdf",
-            "enricher": "https://hiddentext-detect.services.istex.fr/v1/hiddentext",
+            "enricher": "https://data-workflow.services.istex.fr/v1/hiddentext-detect",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
             "summary": "**hiddenTextDetect** - Détection de textes cachés",
