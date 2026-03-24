@@ -272,7 +272,7 @@
             "descriptionLink": "https://github.com/grobidOrg/grobid"
         },
         {
-            "id": "pdf-hiddentext",
+            "id": "pdf-hiddentext-csv",
             "featured": true,
             "input": "article",
             "inputFormat": "pdf",
