@@ -310,6 +310,18 @@
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
         {
+            "id": "txttar-lda-en",
+            "featured": true,
+            "input": "corpus",
+            "inputFormat": "txt.tar.gz",
+            "enricher": "https://data-computer.services.istex.fr/v1/lda",
+            "retrieve": "/v1/retrieve-gexf",
+            "retrieveExtension": "gexf",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
+            "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
+            "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
+        },
+        {
             "id": "csv-noise-en",
             "featured": false,
             "input": "corpus",
