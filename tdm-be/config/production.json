@@ -260,6 +260,68 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
+            "id": "csv-entity-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/entity-tag",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**entityTag** - Extraction d'entités nommées de personnes, de localisations et d'organismes",
+            "description": "Extrait les entités nommées usuelles des résumés en anglais ou en français.",
+            "descriptionLink": "https://services.istex.fr/extraction-dentites-nommees-personnes-localisations-organismes-et-autres/"
+        },
+        {
+            "id": "istex-entity-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-workflow.services.istex.fr/v1/entity-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**entityTag** - Extraction d'entités nommées de personnes, de localisations et d'organismes",
+            "description": "Extrait les entités nommées usuelles des résumés en anglais ou en français.",
+            "descriptionLink": "https://services.istex.fr/extraction-dentites-nommees-personnes-localisations-organismes-et-autres/"
+        },
+        {
+            "id": "pdf-entity-tag",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "pdf",
+            "enricher": "https://data-workflow.services.istex.fr/v1/entity-tag-pdf",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**entityTag** - Extraction d'entités nommées de personnes, de localisations et d'organismes",
+            "description": "Extrait les entités nommées usuelles d'un PDF écrit en anglais ou en français.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
+        },
+        {
+            "id": "txttar-entity-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "txt.tar.gz",
+            "enricher": "https://data-workflow.services.istex.fr/v1/entity-tag",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**entityTag** - Extraction d'entités nommées de personnes, de localisations et d'organismes",
+            "description": "Extrait les entités nommées usuelles d'un corpus de textes écrits en anglais ou en français.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
+        },
+        {
+            "id": "txt-entity-tag",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/entity-tag",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**entityTag** - Extraction d'entités nommées de personnes, de localisations et d'organismes",
+            "description": "Extrait les entités nommées usuelles d'un texte écrit en anglais ou en français.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
+        },
+        {
             "id": "pdf-grobid",
             "featured": false,
             "input": "article",
