@@ -222,6 +222,19 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
+            "id": "csv-chem-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "description": "Extrait les entités chimiques de textes en anglais.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
+        },
+        {
             "id": "istex-teeft-data-graph-tgz",
             "featured": true,
             "input": "corpus",
@@ -269,6 +282,19 @@
             "retrieveExtension": "csv",
             "summary": "**diseaseTag** - Extraction d'entités de maladies",
             "description": "Extrait les entités de maladies des résumés en anglais.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
+        },
+        {
+            "id": "csv-diseases-tag",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "wrapper": "/v1/csv",
+            "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "description": "Extrait les entités de maladies d'un corpus de textes en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
