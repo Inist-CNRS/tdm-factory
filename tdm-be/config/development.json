@@ -139,6 +139,18 @@
         {
             "id": "txt-astro-tag",
             "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**astroTag** - Extraction d'entités astronomiques",
+            "description": "Extrait les entités astronomiques d'un article en anglais.",
+            "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
+        },
+        {
+            "id": "txt-astro-tag",
+            "featured": false,
             "bugged": true,
             "input": "article",
             "inputFormat": "txt",
@@ -222,7 +234,7 @@
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
             "summary": "**chemTag** - Extraction d'entités chimiques",
-            "description": "Extrait les entités chimiques d'un article en texte brut.",
+            "description": "Extrait les entités chimiques d'un article en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
@@ -296,8 +308,8 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**diseasesTag** - Extraction d'entités de maladies",
-            "description": "Extrait les entités de maladies d'un article en texte brut.",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "description": "Extrait les entités de maladies d'un article en anglais",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
