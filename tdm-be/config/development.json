@@ -404,6 +404,17 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
         {
+            "id": "txt-geonames-align",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "https://data-geonames.services.istex.fr/v1/align",
+            "retrieve": "/v1/retrieve-lines-csv",
+            "retrieveExtension": "csv",
+            "summary": "**geonamesAlign** - Alignement d'entités nommées sur GeoNames",
+            "description": "Extrait des entités nommées géographiques du texte et les aligne avec le référentiel [GeoNames](https://www.geonames.org/)."
+        },
+        {
             "id": "pdf-grobid",
             "featured": false,
             "input": "article",
