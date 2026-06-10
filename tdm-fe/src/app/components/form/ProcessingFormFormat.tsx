@@ -72,7 +72,10 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
                 );
 
             if (inputFormats.length > 0) {
-                const firstFormat = inputFormats[0];
+                // Cherche l'index de "pdf" dans le tableau
+                const pdfIndex = inputFormats.indexOf("pdf");
+                // Sélectionne "pdf" s'il existe, sinon prend le premier format
+                const firstFormat = pdfIndex !== -1 ? inputFormats[pdfIndex] : inputFormats[0];
                 onChange(firstFormat);
                 setExpandedFormat(firstFormat);
             }
@@ -101,13 +104,11 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
                 deduplicated.includes(format) ? deduplicated : [...deduplicated, format],
             [] as string[],
         );
-
     type FormatLabels = { summary: string; description: string };
 
     const availableFormats: Array<[string, FormatLabels]> = inputFormats
         .map((formatId) => [formatId, config.inputFormat2labels[formatId]])
         .filter(([, format]) => format !== undefined) as Array<[string, FormatLabels]>;
-
     return (
         <>
             <Typography variant="h3" gutterBottom>
@@ -116,7 +117,10 @@ const ProcessingFormFormat = ({ onChange, value, type: propType }: ProcessingFor
             <div className="processing-form-format">
                 <FormControl component="fieldset" fullWidth>
                     <RadioGroup aria-label="format" name="format" onChange={handleFormatChange} value={value || ''}>
-                        {availableFormats.map(([format, labels]) => {
+                        {availableFormats
+                        // Trier pour que "pdf" soit en premier s'il est présent, sinon garder l'ordre d'origine
+                        .sort((a,b) => a[0] === "pdf" ? -1 : b[0] === "pdf" ? 1 :  0)
+                        .map(([format, labels]) => {
                             if (!labels) {
                                 return null;
                             }
