@@ -61,7 +61,7 @@ const ServiceDescription = () => {
                         <p>
                             Exemple : utilisez le service{' '}
                             <a href="https://services.istex.fr/detection-dentites-nommees-en-chimie/">chemTag</a> pour
-                            repérer tous les composés chimiques ou le services{' '}
+                            repérer tous les composés chimiques ou le service{' '}
                             <a href="https://services.istex.fr/detection-dentites-nommees-en-astronomie/">astroTag</a>{' '}
                             pour extraire toutes les données célestes.
                         </p>
