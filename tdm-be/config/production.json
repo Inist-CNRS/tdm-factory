@@ -119,7 +119,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**aiAbstractCheck** - Détection d'abstract généré par IA",
+            "summary": "**aiAbstractCheck** - Détection d'abstract anglais généré par IA",
             "description": "Indique si un résumé en anglais a été généré par IA ou non, ainsi que son score associé.",
             "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
@@ -131,7 +131,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/aiabstract-check",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**aiAbstractCheck** - Détection d'abstracts générés par IA",
+            "summary": "**aiAbstractCheck** - Détection d'abstracts anglais générés par IA",
             "description": "Indique si les résumés en anglais ont été générés par IA ou non, ainsi que leurs scores associés.",
             "descriptionLink": "https://services.istex.fr/detection-de-resume-scientifique-genere-par-ia/"
         },
@@ -143,7 +143,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag-pdf",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**astroTag** - Extraction d'entités astronomiques",
+            "summary": "**astroTag** - Extraction d'entités astronomiques en anglais",
             "description": "Extrait les entités astronomiques d'un article en anglais au format PDF.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
         },
@@ -155,7 +155,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/astro-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**astroTag** - Extraction d'entités astronomiques",
+            "summary": "**astroTag** - Extraction d'entités astronomiques en anglais",
             "description": "Extrait les entités astronomiques d'un article en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-astronomie/"
         },
@@ -191,7 +191,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag-pdf",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "summary": "**chemTag** - Extraction d'entités chimiques en anglais",
             "description": "Extrait les entités chimiques d'un article en anglais au format PDF.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
@@ -203,7 +203,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "summary": "**chemTag** - Extraction d'entités chimiques en anglais",
             "description": "Extrait les entités chimiques d'un article en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
@@ -216,7 +216,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "summary": "**chemTag** - Extraction d'entités chimiques en anglais",
             "description": "Extrait les entités chimiques des résumés en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
@@ -228,7 +228,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/chem-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**chemTag** - Extraction d'entités chimiques",
+            "summary": "**chemTag** - Extraction d'entités chimiques en anglais",
             "description": "Extrait les entités chimiques de textes en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
@@ -241,7 +241,7 @@
             "enricher": "https://data-graph.services.istex.fr/v1/teeft-graph",
             "retrieve": "/v1/retrieve-gexf-and-img",
             "retrieveExtension": "tar.gz",
-            "summary": "**dataGraph** - Extraction de termes des *abstracts* et construction d'un graphe",
+            "summary": "**dataGraph** - Extraction de termes des *abstracts* en anglais et construction d'un graphe",
             "description": "Extrait les termes les plus spécifiques de chacun des résumés en anglais et construit un graphe des termes."
         },
         {
@@ -252,7 +252,7 @@
             "enricher": "https://data-graph.services.istex.fr/v1/teeft-graph",
             "retrieve": "/v1/retrieve-gexf-and-img",
             "retrieveExtension": "tar.gz",
-            "summary": "**dataGraph** - Extraction de termes des *abstracts* et construction d'un graphe",
+            "summary": "**dataGraph** - Extraction de termes des *abstracts* en anglais et construction d'un graphe",
             "description": "Extrait les termes les plus spécifiques de chacun des résumés en anglais et construit un graphe des termes.",
             "descriptionLink": "https://services.istex.fr/graphe-de-mots-cles/"
         },
@@ -277,7 +277,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies en anglais",
             "description": "Extrait les entités de maladies des résumés en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
@@ -289,7 +289,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies en anglais",
             "description": "Extrait les entités de maladies d'un corpus de textes en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
@@ -301,7 +301,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag-pdf",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies en anglais",
             "description": "Extrait les entités de maladies d'un article en anglais au format PDF",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
@@ -313,7 +313,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/diseases-tag",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**diseaseTag** - Extraction d'entités de maladies",
+            "summary": "**diseaseTag** - Extraction d'entités de maladies en anglais",
             "description": "Extrait les entités de maladies d'un article en anglais",
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-de-maladies/"
         },
@@ -386,8 +386,8 @@
             "enricher": "https://data-geonames.services.istex.fr/v1/align",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**geonamesAlign** - Alignement d'entités nommées sur GeoNames",
-            "description": "Extrait des entités nommées géographiques du texte et les aligne avec le référentiel [GeoNames](https://www.geonames.org/)."
+            "summary": "**GeonamesEnrich** - Alignement d'entités nommées en anglais sur GeoNames",
+            "description": "Extrait des entités nommées géographiques du texte en anglais et les aligne avec le référentiel [GeoNames](https://www.geonames.org/)."
         },
         {
             "id": "pdf-grobid",
@@ -422,7 +422,7 @@
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-gexf",
             "retrieveExtension": "gexf",
-            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus en anglais",
             "description": "Extrait des thématiques d’un corpus de textes en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
@@ -435,7 +435,7 @@
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-gexf",
             "retrieveExtension": "gexf",
-            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus en anglais",
             "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
@@ -447,7 +447,7 @@
             "enricher": "https://data-computer.services.istex.fr/v1/lda",
             "retrieve": "/v1/retrieve-gexf",
             "retrieveExtension": "gexf",
-            "summary": "**ldaClass** - Extrait des thématiques d'un corpus",
+            "summary": "**ldaClass** - Extrait des thématiques d'un corpus en anglais",
             "description": "Extrait des thématiques d’un corpus de résumés en anglais : une thématique (ou topic) est caractérisée par dix mots. La sortie est un fichier GEXF (pour construire un graphe).",
             "descriptionLink": "https://services.istex.fr/creation-de-topics-sur-un-corpus-lda/"
         },
@@ -459,7 +459,7 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**noiseDetect** - Détection du bruit",
+            "summary": "**noiseDetect** - Détection du bruit d'un corpus en anglais",
             "description": "Identifie les documents non pertinents dans un corpus de textes en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-de-bruit-dun-corpus/"
         },
@@ -472,7 +472,7 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/noise",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**noiseDetect** - Détection du bruit",
+            "summary": "**noiseDetect** - Détection du bruit d'un corpus en anglais",
             "description": "Identifie les documents non pertinents dans un corpus de résumés en anglais.",
             "descriptionLink": "https://services.istex.fr/detection-de-bruit-dun-corpus/"
         },
@@ -516,10 +516,10 @@
             "inputFormat": "query-istex.tar.gz",
             "wrapperParameter": "abstract",
             "enricher": "https://data-kwsimilarity.services.istex.fr/v1/kw",
-            "retrieve": "/v1/retrieve-json",
-            "retrieveExtension": "json",
-            "summary": "**similarKeywordsExtract** - Extraction de termes sémantiquement proches",
-            "description": "Extrait des termes sémantiquement proches des mots-clés de la requête dans le corpus"
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**IstexQueryExpand** - Extension de requêtes Istex en anglais par similarité",
+            "description": "Propose des termes anglais pour compléter l'équation de recherche initiale rédigée pour IstexSearch."
         },
         {
             "id": "pdf-tam",
@@ -529,7 +529,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine-pdf",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées",
+            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées en anglais",
             "description": "Extrait des abréviations torturées d'un texte en anglais.",
             "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
         },
@@ -541,7 +541,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/tabbr-mine",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées",
+            "summary": "**TAM (Tortured Abbreviations Miner)** - Détection d'abréviations torturées en anglais",
             "description": "Extrait des abréviations torturées d'un texte en anglais.",
             "descriptionLink": "https://services.istex.fr/service-dextraction-dabreviations-torturees/"
         },
@@ -591,7 +591,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents  pour chaque résumé en français",
+            "summary": "**Teeft FR** - Extrait des termes pertinents  pour chaque résumé en français",
             "description": "Extrait les 10 termes les plus spécifiques de chacun des résumés en français.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
@@ -604,7 +604,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-en",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents pour chaque texte en anglais",
+            "summary": "**Teeft EN** - Extrait des termes pertinents pour chaque texte en anglais",
             "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en anglais.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
@@ -617,7 +617,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/teeft-fr",
             "retrieve": "/v1/retrieve-lines-csv",
             "retrieveExtension": "csv",
-            "summary": "**Teeft** - Extrait des termes pertinents pour chaque texte en français",
+            "summary": "**Teeft FR** - Extrait des termes pertinents pour chaque texte en français",
             "description": "Extrait les 10 termes les plus spécifiques de chacun des textes en français.",
             "descriptionLink": "https://services.istex.fr/extraction-de-termes-teeft/"
         },
@@ -706,7 +706,7 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**textClustering** - Classification de textes",
+            "summary": "**textClustering** - Classification de textes anglais",
             "description": "Crée plusieurs groupes, à partir d'un corpus, afin d'y classifier les textes en anglais en fonction de leur similarité.",
             "descriptionLink": "https://services.istex.fr/extraction-de-cluster-dun-corpus/"
         },
@@ -719,7 +719,7 @@
             "enricher": "https://text-clustering.services.istex.fr/v1/clustering",
             "retrieve": "/v1/retrieve-csv",
             "retrieveExtension": "csv",
-            "summary": "**textClustering** - Classification de textes",
+            "summary": "**textClustering** - Classification de textes anglais",
             "description": "Crée plusieurs groupes, à partir d'un corpus, afin d'y classifier les résumés en anglais en fonction de leur similarité.",
             "descriptionLink": "https://services.istex.fr/extraction-de-cluster-dun-corpus/"
         },
@@ -756,7 +756,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize-pdf",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
-            "summary": "**textSummarize** - Résumé automatique d'un article scientifique",
+            "summary": "**textSummarize** - Résumé automatique d'un article scientifique en anglais",
             "description": "Génère par IA un résumé d'un article en anglais au format PDF.",
             "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
         },
@@ -768,7 +768,7 @@
             "enricher": "https://data-workflow.services.istex.fr/v1/text-summarize",
             "retrieve": "/v1/retrieve-txt",
             "retrieveExtension": "txt",
-            "summary": "**textSummarize** - Résumé automatique d'un article scientifique",
+            "summary": "**textSummarize** - Résumé automatique d'un article scientifique en anglais",
             "description": "Génère par IA un résumé d'un article en anglais au format TXT.",
             "descriptionLink": "https://services.istex.fr/resume-automatique-dun-article-scientifique/"
         },
