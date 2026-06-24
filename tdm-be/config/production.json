@@ -233,6 +233,31 @@
             "descriptionLink": "https://services.istex.fr/detection-dentites-nommees-en-chimie/"
         },
         {
+            "id": "csv-corpus-summarize",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "csv",
+            "enricher": "https://data-corpussummarize.services.istex.fr/v1/abstract?langOutput=fr",
+            "retrieve": "/v1/retrieve-txt",
+            "retrieveExtension": "txt",
+            "summary": "**corpusSummarize** - Résumé automatique de corpus",
+            "description": "Ce web service analyse un corpus de résumés écrits en anglais pour en générer un résumé.",
+            "descriptionLink": "https://services.istex.fr/resume-automatique-de-corpus/"
+        },
+        {
+            "id": "istex-corpus-summarize",
+            "featured": false,
+            "input": "corpus",
+            "inputFormat": "istex.tar.gz",
+            "wrapperParameter": "abstract",
+            "enricher": "https://data-corpussummarize.services.istex.fr/v1/abstract?langOutput=fr",
+            "retrieve": "/v1/retrieve-txt",
+            "retrieveExtension": "txt",
+            "summary": "**corpusSummarize** - Résumé automatique de corpus",
+            "description": "Ce web service analyse un corpus de résumés écrits en anglais pour en générer un résumé.",
+            "descriptionLink": "https://services.istex.fr/resume-automatique-de-corpus/"
+        },
+        {
             "id": "istex-teeft-data-graph-tgz",
             "featured": true,
             "input": "corpus",
