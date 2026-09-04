@@ -1,4 +1,4 @@
-/* Montserrat */
+/* ===== MONTERRAT ===== */
 @font-face {
     font-family: 'Montserrat';
     src: url('../fonts/Montserrat/Montserrat-Bold.woff2') format('woff2');
@@ -19,7 +19,7 @@
 @font-face {
     font-family: 'Montserrat';
     src: url('../fonts/Montserrat/Montserrat-Regular.woff2') format('woff2');
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
@@ -32,7 +32,7 @@
     font-display: swap;
 }
 
-/* Open Sans */
+/* ===== OPEN SANS ===== */
 @font-face {
     font-family: 'Open Sans';
     src: url('../fonts/OpenSans/OpenSans-Bold.woff2') format('woff2');
@@ -40,7 +40,7 @@
     font-style: normal;
     font-display: swap;
 }
-
+/* Open Sans - Regular Italic (400 + italic) */
 @font-face {
     font-family: 'Open Sans';
     src: url('../fonts/OpenSans/OpenSans-Italic.woff2') format('woff2');
