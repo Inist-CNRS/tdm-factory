@@ -1,4 +1,5 @@
 @use "./scss/colors";
+@use "./assets/fonts/fonts.scss";
 
 /*
   Note: The app can't render properly under 500px
@@ -48,7 +49,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Montserrat, sans-serif;
+  font-family: "Montserrat", sans-serif;
   color: colors.$light-black;
 }
 
