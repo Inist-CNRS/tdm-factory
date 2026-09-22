@@ -34,8 +34,15 @@ export const errorEmail = (processing: Processing, errorMessage: string) => {
     }
 };
 
-export const addSidToUrl = (url: string) => {
+export const addSidToUrl = (url: string, clientIp?: string | null) => {
     const urlObj = new URL(url);
     urlObj.searchParams.append('sid', 'tdm-factory');
+
+    // Usage statistics: forward the IP of the user who requested the processing, so the
+    // called web service can log which organisation (IP -> organisation mapping) made the call.
+    if (clientIp) {
+        urlObj.searchParams.append('ip', clientIp);
+    }
+
     return urlObj.toString();
 };

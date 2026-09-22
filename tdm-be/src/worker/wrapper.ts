@@ -112,7 +112,7 @@ const wrapper = async (processingId: string) => {
         }
     }
 
-    actualWrapperUrl = addSidToUrl(actualWrapperUrl);
+    actualWrapperUrl = addSidToUrl(actualWrapperUrl, initialProcessing.clientIp);
 
     // Call wrapper api
     let response: AxiosResponse;

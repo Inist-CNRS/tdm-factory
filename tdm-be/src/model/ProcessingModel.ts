@@ -17,6 +17,7 @@ export type Processing = {
     uploadFile: string;
     tmpFile: string | null;
     resultFile: string | null;
+    clientIp: string | null;
 };
 
 /**
@@ -47,6 +48,7 @@ export const createProcessing = (id: string, originalName: string, uploadFile: s
             wrapperParam: null,
             enrichment: null,
             enrichmentHook: null,
+            clientIp: null,
             createdAt: new Date(),
             updatedAt: new Date(),
         } satisfies Processing;
@@ -90,7 +92,8 @@ export const findAllProcessing = (page: number): { page: number; total: number; 
                uploadFile,
                originalName,
                tmpFile,
-               resultFile
+               resultFile,
+               clientIp
         from processing
         limit 10
         offset ?;
@@ -120,7 +123,8 @@ export const findProcessing = (id: string): Processing | undefined => {
                uploadFile,
                originalName,
                tmpFile,
-               resultFile
+               resultFile,
+               clientIp
         from processing
         where id = ?;
     `);
@@ -151,11 +155,13 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
         enrichmentHook: defaultNull<string>(processing.enrichmentHook, previousValue.enrichmentHook),
         tmpFile: defaultNull<string>(processing.tmpFile, previousValue.tmpFile),
         resultFile: defaultNull<string>(processing.resultFile, previousValue.resultFile),
+        clientIp: defaultNull<string>(processing.clientIp, previousValue.clientIp),
     };
 
     const stmt = database.prepare<
         [
             number,
+            string | null,
             string | null,
             string | null,
             string | null,
@@ -177,7 +183,8 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
             enrichment     = ?,
             enrichmentHook = ?,
             tmpFile        = ?,
-            resultFile     = ?
+            resultFile     = ?,
+            clientIp       = ?
         where id = ?;
     `);
 
@@ -191,6 +198,7 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
         newValue.enrichmentHook,
         newValue.tmpFile,
         newValue.resultFile,
+        newValue.clientIp,
         id,
     );
 

@@ -133,6 +133,9 @@ router.post("/start", (req: Request<unknown, unknown, Traitment>, res) => {
         let email: string | undefined = undefined;
         let flowId: string | undefined = undefined;
 
+        // Get the IP of the user who requested the processing (used for usage statistics)
+        const clientIp: string | null = req.ip ?? null;
+
         // Get wrapper url
         if (traitement.wrapper && traitement.wrapper.url) {
             wrapperUrl = traitement.wrapper.url;
@@ -183,6 +186,7 @@ router.post("/start", (req: Request<unknown, unknown, Traitment>, res) => {
             status: Status.STARTING,
             email,
             flowId,
+            clientIp,
         };
 
         // Update the cache db

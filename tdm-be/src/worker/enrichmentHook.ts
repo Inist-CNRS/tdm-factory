@@ -99,7 +99,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         : '/' + enrichmentEntry.retrieve;
 
     // Construct the full URL
-    const fullUrl = addSidToUrl(`${baseUrl}${retrievePath}`);
+    const fullUrl = addSidToUrl(`${baseUrl}${retrievePath}`, initialProcessing.clientIp);
 
     try {
         response = await axios.post(fullUrl, [{ value: enrichmentHook }], {
