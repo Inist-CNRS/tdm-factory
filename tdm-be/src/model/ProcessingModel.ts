@@ -155,7 +155,9 @@ export const updateProcessing = (id: string, processing: Partial<Processing>): P
         enrichmentHook: defaultNull<string>(processing.enrichmentHook, previousValue.enrichmentHook),
         tmpFile: defaultNull<string>(processing.tmpFile, previousValue.tmpFile),
         resultFile: defaultNull<string>(processing.resultFile, previousValue.resultFile),
-        clientIp: defaultNull<string>(processing.clientIp, previousValue.clientIp),
+        // Unlike the other fields, passing null explicitly clears the IP (privacy: cleared
+        // once the processing is done); undefined keeps the previous value.
+        clientIp: processing.clientIp === undefined ? previousValue.clientIp : processing.clientIp,
     };
 
     const stmt = database.prepare<

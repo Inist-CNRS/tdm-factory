@@ -197,7 +197,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         ).then(undefined);
     }
 
-    // Remove the name part of the email
+    // Remove the name part of the email and clear the client IP (only kept for usage statistics)
     const emailWithoutName = email?.split('@')[1];
 
     // Update processing information
@@ -206,6 +206,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         email: emailWithoutName,
         resultFile: finalFile,
         flowId,
+        clientIp: null,
     });
 };
 
