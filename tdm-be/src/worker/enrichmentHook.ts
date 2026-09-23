@@ -124,6 +124,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         crash(e, message, initialProcessing);
         return;
@@ -150,6 +151,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         return;
     }
@@ -180,6 +182,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         crash(e, message, initialProcessing);
         return;
@@ -253,6 +256,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.ENRICHMENT_ERROR,
         flowId: initialProcessing.flowId,
+        clientIp: null,
     });
 };
 

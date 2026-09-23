@@ -1,23 +1,6 @@
 import { sendErrorMail } from '~/lib/email';
 
-import type { Processing } from '~/model/ProcessingModel';
-
-/**
- * Helper function use to compare two value and set a default value if both are null or undefined
- * @param first First value to compare
- * @param second Second value to compare
- */
-export const defaultNull = <T>(first: T | null | undefined, second: T | null | undefined): T | null => {
-    if (first !== null && first !== undefined) {
-        return first;
-    }
-
-    if (second !== null && second !== undefined) {
-        return second;
-    }
-
-    return null;
-};
+import { updateProcessing, type Processing } from '~/model/ProcessingModel';
 
 export const errorEmail = (processing: Processing, errorMessage: string) => {
     if (processing.email) {
@@ -32,6 +15,10 @@ export const errorEmail = (processing: Processing, errorMessage: string) => {
             errorMessage,
         ).then(undefined);
     }
+
+    // Error paths end the processing: purge the client IP right away, it is only
+    // useful for usage statistics of successful web service calls.
+    updateProcessing(processing.id, { clientIp: null });
 };
 
 export const addSidToUrl = (url: string, clientIp?: string | null) => {
