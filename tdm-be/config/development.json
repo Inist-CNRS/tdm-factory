@@ -110,6 +110,17 @@
     },
     "flows": [
         {
+            "id": "base-line",
+            "featured": false,
+            "input": "article",
+            "inputFormat": "txt",
+            "enricher": "http://172.16.100.100:31976/v1/base-line",
+            "retrieve": "/v1/retrieve-csv",
+            "retrieveExtension": "csv",
+            "summary": "**Base-line** - Ne fait rien",
+            "description": "Ne sert qu'aux tests de TDM Factory."
+        },
+        {
             "id": "txt-aiabstract-check",
             "featured": false,
             "input": "article",
