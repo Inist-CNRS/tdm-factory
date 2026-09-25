@@ -1,4 +1,5 @@
 {
+    "trustProxy": 1,
     "hosts": {
         "internal": {
             "comment": "it's been changed now we use https",
