@@ -1,5 +1,6 @@
 {
     "password": "{very secure password}",
+    "trustProxy": 1,
     "hosts": {
         "internal": {
             "host": "http://{machine ip or internal host}"

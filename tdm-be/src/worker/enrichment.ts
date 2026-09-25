@@ -55,7 +55,7 @@ const enrichment = async (processingId: string) => {
         throw new Error('This is normally impossible - Enrichment value are undefined or null');
     }
 
-    const enrichmentUrl = addSidToUrl(enrichment);
+    const enrichmentUrl = addSidToUrl(enrichment, initialProcessing.clientIp);
 
     // --- Start enrichment process
     debug(processingId, 'Starting enrichment process');

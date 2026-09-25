@@ -26,10 +26,22 @@ const init = () => {
             originalName   text,
             uploadFile     text,
             tmpFile        text default null,
-            resultFile     text default null
+            resultFile     text default null,
+            clientIp       text default null
         );
     `,
     ).run();
+
+    // Migration: add the clientIp column to databases created before it existed
+    const columns = db.prepare<unknown[], { name: string }>(`
+        pragma table_info(processing);
+    `).all();
+
+    if (!columns.some((column) => column.name === 'clientIp')) {
+        db.prepare(`
+            alter table processing add column clientIp text default null;
+        `).run();
+    }
 
     db.prepare(
         `

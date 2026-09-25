@@ -99,7 +99,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         : '/' + enrichmentEntry.retrieve;
 
     // Construct the full URL
-    const fullUrl = addSidToUrl(`${baseUrl}${retrievePath}`);
+    const fullUrl = addSidToUrl(`${baseUrl}${retrievePath}`, initialProcessing.clientIp);
 
     try {
         response = await axios.post(fullUrl, [{ value: enrichmentHook }], {
@@ -124,6 +124,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         crash(e, message, initialProcessing);
         return;
@@ -150,6 +151,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         return;
     }
@@ -180,6 +182,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         updateProcessing(processingId, {
             status: Status.FINISHED_ERROR,
             flowId,
+            clientIp: null,
         });
         crash(e, message, initialProcessing);
         return;
@@ -197,7 +200,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         ).then(undefined);
     }
 
-    // Remove the name part of the email
+    // Remove the name part of the email and clear the client IP (only kept for usage statistics)
     const emailWithoutName = email?.split('@')[1];
 
     // Update processing information
@@ -206,6 +209,7 @@ const enrichmentHookSuccess = async (processingId: string) => {
         email: emailWithoutName,
         resultFile: finalFile,
         flowId,
+        clientIp: null,
     });
 };
 
@@ -252,6 +256,7 @@ const enrichmentHookFailure = async (processingId: string) => {
     updateProcessing(processingId, {
         status: Status.ENRICHMENT_ERROR,
         flowId: initialProcessing.flowId,
+        clientIp: null,
     });
 };
 

@@ -21,6 +21,11 @@ import path from 'path';
 
 const app = express();
 
+// The application runs behind a reverse proxy (ezmaster in production, ngrok in development).
+// The number of trusted hops is configurable (trustProxy key in the config files), so req.ip
+// returns the real client IP instead of the proxy IP.
+app.set('trust proxy', environment.trustProxy ?? 1);
+
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minute
     limit: 2000, // Limit each IP to 1000 requests per `window` (here, per 10 minutes)

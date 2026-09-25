@@ -70,8 +70,37 @@ You also need a [ngrok](https://ngrok.com/) host for the external host in `tdm-b
 to create a ngrok endpoints run `ngrok http 3000`.
 
 > [!WARNING]  
-> Don't copy the whole URL for `hosts.internal.host` but only the part after
-> `https://` (ex: `b562-88-123-62-113.ngrok-free.app`).  
+> Copy the whole URL for `hosts.internal.host` (ex: `https://b562-88-123-62-113.ngrok-free.app`).  
+
+> [!NOTE] 
+> Lastly, the web services can't access the ngrok URL directly, add a local web service in `development.json`, which
+> can:
+>
+> ```json
+> {
+>   "id": "base-line",
+>   "featured": false,
+>   "input": "article",
+>   "inputFormat": "txt",
+>   "enricher": "http://192.168.0.187:31976/v1/base-line",
+>   "retrieve": "/v1/retrieve-csv",
+>   "retrieveExtension": "csv",
+>   "summary": "**Base-line** - Ne fait rien",
+>   "description": "Ne sert qu'aux tests de TDM Factory."
+> }
+> ```
+>
+> That means that you have to run a local data-workflow web service:
+>
+> ```
+> EZS_VERBOSE=true docker run --name webservice --rm -p 31976:31976 cnrsinist/ws-data-workflow:1.18.1
+> ```
+
+> [!WARNING]  
+> Don't forget to replace `192.168.0.187` with your local IP address.  
+> To get it: `ipconfig` on Windows, `ifconfig` on macOS/Linux.
+> Or `hostname -I` on Linux.
+> Be warned: this IP may change depending on your network configuration (from Wifi to Ethernet, for example).
 
 After setting up this you can run `make run-dev`
 

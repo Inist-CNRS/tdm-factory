@@ -21,6 +21,9 @@ type SMTP = {
 type Config = {
     port: number;
     password: string;
+    // Number of reverse proxies in front of the app (see Express "trust proxy" setting).
+    // Also accepts Express values: "loopback", a comma-separated IP list, or true.
+    trustProxy?: number | string | boolean;
     hosts: {
         internal: Host;
         external: Host;
